@@ -1,8 +1,4 @@
 ﻿using qASIC.Console.Commands;
-using System.Linq;
-using System.Collections.Generic;
-using System;
-using System.Reflection;
 
 namespace qASIC.Console
 {
@@ -10,42 +6,26 @@ namespace qASIC.Console
     {
         public static bool TryGettingCommandByName(string commandName, out GameConsoleCommand command)
         {
-            AssignList();
             command = null;
-            for (int i = 0; i < commands.Count; i++)
+            for (int i = 0; i < commands.Length; i++)
+            {
                 if (commands[i].commandName == commandName)
-                { command = commands[i]; return true; }
+                {
+                    command = commands[i];
+                    return true;
+                }
+            }
             return false;
         }
 
-        public static void AssignList()
+        public static GameConsoleCommand[] commands = new GameConsoleCommand[]
         {
-            List<Type> types = FindAllDerivedTypes<GameConsoleCommand>();
-            commands = new List<GameConsoleCommand>();
-            for (int i = 0; i < types.Count; i++)
-            {
-                ConstructorInfo constructor = types[i].GetConstructor(Type.EmptyTypes);
-                commands.Add((GameConsoleCommand)constructor.Invoke(null));
-            }
-        }
-
-        public static List<Type> FindAllDerivedTypes<T>()
-        { return FindAllDerivedTypes<T>(Assembly.GetAssembly(typeof(T))); }
-
-        public static List<Type> FindAllDerivedTypes<T>(Assembly assembly)
-        {
-            var derivedType = typeof(T);
-            return assembly.GetTypes().Where(t => t != derivedType && derivedType.IsAssignableFrom(t)).ToList();
-        }
-
-        public static List<GameConsoleCommand> commands = new List<GameConsoleCommand>();
-        /*public static GameConsoleCommand[] commands = new GameConsoleCommand[]
-        {
-            new GameConsoleHelp(),
-            new GameConsoleEcho(),
-            new GameConsoleOptionCommand(),
-            new GameConsoleInputCommand(),
-            new GameConsoleSceneCommand(),
-        };*/
+            new GameConsoleHelp() { commandName = "help", description = "displays help" },
+            new GameConsoleEcho() { commandName = "echo", description = "creates a new log containing a message" },
+            new GameConsoleOptionCommand() { commandName = "changeoption", description = "changes basic options" },
+            new GameConsoleConfigManager() { commandName = "config", description = "control config files" },
+            new GameConsoleInputCommand() { commandName = "input", description = "change, print input" },
+            new GameConsoleSceneCommand() { commandName = "scene", description = "Log, load scene" },
+        };
     }
 }

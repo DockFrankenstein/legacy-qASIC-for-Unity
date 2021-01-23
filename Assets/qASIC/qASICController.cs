@@ -20,8 +20,7 @@ namespace qASIC
 
         private void LogInput()
         {
-            if (GameConsoleController.TryGettingConfig(out Console.Tools.GameConsoleConfig config) && config.showInputMessages)
-                Console.Commands.GameConsoleInputCommand.Print();
+            Console.Commands.GameConsoleInputCommand.Print();
         }
     }
 }

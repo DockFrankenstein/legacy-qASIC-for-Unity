@@ -5,51 +5,53 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleOptionCommand : GameConsoleCommand
     {
-        public override string commandName { get => "changeoption"; }
-        public override string description { get => "changes basic options"; }
-        public override string help { get => "Use resolution <x> <y>; fullscreen <state>; vsync <state>; framelock <state>"; }
+        public string commandName { get; set; }
+        public string description { get; set; }
 
-        public override void Run(List<string> args)
+        public void Run(List<string> args)
         {
-            if (!CheckForArgumentCount(args, 2, 3)) return;
-            switch (args.Count)
+            if (GameConsoleController.CheckForArgumentCount(args, 2, 3))
             {
-                case 3:
-                    switch (args[1])
-                    {
-                        case "fullscreen":
-                            FullScreen(args);
-                            break;
-                        case "vsync":
-                            Fps(args, false);
-                            break;
-                        case "framelock":
-                            Fps(args, true);
-                            break;
-                        default:
+                if (args[1] == "resolution" && args.Count == 4) Resolution(args);
+                else if (GameConsoleController.CheckForArgumentCount(args, 2))
+                        switch (args[1])
+                        {
+                            case "fullscreen":
+                                FullScreen(args);
+                                break;
+                            case "antialiasing":
+                                AntiAlias(args);
+                                break;
+                            case "vsync":
+                                Fps(args, false);
+                                break;
+                            case "framelock":
+                                Fps(args, true);
+                                break;
+                            default:
                             NoOptionException(args[1]);
-                            break;
-                    }
-                    break;
-                case 4:
-                    if (args[1] == "resolution") Resolution(args);
-                    else NoOptionException(args[1]);
-                    break;
-                default:
-                    NoOptionException("unknown");
-                    break;
+                                break;
+                        }
             }
         }
 
         private void NoOptionException(string option) => 
-            Log("Option <b>" + option + "</b> does not exist! Use <b>Fullscreen</b>; <b>Antialiasing</b>; <b>vsync</b>; <b>framelock</b>", "error");
+            GameConsoleController.Log("Option <b>" + option + "</b> does not exist! Use <b>Fullscreen</b>; <b>Antialiasing</b>; <b>vsync</b>; <b>framelock</b>", "Error1");
 
         public void FullScreen(List<string> args)
         {
             if (bool.TryParse(args[2], out bool result))
                 Options.ChangeFullScreenMode(result);
             else
-                Log("Couldn't parse arguments!", "error");
+                GameConsoleController.Log("Couldn't parse arguments!", "Error2");
+        }
+
+        public void AntiAlias(List<string> args)
+        {
+            if (int.TryParse(args[2], out int result))
+                Options.ChangeAntiAliasing(result);
+            else
+                GameConsoleController.Log("Couldn't parse arguments!", "Error2");
         }
 
         public void Fps(List<string> args, bool lockFrames)
@@ -62,7 +64,7 @@ namespace qASIC.Console.Commands
                     Options.ChangeFrameOptions(result, -1);
             }
             else
-                Log("Couldn't parse arguments!", "error");
+                GameConsoleController.Log("Couldn't parse arguments!", "Error2");
         }
 
         public void Resolution(List<string> args)
@@ -70,7 +72,7 @@ namespace qASIC.Console.Commands
             if (int.TryParse(args[2], out int X) && int.TryParse(args[3], out int Y))
                 Options.ChangeResolution(X, Y);
             else
-                Log("Couldn't parse arguments!", "error");
+                GameConsoleController.Log("Couldn't parse arguments!", "Error2");
         }
     }
 }

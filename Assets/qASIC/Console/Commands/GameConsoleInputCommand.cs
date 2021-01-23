@@ -7,30 +7,32 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleInputCommand : GameConsoleCommand
     {
-        public override string commandName { get => "input"; }
-        public override string description { get => "change, print input"; }
-        public override string help { get => "Use change <input name>; print"; }
+        public string commandName { get; set; }
+        public string description { get; set; }
 
-        public override void Run(List<string> args)
+        public void Run(List<string> args)
         {
-            if (!CheckForArgumentCount(args, 1, 2)) return;
+            if (GameConsoleController.CheckForArgumentCount(args, 1, 2))
+            {
                 switch (args[1])
                 {
                     case "change":
-                        if (CheckForArgumentCount(args, 2))
+                        if (GameConsoleController.CheckForArgumentCount(args, 2))
                             qASICObjectsCreation.CreateInputWindow(args[2]);
                         break;
                     case "print":
-                        if (CheckForArgumentCount(args, 1) && GameConsoleController.TryGettingConfig(out Tools.GameConsoleConfig config) && config.showInputMessages)
+                        if (GameConsoleController.CheckForArgumentCount(args, 1))
                             Print();
                         break;
                     default:
                         NoOptionEsception(args[1]);
                         break;
                 }
+            }
         }
 
-        private void NoOptionEsception(string option) => Log("Option <b>" + option + "</b> does not exist!", "Error");
+        private void NoOptionEsception(string option) =>
+            GameConsoleController.Log("Option <b>" + option + "</b> does not exist! Use <b>change</b>; <b>print</b>", "Error1");
 
         public static void Print()
         {

@@ -460,7 +460,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &1775217444890645789
 MonoBehaviour:
@@ -545,14 +545,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3279f7cda7f2da43adc890adb1647a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  logLimit: 64
-  consoleConfig: {fileID: 11400000, guid: 67849b547219c6544b513c8321bd7756, type: 2}
   canvasObject: {fileID: 3339577114814308204}
   logs: {fileID: 6241433097206589225}
   input: {fileID: 8713881459255019119}
-  onConsoleChangeState:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &5421854239198661686
 GameObject:
   m_ObjectHideFlags: 0
