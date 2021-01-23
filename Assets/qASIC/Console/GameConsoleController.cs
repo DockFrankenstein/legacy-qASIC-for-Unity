@@ -1,67 +1,61 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using qASIC.Console.Commands;
+using qASIC.Console.Logic;
+using qASIC.Console.Tools;
 
 namespace qASIC.Console
 {
     public static class GameConsoleController
     {
-        public static bool useUnityConsole = true;
-        private static string configPath = "/ProjectSettings/qASIC/ConsoleConfiguration.asset";
+        public static List<GameConsoleLog> logs = new List<GameConsoleLog>();
 
-        public static void Log(string text, Color color)
+        #region Log
+        public static void Log(string text, Color color) => Log(text, color, GameConsoleLog.LogType.game, false);
+        public static void Log(string text, string color) => Log(text, GetColor(color), GameConsoleLog.LogType.game, false);
+
+        public static void Log(string text, string color, GameConsoleLog.LogType type, bool qASIC) => Log(text, GetColor(color), type, qASIC);
+        public static void Log(string text, Color color, GameConsoleLog.LogType type, bool qASIC)
         {
-            string colorText = "<color=#" + ColorUtility.ToHtmlStringRGB(color).ToString() + ">";;
-
-            logs += "\n" + colorText + "[" + System.DateTime.Now.ToString("T") + "]" + text + "</color>";
-            if (useUnityConsole) Debug.Log("qASIC game console: " + text);
+            logs.Add(new GameConsoleLog(text, System.DateTime.Now, color, type, qASIC));
+            if (config.logToUnity) Debug.Log("qASIC game console: " + text);
         }
-
-        public static void Log(string text, string color) => Log(text, GetColor(color));
-
-        public static string GetConfigPath()
-        { return FileManaging.FileManager.TrimPathEnd(Application.dataPath, 1) + configPath; }
-
-        public static string logs = "";
-
-        private static Dictionary<string, Color> colors = new Dictionary<string, Color>()
-        {
-            ["Default"] = new Color(1f, 1f, 1f),
-            ["qASIC"] = new Color(0f, 0.7f, 1f),
-            ["Error"] = new Color(1f, 0f, 0f),
-            ["Error1"] = new Color(0.8f, 0f, 0f),
-            ["Error2"] = new Color(0.6f, 0f, 0f),
-            ["Error"] = new Color(0.4f, 0f, 0f),
-            ["Warning"] = new Color(1f, 0.8f, 0f),
-            ["Options"] = new Color(0f, 0.3f, 1f),
-            ["Scene"] = new Color(0.7f, 0f, 1f),
-            ["File"] = new Color(1f, 1f, 0f),
-            ["Reference"] = new Color(0f, 0.7f, 0f),
-            ["Audio"] = new Color(1f, 0f, 0.5f),
-            ["Input"] = new Color(0.8f, 1f, 0f),
-            ["Network"] = new Color(0f, 1f, 1f),
-            ["Sync"] = new Color(1f, 0f, 1f),
-            ["Sudo"] = new Color(0.5f, 0.8f, 0.1f),
-        };
 
         private static Color GetColor(string colorName)
         {
-            if (!colors.ContainsKey(colorName)) return new Color(1f, 1f, 1f);
-            return colors[colorName];
-        }
+            if (config == null || config.colorTheme == null) return new Color(1f, 1f, 1f);
+            colorName = colorName.ToLower();
 
-        public static void LoadConfig()
+            if (colorName == "default") return config.colorTheme.defaultColor;
+            if (colorName == "error") return config.colorTheme.errorColor;
+            if (colorName == "qasic") return config.colorTheme.qASICColor;
+
+            for (int i = 0; i < config.colorTheme.colors.Length; i++)
+                if (config.colorTheme.colors[i].colorName.ToLower() == colorName)
+                    return config.colorTheme.colors[i].color;
+            return config.colorTheme.defaultColor;
+        }
+        #endregion
+
+        #region Config
+        private static GameConsoleConfig config;
+        public static GameConsoleConfig GetConfig() { return config; }
+        public static bool TryGettingConfig(out GameConsoleConfig _config) { _config = config; return _config != null; }
+        public static void AssignConfig(GameConsoleConfig newConfig)
         {
-            if (FileManaging.ConfigController.TryGettingSetting(GetConfigPath(), "Use unity", "", out string Config_UseUnity))
-                useUnityConsole = bool.Parse(Config_UseUnity);
+            if (config == newConfig) return;
+            config = newConfig;
+            if (config.logConfigAssigment) Log("Assigned new config", "sync", GameConsoleLog.LogType.game, false);
         }
+        #endregion
 
+        #region Logic
         public static bool CheckForArgumentCount(List<string> args, int min = -1, int max = -1)
         {
             if (args.Count - 1 < min && min != -1)
-                Log("User input - not enough arguments!", "Error");
+                Log("User input - not enough arguments!", "error");
             else if (args.Count - 1 > max && max != -1)
-                Log("User input - index is out of range!", "Error");
+                Log("User input - index is out of range!", "error");
             else return true;
 
             return false;
@@ -102,6 +96,18 @@ namespace qASIC.Console
             return args;
         }
 
+        public static string LogToString(int logLimit)
+        {
+            string log = "";
+            for (int i = 0; i < logLimit; i++)
+            {
+                if (i >= logs.Count) break;
+                log += $"\n{logs[Mathf.Clamp(logs.Count - logLimit, 0, int.MaxValue) + i].ToText()}";
+            }
+            return log;
+        }
+        #endregion
+
         public static void RunCommand(string _string)
         {
             List<string> args = SortCommand(_string);
@@ -111,7 +117,7 @@ namespace qASIC.Console
                 if (GameConsoleCommandList.TryGettingCommandByName(args[0], out GameConsoleCommand command))
                     command.Run(args);
                 else
-                    Log("Command not found!", "Error");
+                    Log("Command not found!", "error");
             }
         }
     }
