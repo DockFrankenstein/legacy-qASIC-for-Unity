@@ -6,24 +6,35 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleSceneCommand : GameConsoleCommand
     {
-        public string commandName { get; set; }
-        public string description { get; set; }
+        public override string commandName { get => "scene"; }
+        public override string description { get => "get, load scene"; }
+        public override string help { get => "Use get; load"; }
 
-        public void Run(List<string> args)
+        public override void Run(List<string> args)
         {
-            if (!GameConsoleController.CheckForArgumentCount(args, 0, 1)) return;
+            if (!CheckForArgumentCount(args, 0, 2)) return;
             switch (args.Count)
             {
                 case 0:
-                    GameConsoleController.Log("Current scene: <b>" + SceneManager.GetActiveScene().name + "</b>", "Scene");
+                    LogScene();
                     break;
                 case 1:
-                    if(!Application.CanStreamedLevelBeLoaded(args[1]))
-                        GameConsoleController.Log("Scene does not exist!", "Error1");
-                    LevelManager.LoadScene(args[1]);
-                    GameConsoleController.Log("Loaded scene: <b>" + args[1] + "</b>", "Scene");
+                    if (args[1].ToLower() == "get") LogScene();
+                    else LoadScene(args[1]);
+                    break;
+                case 2:
+                    if (args[1] == "load") LoadScene(args[2]);
                     break;
             }
         }
+
+        private void LoadScene(string sceneName)
+        {
+            if (!Application.CanStreamedLevelBeLoaded(sceneName))
+                Log("Scene does not exist!", "Error1");
+            SceneManager.LoadScene(sceneName);
+        }
+
+        private void LogScene() => Log($"Current scene: <b>{SceneManager.GetActiveScene().name}</b>", "Scene");
     }
 }
