@@ -25,12 +25,10 @@ namespace qASIC.Console.Commands
                             Print();
                         break;
                     default:
-                        NoOptionEsception(args[1]);
+                        NoOptionException(args[1]);
                         break;
                 }
         }
-
-        private void NoOptionEsception(string option) => Log("Option <b>" + option + "</b> does not exist!", "Error");
 
         public static void Print()
         {

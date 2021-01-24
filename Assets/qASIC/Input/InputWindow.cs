@@ -13,13 +13,7 @@ namespace qASIC.InputManagment.Editor
         public static void ShowWindow()
         {
             InputWindow window = (InputWindow)GetWindow(typeof(InputWindow));
-            //InputManager.CheckForKeys();
             window.Show();
-        }
-
-        private void OnEnable()
-        {
-            //InputManager.CheckForKeys();
         }
 
         private List<string> inputs = new List<string>();
@@ -53,9 +47,6 @@ namespace qASIC.InputManagment.Editor
                     config = ConfigController.Decode(data);
                     string[] values = inputs[i].Split(':');
 
-                    /*if (ConfigController.OptionExistsInGroup(config, values[0], "Keys"))
-                    { inputs[i] = RenameKey(values[0], config) + ": " + values[1]; Debug.Log(inputs[i] + " has been renamed"); }*/
-
                     if (values[0] == "" || values[1] == "") { inputs.RemoveAt(i); i--; }
                     else
                     {
@@ -68,24 +59,6 @@ namespace qASIC.InputManagment.Editor
             }
             GetKeys();
         }
-
-        /*private string RenameKey(string keyName, List<List<string>> config)
-        {
-            Debug.Log(keyName);
-            if (keyName.Contains("[") && keyName.EndsWith("]"))
-            {
-                char[] chars = keyName.ToCharArray();
-                int trimValue = 0;
-                for (int i = 0; i < chars.Length; i++)
-                    if (chars[i] == '[') trimValue = i;
-
-                keyName = keyName.Remove(trimValue, chars.Length - trimValue);
-            }
-            int newIndex = 0;
-            for (; ConfigController.OptionExistsInGroup(config, keyName + "[" + newIndex + "]", "Keys"); newIndex++) 
-            {  }
-            return keyName + "[" + newIndex + "]";
-        }*/
 
         public void OnGUI()
         {

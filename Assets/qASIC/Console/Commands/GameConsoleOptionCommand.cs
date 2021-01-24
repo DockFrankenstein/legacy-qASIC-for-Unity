@@ -41,15 +41,12 @@ namespace qASIC.Console.Commands
             }
         }
 
-        private void NoOptionException(string option) => 
-            Log("Option <b>" + option + "</b> does not exist! Use <b>Fullscreen</b>; <b>Antialiasing</b>; <b>vsync</b>; <b>framelock</b>", "error");
-
         public void FullScreen(List<string> args)
         {
             if (bool.TryParse(args[2], out bool result))
                 Options.ChangeFullScreenMode(result);
             else
-                Log("Couldn't parse arguments!", "error");
+                ParseException(args[2], "bool");
         }
 
         public void Fps(List<string> args, bool lockFrames)
@@ -62,7 +59,7 @@ namespace qASIC.Console.Commands
                     Options.ChangeFrameOptions(result, -1);
             }
             else
-                Log("Couldn't parse arguments!", "error");
+                ParseException(args[2], "int");
         }
 
         public void Resolution(List<string> args)
@@ -70,7 +67,7 @@ namespace qASIC.Console.Commands
             if (int.TryParse(args[2], out int X) && int.TryParse(args[3], out int Y))
                 Options.ChangeResolution(X, Y);
             else
-                Log("Couldn't parse arguments!", "error");
+                ParseException($"{args[2]}; {args[3]}", "int");
         }
     }
 }

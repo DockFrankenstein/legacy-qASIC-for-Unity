@@ -18,7 +18,7 @@ namespace qASIC.Console
         public static void Log(string text, Color color, GameConsoleLog.LogType type, bool qASIC)
         {
             logs.Add(new GameConsoleLog(text, System.DateTime.Now, color, type, qASIC));
-            if (config.logToUnity) Debug.Log("qASIC game console: " + text);
+            if (config.logToUnity) Debug.Log($"qASIC game console: {text}");
         }
 
         private static Color GetColor(string colorName)
@@ -50,17 +50,6 @@ namespace qASIC.Console
         #endregion
 
         #region Logic
-        public static bool CheckForArgumentCount(List<string> args, int min = -1, int max = -1)
-        {
-            if (args.Count - 1 < min && min != -1)
-                Log("User input - not enough arguments!", "error");
-            else if (args.Count - 1 > max && max != -1)
-                Log("User input - index is out of range!", "error");
-            else return true;
-
-            return false;
-        }
-
         private static List<string> SortCommand(string _string)
         {
             List<string> args = new List<string>();
@@ -73,10 +62,8 @@ namespace qASIC.Console
             {
                 if (isComplicated)
                 {
-                    if (chars[i] == '"' && (chars.Length > i + 1 && chars[i + 1] == ' ' || chars.Length > i))
-                        isComplicated = false;
-                    else
-                        currentString += chars[i];
+                    if (chars[i] == '"' && (chars.Length > i + 1 && chars[i + 1] == ' ' || chars.Length > i)) isComplicated = false;
+                    else currentString += chars[i];
                 }
                 else
                 {
@@ -85,10 +72,8 @@ namespace qASIC.Console
                         args.Add(currentString);
                         currentString = "";
                     }
-                    else if (chars[i] == '"' && (i != 0 && chars[i - 1] == ' ' || i == 0) && currentString == "")
-                        isComplicated = true;
-                    else
-                        currentString += chars[i];
+                    else if (chars[i] == '"' && (i != 0 && chars[i - 1] == ' ' || i == 0) && currentString == "") isComplicated = true;
+                    else currentString += chars[i];
                 }
             }
             args.Add(currentString);
@@ -117,7 +102,7 @@ namespace qASIC.Console
                 if (GameConsoleCommandList.TryGettingCommandByName(args[0], out GameConsoleCommand command))
                     command.Run(args);
                 else
-                    Log("Command not found!", "error");
+                    Log("Command not found!", "error", GameConsoleLog.LogType.game, false);
             }
         }
     }

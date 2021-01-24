@@ -1,6 +1,5 @@
 ﻿using qASIC.InputManagment;
 using qASIC.Console;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace qASIC
@@ -11,17 +10,22 @@ namespace qASIC
 
         private void Awake()
         {
-            if (!hasStarted)
-            {
-                InputManager.LoadKeys();
-                LogInput();
-            }
+            if (hasStarted) return;
+            InputManager.LoadKeys();
+            SetConfig();
         }
 
-        private void LogInput()
+        private void LogLoadedScene(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode) =>
+            GameConsoleController.Log($"Loaded scene {scene.name}", "scene", Console.Logic.GameConsoleLog.LogType.game, false);
+
+        private void SetConfig()
         {
-            if (GameConsoleController.TryGettingConfig(out Console.Tools.GameConsoleConfig config) && config.showInputMessages)
-                Console.Commands.GameConsoleInputCommand.Print();
+            if (!GameConsoleController.TryGettingConfig(out Console.Tools.GameConsoleConfig config)) return;
+            if(config.showInputMessages) LogInput();
+            if(config.logScene) UnityEngine.SceneManagement.SceneManager.sceneLoaded += LogLoadedScene;
         }
+
+        private void LogInput() =>
+            Console.Commands.GameConsoleInputCommand.Print();
     }
 }

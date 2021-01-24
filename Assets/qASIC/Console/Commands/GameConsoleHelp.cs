@@ -21,7 +21,7 @@ namespace qASIC.Console.Commands
             else if (int.TryParse(args[1], out int index))
                 TryHelp(index);
             else if (TryGettingCommand(args[1], out GameConsoleCommand command))
-                DsplayCommand(command);
+                DisplayCommand(command);
             else
                 Log("Command does not exist!", "error");
         }
@@ -29,9 +29,10 @@ namespace qASIC.Console.Commands
         private bool TryGettingCommand(string commandName, out GameConsoleCommand command)
         {
             command = null;
-            for (int i = 0; i < GameConsoleCommandList.commands.Count; i++)
-                if (GameConsoleCommandList.commands[i].commandName == commandName)
-                    command = GameConsoleCommandList.commands[i];
+            List<GameConsoleCommand> commands = GameConsoleCommandList.GetList();
+            for (int i = 0; i < commands.Count; i++)
+                if (commands[i].commandName == commandName)
+                    command = commands[i];
             return command != null;
         }
 
@@ -44,18 +45,18 @@ namespace qASIC.Console.Commands
                 Log("Page is out of range!", "error");
         }
 
-        private void DsplayCommand(GameConsoleCommand command) => Log($"Help for command <b>{command.commandName}</b>: {command.help}", "default");
-
-        private void CalculateMaxPages() => maxPages = (int)Mathf.Ceil((float)GameConsoleCommandList.commands.Count / onePageCommandLimit);
+        private void DisplayCommand(GameConsoleCommand command) => Log($"Help for command <b>{command.commandName}</b>: {command.help}", "default");
+        private void CalculateMaxPages() => maxPages = (int)Mathf.Ceil((float)GameConsoleCommandList.GetList().Count / onePageCommandLimit);
 
         private void DisplayHelp(int pageIndex)
         {
             string helpMessage = $"<b>Help page {pageIndex}:</b>\n";
+            List<GameConsoleCommand> commands = GameConsoleCommandList.GetList();
 
             for (int i = 0; i < onePageCommandLimit; i++)
-                if (GameConsoleCommandList.commands.Count > pageIndex * onePageCommandLimit + i)
+                if (commands.Count > pageIndex * onePageCommandLimit + i)
                 {
-                    GameConsoleCommand command = GameConsoleCommandList.commands[pageIndex * onePageCommandLimit + i];
+                    GameConsoleCommand command = commands[pageIndex * onePageCommandLimit + i];
                     helpMessage += $"{command.commandName} - {command.description}\n";
                 }
 

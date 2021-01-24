@@ -17,3 +17,4 @@ MonoBehaviour:
   logToUnity: 0
   logConfigAssigment: 1
   showInputMessages: 1
+  logScene: 1

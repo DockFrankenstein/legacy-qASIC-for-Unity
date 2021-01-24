@@ -18,17 +18,15 @@ namespace qASIC.InputManagment
 
         private void Update()
         {
-            if (isListening)
+            if (!isListening) return;
+            foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
             {
-                foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
+                if (Input.GetKeyDown(key))
                 {
-                    if (Input.GetKeyDown(key))
-                    {
-                        if (stopOnKeyPress) isListening = false;
-                        if (destroyOnKeyPress) Destroy(gameObject);
-                        onInputRevived.Invoke(key);
-                        return;
-                    }
+                    if (stopOnKeyPress) isListening = false;
+                    if (destroyOnKeyPress) Destroy(gameObject);
+                    onInputRevived.Invoke(key);
+                    return;
                 }
             }
         }

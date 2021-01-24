@@ -20,7 +20,7 @@ namespace qASIC.InputManagment
 
         public static void SaveKeys()
         {
-            string path = Application.persistentDataPath + "/qASIC/InputKeys.txt";
+            string path = $"{Application.persistentDataPath}/qASIC/InputKeys.txt";
             for (int i = 0; i < keys.values.Count; i++)
                 FileManaging.ConfigController.SaveSetting(path, keys.values[i].keyName, keys.values[i].key.ToString(), "Keys");
         }
@@ -29,7 +29,7 @@ namespace qASIC.InputManagment
         {
             keys.values = new List<InputKeyValue>();
 
-            string path = FileManaging.FileManager.TrimPathEnd(Application.dataPath, 1) + "/ProjectSettings/qASIC/InputKeys.asset";
+            string path = $"{FileManaging.FileManager.TrimPathEnd(Application.dataPath, 1)}/ProjectSettings/qASIC/InputKeys.asset";
 
             if (FileManaging.FileManager.TryLoadTxtFile(path, out string data))
             {
@@ -49,7 +49,7 @@ namespace qASIC.InputManagment
 
         private static void LoadUserKeys()
         {
-            string path = Application.persistentDataPath + "/InputKeys.txt";
+            string path = $"{Application.persistentDataPath}/InputKeys.txt";
             if (FileManaging.FileManager.TryLoadTxtFile(path, out string data))
             {
                 if (FileManaging.ConfigController.TryGettingConfigGroup("Keys", FileManaging.ConfigController.Decode(data), out List<string> settings))
@@ -117,7 +117,7 @@ namespace qASIC.InputManagment
         }
 
         private static void KeyNotFoundError(string keyName)
-        { GameConsoleController.Log("Key <b>" + keyName + "</b> does not exist!", "Error1"); }
+        { GameConsoleController.Log($"Key <b>{keyName}</b> does not exist!", "error"); }
 
         public static void ChangeInput(string keyName, KeyCode newKey, bool save = false)
         {
@@ -156,7 +156,7 @@ namespace qASIC.InputManagment
                     values.RemoveAt(i);
                     return;
                 }
-            GameConsoleController.Log("Cannot remove key <b>" + keyName + "</b>", "Error1");
+            GameConsoleController.Log($"Cannot remove key <b>{keyName}</b>", "error");
         }
 
         public bool TryChanging(string keyName, KeyCode newKey)
@@ -175,14 +175,14 @@ namespace qASIC.InputManagment
         public void Change(string keyName, KeyCode newKey)
         {
             if (!TryChanging(keyName, newKey))
-                GameConsoleController.Log("Key <b>" + keyName + "</b> does not exist!", "Error1");
+                GameConsoleController.Log($"Key <b>{keyName}</b> does not exist!", "error");
         }
 
         public KeyCode Get(string keyName)
         {
             if (TryGetting(keyName, out KeyCode key))
                 return key;
-            GameConsoleController.Log("Key <b>" + keyName + "</b> does not exist!", "Error1");
+            GameConsoleController.Log($"Key <b>{keyName}</b> does not exist!", "error");
             return KeyCode.None;
         }
 

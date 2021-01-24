@@ -6,14 +6,16 @@ namespace qASIC.Console
 {
     public class GameConsoleInterface : MonoBehaviour
     {
+        [Header("Settings")]
         public int logLimit = 64;
         public GameConsoleConfig consoleConfig;
 
-        [Space]
+        [Header("Objects")]
         public GameObject canvasObject;
         public TextMeshProUGUI logs;
         public TMP_InputField input;
 
+        [Header("Events")]
         public UnityEventBool onConsoleChangeState;
 
         private static bool init = false;
@@ -25,7 +27,6 @@ namespace qASIC.Console
         }
 
         private void FixedUpdate() { if (canvasObject.activeSelf) RefreshLogs(); }
-
         public void RefreshLogs() => logs.text = GameConsoleController.LogToString(logLimit);
 
         private void ToggleConsole(bool state)

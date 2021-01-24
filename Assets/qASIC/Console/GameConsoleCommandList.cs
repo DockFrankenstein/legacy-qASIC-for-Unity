@@ -10,15 +10,15 @@ namespace qASIC.Console
     {
         public static bool TryGettingCommandByName(string commandName, out GameConsoleCommand command)
         {
-            AssignList();
+            List<GameConsoleCommand> _commands = GetList();
             command = null;
-            for (int i = 0; i < commands.Count; i++)
-                if (commands[i].commandName == commandName)
-                { command = commands[i]; return true; }
+            for (int i = 0; i < _commands.Count; i++)
+                if (_commands[i].commandName == commandName)
+                { command = _commands[i]; return true; }
             return false;
         }
 
-        public static void AssignList()
+        public static List<GameConsoleCommand> GetList()
         {
             List<Type> types = FindAllDerivedTypes<GameConsoleCommand>();
             commands = new List<GameConsoleCommand>();
@@ -27,7 +27,9 @@ namespace qASIC.Console
                 ConstructorInfo constructor = types[i].GetConstructor(Type.EmptyTypes);
                 commands.Add((GameConsoleCommand)constructor.Invoke(null));
             }
+            return commands;
         }
+
 
         public static List<Type> FindAllDerivedTypes<T>()
         { return FindAllDerivedTypes<T>(Assembly.GetAssembly(typeof(T))); }
@@ -38,14 +40,6 @@ namespace qASIC.Console
             return assembly.GetTypes().Where(t => t != derivedType && derivedType.IsAssignableFrom(t)).ToList();
         }
 
-        public static List<GameConsoleCommand> commands = new List<GameConsoleCommand>();
-        /*public static GameConsoleCommand[] commands = new GameConsoleCommand[]
-        {
-            new GameConsoleHelp(),
-            new GameConsoleEcho(),
-            new GameConsoleOptionCommand(),
-            new GameConsoleInputCommand(),
-            new GameConsoleSceneCommand(),
-        };*/
+        private static List<GameConsoleCommand> commands = new List<GameConsoleCommand>();
     }
 }

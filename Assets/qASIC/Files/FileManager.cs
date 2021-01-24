@@ -33,7 +33,7 @@ namespace qASIC.FileManaging
             string trimmedPath = "";
             for (int i = 0; i < folders.Length - amount; i++)
             {
-                trimmedPath += folders[i] + "/";
+                trimmedPath += $"{folders[i]}/";
             }
             return trimmedPath.TrimEnd('/');
         }
@@ -47,7 +47,7 @@ namespace qASIC.FileManaging
             string trimmedPath = "";
             for (int i = 0; i < folders.Length - amount; i++)
             {
-                trimmedPath += folders[i + amount] + "/";
+                trimmedPath += "${folders[i + amount]}/";
             }
             return trimmedPath.TrimEnd('/');
         }

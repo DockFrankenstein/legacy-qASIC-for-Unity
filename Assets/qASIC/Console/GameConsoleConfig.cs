@@ -10,5 +10,6 @@ namespace qASIC.Console.Tools
         public bool logToUnity = false;
         public bool logConfigAssigment = true;
         public bool showInputMessages = true;
+        public bool logScene = true;
     }
 }

@@ -19,13 +19,13 @@ namespace qASIC.FileManaging
         }
 
         public static void DeleteGroup(string groupName, string path)
-        { 
-            if(FileManager.TryLoadTxtFile(path, out string data))
+        {
+            if (FileManager.TryLoadTxtFile(path, out string data))
             {
                 List<List<string>> config = Decode(data);
                 for (int i = 0; i < config.Count; i++)
                 {
-                    if (config[i][0] == "#" + groupName)
+                    if (config[i][0] == $"#{groupName}")
                     { config.RemoveAt(i); break; }
                 }
                 FileManager.SaveTxtFile(path, Encode(config));
@@ -42,7 +42,7 @@ namespace qASIC.FileManaging
             {
                 data.Add(new List<string>());
                 List<string> temp = new List<string>(groups[x].Split('\n'));
-                if (x != 0) temp[0] = "#" + temp[0];
+                if (x != 0) temp[0] = $"#{temp[0]}";
                 else temp.Insert(0, "#");
                 for (int y = 0; y < temp.Count; y++)
                 {
@@ -52,7 +52,7 @@ namespace qASIC.FileManaging
                     bool isGroupName = temp[y].StartsWith("#");
 
                     if (isEmpty && hasData)
-                        data[x].Add(temp[y].Split(':')[0] + ": " + SortValue(temp[y].Split(':')[1]));
+                        data[x].Add($"{temp[y].Split(':')[0]}: {SortValue(temp[y].Split(':')[1])}");
                     else if (isGroupName)
                         data[x].Add(temp[y]);
                 }
@@ -61,7 +61,7 @@ namespace qASIC.FileManaging
             string test = "";
             for (int x = 0; x < data.Count; x++)
                 for (int y = 0; y < data[x].Count; y++)
-                    test += data[x][y] + "\n";
+                    test += $"{data[x][y]}\n";
 
             return data;
         }
@@ -71,12 +71,12 @@ namespace qASIC.FileManaging
             string result = "";
             for (int x = 0; x < data.Count; x++)
             {
-                if (!(data[x].Count == 0  || (x == 0 && data[x].Count == 1)))
+                if (!(data[x].Count == 0 || (x == 0 && data[x].Count == 1)))
                 {
                     for (int y = 0; y < data[x].Count; y++)
                     {
                         if (x == 0 && y == 0) y++;
-                        result += data[x][y] + "\n";
+                        result += $"{data[x][y]}\n";
                     }
                     result += "\n";
                 }
@@ -87,7 +87,7 @@ namespace qASIC.FileManaging
         public static bool OptionExistsInGroup(List<List<string>> content, string option, string group)
         {
             for (int x = 0; x < content.Count; x++)
-                if(content[x][0] == "#" + group)
+                if (content[x][0] == $"#{group}")
                     for (int y = 0; y < content[x].Count; y++)
                         if (content[x][y].Split(':').Length >= 2)
                             if (content[x][y].Split(':')[0] == option)
@@ -106,7 +106,7 @@ namespace qASIC.FileManaging
         {
             result = new List<string>();
             for (int i = 0; i < content.Count; i++)
-                if (content[i][0] == "#" + groupName) { result = content[i]; return true; }
+                if (content[i][0] == $"#{groupName}") { result = content[i]; return true; }
 
             return false;
         }
@@ -115,7 +115,7 @@ namespace qASIC.FileManaging
         {
             if (TryGettingSetting(path, settingName, group, out string value))
                 return value;
-            GameConsoleController.Log("File does not exist!", "Error1");
+            GameConsoleController.Log("File does not exist!", "error");
             return "";
         }
 
@@ -142,11 +142,11 @@ namespace qASIC.FileManaging
 
             bool groupExists = false;
             for (int i = 0; i < config.Count; i++)
-                if (config[i][0] == "#" + groupName)
+                if (config[i][0] == $"#{groupName}")
                     groupExists = true;
 
             if (!groupExists)
-                config.Add(new List<string>(new string[] { "#" + groupName }));
+                config.Add(new List<string>(new string[] { $"# + {groupName}" }));
             return config;
         }
 
@@ -166,10 +166,10 @@ namespace qASIC.FileManaging
             bool settingExists = false;
             for (int i = 0; i < content.Count; i++)
                 if (content[i].Split(':')[0] == settingName)
-                { content[i] = settingName + ": " + value; settingExists = true; break; }
+                { content[i] = $"{settingName}: {value}"; settingExists = true; break; }
 
             if (!settingExists)
-                content.Add(settingName + ": " + value);
+                content.Add($"{settingName}: {value }");
 
             config = ReplaceGroup(config, group, content);
             FileManager.SaveTxtFile(path, Encode(config));

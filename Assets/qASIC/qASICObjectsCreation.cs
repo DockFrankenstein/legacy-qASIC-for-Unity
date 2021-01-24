@@ -71,7 +71,7 @@ namespace qASIC.Backend
             CanvasScaler canvasScaler = newCanvas.AddComponent<CanvasScaler>();
             canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
 
-            /*GraphicRaycaster graphicsRaycaster = */newCanvas.AddComponent<GraphicRaycaster>();
+            newCanvas.AddComponent<GraphicRaycaster>();
 
             Canvas.ForceUpdateCanvases();
 
