@@ -30,18 +30,20 @@ namespace qASIC.Console
         }
 
         private void FixedUpdate() { if (canvasObject.activeSelf) RefreshLogs(); }
-        public void RefreshLogs() => logs.text = GameConsoleController.LogToString(logLimit);
+        public void RefreshLogs() { if (logs != null) logs.text = GameConsoleController.LogToString(logLimit); }
 
         private void ToggleConsole(bool state)
         {
             if (state && selectOnOpen) StartCoroutine(Reselect());
+            else if (input != null) input.text = "";
             onConsoleChangeState.Invoke(state);
-            canvasObject.SetActive(state);
+            if(canvasObject != null) canvasObject.SetActive(state);
             RefreshLogs();
         }
 
         private void RunCommand()
         {
+            if (input == null) return;
             if (reselectOnSubmit) StartCoroutine(Reselect());
             if (input.text == "") return;
             GameConsoleController.Log(input.text, "default", Logic.GameConsoleLog.LogType.user, false);
