@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using qASIC.Console.Tools;
+using System.Collections;
 
 namespace qASIC.Console
 {
@@ -9,6 +10,8 @@ namespace qASIC.Console
         [Header("Settings")]
         public int logLimit = 64;
         public GameConsoleConfig consoleConfig;
+        public bool selectOnOpen = true;
+        public bool reselectOnSubmit = true;
 
         [Header("Objects")]
         public GameObject canvasObject;
@@ -31,6 +34,7 @@ namespace qASIC.Console
 
         private void ToggleConsole(bool state)
         {
+            if (state && selectOnOpen) StartCoroutine(Reselect());
             onConsoleChangeState.Invoke(state);
             canvasObject.SetActive(state);
             RefreshLogs();
@@ -38,10 +42,17 @@ namespace qASIC.Console
 
         private void RunCommand()
         {
+            if (reselectOnSubmit) StartCoroutine(Reselect());
             if (input.text == "") return;
             GameConsoleController.Log(input.text, "default", Logic.GameConsoleLog.LogType.user, false);
             GameConsoleController.RunCommand(input.text);
             input.text = "";
+        }
+
+        private IEnumerator Reselect()
+        {
+            yield return null;
+            input.ActivateInputField();
         }
 
         private void Awake()
