@@ -25,6 +25,9 @@ namespace qASIC.Console.Commands
                 case 3:
                     if (args[1] == "load") LoadScene(args[2]);
                     break;
+                default:
+                    Log("There was an error while executing command <b>Scene</b>", "error");
+                    break;
             }
         }
 
