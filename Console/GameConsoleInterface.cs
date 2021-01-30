@@ -2,6 +2,7 @@
 using TMPro;
 using qASIC.Console.Tools;
 using System.Collections;
+using UnityEngine.Events;
 
 namespace qASIC.Console
 {
@@ -19,7 +20,8 @@ namespace qASIC.Console
         public TMP_InputField input;
 
         [Header("Events")]
-        public UnityEventBool onConsoleChangeState;
+        public UnityEventBool OnConsoleChangeState;
+        public UnityAction logListener;
 
         private static bool init = false;
 
@@ -29,14 +31,14 @@ namespace qASIC.Console
             if (Input.GetKeyDown(KeyCode.BackQuote) && canvasObject != null) ToggleConsole(!canvasObject.activeSelf);
         }
 
-        private void FixedUpdate() { if (canvasObject.activeSelf) RefreshLogs(); }
+        /// <summary>Updates logs from controller</summary>
         public void RefreshLogs() { if (logs != null) logs.text = GameConsoleController.LogToString(logLimit); }
 
         private void ToggleConsole(bool state)
         {
             if (state && selectOnOpen) StartCoroutine(Reselect());
             else if (input != null) input.text = "";
-            onConsoleChangeState.Invoke(state);
+            OnConsoleChangeState.Invoke(state);
             if(canvasObject != null) canvasObject.SetActive(state);
             RefreshLogs();
         }
@@ -63,12 +65,22 @@ namespace qASIC.Console
             Initialize();
         }
 
+        private void Start() => AddListinerToLog();
+
+        private void AddListinerToLog()
+        {
+            logListener = () => RefreshLogs();
+            GameConsoleController.OnLog.AddListener(logListener);
+        }
+
+        private void OnDestroy() => GameConsoleController.OnLog.RemoveListener(logListener);
+
         private void Initialize()
         {
             if (init) return;
             init = true;
             if (GameConsoleController.TryGettingConfig(out GameConsoleConfig config) && config.showThankYouMessage) 
-                GameConsoleController.Log("Thank you for using qASIC console", "qASIC");
+                GameConsoleController.Log("Thank you for using qASIC console", "qasic");
         }
     }
 }

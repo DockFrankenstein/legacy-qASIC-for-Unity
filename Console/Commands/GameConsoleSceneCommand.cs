@@ -15,14 +15,14 @@ namespace qASIC.Console.Commands
             if (!CheckForArgumentCount(args, 0, 2)) return;
             switch (args.Count)
             {
-                case 0:
+                case 1:
                     LogScene();
                     break;
-                case 1:
+                case 2:
                     if (args[1].ToLower() == "get") LogScene();
                     else LoadScene(args[1]);
                     break;
-                case 2:
+                case 3:
                     if (args[1] == "load") LoadScene(args[2]);
                     break;
             }

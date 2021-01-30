@@ -18,8 +18,11 @@ namespace qASIC.Console
         public static void Log(string text, Color color, GameConsoleLog.LogType type, bool qASIC)
         {
             logs.Add(new GameConsoleLog(text, System.DateTime.Now, color, type, qASIC));
-            if (config.logToUnity) Debug.Log($"qASIC game console: {text}");
+            if (config.logToUnity && type != GameConsoleLog.LogType.user) Debug.Log($"qASIC game console: {text}");
+            OnLog.Invoke();
         }
+
+        public static UnityEngine.Events.UnityEvent OnLog = new UnityEngine.Events.UnityEvent();
 
         private static Color GetColor(string colorName)
         {

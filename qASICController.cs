@@ -13,6 +13,7 @@ namespace qASIC
             if (hasStarted) return;
             InputManager.LoadKeys();
             SetConfig();
+            hasStarted = true;
         }
 
         private void LogLoadedScene(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode) =>
