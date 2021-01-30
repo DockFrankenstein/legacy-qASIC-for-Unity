@@ -12,9 +12,15 @@ namespace qASIC.Console
 
         #region Log
         public static void Log(string text, Color color) => Log(text, color, GameConsoleLog.LogType.game, false);
+
+        /// <param name="color">color name from the color settings</param>
         public static void Log(string text, string color) => Log(text, GetColor(color), GameConsoleLog.LogType.game, false);
 
+        /// <param name="qASIC">Should be ignored if an error occures</param>
+        /// <param name="color">color name from the color settings</param>
         public static void Log(string text, string color, GameConsoleLog.LogType type, bool qASIC) => Log(text, GetColor(color), type, qASIC);
+
+        /// <param name="qASIC">Should be ignored if an error occures</param>
         public static void Log(string text, Color color, GameConsoleLog.LogType type, bool qASIC)
         {
             logs.Add(new GameConsoleLog(text, System.DateTime.Now, color, type, qASIC));
@@ -24,6 +30,7 @@ namespace qASIC.Console
 
         public static UnityEngine.Events.UnityEvent OnLog = new UnityEngine.Events.UnityEvent();
 
+        /// <summary>Get color from color settings</summary>
         private static Color GetColor(string colorName)
         {
             if (config == null || config.colorTheme == null) return new Color(1f, 1f, 1f);
@@ -53,11 +60,12 @@ namespace qASIC.Console
         #endregion
 
         #region Logic
-        private static List<string> SortCommand(string _string)
+        /// <returns>Returns arguments</returns>
+        private static List<string> SortCommand(string cmd)
         {
             List<string> args = new List<string>();
 
-            char[] chars = _string.ToCharArray();
+            char[] chars = cmd.ToCharArray();
             bool isComplicated = false;
             string currentString = "";
 
@@ -80,10 +88,10 @@ namespace qASIC.Console
                 }
             }
             args.Add(currentString);
-
             return args;
         }
 
+        /// <summary>Convert logs to text</summary>
         public static string LogToString(int logLimit)
         {
             string log = "";
@@ -96,9 +104,9 @@ namespace qASIC.Console
         }
         #endregion
 
-        public static void RunCommand(string _string)
+        public static void RunCommand(string cmd)
         {
-            List<string> args = SortCommand(_string);
+            List<string> args = SortCommand(cmd);
 
             if (args.Count != 0)
             {
