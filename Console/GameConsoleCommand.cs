@@ -10,6 +10,7 @@ namespace qASIC.Console.Commands
         public abstract string commandName { get; }
         public abstract string description { get; }
         public abstract string help { get; }
+        public virtual string[] aliases { get; }
 
         public bool CheckForArgumentCount(List<string>args, int min, int max)
         {

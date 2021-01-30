@@ -10,6 +10,7 @@ namespace qASIC.Console.Commands
         public override string commandName { get => "input"; }
         public override string description { get => "change, print input"; }
         public override string help { get => "Use change <input name>; print"; }
+        public override string[] aliases { get => new string[] { "keys" }; }
 
         public override void Run(List<string> args)
         {

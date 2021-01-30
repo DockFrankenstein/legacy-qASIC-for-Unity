@@ -8,6 +8,7 @@ namespace qASIC.Console.Commands
         public override string commandName { get => "changeoption"; }
         public override string description { get => "changes basic options"; }
         public override string help { get => "Use resolution <x> <y>; fullscreen <state>; vsync <state>; framelock <state>"; }
+        public override string[] aliases { get => new string[] { "option", "options", "settings" }; }
 
         public override void Run(List<string> args)
         {

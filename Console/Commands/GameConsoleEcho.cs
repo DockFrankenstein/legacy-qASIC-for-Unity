@@ -8,6 +8,7 @@ namespace qASIC.Console.Commands
         public override string commandName { get => "echo"; }
         public override string description { get => "creates a new log containing a message"; }
         public override string help { get => "Write a message to echo"; }
+        public override string[] aliases { get => new string[] { "print" }; }
 
         public override void Run(List<string> args)
         {

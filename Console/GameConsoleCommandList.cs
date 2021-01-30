@@ -13,8 +13,23 @@ namespace qASIC.Console
             List<GameConsoleCommand> _commands = GetList();
             command = null;
             for (int i = 0; i < _commands.Count; i++)
-                if (_commands[i].commandName == commandName)
-                { command = _commands[i]; return true; }
+            {
+                if (AliasExists(_commands[i], commandName))
+                {
+                    command = _commands[i];
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static bool AliasExists(GameConsoleCommand command, string targetName)
+        {
+            if (command.commandName == targetName) return true;
+            if (command.aliases != null)
+                for (int i = 0; i < command.aliases.Length; i++)
+                    if (command.aliases[i] == targetName)
+                        return true;
             return false;
         }
 
@@ -29,7 +44,6 @@ namespace qASIC.Console
             }
             return commands;
         }
-
 
         public static List<Type> FindAllDerivedTypes<T>()
         { return FindAllDerivedTypes<T>(Assembly.GetAssembly(typeof(T))); }
