@@ -9,21 +9,16 @@ namespace qASIC.Backend
 {
     public static class qASICObjectsCreation
     {
-        private static string lastKeyName = "";
-
-        public static void test(KeyCode key)
-        {
-            InputManager.ChangeInput(lastKeyName, key, true);
-        }
-
         public static GameObject CreateInputWindow(string newKeyName)
         {
             GameObject canvas = CreateCanvas();
 
+            InputAssign assign = canvas.AddComponent<InputAssign>();
+            assign.Initialize(null, newKeyName);
+
             InputListiner listiner = canvas.AddComponent<InputListiner>();
             listiner.StartListening(true, true);
-            lastKeyName = newKeyName;
-            listiner.onInputRevived.AddListener(test);
+            listiner.onInputRecived.AddListener(assign.Assign);
 
             //back color
             GameObject backColor = new GameObject("Color");

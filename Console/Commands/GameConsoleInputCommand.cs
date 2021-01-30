@@ -34,10 +34,10 @@ namespace qASIC.Console.Commands
         public static void Print()
         {
             string log = "<b>InputKeys.asset</b> has been loaded:";
-            List<InputKeyValue> keys = InputManager.GetKeys().values;
+            List<string> keys = new List<string>(InputManager.globalKeys.presets.Keys);
             for (int i = 0; i < keys.Count; i++)
-                log += "\n" + keys[i].keyName + ": " + keys[i].key;
-            GameConsoleController.Log(log, "Input");
+                log += "\n" + keys[i] + ": " + InputManager.globalKeys.presets[keys[i]];
+            GameConsoleController.Log(log, "input");
         }
     }
 }
