@@ -5,7 +5,7 @@ namespace qASIC.Console.Logic
 {
     public class GameConsoleLog
     {
-        public enum LogType { user, game };
+        public enum LogType { user, game, clear };
         public LogType logType { get; }
         public DateTime time { get; }
         public string message { get; }
@@ -31,6 +31,9 @@ namespace qASIC.Console.Logic
                     break;
                 case LogType.game:
                     log = $" {log}";
+                    break;
+                case LogType.clear:
+                    log = " !clear";
                     break;
                 default:
                     log = $"?{log}";

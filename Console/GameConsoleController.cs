@@ -98,7 +98,9 @@ namespace qASIC.Console
             for (int i = 0; i < logLimit; i++)
             {
                 if (i >= logs.Count) break;
-                log += $"\n{logs[Mathf.Clamp(logs.Count - logLimit, 0, int.MaxValue) + i].ToText()}";
+                int index = Mathf.Clamp(logs.Count - logLimit, 0, int.MaxValue) + i;
+                if (logs[index].logType == GameConsoleLog.LogType.clear) log = "";
+                else log += $"\n{logs[index].ToText()}";
             }
             return log;
         }
