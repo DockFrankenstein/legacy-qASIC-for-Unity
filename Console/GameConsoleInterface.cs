@@ -13,11 +13,13 @@ namespace qASIC.Console
         public GameConsoleConfig consoleConfig;
         public bool selectOnOpen = true;
         public bool reselectOnSubmit = true;
+        public bool resetScrollOnLog = true;
 
         [Header("Objects")]
         public GameObject canvasObject;
         public TextMeshProUGUI logs;
         public TMP_InputField input;
+        public UnityEngine.UI.ScrollRect scroll;
 
         [Header("Events")]
         public UnityEventBool OnConsoleChangeState;
@@ -32,7 +34,11 @@ namespace qASIC.Console
         }
 
         /// <summary>Updates logs from controller</summary>
-        public void RefreshLogs() { if (logs != null) logs.text = GameConsoleController.LogToString(logLimit); }
+        public void RefreshLogs() 
+        { 
+            if (logs != null) logs.text = GameConsoleController.LogToString(logLimit);
+            ResetScroll();
+        }
 
         private void ToggleConsole(bool state)
         {
@@ -81,6 +87,13 @@ namespace qASIC.Console
             init = true;
             if (GameConsoleController.TryGettingConfig(out GameConsoleConfig config) && config.showThankYouMessage) 
                 GameConsoleController.Log("Thank you for using qASIC console", "qasic");
+        }
+
+        public void ResetScroll()
+        {
+            if (!resetScrollOnLog) return;
+            Canvas.ForceUpdateCanvases();
+            scroll.verticalNormalizedPosition = 0f;
         }
     }
 }
