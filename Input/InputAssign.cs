@@ -20,9 +20,10 @@ namespace qASIC.InputManagment
         }
 
         public void Assign(KeyCode key)
-        { 
-            if(keys != null) keys = InputManager.ChangeInput(keys, keyName, key); 
-            else InputManager.ChangeInput(keyName, key);
+        {
+            Debug.Log(keys == null);
+            if (keys != null) keys = InputManager.ChangeInput(keys, keyName, key);
+            else { InputManager.ChangeInput(keyName, key); }
             if (keys != null) OnAssign.Invoke(keys);
         }
     }

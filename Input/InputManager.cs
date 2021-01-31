@@ -15,7 +15,11 @@ namespace qASIC.InputManagment
                 if (global == null) global = new InputManagerKeys();
                 return global;
             }
-            set => global = value;
+            set
+            {
+                global = value;
+                Debug.Log($"Set {global.presets.Count}");
+            }
         }
 
         public static void SaveKeys() => SaveKeys(globalKeys);
@@ -23,9 +27,8 @@ namespace qASIC.InputManagment
         {
             string path = $"{Application.persistentDataPath}/{keys.savePath}";
             List<string> keyList = new List<string>(keys.presets.Keys);
-            for (int i = 0; i < keyList.Count; i++)
-                //FileManaging.ConfigController.SaveSetting(path, keyList[i], keys.presets[keyList[i]].ToString(), "Keys");
-                GameConsoleController.Log(keyList[i] + " " + keys.presets[keyList[i]], "default");
+            foreach (var entry in keys.presets)
+                FileManaging.ConfigController.SaveSetting(path, entry.Key, entry.Value.ToString(), "Keys");
         }
 
         public static void LoadUserKeys() => globalKeys = LoadUserKeys(globalKeys);
@@ -78,9 +81,10 @@ namespace qASIC.InputManagment
         public static void ChangeInput(string keyName, KeyCode newKey) => globalKeys = ChangeInput(globalKeys, keyName, newKey);
         public static InputManagerKeys ChangeInput(InputManagerKeys keys, string keyName, KeyCode newKey)
         {
-            if (keys == null || keys.presets.ContainsKey(keyName)) return keys;
+            if (keys == null || !keys.presets.ContainsKey(keyName)) return keys;
             keys.presets[keyName] = newKey;
             SaveKeys(keys);
+            GameConsoleController.Log($"Changed input <b>{keyName}</b> to: {newKey}", "input", Console.Logic.GameConsoleLog.LogType.game, false);
             return keys;
         }
 

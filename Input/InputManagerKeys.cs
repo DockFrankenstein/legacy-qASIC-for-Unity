@@ -3,10 +3,11 @@ using UnityEngine;
 
 namespace qASIC.InputManagment
 {
+    [System.Serializable]
     public class InputManagerKeys
     {
-        public string savePath;
-        public Dictionary<string, KeyCode> presets;
+        [SerializeField] public string savePath;
+        [SerializeField] public Dictionary<string, KeyCode> presets;
 
         public InputManagerKeys()
         {
