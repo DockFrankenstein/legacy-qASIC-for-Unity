@@ -11,7 +11,6 @@ namespace qASIC
         private void Awake()
         {
             if (hasStarted) return;
-            InputManager.LoadKeys();
             SetConfig();
             hasStarted = true;
         }

@@ -7,215 +7,94 @@ namespace qASIC.InputManagment
 {
     public static class InputManager
     {
-        private static Color errorColor = new Color(1f, 0f, 0f);
-        private readonly static InputManagerKeys keys = new InputManagerKeys();
-
-        public static InputManagerKeys GetKeys() { return keys; }
-
-        public static void CheckForKeys()
+        private static InputManagerKeys global;
+        public static InputManagerKeys globalKeys
         {
-            if (keys.values == null)
-                LoadKeys();
-        }
-
-        public static void SaveKeys()
-        {
-            string path = $"{Application.persistentDataPath}/qASIC/InputKeys.txt";
-            for (int i = 0; i < keys.values.Count; i++)
-                FileManaging.ConfigController.SaveSetting(path, keys.values[i].keyName, keys.values[i].key.ToString(), "Keys");
-        }
-
-        public static void LoadKeys()
-        {
-            keys.values = new List<InputKeyValue>();
-
-            string path = $"{FileManaging.FileManager.TrimPathEnd(Application.dataPath, 1)}/ProjectSettings/qASIC/InputKeys.asset";
-
-            if (FileManaging.FileManager.TryLoadTxtFile(path, out string data))
+            get 
             {
-                if (FileManaging.ConfigController.TryGettingConfigGroup("Keys", FileManaging.ConfigController.Decode(data), out List<string> settings))
-                    for (int i = 0; i < settings.Count; i++)
-                        if (i != 0)
-                        {
-                            string[] setting = settings[i].Split(':');
-                            if (System.Enum.TryParse(FileManaging.ConfigController.SortValue(setting[1]), out KeyCode key))
-                                keys.Add(setting[0], key);
-                        }
-                LoadUserKeys();
+                if (global == null) global = new InputManagerKeys();
+                return global;
             }
-            else
-                SaveKeys();
+            set
+            {
+                global = value;
+                Debug.Log($"Set {global.presets.Count}");
+            }
         }
 
-        private static void LoadUserKeys()
+        public static void SaveKeys() => SaveKeys(globalKeys);
+        public static void SaveKeys(InputManagerKeys keys)
         {
-            string path = $"{Application.persistentDataPath}/InputKeys.txt";
-            if (FileManaging.FileManager.TryLoadTxtFile(path, out string data))
+            string path = $"{Application.persistentDataPath}/{keys.savePath}";
+            List<string> keyList = new List<string>(keys.presets.Keys);
+            foreach (var entry in keys.presets)
+                FileManaging.ConfigController.SaveSetting(path, entry.Key, entry.Value.ToString(), "Keys");
+        }
+
+        public static void LoadUserKeys() => globalKeys = LoadUserKeys(globalKeys);
+        public static InputManagerKeys LoadUserKeys(InputManagerKeys keys)
+        {
+            string path = $"{Application.persistentDataPath}/{keys.savePath}";
+            if (!FileManaging.FileManager.TryLoadTxtFile(path, out string data)) return keys;
+            if (!FileManaging.ConfigController.TryGettingConfigGroup("Keys", FileManaging.ConfigController.Decode(data), out List<string> settings)) return keys;
+
+            for (int i = 0; i < settings.Count; i++)
             {
-                if (FileManaging.ConfigController.TryGettingConfigGroup("Keys", FileManaging.ConfigController.Decode(data), out List<string> settings))
+                if (!settings[i].StartsWith("#"))
                 {
-                    for (int i = 0; i < settings.Count; i++)
+                    string[] values = settings[i].Split(':');
+                    if (values.Length == 2)
                     {
-                        if (!settings[i].StartsWith("#"))
-                        {
-                            string[] values = settings[i].Split(':');
-                            values[1] = FileManaging.ConfigController.SortValue(values[1]);
-                            if (keys.TryGetting(values[0], out _))
-                                keys.Change(values[0], (KeyCode)System.Enum.Parse(typeof(KeyCode), values[1]));
-                        }
+                        values[1] = FileManaging.ConfigController.SortValue(values[1]);
+                        if (keys.presets.ContainsKey(values[0]))
+                            keys.presets[values[1]] = (KeyCode)System.Enum.Parse(typeof(KeyCode), values[1]);
                     }
                 }
             }
+            return keys;
         }
 
-        public static bool GetInputDown(string keyName)
+        public static bool GetInputDown(string keyName) => GetInputDown(globalKeys, keyName);
+        public static bool GetInputDown(InputManagerKeys keys, string keyName)
         {
-            CheckForKeys();
-            List<KeyCode> keyCodes = keys.GetKeyCodes(keyName);
-
-            bool state = false;
-            for (int i = 0; i < keyCodes.Count; i++)
-                if (Input.GetKeyDown(keyCodes[i]))
-                    state = true;
-
-            if (!state)
-                KeyNotFoundError(keyName);
-
-            return state;
+            if (keys == null) return false;
+            if (!keys.presets.ContainsKey(keyName)) return false;
+            return Input.GetKeyDown(keys.presets[keyName]);
         }
 
-        public static bool GetInput(string keyName)
+        public static bool GetInput(string keyName) => GetInput(globalKeys, keyName);
+        public static bool GetInput(InputManagerKeys keys, string keyName)
         {
-            CheckForKeys();
-            List<KeyCode> keyCodes = keys.GetKeyCodes(keyName);
-
-            bool state = false;
-            for (int i = 0; i < keyCodes.Count; i++)
-                if (Input.GetKey(keyCodes[i]))
-                    state = true;
-
-            if (!state)
-                KeyNotFoundError(keyName);
-
-            return state;
+            if (keys == null) return false;
+            if (!keys.presets.ContainsKey(keyName)) return false;
+            return Input.GetKey(keys.presets[keyName]);
         }
 
-        public static bool GetInputUp(string keyName)
+        public static bool GetInputUp(string keyName) => GetInputUp(globalKeys, keyName);
+        public static bool GetInputUp(InputManagerKeys keys, string keyName)
         {
-            CheckForKeys();
-            List<KeyCode> keyCodes = keys.GetKeyCodes(keyName);
-
-            bool state = false;
-            for (int i = 0; i < keyCodes.Count; i++)
-                if (Input.GetKeyUp(keyCodes[i]))
-                    state = true;
-
-            if (!state)
-                KeyNotFoundError(keyName);
-
-            return state;
+            if (keys == null) return false;
+            if (!keys.presets.ContainsKey(keyName)) return false;
+            return Input.GetKeyUp(keys.presets[keyName]);
         }
 
-        private static void KeyNotFoundError(string keyName)
-        { GameConsoleController.Log($"Key <b>{keyName}</b> does not exist!", "error"); }
-
-        public static void ChangeInput(string keyName, KeyCode newKey, bool save = false)
+        public static void ChangeInput(string keyName, KeyCode newKey) => globalKeys = ChangeInput(globalKeys, keyName, newKey);
+        public static InputManagerKeys ChangeInput(InputManagerKeys keys, string keyName, KeyCode newKey)
         {
-            if (!keys.TryChanging(keyName, newKey))
-                KeyNotFoundError(keyName);
-
-            if (save) SaveKeys();
+            if (keys == null || !keys.presets.ContainsKey(keyName)) return keys;
+            keys.presets[keyName] = newKey;
+            SaveKeys(keys);
+            GameConsoleController.Log($"Changed input <b>{keyName}</b> to: {newKey}", "input", Console.Logic.GameConsoleLog.LogType.game, false);
+            return keys;
         }
 
-        public static float GetAxis(string positive, string negative)
+        public static float GetAxis(string positive, string negative) => GetAxis(globalKeys, positive, negative);
+        public static float GetAxis(InputManagerKeys keys, string positive, string negative)
         {
             float value = 0f;
-            if (GetInput(positive)) value++;
-            if (GetInput(negative)) value--;
+            if (GetInput(keys, positive)) value++;
+            if (GetInput(keys, negative)) value--;
             return value;
-        }
-
-        public static void AddInput(string keyName, KeyCode key, bool save = false) 
-        { keys.Add(keyName, key); if(!save) SaveKeys(); }
-
-        public static void RemoveInput(string keyName, bool save = false) 
-        { keys.Remove(keyName); if (!save) SaveKeys(); }
-    }
-
-    public class InputManagerKeys
-    {
-        private Color errorColor = new Color(1f, 0f, 0f);
-        public List<InputKeyValue> values = null;
-
-        public void Add(string keyName, KeyCode key) => values.Add(new InputKeyValue(keyName, key));
-        public void Remove(string keyName)
-        {
-            for (int i = 0; i < values.Count; i++)
-                if (values[i].keyName == keyName)
-                {
-                    values.RemoveAt(i);
-                    return;
-                }
-            GameConsoleController.Log($"Cannot remove key <b>{keyName}</b>", "error");
-        }
-
-        public bool TryChanging(string keyName, KeyCode newKey)
-        {
-            for (int i = 0; i < values.Count; i++)
-            {
-                if (values[i].keyName == keyName)
-                {
-                    values[i].key = newKey;
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public void Change(string keyName, KeyCode newKey)
-        {
-            if (!TryChanging(keyName, newKey))
-                GameConsoleController.Log($"Key <b>{keyName}</b> does not exist!", "error");
-        }
-
-        public KeyCode Get(string keyName)
-        {
-            if (TryGetting(keyName, out KeyCode key))
-                return key;
-            GameConsoleController.Log($"Key <b>{keyName}</b> does not exist!", "error");
-            return KeyCode.None;
-        }
-
-        public List<KeyCode> GetKeyCodes(string keyName)
-        {
-            List<KeyCode> keyCodes = new List<KeyCode>();
-            for (int i = 0; i < values.Count; i++)
-                if (values[i].keyName == keyName)
-                    keyCodes.Add(values[i].key);
-            return keyCodes;
-        }
-
-        public bool TryGetting(string keyName, out KeyCode key)
-        {
-            List<KeyCode> keyCodes = GetKeyCodes(keyName);
-            key = KeyCode.None;
-
-            bool wereKeyCodesFound = keyCodes.Count != 0;
-            if (wereKeyCodesFound)
-                key = keyCodes[1];
-            return wereKeyCodesFound;
-        }
-    }
-
-    public class InputKeyValue
-    {
-        public string keyName;
-        public KeyCode key;
-
-        public InputKeyValue(string _keyName, KeyCode _key)
-        {
-            keyName = _keyName;
-            key = _key;
         }
     }
 }
