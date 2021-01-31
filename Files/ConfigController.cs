@@ -214,7 +214,7 @@ namespace qASIC.FileManaging
             content = AddGroup(content, group);
             TryGettingConfigGroup(group, content, out List<string> groupData);
             bool settingExists = false;
-            for (int i = 0; i < content.Count; i++)
+            for (int i = 0; i < groupData.Count; i++)
                 if (groupData[i].Split(':')[0] == settingName)
                 { groupData[i] = $"{settingName}: {value}"; settingExists = true; break; }
             if (!settingExists) groupData.Add($"{settingName}: {value }");
