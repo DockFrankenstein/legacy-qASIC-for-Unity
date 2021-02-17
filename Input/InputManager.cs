@@ -26,23 +26,22 @@ namespace qASIC.InputManagment
         {
             string path = $"{Application.persistentDataPath}/{keys.SavePath}";
             foreach (var entry in keys.Presets)
-                FileManaging.ConfigController.SaveSetting(path, entry.Key, entry.Value.ToString(), "Keys");
+                FileManaging.ConfigController.SetSetting(path, entry.Key, entry.Value.ToString());
         }
 
         public static void LoadUserKeys() => GlobalKeys = LoadUserKeys(GlobalKeys);
         public static InputManagerKeys LoadUserKeys(InputManagerKeys keys)
         {
             string path = $"{Application.persistentDataPath}/{keys.SavePath}";
-            if (!FileManaging.FileManager.TryLoadFileWriter(path, out string data)) return keys;
-            if (!FileManaging.ConfigController.TryGettingConfigGroup("Keys", FileManaging.ConfigController.Decode(data), out List<string> settings)) return keys;
+            if (!FileManaging.FileManager.TryLoadFileWriter(path, out string content)) return keys;
+            List<string> settings = FileManaging.ConfigController.CreateOptionList(content);
 
             for (int i = 0; i < settings.Count; i++)
             {
                 if (!settings[i].StartsWith("#")) continue;
-                string[] values = settings[i].Split(':');
-                if (values.Length == 2) continue;
-                values[1] = FileManaging.ConfigController.SortValue(values[1]);
-                if (keys.Presets.ContainsKey(values[0])) keys.Presets[values[1]] = (KeyCode)System.Enum.Parse(typeof(KeyCode), values[1]);
+                string[] values = settings[i].Split(new string[] { ": " }, System.StringSplitOptions.RemoveEmptyEntries);
+                if (values.Length != 2) continue;
+                if (keys.Presets.ContainsKey(values[0]) && System.Enum.TryParse(values[1], out KeyCode result)) keys.Presets[values[1]] = result;
             }
             return keys;
         }

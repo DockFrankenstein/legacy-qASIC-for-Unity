@@ -77,7 +77,7 @@ namespace qASIC.Console
 
         public void ResetScroll()
         {
-            if (!ResetScrollOnLog) return;
+            if (!ResetScrollOnLog || Scroll == null) return;
             Canvas.ForceUpdateCanvases();
             Scroll.verticalNormalizedPosition = 0f;
         }
