@@ -28,7 +28,8 @@ namespace qASIC.Console
         private void Awake()
         {
             AssignConfig();
-            if (GameConsoleController.TryGettingConfig(out GameConsoleConfig config) && config.LogScene) 
+            ReloadInterface();
+            if (GameConsoleController.TryGettingConfig(out GameConsoleConfig config) && config.LogScene)
                 UnityEngine.SceneManagement.SceneManager.sceneLoaded += LogLoadedScene;
         }
         private void Start() => RefreshLogs();
@@ -37,6 +38,14 @@ namespace qASIC.Console
 
         public void LogLoadedScene(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode) =>
             GameConsoleController.Log($"Loaded scene {scene.name}", "scene", Logic.GameConsoleLog.LogType.game);
+
+        private void ReloadInterface()
+        {
+            if (CanvasObject == null) return;
+            CanvasObject.SetActive(true);
+            Canvas.ForceUpdateCanvases();
+            CanvasObject.SetActive(false);
+        }
 
         private void Update()
         {

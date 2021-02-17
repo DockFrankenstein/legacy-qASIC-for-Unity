@@ -33,13 +33,13 @@ namespace qASIC.Console
         public static List<GameConsoleCommand> UpdateList()
         {
             List<Type> types = FindAllTypes();
-            Commands.Clear();
+            _commands.Clear();
             for (int i = 0; i < types.Count; i++)
             {
                 ConstructorInfo constructor = types[i].GetConstructor(Type.EmptyTypes);
-                Commands.Add((GameConsoleCommand)constructor.Invoke(null));
+                _commands.Add((GameConsoleCommand)constructor.Invoke(null));
             }
-            return Commands;
+            return _commands;
         }
 
         public static List<Type> FindAllTypes()
