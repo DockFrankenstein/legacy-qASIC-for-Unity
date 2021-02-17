@@ -10,50 +10,52 @@ namespace qASIC.Console
     {
         public static bool TryGettingCommandByName(string commandName, out GameConsoleCommand command)
         {
-            List<GameConsoleCommand> _commands = GetList();
             command = null;
-            for (int i = 0; i < _commands.Count; i++)
+            for (int i = 0; i < Commands.Count; i++)
             {
-                if (AliasExists(_commands[i], commandName))
-                {
-                    command = _commands[i];
-                    return true;
-                }
+                if (!AliasExists(Commands[i], commandName)) continue;
+                command = Commands[i];
+                return true;
             }
             return false;
         }
 
         private static bool AliasExists(GameConsoleCommand command, string targetName)
         {
-            if (command.commandName == targetName) return true;
-            if (command.aliases != null)
-                for (int i = 0; i < command.aliases.Length; i++)
-                    if (command.aliases[i] == targetName)
-                        return true;
+            if (command.CommandName == targetName) return true;
+            if (command.Aliases == null) return false;
+            for (int i = 0; i < command.Aliases.Length; i++)
+                if (command.Aliases[i] == targetName) 
+                    return true;
             return false;
         }
 
-        public static List<GameConsoleCommand> GetList()
+        public static List<GameConsoleCommand> UpdateList()
         {
-            List<Type> types = FindAllDerivedTypes<GameConsoleCommand>();
-            commands = new List<GameConsoleCommand>();
+            List<Type> types = FindAllTypes();
+            Commands.Clear();
             for (int i = 0; i < types.Count; i++)
             {
                 ConstructorInfo constructor = types[i].GetConstructor(Type.EmptyTypes);
-                commands.Add((GameConsoleCommand)constructor.Invoke(null));
+                Commands.Add((GameConsoleCommand)constructor.Invoke(null));
             }
-            return commands;
+            return Commands;
         }
 
-        public static List<Type> FindAllDerivedTypes<T>()
-        { return FindAllDerivedTypes<T>(Assembly.GetAssembly(typeof(T))); }
-
-        public static List<Type> FindAllDerivedTypes<T>(Assembly assembly)
+        public static List<Type> FindAllTypes()
         {
-            var derivedType = typeof(T);
-            return assembly.GetTypes().Where(t => t != derivedType && derivedType.IsAssignableFrom(t)).ToList();
+            var derivedType = typeof(GameConsoleCommand);
+            return Assembly.GetAssembly(typeof(GameConsoleCommand)).GetTypes().Where(t => t != derivedType && derivedType.IsAssignableFrom(t)).ToList();
         }
 
-        private static List<GameConsoleCommand> commands = new List<GameConsoleCommand>();
+        private static List<GameConsoleCommand> _commands = new List<GameConsoleCommand>();
+        public static List<GameConsoleCommand> Commands 
+        {
+            get
+            {
+                if (_commands.Count == 0) UpdateList();
+                return _commands;
+            }
+        }
     }
 }

@@ -6,24 +6,7 @@ namespace qASIC.FileManaging
 {
     public static class FileManager
     {
-        #region GetPath
-        /// <return>Returns the desktop folder path</return>
-        public static string GetDesktopPath() { return System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop); }
-        /// <return>Returns the profile folder path</return>
-        public static string GetProfilePath() { return System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile); }
-        /// <return>Returns the favourites folder path</return>
-        public static string GetFavouritesPath() { return System.Environment.GetFolderPath(System.Environment.SpecialFolder.Favorites); }
-        /// <return>Returns the documents folder path</return>
-        public static string GetDocumentsPath() { return System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments); }
-        /// <return>Returns the music folder path</return>
-        public static string GetMusicsPath() { return System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyMusic); }
-        /// <return>Returns the pictures folder path</return>
-        public static string GetPicturesPath() { return System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures); }
-        /// <return>Returns the videos folder path</return>
-        public static string GetVideosPath() { return System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyVideos); }
-        /// <return>Returns the specified folder</return>
-        public static string GetCustomFolder(System.Environment.SpecialFolder type) { return System.Environment.GetFolderPath(type); }
-        #endregion
+        public static string GetCustomFolderPath(System.Environment.SpecialFolder type) { return System.Environment.GetFolderPath(type); }
 
         #region Trim
         /// <summary>Trims paths end by specified amount of folders</summary>
@@ -34,11 +17,8 @@ namespace qASIC.FileManaging
             amount = Mathf.Abs(amount);
             string[] folders = path.Split('/');
 
-            string trimmedPath = "";
-            for (int i = 0; i < folders.Length - amount; i++)
-            {
-                trimmedPath += $"{folders[i]}/";
-            }
+            string trimmedPath = string.Empty;
+            for (int i = 0; i < folders.Length - amount; i++) trimmedPath += $"{folders[i]}/";
             return trimmedPath.TrimEnd('/');
         }
 
@@ -50,7 +30,7 @@ namespace qASIC.FileManaging
             amount = Mathf.Abs(amount);
             string[] folders = path.Split('/');
 
-            string trimmedPath = "";
+            string trimmedPath = string.Empty;
             for (int i = 0; i < folders.Length - amount; i++)
             {
                 trimmedPath += $"{folders[i + amount]}/";
@@ -79,6 +59,20 @@ namespace qASIC.FileManaging
             fileStream.Close();
         }
 
+        public static bool TrySavingFile(string path, object data)
+        {
+            try
+            {
+                SaveFile(path, data);
+            }
+            catch (System.Exception ex)
+            {
+                Console.GameConsoleController.Log($"Couldn't save file. Exception: {ex}", "error");
+                return false;
+            }
+            return true;
+        }
+
         public static object LoadFile(string path)
         {
             FileStream fileStream = File.Open(path, FileMode.Open);
@@ -92,9 +86,15 @@ namespace qASIC.FileManaging
         /// <returns>Returns if the file exists</returns>
         public static bool TryLoadingFile(string path, out object data)
         {
-            data = new object();
-            if (FileExists(path)) return false;
-            data = LoadFile(path);
+            data = null;
+            try 
+            { 
+                data = LoadFile(path); 
+            }
+            catch
+            {
+                return false;
+            }
             return true;
         }
 
@@ -121,7 +121,7 @@ namespace qASIC.FileManaging
         #endregion
 
         #region Txt
-        public static void SaveTxtFile(string path, string data)
+        public static void SaveFileWriter(string path, string data)
         {
             string directory = TrimPathEnd(path, 1);
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
@@ -131,14 +131,14 @@ namespace qASIC.FileManaging
             writer.Close();
         }
 
-        public static bool TryLoadTxtFile(string path, out string data)
+        public static bool TryLoadFileWriter(string path, out string data)
         {
-            data = "";
+            data = string.Empty;
             if (!File.Exists(path)) return false;
             StreamReader reader = new StreamReader(path);
             data = reader.ReadToEnd();
             reader.Close();
-            if (data == null) data = "";
+            if (data == null) data = string.Empty;
             return true;
         }
         #endregion

@@ -6,19 +6,19 @@ namespace qASIC.InputManagment
     [System.Serializable]
     public class InputManagerKeys
     {
-        [SerializeField] public string savePath;
-        [SerializeField] public Dictionary<string, KeyCode> presets;
+        public string SavePath;
+        public Dictionary<string, KeyCode> Presets;
 
         public InputManagerKeys()
         {
-            savePath = "qASIC/Input.txt";
-            presets = new Dictionary<string, KeyCode>();
+            SavePath = "qASIC/Input.txt";
+            Presets = new Dictionary<string, KeyCode>();
         }
 
-        public InputManagerKeys(string _savePath, Dictionary<string, KeyCode>  _presets)
+        public InputManagerKeys(string savePath, Dictionary<string, KeyCode> presets)
         {
-            savePath = _savePath;
-            presets = _presets;
+            SavePath = savePath;
+            Presets = presets;
         }
     }
 }

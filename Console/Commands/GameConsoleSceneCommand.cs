@@ -6,10 +6,10 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleSceneCommand : GameConsoleCommand
     {
-        public override string commandName { get => "scene"; }
-        public override string description { get => "get, load scene"; }
-        public override string help { get => "Use get; load"; }
-        public override string[] aliases { get => new string[] { "loadscene", "level", "loadlevel" }; }
+        public override string CommandName { get => "scene"; }
+        public override string Description { get => "get, load scene"; }
+        public override string Help { get => "Use get; load"; }
+        public override string[] Aliases { get => new string[] { "loadscene", "level", "loadlevel" }; }
 
         public override void Run(List<string> args)
         {
@@ -35,10 +35,13 @@ namespace qASIC.Console.Commands
         private void LoadScene(string sceneName)
         {
             if (!Application.CanStreamedLevelBeLoaded(sceneName))
-                Log("Scene does not exist!", "Error1");
+            {
+                Log("Scene does not exist!", "error");
+                return;
+            }
             SceneManager.LoadScene(sceneName);
         }
 
-        private void LogScene() => Log($"Current scene: <b>{SceneManager.GetActiveScene().name}</b>", "Scene");
+        private void LogScene() => Log($"Current scene: <b>{SceneManager.GetActiveScene().name}</b>", "scene");
     }
 }

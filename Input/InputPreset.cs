@@ -4,28 +4,27 @@ using UnityEngine;
 
 namespace qASIC.InputManagment
 {
-    [ExecuteInEditMode]
-    [System.Serializable]
     [CreateAssetMenu(fileName = "NewInputPreset", menuName = "Input Preset")]
     public class InputPreset : ScriptableObject, ISerializationCallbackReceiver
     {
-        [SerializeField] public InputManagerKeys preset = new InputManagerKeys();
+        public InputManagerKeys Preset = new InputManagerKeys();
 
-        public List<string> _keys;
-        public List<KeyCode> _values;
+        private List<string> _keys = new List<string>();
+        private List<KeyCode> _values = new List<KeyCode>();
 
         public void OnAfterDeserialize()
         {
-            preset.presets = new Dictionary<string, KeyCode>();
+            Preset.Presets = new Dictionary<string, KeyCode>();
             for (int i = 0; i < Mathf.Min(_keys.Count, _values.Count); i++)
-                preset.presets.Add(_keys[i], _values[i]);
+                if(!Preset.Presets.ContainsKey(_keys[i]))
+                    Preset.Presets.Add(_keys[i], _values[i]);
         }
 
         public void OnBeforeSerialize()
         {
             _keys.Clear();
             _values.Clear();
-            foreach (KeyValuePair<string, KeyCode> entry in preset.presets)
+            foreach (KeyValuePair<string, KeyCode> entry in Preset.Presets)
             {
                 _keys.Add(entry.Key);
                 _values.Add(entry.Value);

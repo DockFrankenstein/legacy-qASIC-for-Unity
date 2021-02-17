@@ -8,54 +8,50 @@ namespace qASIC.Console
 {
     public static class GameConsoleController
     {
-        public static List<GameConsoleLog> logs = new List<GameConsoleLog>();
+        public static List<GameConsoleLog> Logs = new List<GameConsoleLog>();
 
         #region Log
-        public static void Log(string text, Color color) => Log(text, color, GameConsoleLog.LogType.game, false);
-
         /// <param name="color">color name from the color settings</param>
-        public static void Log(string text, string color) => Log(text, GetColor(color), GameConsoleLog.LogType.game, false);
-
-        /// <param name="qASIC">Should be ignored if an error occures</param>
+        public static void Log(string text, string color) => Log(new GameConsoleLog(text, System.DateTime.Now, color, GameConsoleLog.LogType.game));
         /// <param name="color">color name from the color settings</param>
-        public static void Log(string text, string color, GameConsoleLog.LogType type, bool qASIC) => Log(text, GetColor(color), type, qASIC);
+        public static void Log(string text, string color, GameConsoleLog.LogType type) => Log(new GameConsoleLog(text, System.DateTime.Now, color, type));
+        public static void Log(string text, Color color) => Log(new GameConsoleLog(text, System.DateTime.Now, color, GameConsoleLog.LogType.game));
+        public static void Log(string text, Color color, GameConsoleLog.LogType type) => Log(new GameConsoleLog(text, System.DateTime.Now, color, type));
 
-        /// <param name="qASIC">Should be ignored if an error occures</param>
-        public static void Log(string text, Color color, GameConsoleLog.LogType type, bool qASIC)
+        public static void Log(GameConsoleLog log)
         {
-            logs.Add(new GameConsoleLog(text, System.DateTime.Now, color, type, qASIC));
-            if (config.logToUnity && type != GameConsoleLog.LogType.user) Debug.Log($"qASIC game console: {text}");
-            OnLog.Invoke();
+            Logs.Add(log);
+            if (_config.LogToUnity && log.Type != GameConsoleLog.LogType.user) Debug.Log($"qASIC game console: {log.Message}");
+            if (Logs.Count == 1 && TryGettingConfig(out GameConsoleConfig config) && config.ShowThankYouMessage) 
+                Log("Thank you for using qASIC console", "qasic");
         }
 
-        public static UnityEngine.Events.UnityEvent OnLog = new UnityEngine.Events.UnityEvent();
-
         /// <summary>Get color from color settings</summary>
-        private static Color GetColor(string colorName)
+        public static Color GetColor(string colorName)
         {
-            if (config == null || config.colorTheme == null) return new Color(1f, 1f, 1f);
+            if (_config == null || _config.ColorTheme == null) return new Color(1f, 1f, 1f);
             colorName = colorName.ToLower();
 
-            if (colorName == "default") return config.colorTheme.defaultColor;
-            if (colorName == "error") return config.colorTheme.errorColor;
-            if (colorName == "qasic") return config.colorTheme.qASICColor;
+            if (colorName == "default") return _config.ColorTheme.defaultColor;
+            if (colorName == "error") return _config.ColorTheme.errorColor;
+            if (colorName == "qasic") return _config.ColorTheme.qASICColor;
 
-            for (int i = 0; i < config.colorTheme.colors.Length; i++)
-                if (config.colorTheme.colors[i].colorName.ToLower() == colorName)
-                    return config.colorTheme.colors[i].color;
-            return config.colorTheme.defaultColor;
+            for (int i = 0; i < _config.ColorTheme.colors.Length; i++)
+                if (_config.ColorTheme.colors[i].colorName.ToLower() == colorName)
+                    return _config.ColorTheme.colors[i].color;
+            return _config.ColorTheme.defaultColor;
         }
         #endregion
 
         #region Config
-        private static GameConsoleConfig config;
-        public static GameConsoleConfig GetConfig() { return config; }
-        public static bool TryGettingConfig(out GameConsoleConfig _config) { _config = config; return _config != null; }
+        private static GameConsoleConfig _config;
+        public static GameConsoleConfig GetConfig() { return _config; }
+        public static bool TryGettingConfig(out GameConsoleConfig _config) { _config = GameConsoleController._config; return _config != null; }
         public static void AssignConfig(GameConsoleConfig newConfig)
         {
-            if (config == newConfig) return;
-            config = newConfig;
-            if (config.logConfigAssigment) Log("Assigned new config", "sync", GameConsoleLog.LogType.game, false);
+            if (_config == newConfig) return;
+            _config = newConfig;
+            if (_config.LogConfigAssigment) Log("Assigned new config", "sync", GameConsoleLog.LogType.game);
         }
         #endregion
 
@@ -65,43 +61,49 @@ namespace qASIC.Console
         {
             List<string> args = new List<string>();
 
-            char[] chars = cmd.ToCharArray();
-            bool isComplicated = false;
+            bool isAdvanced = false;
             string currentString = "";
 
-            for (int i = 0; i < chars.Length; i++)
+            for (int i = 0; i < cmd.Length; i++)
             {
-                if (isComplicated)
+                if (isAdvanced)
                 {
-                    if (chars[i] == '"' && (chars.Length > i + 1 && chars[i + 1] == ' ' || chars.Length > i)) isComplicated = false;
-                    else currentString += chars[i];
-                }
-                else
-                {
-                    if (chars[i] == ' ')
+                    if (cmd[i] == '"' && (cmd.Length > i + 1 && cmd[i + 1] == ' ' || cmd.Length > i))
                     {
-                        args.Add(currentString);
-                        currentString = "";
+                        isAdvanced = false;
+                        continue;
                     }
-                    else if (chars[i] == '"' && (i != 0 && chars[i - 1] == ' ' || i == 0) && currentString == "") isComplicated = true;
-                    else currentString += chars[i];
+                    currentString += cmd[i];
+                    continue;
                 }
+                if (cmd[i] == ' ')
+                {
+                    args.Add(currentString);
+                    currentString = "";
+                    continue;
+                }
+                if (cmd[i] == '"' && (i != 0 && cmd[i - 1] == ' ' || i == 0) && currentString == "")
+                {
+                    isAdvanced = true;
+                    continue;
+                }
+                currentString += cmd[i];
             }
             args.Add(currentString);
             return args;
         }
-
+                
         /// <summary>Convert logs to text</summary>
-        public static string LogToString(int logLimit)
+        public static string LogsToString(int logLimit)
         {
             string log = "";
             for (int i = 0; i < logLimit; i++)
             {
-                if (i >= logs.Count) break;
-                int index = Mathf.Clamp(logs.Count - logLimit, 0, int.MaxValue) + i;
-                if (logs[index].logType == GameConsoleLog.LogType.clear) log = "";
-                else if (i != 0) log += $"\n{logs[index].ToText()}";
-                else log += logs[index].ToText();
+                if (i >= Logs.Count) break;
+                int index = Mathf.Clamp(Logs.Count - logLimit, 0, int.MaxValue) + i;
+                if (Logs[index].Type == GameConsoleLog.LogType.clear) log = "";
+                else if (i != 0) log += $"\n{Logs[index].ToText()}";
+                else log += Logs[index].ToText();
             }
             return log;
         }
@@ -110,14 +112,10 @@ namespace qASIC.Console
         public static void RunCommand(string cmd)
         {
             List<string> args = SortCommand(cmd);
+            if (args.Count == 0) return;
 
-            if (args.Count != 0)
-            {
-                if (GameConsoleCommandList.TryGettingCommandByName(args[0], out GameConsoleCommand command))
-                    command.Run(args);
-                else
-                    Log("Command not found!", "error", GameConsoleLog.LogType.game, false);
-            }
+            if (GameConsoleCommandList.TryGettingCommandByName(args[0], out GameConsoleCommand command)) command.Run(args);
+            else Log("Command not found!", "error", GameConsoleLog.LogType.game);
         }
     }
 }

@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 namespace qASIC.Console.Commands
 {
     public class GameConsoleHelp : GameConsoleCommand
     {
-        public override string commandName { get => "help"; }
-        public override string description { get => "displays help"; }
-        public override string help { get => "Use help; help <index>; help <command>"; }
+        public override string CommandName { get => "help"; }
+        public override string Description { get => "displays help"; }
+        public override string Help { get => "Use help; help <index>; help <command>"; }
 
-        private int onePageCommandLimit = 5;
-        private int maxPages;
+        int onePageCommandLimit = 5;
+        int maxPages;
 
         public override void Run(List<string> args)
         {
@@ -33,28 +32,28 @@ namespace qASIC.Console.Commands
         private void DisplayCommand(GameConsoleCommand command)
         {
             string aliasList = "";
-            if (command.aliases != null)
+            if (command.Aliases != null)
             {
                 aliasList = "\nCommand aliases:";
-                for (int i = 0; i < command.aliases.Length; i++)
-                    aliasList += $" {command.aliases[i]}";
+                for (int i = 0; i < command.Aliases.Length; i++)
+                    aliasList += $" {command.Aliases[i]}";
             }
-            Log($"Help for command <b>{command.commandName}</b>: {command.help}{aliasList}", "default");
+            Log($"Help for command <b>{command.CommandName}</b>: {command.Help}{aliasList}", "default");
         }
 
-        private void CalculateMaxPages() => maxPages = (int)Mathf.Ceil((float)GameConsoleCommandList.GetList().Count / onePageCommandLimit);
+        private void CalculateMaxPages() => maxPages = (int)Mathf.Ceil((float)GameConsoleCommandList.Commands.Count / onePageCommandLimit);
 
         private void DisplayHelp(int pageIndex)
         {
             string helpMessage = $"<b>Help page {pageIndex} out of {maxPages}:</b>\n";
-            List<GameConsoleCommand> commands = GameConsoleCommandList.GetList();
+            List<GameConsoleCommand> commands = GameConsoleCommandList.Commands;
 
             for (int i = 0; i < onePageCommandLimit; i++)
             {
                 if (commands.Count > pageIndex * onePageCommandLimit + i)
                 {
                     GameConsoleCommand command = commands[pageIndex * onePageCommandLimit + i];
-                    helpMessage += $"{command.commandName} - {command.description}\n";
+                    helpMessage += $"{command.CommandName} - {command.Description}\n";
                 }
             }
             Log(helpMessage, "default");

@@ -1,16 +1,14 @@
 ﻿#if UNITY_EDITOR
 using UnityEngine;
 using System.Collections.Generic;
-using System;
 using UnityEditor;
-using System.Reflection;
 
 namespace qASIC.InputManagment.Tools
 {
     [CustomEditor(typeof(InputPreset))]
     public class InputPresetCI : Editor
     {
-        public InputPreset preset;
+        InputPreset preset;
 
         int currentEdit = -1;
         string newKeyName = "";
@@ -20,13 +18,13 @@ namespace qASIC.InputManagment.Tools
         private void OnEnable() 
         { 
             preset = (InputPreset)target;
-            keys = preset.preset.presets;
+            keys = preset.Preset.Presets;
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            preset.preset.savePath = EditorGUILayout.TextField("Save path", preset.preset.savePath);
+            preset.Preset.SavePath = EditorGUILayout.TextField("Save path", preset.Preset.SavePath);
             DisplayList();
             EditorUtility.SetDirty(preset);
         }
@@ -46,7 +44,7 @@ namespace qASIC.InputManagment.Tools
             };
 
             GUILayout.BeginVertical();
-            Dictionary<string, KeyCode> keys = preset.preset.presets;
+            Dictionary<string, KeyCode> keys = preset.Preset.Presets;
             List<string> keyList = new List<string>(keys.Keys);
 
             for (int i = 0; i < keyList.Count; i++)
@@ -80,7 +78,7 @@ namespace qASIC.InputManagment.Tools
             GUILayout.EndVertical();
 
             if (GUILayout.Button("Add")) keys.Add(CreateNewName("newKey"), KeyCode.A);
-            preset.preset.presets = keys;
+            preset.Preset.Presets = keys;
         }
 
         private void ResetEdit(List<string> keyList)
@@ -96,8 +94,8 @@ namespace qASIC.InputManagment.Tools
         {
             string newName = baseName;
             int newIndex = 0;
-            if (!preset.preset.presets.ContainsKey(newName)) { return newName; }
-            while (preset.preset.presets.ContainsKey(newName))
+            if (!preset.Preset.Presets.ContainsKey(newName)) { return newName; }
+            while (preset.Preset.Presets.ContainsKey(newName))
             {
                 newName = $"{baseName}{newIndex}";
                 newIndex++;

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorTheme: {fileID: 11400000, guid: df0ca8a39e5d56044acfeff2f5c72a7c, type: 2}
   showThankYouMessage: 1
-  logToUnity: 1
+  logToUnity: 0
   logConfigAssigment: 1
   showInputMessages: 1
   logScene: 1

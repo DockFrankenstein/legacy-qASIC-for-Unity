@@ -5,11 +5,11 @@ namespace qASIC.Console.Tools
     [CreateAssetMenu(fileName = "NewConsoleConfig", menuName = "Console Config")]
     public class GameConsoleConfig : ScriptableObject
     {
-        public GameConsoleTheme colorTheme;
-        public bool showThankYouMessage = true;
-        public bool logToUnity = false;
-        public bool logConfigAssigment = true;
-        public bool showInputMessages = true;
-        public bool logScene = true;
+        public GameConsoleTheme ColorTheme;
+        public bool ShowThankYouMessage = true;
+        public bool LogToUnity = false;
+        public bool LogConfigAssigment = true;
+        public bool ShowInputMessages = true;
+        public bool LogScene = true;
     }
 }

@@ -8,23 +8,22 @@ namespace qASIC.InputManagment
 
     public class InputAssign : MonoBehaviour
     {
-        public string keyName;
-        public InputManagerKeys keys;
+        public string KeyName;
+        public InputManagerKeys Keys;
 
         public AssignEvent OnAssign;
 
-        public void Initialize(InputManagerKeys _keys, string _keyName)
+        public void Initialize(InputManagerKeys keys, string keyName)
         {
-            keyName = _keyName;
-            keys = _keys;
+            KeyName = keyName;
+            Keys = keys;
         }
 
         public void Assign(KeyCode key)
         {
-            Debug.Log(keys == null);
-            if (keys != null) keys = InputManager.ChangeInput(keys, keyName, key);
-            else { InputManager.ChangeInput(keyName, key); }
-            if (keys != null) OnAssign.Invoke(keys);
+            if (Keys != null) Keys = InputManager.ChangeInput(Keys, KeyName, key);
+            else { InputManager.ChangeInput(KeyName, key); }
+            if (Keys != null) OnAssign.Invoke(Keys);
         }
     }
 }

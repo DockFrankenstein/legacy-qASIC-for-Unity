@@ -1,33 +1,43 @@
 ﻿using UnityEngine;
 using System;
+using System.Text.RegularExpressions;
 
 namespace qASIC.Console.Logic
 {
     public class GameConsoleLog
     {
         public enum LogType { user, game, clear };
-        public LogType logType { get; }
-        public DateTime time { get; }
-        public string message { get; }
-        public Color color { get; }
-        public bool qASICMessage { get; }
+        public LogType Type { get; }
+        public DateTime Time { get; }
+        public string Message { get; }
+        public Color LogColor { get; }
+        public string colorName { get; }
 
-        public GameConsoleLog(string _message, DateTime _time, Color _color, LogType _logType, bool isQASIC)
+        public GameConsoleLog(string message, DateTime time, string color, LogType logType)
         {
-            logType = _logType;
-            time = _time;
-            message = _message;
-            color = _color;
-            qASICMessage = isQASIC;
+            Type = logType;
+            Time = time;
+            Message = message;
+            LogColor = new Color();
+            colorName = color;
+        }
+
+        public GameConsoleLog(string message, DateTime time, Color color, LogType logType)
+        {
+            Type = logType;
+            Time = time;
+            Message = message;
+            LogColor = color;
+            colorName = string.Empty;
         }
 
         public string ToText()
         {
-            string log = message;
-            switch (logType)
+            string log = Message;
+            switch (Type)
             {
                 case LogType.user:
-                    log = $">{log}";
+                    log = $">{Regex.Replace(log, "<.*?>", string.Empty)}";
                     break;
                 case LogType.game:
                     log = $" {log}";
@@ -37,10 +47,10 @@ namespace qASIC.Console.Logic
                     break;
                 default:
                     log = $"?{log}";
-                    if(!qASICMessage) GameConsoleController.Log("Log not recognized", "Error", LogType.game, true);
                     break;
             }
-            log = $"<color=#{ColorUtility.ToHtmlStringRGB(color)}>[{time:HH:mm:ss}]{log}</color>";
+            string colorHash = ColorUtility.ToHtmlStringRGB(colorName == null ? LogColor : GameConsoleController.GetColor(colorName));
+            log = $"<color=#{colorHash}>[{Time:HH:mm:ss}]{log}</color>";
             return log;
         }
     }

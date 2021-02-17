@@ -12,9 +12,9 @@ namespace qASIC.FileManaging
         /// <returns>Returns the list of groups containing a list of keys</returns>
         public static List<List<string>> FixConfig(string path)
         {
-            if (!FileManager.TryLoadTxtFile(path, out string data)) return new List<List<string>>();
+            if (!FileManager.TryLoadFileWriter(path, out string data)) return new List<List<string>>();
             List<List<string>> values = Decode(data);
-            FileManager.SaveTxtFile(path, Encode(values));
+            FileManager.SaveFileWriter(path, Encode(values));
             return values;
         }
 
@@ -119,7 +119,7 @@ namespace qASIC.FileManaging
         public static bool TryGettingValue(string path, string settingName, string group, out string value)
         {
             value = "";
-            if (FileManager.TryLoadTxtFile(path, out string config)) 
+            if (FileManager.TryLoadFileWriter(path, out string config)) 
                 return TryGettingValue(Decode(config), settingName, group, out value);
             return false;
         }
@@ -151,14 +151,14 @@ namespace qASIC.FileManaging
 
         public static void DeleteGroup(string groupName, string path)
         {
-            if (!FileManager.TryLoadTxtFile(path, out string data)) return;
+            if (!FileManager.TryLoadFileWriter(path, out string data)) return;
             List<List<string>> config = Decode(data);
             for (int i = 0; i < config.Count; i++)
             {
                 if (config[i][0] == $"#{groupName}")
                 { config.RemoveAt(i); break; }
             }
-            FileManager.SaveTxtFile(path, Encode(config));
+            FileManager.SaveFileWriter(path, Encode(config));
         }
 
         /// <returns>Returns the list of groups containing a list of keys</returns>
@@ -198,7 +198,7 @@ namespace qASIC.FileManaging
         public static List<List<string>> SaveSetting(string path, string settingName, string value, string group)
         {
             List<List<string>> content = SaveSetting(FixConfig(path), settingName, value, group);
-            FileManager.SaveTxtFile(path, Encode(content));
+            FileManager.SaveFileWriter(path, Encode(content));
             return content;
         }
 
@@ -229,9 +229,8 @@ namespace qASIC.FileManaging
             for (int x = 0; x < content.Count; x++)
                 if (content[x][0] == $"#{group}")
                     for (int y = 0; y < content[x].Count; y++)
-                        if (content[x][y].Split(':').Length >= 2)
-                            if (content[x][y].Split(':')[0] == key)
-                                return true;
+                        if (content[x][y].Split(':').Length >= 2 && content[x][y].Split(':')[0] == key)
+                            return true;
             return false;
         }
     }

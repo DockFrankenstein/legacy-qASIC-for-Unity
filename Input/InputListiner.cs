@@ -7,18 +7,18 @@ namespace qASIC.InputManagment
     {
         public UnityEventKeyCode onInputRecived = new UnityEventKeyCode();
 
-        private bool isListening = false;
-        private bool stopOnKeyPress = true;
-        private bool destroyOnKeyPress = true;
+        bool isListening = false;
+        private bool _stopOnKeyPress = true;
+        private bool _destroyOnKeyPress = true;
 
         public void StartListening() => isListening = true;
         public void StopListening() => isListening = false;
 
-        public void StartListening(bool stop, bool destroy) 
-        { 
+        public void StartListening(bool stopOnKeyPress, bool destroy) 
+        {
             isListening = true;
-            stopOnKeyPress = stop;
-            destroyOnKeyPress = destroy;
+            _stopOnKeyPress = stopOnKeyPress;
+            _destroyOnKeyPress = destroy;
         }
 
         private void Update()
@@ -26,13 +26,11 @@ namespace qASIC.InputManagment
             if (!isListening) return;
             foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
             {
-                if (Input.GetKeyDown(key))
-                {
-                    if (stopOnKeyPress) isListening = false;
-                    if (destroyOnKeyPress) Destroy(gameObject);
-                    onInputRecived.Invoke(key);
-                    return;
-                }
+                if (!Input.GetKeyDown(key)) continue;
+                if (_stopOnKeyPress) isListening = false;
+                if (_destroyOnKeyPress) Destroy(gameObject);
+                onInputRecived.Invoke(key);
+                return;
             }
         }
     }
