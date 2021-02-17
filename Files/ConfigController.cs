@@ -83,5 +83,18 @@ namespace qASIC.FileManaging
             }
             FileManager.SaveFileWriter(path, string.Join("\n", settings));
         }
+
+        public static List<string> CreateOptionList(string content)
+        {
+            List<string> optionsList = new List<string>();
+            string[] settings = content.Split('\n');
+            for (int i = 0; i < settings.Length; i++)
+            {
+                if (settings[i].StartsWith("#")) continue;
+                if (settings[i].Split(new string[] { ": " }, System.StringSplitOptions.RemoveEmptyEntries).Length != 2) continue;
+                optionsList.Add(settings[i]);
+            }
+            return optionsList;
+        }
     }
 }
