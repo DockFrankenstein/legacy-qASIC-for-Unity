@@ -32,7 +32,7 @@ namespace qASIC.Console
 
         public static List<GameConsoleCommand> UpdateList()
         {
-            List<Type> types = FindAllTypes();
+            List<Type> types = TypeFinder.FindAllTypes<GameConsoleCommand>();
             _commands.Clear();
             for (int i = 0; i < types.Count; i++)
             {
@@ -40,12 +40,6 @@ namespace qASIC.Console
                 _commands.Add((GameConsoleCommand)constructor.Invoke(null));
             }
             return _commands;
-        }
-
-        public static List<Type> FindAllTypes()
-        {
-            var derivedType = typeof(GameConsoleCommand);
-            return Assembly.GetAssembly(typeof(GameConsoleCommand)).GetTypes().Where(t => t != derivedType && derivedType.IsAssignableFrom(t)).ToList();
         }
 
         private static List<GameConsoleCommand> _commands = new List<GameConsoleCommand>();

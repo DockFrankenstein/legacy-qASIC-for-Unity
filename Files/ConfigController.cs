@@ -91,8 +91,9 @@ namespace qASIC.FileManaging
             for (int i = 0; i < settings.Length; i++)
             {
                 if (settings[i].StartsWith("#")) continue;
-                if (settings[i].Split(new string[] { ": " }, System.StringSplitOptions.RemoveEmptyEntries).Length != 2) continue;
-                optionsList.Add(settings[i]);
+                string[] values = settings[i].Split(new string[] { ": " }, System.StringSplitOptions.RemoveEmptyEntries);
+                if (values.Length != 2) continue;
+                optionsList.Add($"{values[0]}:{values[1]}");
             }
             return optionsList;
         }

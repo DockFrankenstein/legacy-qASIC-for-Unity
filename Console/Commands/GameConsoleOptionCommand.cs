@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using qASIC.Options;
 
 namespace qASIC.Console.Commands
 {
@@ -7,7 +8,7 @@ namespace qASIC.Console.Commands
     {
         public override string CommandName { get => "changeoption"; }
         public override string Description { get => "changes basic options"; }
-        public override string Help { get => "Use resolution <x> <y>; fullscreen <state>; vsync <state>; framelock <state>"; }
+        public override string Help { get => "Use <setting name> <value>"; }
         public override string[] Aliases { get => new string[] { "option", "options", "settings" }; }
 
         public override void Run(List<string> args)
@@ -16,67 +17,20 @@ namespace qASIC.Console.Commands
             switch (args.Count)
             {
                 case 3:
-                    switch (args[1])
-                    {
-                        case "fullscreen":
-                            FullScreen(args);
-                            break;
-                        case "vsync":
-                            Fps(args, false);
-                            break;
-                        case "framelock":
-                            Fps(args, true);
-                            break;
-                        default:
-                            NoOptionException(args[1]);
-                            break;
-                    }
+                    if (int.TryParse(args[2], out int intResult)) OptionsController.ChangeOption(args[1], intResult);
+                    else if (bool.TryParse(args[2], out bool boolResult)) OptionsController.ChangeOption(args[1], boolResult);
+                    else if (float.TryParse(args[2], out float floatResult)) OptionsController.ChangeOption(args[1], floatResult);
+                    else OptionsController.ChangeOption(args[1], args[2]);
                     break;
                 case 4:
-                    if (args[1] == "resolution")
-                    {
-                        Resolution(args);
-                        break;
-                    }
-                    NoOptionException(args[1]);
-                    break;
-                default:
-                    NoOptionException("unknown");
+
+                    if (int.TryParse(args[2], out int vectorIntResultX) && int.TryParse(args[3], out int vectorIntResultY))
+                        OptionsController.ChangeOption(args[1], new Vector2Int(vectorIntResultX, vectorIntResultY));
+                    else if (float.TryParse(args[2], out float vectorResultX) && float.TryParse(args[3], out float vectorResultY))
+                        OptionsController.ChangeOption(args[1], new Vector2(vectorResultX, vectorResultY));
+                    else ParseException($"{args[2]} and {args[3]}", "vector");
                     break;
             }
-        }
-
-        public void FullScreen(List<string> args)
-        {
-            if (bool.TryParse(args[2], out bool result)) Options.ChangeFullScreenMode(result);
-            else ParseException(args[2], "bool");
-        }
-
-        public void Fps(List<string> args, bool lockFrames)
-        {
-            if (!int.TryParse(args[2], out int result))
-            {
-                ParseException(args[2], "int");
-                return;
-            }
-            if (lockFrames) Options.ChangeFrameOptions(0, result);
-            else Options.ChangeFrameOptions(result, -1);
-            return;
-        }
-
-        public void Resolution(List<string> args)
-        {
-            if (!int.TryParse(args[2], out int X))
-            {
-                ParseException(args[2], "int");
-                return;
-            }
-            if (!int.TryParse(args[3], out int Y))
-            {
-                ParseException(args[3], "int");
-                return;
-            }
-            Options.ChangeResolution(X, Y);
         }
     }
 }

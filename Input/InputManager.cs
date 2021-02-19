@@ -39,7 +39,7 @@ namespace qASIC.InputManagment
             for (int i = 0; i < settings.Count; i++)
             {
                 if (!settings[i].StartsWith("#")) continue;
-                string[] values = settings[i].Split(new string[] { ": " }, System.StringSplitOptions.RemoveEmptyEntries);
+                string[] values = settings[i].Split(':');
                 if (values.Length != 2) continue;
                 if (keys.Presets.ContainsKey(values[0]) && System.Enum.TryParse(values[1], out KeyCode result)) keys.Presets[values[1]] = result;
             }
