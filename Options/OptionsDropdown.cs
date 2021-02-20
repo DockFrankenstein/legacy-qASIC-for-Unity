@@ -5,9 +5,6 @@ namespace qASIC.Options.UI
 {
     public abstract class OptionsDropdown : MenuOption
     {
-        public TextMeshProUGUI NameText;
-        public string OptionLabelName;
-
         [UnityEngine.HideInInspector] public TMP_Dropdown dropDown;
         public List<object> properties = new List<object>();
         private bool isActive = false;
@@ -25,7 +22,7 @@ namespace qASIC.Options.UI
 
         private void Update()
         {
-            if (NameText != null && dropDown != null) NameText.text = $"{OptionLabelName}{GetPropertyName(properties[dropDown.value])}";
+            if (NameText != null && dropDown != null) NameText.text = GetPropertyName(properties[dropDown.value]);
         }
 
         public abstract void Assign();
@@ -50,7 +47,6 @@ namespace qASIC.Options.UI
             dropDown.AddOptions(dropDownData);
         }
 
-        public abstract string GetPropertyName(object property);
         public abstract void SetIndexCurrent();
 
         public override void LoadOption()

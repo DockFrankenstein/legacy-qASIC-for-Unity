@@ -24,6 +24,11 @@ namespace qASIC.Options.UI
             SetValue(value, log);
         }
 
+        private void Update()
+        {
+            if (NameText != null && _slider != null) NameText.text = GetPropertyName(_slider.value);
+        }
+
         public override void LoadOption()
         {
             if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) || 
