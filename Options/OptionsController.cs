@@ -8,7 +8,7 @@ namespace qASIC.Options
 {
     public static class OptionsController
     {
-        private static string _config;
+        private static string _config = string.Empty;
         private static string _path = "qASIC/Settings.txt";
 
         private static List<MethodInfo> _settings;
@@ -24,7 +24,7 @@ namespace qASIC.Options
         public static void Load(string path)
         {
             _path = path;
-            if (!FileManager.TryLoadFileWriter(_path, out _config)) return;
+            if (!FileManager.TryLoadFileWriter($"{UnityEngine.Application.persistentDataPath}/{_path}", out _config)) return;
             List<string> settings = ConfigController.CreateOptionList(_config);
             for (int i = 0; i < settings.Count; i++)
             {
@@ -34,6 +34,9 @@ namespace qASIC.Options
             }
             Console.GameConsoleController.Log("Loaded user settings", "settings");
         }
+
+        public static bool TryGetUserSetting(string key, out string value) =>
+            ConfigController.TryGettingSetting(_config, key, out value);
 
         public static void Save()
         {
@@ -47,7 +50,7 @@ namespace qASIC.Options
             _settings = methodInfos.ToList();
         }
 
-        public static void ChangeOption(string optionName, object parameter, bool log = true)
+        public static void ChangeOption(string optionName, object parameter, bool log = true, bool save = true)
         {
             foreach (MethodInfo setting in Settings)
             {
@@ -55,14 +58,22 @@ namespace qASIC.Options
                 try
                 {
                     OptionsSetting attr = (OptionsSetting)setting.GetCustomAttributes(typeof(OptionsSetting), true)[0];
+
+                    if (parameter is string) parameter = Convert.ChangeType(parameter, attr?.ValueType);
+
                     if (parameter.GetType() != typeof(int) && attr.ValueType.IsEnum && parameter.GetType() != attr?.ValueType
                         || optionName.ToLower() != attr?.Name) continue;
+
                     setting.Invoke(obj, new object[] { parameter });
+
                     if (log) Console.GameConsoleController.Log($"Changed <b>{attr.Name}</b> to {parameter}", "settings");
-                    _config = ConfigController.SetSetting(_config, attr.Name, parameter.ToString());
+
+                    string saveSetting = parameter.ToString();
+                    _config = ConfigController.SetSetting(_config, attr.Name, saveSetting);
                 }
                 catch { }
             }
+            if (save) Save();
         }
     }
 }

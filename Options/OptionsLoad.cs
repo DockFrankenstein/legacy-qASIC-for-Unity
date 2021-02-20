@@ -8,6 +8,7 @@ namespace qASIC.Options
     public class OptionsLoad : MonoBehaviour
     {
         public string UserSavePath = "qASIC/Settings.txt";
+        public string EditorUserSavePath = "qASIC/Setting-editor.txt";
         public TextAsset SaveFilePreset;
 
         private void Awake()
@@ -19,7 +20,11 @@ namespace qASIC.Options
         public void LoadPreferences()
         {
             if(SaveFilePreset != null) ConfigController.Repair(UserSavePath, SaveFilePreset.text);
-            OptionsController.Load(UserSavePath);
+            string path = UserSavePath;
+#if UNITY_EDITOR
+            path = EditorUserSavePath;
+#endif
+            OptionsController.Load(path);
         }
     }
 }

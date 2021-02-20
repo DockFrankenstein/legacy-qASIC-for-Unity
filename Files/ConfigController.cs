@@ -47,16 +47,25 @@ namespace qASIC.FileManaging
         #region SetOption
         public static string SetSetting(string content, string key, string setting)
         {
-            string[] settings = content.Split('\n');
+            bool exists = false;
+            string[] settings = new string[0];
+            if (content.Length != 0) settings = content.Split('\n');
             for (int i = 0; i < settings.Length; i++)
             {
                 if (settings[i].StartsWith("#")) continue;
                 string[] values = settings[i].Split(new string[] { ": " }, System.StringSplitOptions.RemoveEmptyEntries);
                 if ((values.Length == 2 || values.Length == 1) && values[0] == key)
                 {
+                    exists = true;
                     settings[i] = $"{values[0]}: {setting}";
                     break;
                 }
+            }
+
+            if (!exists)
+            {
+                System.Array.Resize(ref settings, settings.Length + 1);
+                settings[settings.Length - 1] = $"{key}: {setting}";
             }
             return string.Join("\n", settings);
         }

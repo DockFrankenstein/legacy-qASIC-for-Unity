@@ -17,10 +17,7 @@ namespace qASIC.Console.Commands
             switch (args.Count)
             {
                 case 3:
-                    if (int.TryParse(args[2], out int intResult)) OptionsController.ChangeOption(args[1], intResult);
-                    else if (bool.TryParse(args[2], out bool boolResult)) OptionsController.ChangeOption(args[1], boolResult);
-                    else if (float.TryParse(args[2], out float floatResult)) OptionsController.ChangeOption(args[1], floatResult);
-                    else OptionsController.ChangeOption(args[1], args[2]);
+                    OptionsController.ChangeOption(args[1], args[2]);
                     break;
                 case 4:
 

@@ -21,7 +21,7 @@ namespace qASIC.Console
         public static void Log(GameConsoleLog log)
         {
             Logs.Add(log);
-            if (_config.LogToUnity && log.Type != GameConsoleLog.LogType.user) Debug.Log($"qASIC game console: {log.Message}");
+            if (_config != null && _config.LogToUnity && log.Type != GameConsoleLog.LogType.user) Debug.Log($"qASIC game console: {log.Message}");
             if (Logs.Count == 1 && TryGettingConfig(out GameConsoleConfig config) && config.ShowThankYouMessage) 
                 Log("Thank you for using qASIC console", "qasic");
         }

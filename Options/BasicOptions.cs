@@ -1,14 +1,19 @@
 ﻿using UnityEngine;
-using qASIC.Console;
 
 namespace qASIC.Options
 {
     public class BasicOptions
     {
+        [OptionsSetting("resolution", typeof(string))]
+        public static void ChangeResolution(string resolution)
+        {
+            ChangeResolution(VectorStringConvertion.StringToVector2Int(resolution));
+        }
+
         [OptionsSetting("resolution", typeof(Vector2Int))]
         public static void ChangeResolution(Vector2Int resolution)
         {
-            if (resolution == new Vector2Int(Screen.currentResolution.width, Screen.currentResolution.height)) return;
+            if (resolution == new Vector2Int(Screen.width, Screen.height)) return;
             Screen.SetResolution(resolution.x, resolution.y, Screen.fullScreen);
         }
 
