@@ -2,7 +2,7 @@
 
 namespace qASIC.Console.Tools
 {
-    [CreateAssetMenu(fileName = "NewConsoleConfig", menuName = "Console Config")]
+    [CreateAssetMenu(fileName = "NewConsoleConfig", menuName = "qASIC/Console/Console Config")]
     public class GameConsoleConfig : ScriptableObject
     {
         public GameConsoleTheme ColorTheme;

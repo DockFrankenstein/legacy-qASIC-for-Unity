@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace qASIC.InputManagment
 {
-    [CreateAssetMenu(fileName = "NewInputPreset", menuName = "Input Preset")]
+    [CreateAssetMenu(fileName = "NewInputPreset", menuName = "qASIC/Input/Input Preset")]
     public class InputPreset : ScriptableObject, ISerializationCallbackReceiver
     {
         public InputManagerKeys Preset = new InputManagerKeys();

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace qASIC.Console
 {
-    [CreateAssetMenu(fileName = "NewConsoleTheme", menuName = "Console Theme")]
+    [CreateAssetMenu(fileName = "NewConsoleTheme", menuName = "qASIC/Console/Console Theme")]
     public class GameConsoleTheme : ScriptableObject
     {
         public Color defaultColor = new Color(1f, 1f, 1f);
