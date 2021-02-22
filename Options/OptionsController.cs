@@ -30,7 +30,7 @@ namespace qASIC.Options
             {
                 string[] values = settings[i].Split(':');
                 if (values.Length != 2) continue;
-                ChangeOption(values[0], values[1], false);
+                ChangeOption(values[0], values[1], false, false);
             }
             Console.GameConsoleController.Log("Loaded user settings", "settings");
         }
@@ -41,7 +41,6 @@ namespace qASIC.Options
         public static void Save()
         {
             FileManager.SaveFileWriter($"{UnityEngine.Application.persistentDataPath}/{_path}", _config);
-            Console.GameConsoleController.Log($"Saved user settings preferences to {_path}", "settings");
         }
 
         public static void LoadSettings()

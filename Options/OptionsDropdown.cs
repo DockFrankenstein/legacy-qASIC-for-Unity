@@ -7,7 +7,6 @@ namespace qASIC.Options.UI
     {
         [UnityEngine.HideInInspector] public TMP_Dropdown dropDown;
         public List<object> properties = new List<object>();
-        private bool isActive = false;
 
         public override void Start()
         {
@@ -27,11 +26,7 @@ namespace qASIC.Options.UI
 
         public abstract void Assign();
 
-        public void SetValue(int value)
-        {
-            if (!isActive) return;
-            SetValue(properties[value]);
-        }
+        public void SetValue(int value) => SetValue(properties[value]);
 
         public virtual void SetValue(object propertie)
         {

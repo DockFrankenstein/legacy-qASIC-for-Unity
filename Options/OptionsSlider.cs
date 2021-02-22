@@ -34,6 +34,7 @@ namespace qASIC.Options.UI
             if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) || 
                 !float.TryParse(optionValue, out float value) || _slider == null) return;
             _slider.value = value;
+            isActive = true;
         }
     }
 }
