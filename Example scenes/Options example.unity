@@ -1499,11 +1499,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game console
       objectReference: {fileID: 0}
-    - target: {fileID: 3569834521637251086, guid: 89bb324920745274db9deaa01b2e0660,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89bb324920745274db9deaa01b2e0660, type: 3}
 --- !u!1 &893907392

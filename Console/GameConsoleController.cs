@@ -9,6 +9,7 @@ namespace qASIC.Console
     public static class GameConsoleController
     {
         public static List<GameConsoleLog> Logs = new List<GameConsoleLog>();
+        public static List<string> InvokedCommands = new List<string>();
 
         #region Log
         /// <param name="color">color name from the color settings</param>
@@ -111,6 +112,7 @@ namespace qASIC.Console
 
         public static void RunCommand(string cmd)
         {
+            InvokedCommands.Add(cmd);
             List<string> args = SortCommand(cmd);
             if (args.Count == 0) return;
 
