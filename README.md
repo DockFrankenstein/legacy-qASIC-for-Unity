@@ -1,26 +1,25 @@
-#### Quick Basics for starting projects fast
+## Quick Basics for starting projects fast
 
-## What is qASIC
-qASIC is a collection of **tools for debugging and adding basic features**. This includes:
-- In game console
-- Custom mapable input system
-- Customaizable options
-- Saving system
-- Gloabl audio managment
+# Table of contents
+* [Introduction](#introduction)
+* [Tools](#tools)
+* [Why should you use it](#why-should-you-use-it)
+* [Setup](#setup)
 
-## Customalization
-From console layout, log colors, custom options qASIC gives power to the developer.
+# Introduction
+qASIC i a simple collection of tools to quickly create games in the Unity game engine. Using qASIC makes your games more accesible, easier to create and debug.
 
-## Console
-This is the most advanced feature of qASIC. An in-game console for cheating, debugging, or checking errors. 
+# Tools:
+* Console
+* Options
+* Audio manager
+* Input manager
+* Saving XML
+* Saving with FileWriter
+* Custom Config Controller
 
-To add a command it's just as simple as creating a new script from a template. You change the name, description, help message and what it will do. It will automatically be added to the list
+# Why should you use it
+Having options and remapable inputs makes your game more accesible to other users. Tools such as the console seems like overkill, but it helps to easily debug issues in game, or to quickly test something out.
 
-You can control specific options with the console config and console theme. If you dislike the build in colors, you can change them for your own liking.
-
-To say something in the console just write qDebug.Log() or qASIC.Console.GameConsoleController.Log(). Now you will know what's not working without having to look deep inside the files.
-
-qASIC console comes with some built in commands such as: echo or help
-
-#Input system
-qASIC supports simple remapable bindings. Currently in beta
+# Setup
+You can find all avalible versions [here](https://github.com/DockFrankenstein/qASIC/releases)
