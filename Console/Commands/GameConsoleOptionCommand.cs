@@ -13,21 +13,8 @@ namespace qASIC.Console.Commands
 
         public override void Run(List<string> args)
         {
-            if (!CheckForArgumentCount(args, 2, 3)) return;
-            switch (args.Count)
-            {
-                case 3:
-                    OptionsController.ChangeOption(args[1], args[2]);
-                    break;
-                case 4:
-
-                    if (int.TryParse(args[2], out int vectorIntResultX) && int.TryParse(args[3], out int vectorIntResultY))
-                        OptionsController.ChangeOption(args[1], new Vector2Int(vectorIntResultX, vectorIntResultY));
-                    else if (float.TryParse(args[2], out float vectorResultX) && float.TryParse(args[3], out float vectorResultY))
-                        OptionsController.ChangeOption(args[1], new Vector2(vectorResultX, vectorResultY));
-                    else ParseException($"{args[2]} and {args[3]}", "vector");
-                    break;
-            }
+            if (!CheckForArgumentCount(args, 2)) return;
+            OptionsController.ChangeOption(args[1], args[2]);
         }
     }
 }

@@ -7,14 +7,9 @@ namespace qASIC.Options
         [OptionsSetting("resolution", typeof(string))]
         public static void ChangeResolution(string resolution)
         {
-            ChangeResolution(VectorStringConvertion.StringToVector2Int(resolution));
-        }
-
-        [OptionsSetting("resolution", typeof(Vector2Int))]
-        public static void ChangeResolution(Vector2Int resolution)
-        {
-            if (resolution == new Vector2Int(Screen.width, Screen.height)) return;
-            Screen.SetResolution(resolution.x, resolution.y, Screen.fullScreen);
+            Vector2Int res = VectorStringConvertion.StringToVector2Int(resolution);
+            if (res == new Vector2Int(Screen.width, Screen.height)) return;
+            Screen.SetResolution(res.x, res.y, Screen.fullScreen);
         }
 
         [OptionsSetting("fullscreen", typeof(FullScreenMode))]
