@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using qASIC.Console;
+using System;
 
 namespace qASIC.FileManaging
 {
@@ -44,9 +46,8 @@ namespace qASIC.FileManaging
         public static bool FileExists(string path) { return File.Exists(path.Replace('\\', '/')); }
         #endregion
 
-        #region Save and Load
-        /// <param name="data">Data to serielize and save</param>
-        public static void SaveFile(string path, object data)
+        #region Binary
+        private static void SaveBinary(string path, object data)
         {
             path = path.Replace('\\', '/');
             if (!DirectoryExists(TrimPathEnd(path, 1))) Directory.CreateDirectory(TrimPathEnd(path, 1));
@@ -59,37 +60,32 @@ namespace qASIC.FileManaging
             fileStream.Close();
         }
 
-        public static bool TrySavingFile(string path, object data)
-        {
-            try
-            {
-                SaveFile(path, data);
-            }
-            catch (System.Exception ex)
-            {
-                Console.GameConsoleController.Log($"Couldn't save file. Exception: {ex}", "error");
-                return false;
-            }
-            return true;
-        }
-
-        public static object LoadFile(string path)
+        private static void LoadBinary(string path, out object data)
         {
             FileStream fileStream = File.Open(path, FileMode.Open);
             BinaryFormatter formater = new BinaryFormatter();
-            object data = formater.Deserialize(fileStream);
+            data = formater.Deserialize(fileStream);
             fileStream.Close();
-            return data;
         }
 
-        /// <param name="data">The deserielized object</param>
-        /// <returns>Returns if the file exists</returns>
-        public static bool TryLoadingFile(string path, out object data)
+
+        public static void SaveFileBinary(string path, object data)
         {
-            data = null;
-            try 
-            { 
-                data = LoadFile(path); 
+            try
+            {
+                SaveBinary(path, data);
+            }
+            catch (Exception e)
+            {
+                GameConsoleController.Log($"Couldn't save file. Exception: {e}", "error");
+            }
+        }
+
+        public static bool TrySaveFileBinary(string path, object data)
+        {
+            try
+            {
+                SaveBinary(path, data);
             }
             catch
             {
@@ -98,6 +94,103 @@ namespace qASIC.FileManaging
             return true;
         }
 
+
+        public static object LoadFileBinary(string path)
+        {
+            object data = new object();
+            try
+            {
+                LoadBinary(path, out data);
+            }
+            catch (Exception e)
+            {
+                GameConsoleController.Log($"Couldn't load file. Exception: {e}", "error");
+            }
+            return data;
+        }
+
+        public static bool TryLoadFileBinary(string path, out object data)
+        {
+            data = new object();
+            try
+            {
+                LoadBinary(path, out data);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        #endregion
+
+        #region JSON
+        private static void SaveJSON(string path, object data, bool preattyPrint)
+        {
+            SaveWriter(path, JsonUtility.ToJson(data, preattyPrint));
+        }
+
+        private static void LoadJSON(string path, object objectToOverride)
+        {
+            JsonUtility.FromJsonOverwrite(LoadWriter(path), objectToOverride);
+        }
+
+
+        /// <param name="preattyPrint">If the file should be saved for readability or minimum size</param>
+        public static void SaveFileJSON(string path, object data, bool preattyPrint = false)
+        {
+            try
+            {
+                SaveJSON(path, data, preattyPrint);
+            }
+            catch (Exception e)
+            {
+                GameConsoleController.Log($"Couldn't save file: {e}", "error");
+            }
+        }
+
+        /// <param name="preattyPrint">If the file should be saved for readability or minimum size</param>
+        public static bool TrySaveFileJSON(string path, object data, bool preattyPrint = false)
+        {
+            try
+            {
+                SaveJSON(path, data, preattyPrint);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        /// <param name="preattyPrint">If the file should be saved for readability or minimum size</param>
+        public static void ReadFileJSON(string path, object objectToOverride)
+        {
+            try
+            {
+                LoadJSON(path, objectToOverride);
+            }
+            catch (Exception e)
+            {
+                GameConsoleController.Log($"Couldn't load file: {e}", "error");
+            }
+        }
+
+        /// <param name="preattyPrint">If the file should be saved for readability or minimum size</param>
+        public static bool TryReadFileJSON(string path, object objectToOverride)
+        {
+            try
+            {
+                LoadJSON(path, objectToOverride);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
         #endregion
 
         #region Delete
@@ -120,8 +213,8 @@ namespace qASIC.FileManaging
         public static void CreateDirectory(string path) => Directory.CreateDirectory(path);
         #endregion
 
-        #region Txt
-        public static void SaveFileWriter(string path, string data)
+        #region Writer
+        private static void SaveWriter(string path, string data)
         {
             string directory = TrimPathEnd(path, 1);
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
@@ -131,14 +224,67 @@ namespace qASIC.FileManaging
             writer.Close();
         }
 
+        private static string LoadWriter(string path)
+        {
+            StreamReader reader = new StreamReader(path);
+            string data = reader.ReadToEnd();
+            reader.Close();
+            if (data == null) data = string.Empty;
+            return data;
+        }
+
+
+        public static void SaveFileWriter(string path, string data)
+        {
+            try
+            {
+                SaveWriter(path, data);
+            }
+            catch (Exception e)
+            {
+                GameConsoleController.Log($"Couldn't save file. Exception: {e}", "error");
+            }
+        }
+
+        public static bool TrySaveFileWriter(string path, string data)
+        {
+            try
+            {
+                SaveWriter(path, data);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        public static string LoadFileWriter(string path)
+        {
+            string data = string.Empty;
+            try
+            {
+                data = LoadWriter(path);
+            }
+            catch (Exception e)
+            {
+                GameConsoleController.Log($"Couldn't save file. Exception: {e}", "error");
+            }
+            return data;
+        }
+
         public static bool TryLoadFileWriter(string path, out string data)
         {
             data = string.Empty;
-            if (!File.Exists(path)) return false;
-            StreamReader reader = new StreamReader(path);
-            data = reader.ReadToEnd();
-            reader.Close();
-            if (data == null) data = string.Empty;
+            try
+            {
+                data = LoadWriter(path);
+            }
+            catch
+            {
+                return false;
+            }
             return true;
         }
         #endregion
