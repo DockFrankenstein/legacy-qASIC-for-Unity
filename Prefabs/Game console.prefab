@@ -867,7 +867,7 @@ MonoBehaviour:
   ConsoleConfig: {fileID: 11400000, guid: 67849b547219c6544b513c8321bd7756, type: 2}
   SelectOnOpen: 1
   ReselectOnSubmit: 1
-  ResetScrollOnLog: 1
+  ResetScrollOnRun: 1
   CanvasObject: {fileID: 3339577114814308204}
   Logs: {fileID: 6241433097206589225}
   Input: {fileID: 8713881459255019119}
@@ -875,7 +875,6 @@ MonoBehaviour:
   OnConsoleChangeState:
     m_PersistentCalls:
       m_Calls: []
-  _commandIndex: -1
 --- !u!1 &5421854239198661686
 GameObject:
   m_ObjectHideFlags: 0
@@ -1118,7 +1117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:

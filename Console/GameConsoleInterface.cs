@@ -13,7 +13,7 @@ namespace qASIC.Console
         public GameConsoleConfig ConsoleConfig;
         public bool SelectOnOpen = true;
         public bool ReselectOnSubmit = true;
-        public bool ResetScrollOnLog = true;
+        public bool ResetScrollOnRun = true;
 
         [Header("Objects")]
         public GameObject CanvasObject;
@@ -23,7 +23,6 @@ namespace qASIC.Console
 
         [Header("Events")]
         public UnityEventBool OnConsoleChangeState;
-        public UnityAction LogListener;
 
         private int _commandIndex = -1;
 
@@ -38,7 +37,7 @@ namespace qASIC.Console
         public void AssignConfig() => GameConsoleController.AssignConfig(ConsoleConfig);
         private void FixedUpdate() => RefreshLogs();
 
-        public void LogLoadedScene(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+        private void LogLoadedScene(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
         {
             UnityEngine.SceneManagement.SceneManager.sceneLoaded -= LogLoadedScene;
             GameConsoleController.Log($"Loaded scene {scene.name}", "scene", Logic.GameConsoleLog.LogType.game);
@@ -83,7 +82,6 @@ namespace qASIC.Console
         public void RefreshLogs()
         {
             if (Logs != null) Logs.text = GameConsoleController.LogsToString(LogLimit);
-            ResetScroll();
         }
 
         private void ToggleConsole(bool state)
@@ -95,15 +93,23 @@ namespace qASIC.Console
             DiscardPreviousCommand();
         }
 
-        private void RunCommand()
+        public void RunCommand()
         {
             DiscardPreviousCommand();
             if (Input == null) return;
             if (ReselectOnSubmit) StartCoroutine(Reselect());
-            if (Input.text == "") return;
+
+            if (Input.text == "")
+            {
+                ResetScroll();
+                return;
+            }
+
             GameConsoleController.Log(Input.text, "default", Logic.GameConsoleLog.LogType.user);
             GameConsoleController.RunCommand(Input.text);
             Input.text = "";
+            RefreshLogs();
+            ResetScroll();
         }
 
         private IEnumerator Reselect()
@@ -114,7 +120,7 @@ namespace qASIC.Console
 
         public void ResetScroll()
         {
-            if (!ResetScrollOnLog || Scroll == null) return;
+            if (!ResetScrollOnRun || Scroll == null) return;
             Canvas.ForceUpdateCanvases();
             Scroll.verticalNormalizedPosition = 0f;
         }
