@@ -24,12 +24,12 @@ namespace qASIC.Options
         public void LoadPreferences()
         {
             if (_init && LoadOnce) return;
-            if(SaveFilePreset != null) ConfigController.Repair(UserSavePath, SaveFilePreset.text);
             string path = UserSavePath;
 #if UNITY_EDITOR
             path = EditorUserSavePath;
 #endif
-            OptionsController.Load(path);
+            if(SaveFilePreset != null) ConfigController.Repair($"{Application.persistentDataPath}/{path}", SaveFilePreset.text);
+            OptionsController.Load($"{Application.persistentDataPath}/{path}");
         }
     }
 }
