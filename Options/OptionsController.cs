@@ -24,7 +24,7 @@ namespace qASIC.Options
         public static void Load(string path)
         {
             _path = path;
-            if (!FileManager.TryLoadFileWriter($"{UnityEngine.Application.persistentDataPath}/{_path}", out _config)) return;
+            if (!FileManager.TryLoadFileWriter(_path, out _config)) return;
             List<string> settings = ConfigController.CreateOptionList(_config);
             for (int i = 0; i < settings.Count; i++)
             {
@@ -35,13 +35,8 @@ namespace qASIC.Options
             Console.GameConsoleController.Log("Loaded user settings", "settings");
         }
 
-        public static bool TryGetUserSetting(string key, out string value) =>
-            ConfigController.TryGettingSetting(_config, key, out value);
-
-        public static void Save()
-        {
-            FileManager.SaveFileWriter($"{UnityEngine.Application.persistentDataPath}/{_path}", _config);
-        }
+        public static bool TryGetUserSetting(string key, out string value) => ConfigController.TryGettingSetting(_config, key, out value);
+        public static void Save() => FileManager.SaveFileWriter(_path, _config);
 
         public static void LoadSettings()
         {

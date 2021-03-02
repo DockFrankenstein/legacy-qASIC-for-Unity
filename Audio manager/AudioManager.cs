@@ -53,7 +53,7 @@ namespace qASIC.AudioManagment
 #if UNITY_EDITOR
             path = singleton.EditorUserSavePath;
 #endif
-            if(singleton.SaveFilePreset != null) ConfigController.Repair(path, singleton.SaveFilePreset.text);
+            if(singleton.SaveFilePreset != null) ConfigController.Repair($"{Application.persistentDataPath}/{path}", singleton.SaveFilePreset.text);
             if(!FileManager.TryLoadFileWriter($"{Application.persistentDataPath}/{path}", out _config)) return;
             List<string> sets = ConfigController.CreateOptionList(_config);
 
@@ -77,7 +77,12 @@ namespace qASIC.AudioManagment
         public static void ChangeParameterFloat(string name, float value, bool preview = true)
         {
             CheckSingleton();
-            if (singleton.Mixer == null) return;
+            if (singleton.Mixer == null || singleton.Mixer.GetFloat(name, out _))
+            {
+                Console.GameConsoleController.Log("Parameter or mixer does not exist! Cannot save or change parameter!", "error");
+                return;
+            }
+
             if (singleton.RoundValue) value = Mathf.Round(value);
             singleton.Mixer.SetFloat(name, value);
 

@@ -10,6 +10,7 @@ namespace qASIC.Options.UI
         public UnityEventBool OnValueChange = new UnityEventBool();
 
         private void Awake() => _toggle = GetComponent<Toggle>();
+
         public void SetValue(bool state) 
         { 
             SetValue(state, true); 

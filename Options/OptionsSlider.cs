@@ -9,6 +9,7 @@ namespace qASIC.Options.UI
         private void Awake() => _slider = GetComponent<Slider>();
         public void PreviewValue(float value) => SetValueSlider(value, false);
         public void SetValue(float value) => SetValueSlider(value, true);
+
         public void SetValue()
         {
             if(_slider != null) SetValue(_slider.value);
