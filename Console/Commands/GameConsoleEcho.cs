@@ -5,10 +5,10 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleEcho : GameConsoleCommand
     {
-        public override string CommandName { get => "echo"; }
-        public override string Description { get => "creates a new log containing a message"; }
-        public override string Help { get => "Write a message to echo"; }
-        public override string[] Aliases { get => new string[] { "print" }; }
+        public override string CommandName { get; } = "echo";
+        public override string Description { get; } = "creates a new log containing a message";
+        public override string Help { get; } = "Write a message to echo";
+        public override string[] Aliases { get; } = new string[] { "print" };
 
         public override void Run(List<string> args)
         {

@@ -5,9 +5,9 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleHelp : GameConsoleCommand
     {
-        public override string CommandName { get => "help"; }
-        public override string Description { get => "displays help"; }
-        public override string Help { get => "Use help; help <index>; help <command>"; }
+        public override string CommandName { get; } = "help";
+        public override string Description { get; } = "displays help";
+        public override string Help { get; } = "Use help; help <index>; help <command>";
 
         int onePageCommandLimit = 5;
         int maxPages;

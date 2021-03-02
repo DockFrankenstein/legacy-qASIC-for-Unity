@@ -6,10 +6,10 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleSceneCommand : GameConsoleCommand
     {
-        public override string CommandName { get => "scene"; }
-        public override string Description { get => "get, load scene"; }
-        public override string Help { get => "Use get; load"; }
-        public override string[] Aliases { get => new string[] { "loadscene", "level", "loadlevel" }; }
+        public override string CommandName { get; } = "scene";
+        public override string Description { get; } = "get, load scene";
+        public override string Help { get; } = "Use get; load";
+        public override string[] Aliases { get; } = new string[] { "loadscene", "level", "loadlevel" };
 
         public override void Run(List<string> args)
         {
