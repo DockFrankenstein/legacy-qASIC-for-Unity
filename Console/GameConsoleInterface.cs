@@ -32,10 +32,37 @@ namespace qASIC.Console
             ReloadInterface();
             if (GameConsoleController.TryGettingConfig(out GameConsoleConfig config) && config.LogScene)
                 UnityEngine.SceneManagement.SceneManager.sceneLoaded += LogLoadedScene;
+            AddLogEvent();
         }
+
+        private void AddLogEvent()
+        {
+            if (GameConsoleController.OnLog == null)
+            {
+                GameConsoleController.OnLog = new UnityAction<Logic.GameConsoleLog>(AddLog);
+                return;
+            }
+            GameConsoleController.OnLog += AddLog;
+        }
+
         private void Start() => RefreshLogs();
         public void AssignConfig() => GameConsoleController.AssignConfig(ConsoleConfig);
         private void FixedUpdate() => RefreshLogs();
+
+        public void AddLog(Logic.GameConsoleLog log)
+        {
+            if (Logs == null) return;
+            if (log.Type == Logic.GameConsoleLog.LogType.clear)
+            {
+                Logs.text = string.Empty;
+                ResetScroll();
+                return;
+            }
+            Logs.text += $"\n{log.ToText()}";
+            ResetScroll();
+        }
+
+        private void OnDestroy() => GameConsoleController.OnLog -= AddLog;
 
         private void LogLoadedScene(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
         {
@@ -54,7 +81,7 @@ namespace qASIC.Console
         private void Update()
         {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Return) && CanvasObject != null && CanvasObject.activeSelf) RunCommand();
-            if (UnityEngine.Input.GetKeyDown(KeyCode.BackQuote) && CanvasObject != null) ToggleConsole(!CanvasObject.activeSelf);
+            if (UnityEngine.Input.GetKeyDown(KeyCode.BackQuote) && CanvasObject != null) ToggleConsole();
             if (UnityEngine.Input.GetKeyDown(KeyCode.UpArrow) && CanvasObject.activeSelf) ReInsertCommand(false);
             if (UnityEngine.Input.GetKeyDown(KeyCode.DownArrow) && CanvasObject.activeSelf) ReInsertCommand(true);
         }
@@ -84,13 +111,19 @@ namespace qASIC.Console
             if (Logs != null) Logs.text = GameConsoleController.LogsToString(LogLimit);
         }
 
-        private void ToggleConsole(bool state)
+        public void ToggleConsole()
+        {
+            ToggleConsole(!CanvasObject.activeSelf);
+        }
+
+        public void ToggleConsole(bool state)
         {
             if (state && SelectOnOpen) StartCoroutine(Reselect());
             if (Input != null) Input.text = "";
             OnConsoleChangeState.Invoke(state);
             if(CanvasObject != null) CanvasObject.SetActive(state);
             DiscardPreviousCommand();
+            ResetScroll();
         }
 
         public void RunCommand()

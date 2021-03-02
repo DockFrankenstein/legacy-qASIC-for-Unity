@@ -3,6 +3,7 @@ using UnityEngine;
 using qASIC.Console.Commands;
 using qASIC.Console.Logic;
 using qASIC.Console.Tools;
+using UnityEngine.Events;
 
 namespace qASIC.Console
 {
@@ -10,6 +11,8 @@ namespace qASIC.Console
     {
         public static List<GameConsoleLog> Logs = new List<GameConsoleLog>();
         public static List<string> InvokedCommands = new List<string>();
+
+        public static UnityAction<GameConsoleLog> OnLog;
 
         #region Log
         /// <param name="color">color name from the color settings</param>
@@ -25,6 +28,7 @@ namespace qASIC.Console
                 Logs.Add(new GameConsoleLog("Thank you for using qASIC console", System.DateTime.Now, "qasic", GameConsoleLog.LogType.game));
             Logs.Add(log);
             if (_config != null && _config.LogToUnity && log.Type != GameConsoleLog.LogType.user) Debug.Log($"qASIC game console: {log.Message}");
+            OnLog?.Invoke(log);
         }
 
         /// <summary>Get color from color settings</summary>

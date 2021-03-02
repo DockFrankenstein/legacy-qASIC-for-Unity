@@ -45,7 +45,7 @@ namespace qASIC.Console.Commands
 
         private void DisplayHelp(int pageIndex)
         {
-            string helpMessage = $"<b>Help page {pageIndex} out of {maxPages}:</b>\n";
+            string helpMessage = $"<b>Help page {pageIndex + 1} out of {maxPages}:</b>\n";
             List<GameConsoleCommand> commands = GameConsoleCommandList.Commands;
 
             for (int i = 0; i < onePageCommandLimit; i++)
