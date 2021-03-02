@@ -47,7 +47,6 @@ namespace qASIC.Console
 
         private void Start() => RefreshLogs();
         public void AssignConfig() => GameConsoleController.AssignConfig(ConsoleConfig);
-        private void FixedUpdate() => RefreshLogs();
 
         public void AddLog(Logic.GameConsoleLog log)
         {
