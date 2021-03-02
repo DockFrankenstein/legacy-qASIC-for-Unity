@@ -81,19 +81,13 @@ namespace qASIC.FileManaging
         public static void Repair(string path, string template)
         {
             if (!FileManager.TryLoadFileWriter(path, out string content)) return;
-            Debug.Log("Repearing");
             string[] settings = template.Split('\n');
             for (int i = 0; i < settings.Length; i++)
             {
-                Debug.Log("Try");
                 if (settings[i].StartsWith("#") || string.IsNullOrWhiteSpace(settings[i])) continue;
-                Debug.Log("Passed");
                 string[] values = settings[i].Split(new string[] { ": " }, System.StringSplitOptions.RemoveEmptyEntries);
-                Debug.Log("Try values");
                 if (values.Length != 2) continue;
-                Debug.Log($"values: {values[0]} {values[1]}");
                 bool exists = TryGettingSetting(content, values[0], out string setting);
-                Debug.Log($"Exists: {exists} => {values[0]}: {(exists ? setting : values[1])}");
                 settings[i] = $"{values[0]}: {(exists ? setting : values[1])}";
             }
             FileManager.SaveFileWriter(path, string.Join("\n", settings));
