@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using qASIC.InputManagment;
+using qASIC.InputManagment.Menu;
 
 namespace qASIC.Backend
 {
@@ -14,7 +15,7 @@ namespace qASIC.Backend
             GameObject canvas = CreateCanvas();
 
             InputAssign assign = canvas.AddComponent<InputAssign>();
-            assign.Initialize(null, newKeyName);
+            assign.KeyName = newKeyName;
 
             InputListiner listiner = canvas.AddComponent<InputListiner>();
             listiner.StartListening(true, true);
@@ -36,7 +37,7 @@ namespace qASIC.Backend
             backColorContentFit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             Image backImage = backColor.AddComponent<Image>();
-            backImage.color = new Color(0.5f, 0.5f, 0.5f, 1f);
+            backImage.color = new Color(0f, 0f, 0f);
 
             //text
             GameObject text = new GameObject("Text");
@@ -44,6 +45,7 @@ namespace qASIC.Backend
 
             TextMeshProUGUI textText = text.AddComponent<TextMeshProUGUI>();
             textText.text = "Assign the new key";
+            textText.color = new Color(1f, 1f, 1f);
 
             ContentSizeFitter textContentFit = text.AddComponent<ContentSizeFitter>();
             textContentFit.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;

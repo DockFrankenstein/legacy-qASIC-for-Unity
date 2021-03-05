@@ -9,5 +9,5 @@ namespace qASIC
     [Serializable] public class UnityEventFloat : UnityEvent<float> { }
     [Serializable] public class UnityEventDouble : UnityEvent<double> { }
     [Serializable] public class UnityEventBool : UnityEvent<bool> { }
-    [Serializable] public class UnityEventKeyCode : UnityEvent<KeyCode> { };
+    [Serializable] public class UnityEventKeyCode : UnityEvent<KeyCode> { }
 }

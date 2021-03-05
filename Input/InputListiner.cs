@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-namespace qASIC.InputManagment
+namespace qASIC.InputManagment.Menu
 {
     public class InputListiner : MonoBehaviour
     {
@@ -9,7 +9,7 @@ namespace qASIC.InputManagment
 
         bool isListening = false;
         private bool _stopOnKeyPress = true;
-        private bool _destroyOnKeyPress = true;
+        private bool _destroyOnKeyPress = false;
 
         public void StartListening() => isListening = true;
         public void StopListening() => isListening = false;
@@ -27,11 +27,18 @@ namespace qASIC.InputManagment
             foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
             {
                 if (!Input.GetKeyDown(key)) continue;
-                if (_stopOnKeyPress) isListening = false;
+                if (_stopOnKeyPress) StopListening();
                 if (_destroyOnKeyPress) Destroy(gameObject);
                 onInputRecived.Invoke(key);
+                ResetListiner();
                 return;
             }
+        }
+
+        private void ResetListiner()
+        {
+            _stopOnKeyPress = true;
+            _destroyOnKeyPress = false;
         }
     }
 }

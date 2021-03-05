@@ -1,29 +1,45 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
 
-namespace qASIC.InputManagment
+namespace qASIC.InputManagment.Menu
 {
-    [System.Serializable] public class AssignEvent : UnityEngine.Events.UnityEvent<InputManagerKeys> { }
-
     public class InputAssign : MonoBehaviour
     {
         public string KeyName;
-        public InputManagerKeys Keys;
+        public TMPro.TextMeshProUGUI keyText;
 
-        public AssignEvent OnAssign;
+        public InputListiner Listiner;
+        public UnityEvent OnStartListening = new UnityEvent();
+        public UnityEvent OnAssign = new UnityEvent();
 
-        public void Initialize(InputManagerKeys keys, string keyName)
+        private UnityAction<KeyCode> listinerAction;
+
+        private void Awake() => listinerAction = Assign;
+
+        private void Update()
         {
-            KeyName = keyName;
-            Keys = keys;
+            if (keyText != null && InputManager.GlobalKeys.Presets.ContainsKey(KeyName)) 
+                keyText.text = InputManager.GlobalKeys.Presets[KeyName].ToString();
+        }
+
+        public void StartListening()
+        {
+            if (Listiner == null)
+            {
+                qDebug.LogError("Listiner is not assigned!");
+                return;
+            }
+            OnStartListening.Invoke();
+            Listiner.onInputRecived.AddListener(listinerAction);
+            Listiner.StartListening(true, false);
         }
 
         public void Assign(KeyCode key)
         {
-            if (Keys != null) Keys = InputManager.ChangeInput(Keys, KeyName, key);
-            else { InputManager.ChangeInput(KeyName, key); }
-            if (Keys != null) OnAssign.Invoke(Keys);
+            InputManager.ChangeInput(KeyName, key);
+            OnAssign.Invoke();
+
+            if (Listiner != null) Listiner.onInputRecived.RemoveListener(listinerAction);
         }
     }
 }
