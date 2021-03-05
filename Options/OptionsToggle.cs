@@ -25,7 +25,11 @@ namespace qASIC.Options.UI
         public override void LoadOption()
         {
             if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) ||
-                !bool.TryParse(optionValue, out bool value) || _toggle == null) return;
+                !bool.TryParse(optionValue, out bool value) || _toggle == null)
+            {
+                isActive = true;
+                return;
+            }
             _toggle.isOn = value;
             isActive = true;
         }

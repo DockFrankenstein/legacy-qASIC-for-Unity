@@ -10,12 +10,13 @@ namespace qASIC.Options.UI
 
         public override void Start()
         {
-            base.Start();
+            isActive = false;
             dropDown = GetComponent<TMP_Dropdown>();
             if (dropDown == null) return;
             Assign();
             Initialize();
             SetIndexCurrent();
+            base.Start();
             isActive = true;
         }
 

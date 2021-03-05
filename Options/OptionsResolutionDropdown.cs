@@ -34,5 +34,12 @@ namespace qASIC.Options.UI
             Vector2Int res = (Vector2Int)property;
             return $"{res.x}x{res.y}";
         }
+
+        public override void LoadOption()
+        {
+            if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) || dropDown == null ||
+                !VectorStringConvertion.TryStringToVector2Int(optionValue, out Vector2Int result)) return;
+            dropDown.value = properties.IndexOf(result);
+        }
     }
 }

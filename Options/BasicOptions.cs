@@ -34,12 +34,11 @@ namespace qASIC.Options
         }
 
         [OptionsSetting("vsync", typeof(bool))]
-        public static void ChangeVSync(bool state) => ChangeVSync(state ? 1 : 0);
-        [OptionsSetting("vsync", typeof(int))]
-        public static void ChangeVSync(int value)
+        public static void ChangeVSync(bool value)
         {
-            if (value == QualitySettings.vSyncCount) return;
-            QualitySettings.vSyncCount = value;
+            int intValue = value ? 1 : 0;
+            if (intValue == QualitySettings.vSyncCount) return;
+            QualitySettings.vSyncCount = intValue;
         }
     }
 }

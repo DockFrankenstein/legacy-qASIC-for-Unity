@@ -25,9 +25,6 @@ namespace qASIC.Options.UI
             OptionsController.ChangeOption(OptionName, value, log, save);
         }
 
-        public virtual string GetPropertyName(object property)
-        {
-            return $"{OptionLabelName}{property}";
-        }
+        public virtual string GetPropertyName(object property) => $"{OptionLabelName}{property}";
     }
 }

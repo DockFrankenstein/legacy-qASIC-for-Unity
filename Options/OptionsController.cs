@@ -53,16 +53,17 @@ namespace qASIC.Options
                 {
                     OptionsSetting attr = (OptionsSetting)setting.GetCustomAttributes(typeof(OptionsSetting), true)[0];
 
-                    if (parameter is string) parameter = Convert.ChangeType(parameter, attr?.ValueType);
+                    object param = parameter;
+                    if (parameter is string) param = Convert.ChangeType(parameter, attr?.ValueType);
 
-                    if (parameter.GetType() != typeof(int) && attr.ValueType.IsEnum && parameter.GetType() != attr?.ValueType
+                    if (param.GetType() != typeof(int) && attr.ValueType.IsEnum && param.GetType() != attr?.ValueType
                         || optionName.ToLower() != attr?.Name) continue;
 
-                    setting.Invoke(obj, new object[] { parameter });
+                    setting.Invoke(obj, new object[] { param });
 
-                    if (log) Console.GameConsoleController.Log($"Changed <b>{attr.Name}</b> to {parameter}", "settings");
+                    if (log) Console.GameConsoleController.Log($"Changed <b>{attr.Name}</b> to {param}", "settings");
 
-                    string saveSetting = parameter.ToString();
+                    string saveSetting = param.ToString();
                     _config = ConfigController.SetSetting(_config, attr.Name, saveSetting);
                 }
                 catch { }
