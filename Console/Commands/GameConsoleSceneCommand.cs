@@ -20,8 +20,18 @@ namespace qASIC.Console.Commands
                     LogScene();
                     break;
                 case 2:
-                    if (args[1].ToLower() == "get") LogScene();
-                    else LoadScene(args[1]);
+                    switch (args[1].ToLower())
+                    {
+                        case "get":
+                            LogScene();
+                            break;
+                        case "reload":
+                            LoadScene(SceneManager.GetActiveScene().name);
+                            break;
+                        default:
+                            LoadScene(args[1]);
+                            break;
+                    }
                     break;
                 case 3:
                     if (args[1] == "load") LoadScene(args[2]);

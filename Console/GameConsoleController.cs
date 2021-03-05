@@ -120,8 +120,13 @@ namespace qASIC.Console
             List<string> args = SortCommand(cmd);
             if (args.Count == 0) return;
 
-            if (GameConsoleCommandList.TryGettingCommandByName(args[0], out GameConsoleCommand command)) command.Run(args);
-            else Log("Command not found!", "error", GameConsoleLog.LogType.game);
+            if (GameConsoleCommandList.TryGettingCommandByName(args[0].ToLower(), out GameConsoleCommand command))
+            {
+                Log("Command not found!", "error", GameConsoleLog.LogType.game);
+                return;
+            }
+
+            command.Run(args);
         }
     }
 }

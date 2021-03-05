@@ -26,6 +26,12 @@ namespace qASIC.Console
 
         private int _commandIndex = -1;
 
+        public RuntimePlatform[] IgnoreReselectPlatforms = new RuntimePlatform[]
+            {
+                RuntimePlatform.IPhonePlayer,
+                RuntimePlatform.Android,
+            };
+
         private void Awake()
         {
             AssignConfig();
@@ -146,6 +152,7 @@ namespace qASIC.Console
 
         private IEnumerator Reselect()
         {
+            if (System.Array.IndexOf(IgnoreReselectPlatforms, Application.platform) >= 0) yield break;
             yield return null;
             Input.ActivateInputField();
         }
