@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 
-namespace qASIC.Options.UI
+namespace qASIC.Options.Menu
 {
     public abstract class OptionsDropdown : MenuOption
     {
@@ -39,11 +39,13 @@ namespace qASIC.Options.UI
             List<TMP_Dropdown.OptionData> dropDownData = new List<TMP_Dropdown.OptionData>();
             dropDown.ClearOptions();
             for (int i = 0; i < properties.Count; i++)
-                dropDownData.Add(new TMP_Dropdown.OptionData() { text = GetPropertyName(properties[i]) });
+                dropDownData.Add(new TMP_Dropdown.OptionData() { text = GetDropdownValueName(properties[i]) });
             dropDown.AddOptions(dropDownData);
         }
 
         public abstract void SetIndexCurrent();
+        public virtual string GetDropdownValueName(object property) => property.ToString();
+        public override string GetPropertyName(object property) => $"{OptionLabelName}{GetDropdownValueName(property)}";
 
         public override void LoadOption()
         {

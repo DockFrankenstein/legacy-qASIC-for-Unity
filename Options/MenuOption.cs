@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 
-namespace qASIC.Options.UI
+namespace qASIC.Options.Menu
 {
     public abstract class MenuOption : MonoBehaviour
     {

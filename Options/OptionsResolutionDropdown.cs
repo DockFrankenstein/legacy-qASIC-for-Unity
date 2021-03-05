@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-namespace qASIC.Options.UI
+namespace qASIC.Options.Menu
 {
     public class OptionsResolutionDropdown : OptionsDropdown
     {
@@ -28,7 +28,7 @@ namespace qASIC.Options.UI
             dropDown.value = properties.IndexOf(new Vector2Int(Screen.width, Screen.height));
         }
 
-        public override string GetPropertyName(object property)
+        public override string GetDropdownValueName(object property)
         {
             if (!(property is Vector2Int)) return string.Empty;
             Vector2Int res = (Vector2Int)property;

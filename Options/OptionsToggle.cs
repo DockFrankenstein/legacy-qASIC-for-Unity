@@ -1,6 +1,6 @@
 ﻿using UnityEngine.UI;
 
-namespace qASIC.Options.UI
+namespace qASIC.Options.Menu
 {
     public class OptionsToggle : MenuOption
     {
