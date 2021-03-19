@@ -45,29 +45,16 @@ namespace qASIC.Console
         {
             if (GameConsoleController.OnLog == null)
             {
-                GameConsoleController.OnLog = new UnityAction<Logic.GameConsoleLog>(AddLog);
+                GameConsoleController.OnLog = new UnityAction<Logic.GameConsoleLog>((Logic.GameConsoleLog log) => RefreshLogs());
                 return;
             }
-            GameConsoleController.OnLog += AddLog;
+            GameConsoleController.OnLog += (Logic.GameConsoleLog log) => RefreshLogs();
         }
 
         private void Start() => RefreshLogs();
         public void AssignConfig() => GameConsoleController.AssignConfig(ConsoleConfig);
 
-        public void AddLog(Logic.GameConsoleLog log)
-        {
-            if (Logs == null) return;
-            if (log.Type == Logic.GameConsoleLog.LogType.clear)
-            {
-                Logs.text = string.Empty;
-                ResetScroll();
-                return;
-            }
-            Logs.text += $"\n{log.ToText()}";
-            ResetScroll();
-        }
-
-        private void OnDestroy() => GameConsoleController.OnLog -= AddLog;
+        private void OnDestroy() => GameConsoleController.OnLog -= (Logic.GameConsoleLog log) => RefreshLogs();
 
         private void LogLoadedScene(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
         {
