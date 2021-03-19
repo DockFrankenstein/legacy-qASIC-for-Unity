@@ -33,7 +33,7 @@ namespace qASIC.Console.Logic
 
         public string ToText()
         {
-            string log = Message;
+            string log = Message.Replace('\r','\n');
             switch (Type)
             {
                 case LogType.user:

@@ -101,13 +101,13 @@ namespace qASIC.Console
         /// <summary>Convert logs to text</summary>
         public static string LogsToString(int logLimit)
         {
-            string log = "";
+            string log = string.Empty;
             for (int i = 0; i < logLimit; i++)
             {
                 if (i >= Logs.Count) break;
                 int index = Mathf.Clamp(Logs.Count - logLimit, 0, int.MaxValue) + i;
                 if (Logs[index].Type == GameConsoleLog.LogType.clear) log = "";
-                else if (i != 0) log += $"\n{Logs[index].ToText()}";
+                else if (log != string.Empty) log += $"\n{Logs[index].ToText()}";
                 else log += Logs[index].ToText();
             }
             return log;

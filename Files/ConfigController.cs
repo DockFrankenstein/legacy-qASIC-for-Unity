@@ -72,7 +72,7 @@ namespace qASIC.FileManaging
 
         public static void SetSettingFromFile(string path, string key, string setting)
         {
-            if (!FileManager.TryLoadFileWriter(path, out string content)) return;
+            if (!FileManager.TryLoadFileWriter(path, out string content)) content = "";
             FileManager.SaveFileWriter(path, SetSetting(content, key, setting));
         }
         #endregion

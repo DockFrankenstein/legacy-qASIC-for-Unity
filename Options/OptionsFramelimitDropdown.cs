@@ -12,6 +12,14 @@ namespace qASIC.Options.Menu
             for (int i = 0; i < values.Length; i++) properties.Add(values[i]);
         }
 
+        public override string GetDropdownValueName(object property)
+        {
+            if (!(property is int)) return base.GetDropdownValueName(property);
+            int value = (int)property;
+            if (value == -1) return "Off";
+            return value.ToString();
+        }
+
         public override void SetIndexCurrent()
         {
             dropDown.value = properties.IndexOf(Application.targetFrameRate);
