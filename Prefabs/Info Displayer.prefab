@@ -249,7 +249,7 @@ GameObject:
   m_Layer: 5
   m_Name: Info Displayer
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2800000, guid: 9b32cbfc9daa98947b01b31996404afa, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -404,9 +404,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DisplayerName: main
-  DisplayProjectVersion: 1
-  ProjectVersionDisplayName: Version
-  DisplayUnityVersion: 1
-  UnityVersionDisplayName: Unity version
-  DisplayqASICVersion: 1
-  qASICVersionDisplayName: qASIC version
+  Project:
+    Show: 1
+    DisplayName: Version
+  Unity:
+    Show: 1
+    DisplayName: Unity version
+  qASIC:
+    Show: 1
+    DisplayName: qASIC version
