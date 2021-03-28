@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-using qASIC.FileManaging;
+using qASIC.FileManagment;
 using qASIC.Console;
 
 namespace qASIC.AudioManagment

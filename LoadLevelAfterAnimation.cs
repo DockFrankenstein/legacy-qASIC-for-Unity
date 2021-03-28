@@ -5,7 +5,7 @@ namespace qASIC
 {
     public class LoadLevelAfterAnimation : StateMachineBehaviour
     {
-        public string sceneName;
-        override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) => SceneManager.LoadScene(sceneName);
+        public string SceneName;
+        override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) => SceneManager.LoadScene(SceneName);
     }
 }

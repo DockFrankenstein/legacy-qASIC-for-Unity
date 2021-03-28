@@ -10,14 +10,14 @@ namespace qASIC.Options.Menu
 
         public override void Start()
         {
-            isActive = false;
+            IsActive = false;
             dropDown = GetComponent<TMP_Dropdown>();
             if (dropDown == null) return;
             Assign();
             Initialize();
             SetIndexCurrent();
             base.Start();
-            isActive = true;
+            IsActive = true;
         }
 
         private void Update()

@@ -4,7 +4,7 @@ using UnityEngine;
 using qASIC.Console;
 using System;
 
-namespace qASIC.FileManaging
+namespace qASIC.FileManagment
 {
     public static class FileManager
     {

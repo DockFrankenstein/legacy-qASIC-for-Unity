@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3c7752be8fa6cd478525d188d30c81e, type: 3}
   m_Name: DefaultColors
   m_EditorClassIdentifier: 
-  defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  errorColor: {r: 1, g: 0, b: 0, a: 1}
+  DefaultColor: {r: 1, g: 1, b: 1, a: 1}
+  ErrorColor: {r: 1, g: 0, b: 0, a: 1}
   qASICColor: {r: 0, g: 0.7, b: 1, a: 1}
-  colors:
+  Colors:
   - colorName: settings
     color: {r: 0, g: 0.3019608, b: 1, a: 1}
   - colorName: scene

@@ -9,8 +9,8 @@ namespace qASIC.InputManagment
     {
         public InputManagerKeys Preset = new InputManagerKeys();
 
-        private List<string> _keys = new List<string>();
-        private List<KeyCode> _values = new List<KeyCode>();
+        [SerializeField] List<string> _keys = new List<string>();
+        [SerializeField] List<KeyCode> _values = new List<KeyCode>();
 
         public void OnAfterDeserialize()
         {

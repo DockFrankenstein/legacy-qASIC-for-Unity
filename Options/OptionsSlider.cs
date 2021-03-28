@@ -12,7 +12,8 @@ namespace qASIC.Options.Menu
 
         public void SetValue()
         {
-            if(_slider != null) SetValue(_slider.value);
+            if(_slider != null) 
+                SetValue(_slider.value);
         }
 
         private void SetValueSlider(float value, bool log)
@@ -27,7 +28,8 @@ namespace qASIC.Options.Menu
 
         private void Update()
         {
-            if (NameText != null && _slider != null) NameText.text = GetPropertyName(_slider.value);
+            if (NameText != null && _slider != null) 
+                NameText.text = GetPropertyName(_slider.value);
         }
 
         public override void LoadOption()
@@ -35,7 +37,7 @@ namespace qASIC.Options.Menu
             if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) || 
                 !float.TryParse(optionValue, out float value) || _slider == null) return;
             _slider.value = value;
-            isActive = true;
+            IsActive = true;
         }
     }
 }

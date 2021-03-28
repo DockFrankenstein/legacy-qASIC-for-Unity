@@ -6,7 +6,7 @@ namespace qASIC.Options.Menu
     {
         private Toggle _toggle;
 
-        public bool invertEvent;
+        public bool InvertEvent;
         public UnityEventBool OnValueChange = new UnityEventBool();
 
         private void Awake() => _toggle = GetComponent<Toggle>();
@@ -14,7 +14,7 @@ namespace qASIC.Options.Menu
         public void SetValue(bool state) 
         { 
             SetValue(state, true); 
-            OnValueChange.Invoke(state != invertEvent); 
+            OnValueChange.Invoke(state != InvertEvent); 
         }
 
         private void Update()
@@ -27,11 +27,11 @@ namespace qASIC.Options.Menu
             if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) ||
                 !bool.TryParse(optionValue, out bool value) || _toggle == null)
             {
-                isActive = true;
+                IsActive = true;
                 return;
             }
             _toggle.isOn = value;
-            isActive = true;
+            IsActive = true;
         }
     }
 }

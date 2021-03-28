@@ -8,7 +8,7 @@ namespace qASIC.Console.Commands
     {
         public override string CommandName { get; } = "scene";
         public override string Description { get; } = "get, load scene";
-        public override string Help { get; } = "Use get; load";
+        public override string Help { get; } = "Use scene get; scene load";
         public override string[] Aliases { get; } = new string[] { "loadscene", "level", "loadlevel" };
 
         public override void Run(List<string> args)

@@ -14,3 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Preset:
     SavePath: qASIC/Input.txt
+  _keys:
+  - WalkUp
+  - WalkDown
+  - WalkLeft
+  - WalkRight
+  _values: 77000000730000006100000064000000

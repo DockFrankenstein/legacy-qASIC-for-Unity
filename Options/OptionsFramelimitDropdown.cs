@@ -4,12 +4,12 @@ namespace qASIC.Options.Menu
 {
     public class OptionsFramelimitDropdown : OptionsDropdown
     {
-        public int[] values;
+        public int[] Values;
 
         public override void Assign()
         {
             properties.Clear();
-            for (int i = 0; i < values.Length; i++) properties.Add(values[i]);
+            for (int i = 0; i < Values.Length; i++) properties.Add(Values[i]);
         }
 
         public override string GetDropdownValueName(object property)

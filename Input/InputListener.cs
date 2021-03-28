@@ -3,7 +3,7 @@ using System;
 
 namespace qASIC.InputManagment.Menu
 {
-    public class InputListiner : MonoBehaviour
+    public class InputListener : MonoBehaviour
     {
         public UnityEventKeyCode onInputRecived = new UnityEventKeyCode();
 

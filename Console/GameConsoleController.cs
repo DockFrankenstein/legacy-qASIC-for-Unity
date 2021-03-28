@@ -37,14 +37,14 @@ namespace qASIC.Console
             if (_config == null || _config.ColorTheme == null) return new Color(1f, 1f, 1f);
             colorName = colorName.ToLower();
 
-            if (colorName == "default") return _config.ColorTheme.defaultColor;
-            if (colorName == "error") return _config.ColorTheme.errorColor;
+            if (colorName == "default") return _config.ColorTheme.DefaultColor;
+            if (colorName == "error") return _config.ColorTheme.ErrorColor;
             if (colorName == "qasic") return _config.ColorTheme.qASICColor;
 
-            for (int i = 0; i < _config.ColorTheme.colors.Length; i++)
-                if (_config.ColorTheme.colors[i].colorName.ToLower() == colorName)
-                    return _config.ColorTheme.colors[i].color;
-            return _config.ColorTheme.defaultColor;
+            for (int i = 0; i < _config.ColorTheme.Colors.Length; i++)
+                if (_config.ColorTheme.Colors[i].colorName.ToLower() == colorName)
+                    return _config.ColorTheme.Colors[i].color;
+            return _config.ColorTheme.DefaultColor;
         }
         #endregion
 

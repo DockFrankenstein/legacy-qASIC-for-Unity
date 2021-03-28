@@ -17,9 +17,9 @@ namespace qASIC.Backend
             InputAssign assign = canvas.AddComponent<InputAssign>();
             assign.KeyName = newKeyName;
 
-            InputListiner listiner = canvas.AddComponent<InputListiner>();
-            listiner.StartListening(true, true);
-            listiner.onInputRecived.AddListener(assign.Assign);
+            InputListener listener = canvas.AddComponent<InputListener>();
+            listener.StartListening(true, true);
+            listener.onInputRecived.AddListener(assign.Assign);
 
             //back color
             GameObject backColor = new GameObject("Color");

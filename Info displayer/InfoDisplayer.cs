@@ -13,7 +13,7 @@ namespace qASIC.Displayer
         public bool ExceptUnknown = true;
 
         [Space]
-        public string[] defaultLines;
+        public string[] DefaultLines;
 
         [Space]
         public string StartText;
@@ -47,9 +47,9 @@ namespace qASIC.Displayer
         public void Initialize()
         {
             lines.Clear();
-            for (int i = 0; i < defaultLines.Length; i++)
-                if (!lines.ContainsKey(defaultLines[i]))
-                    lines.Add(defaultLines[i], new InfoDisplayerLine());
+            for (int i = 0; i < DefaultLines.Length; i++)
+                if (!lines.ContainsKey(DefaultLines[i]))
+                    lines.Add(DefaultLines[i], new InfoDisplayerLine());
         }
 
         private void LateUpdate()

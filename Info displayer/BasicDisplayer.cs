@@ -35,6 +35,8 @@ namespace qASIC.Displayer.Displayers
         private void Update()
         {
             DisplayFramerate();
+            Resolution.DisplayValue($"{Screen.currentResolution.width}x{Screen.currentResolution.height}", DisplayerName);
+            Fullscreen.DisplayValue(Screen.fullScreenMode.ToString(), DisplayerName);
         }
 
         private void DisplayFramerate()

@@ -18,15 +18,11 @@ namespace qASIC.Options.Menu
             properties = resolutionList;
         }
 
-        public override void SetValue(object propertie)
-        {
+        public override void SetValue(object propertie) =>
             base.SetValue(VectorStringConvertion.Vector2IntToString((Vector2Int)propertie));
-        }
 
-        public override void SetIndexCurrent()
-        {
+        public override void SetIndexCurrent() =>
             dropDown.value = properties.IndexOf(new Vector2Int(Screen.width, Screen.height));
-        }
 
         public override string GetDropdownValueName(object property)
         {

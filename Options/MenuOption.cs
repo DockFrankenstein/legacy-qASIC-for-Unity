@@ -11,9 +11,9 @@ namespace qASIC.Options.Menu
 
         [Header("Options")]
         public string OptionName;
-        public bool save = true;
+        public bool Save = true;
 
-        public bool isActive { get; set; }
+        public bool IsActive { get; set; }
 
         public virtual void Start() => LoadOption();
 
@@ -21,8 +21,8 @@ namespace qASIC.Options.Menu
 
         public void SetValue(object value, bool log)
         {
-            if (!isActive) return;
-            OptionsController.ChangeOption(OptionName, value, log, save);
+            if (!IsActive) return;
+            OptionsController.ChangeOption(OptionName, value, log, Save);
         }
 
         public virtual string GetPropertyName(object property) => $"{OptionLabelName}{property}";
