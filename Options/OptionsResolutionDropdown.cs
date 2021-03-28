@@ -22,7 +22,7 @@ namespace qASIC.Options.Menu
             base.SetValue(VectorStringConvertion.Vector2IntToString((Vector2Int)propertie));
 
         public override void SetIndexCurrent() =>
-            dropDown.value = properties.IndexOf(new Vector2Int(Screen.width, Screen.height));
+            dropdown.value = properties.IndexOf(new Vector2Int(Screen.width, Screen.height));
 
         public override string GetDropdownValueName(object property)
         {
@@ -33,9 +33,9 @@ namespace qASIC.Options.Menu
 
         public override void LoadOption()
         {
-            if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) || dropDown == null ||
+            if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) || dropdown == null ||
                 !VectorStringConvertion.TryStringToVector2Int(optionValue, out Vector2Int result)) return;
-            dropDown.value = properties.IndexOf(result);
+            dropdown.value = properties.IndexOf(result);
         }
     }
 }

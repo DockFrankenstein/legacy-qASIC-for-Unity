@@ -22,14 +22,14 @@ namespace qASIC.Options.Menu
 
         public override void SetIndexCurrent()
         {
-            dropDown.value = properties.IndexOf(Application.targetFrameRate);
+            dropdown.value = properties.IndexOf(Application.targetFrameRate);
         }
 
         public override void LoadOption()
         {
-            if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) || dropDown == null ||
+            if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) || dropdown == null ||
                 !int.TryParse(optionValue, out int result)) return;
-            dropDown.value = properties.IndexOf(result);
+            dropdown.value = properties.IndexOf(result);
         }
     }
 }

@@ -5,14 +5,14 @@ namespace qASIC.Options.Menu
 {
     public abstract class OptionsDropdown : MenuOption
     {
-        [UnityEngine.HideInInspector] public TMP_Dropdown dropDown;
+        [UnityEngine.HideInInspector] public TMP_Dropdown dropdown;
         public List<object> properties = new List<object>();
 
         public override void Start()
         {
             IsActive = false;
-            dropDown = GetComponent<TMP_Dropdown>();
-            if (dropDown == null) return;
+            dropdown = GetComponent<TMP_Dropdown>();
+            if (dropdown == null) return;
             Assign();
             Initialize();
             SetIndexCurrent();
@@ -22,25 +22,21 @@ namespace qASIC.Options.Menu
 
         private void Update()
         {
-            if (NameText != null && dropDown != null) NameText.text = GetPropertyName(properties[dropDown.value]);
+            if (NameText != null && dropdown != null) NameText.text = GetPropertyName(properties[dropdown.value]);
         }
 
         public abstract void Assign();
 
         public void SetValue(int value) => SetValue(properties[value]);
-
-        public virtual void SetValue(object propertie)
-        {
-            SetValue(propertie, true);
-        }
+        public virtual void SetValue(object property) => SetValue(property, true);
 
         public virtual void Initialize()
         {
             List<TMP_Dropdown.OptionData> dropDownData = new List<TMP_Dropdown.OptionData>();
-            dropDown.ClearOptions();
+            dropdown.ClearOptions();
             for (int i = 0; i < properties.Count; i++)
                 dropDownData.Add(new TMP_Dropdown.OptionData() { text = GetDropdownValueName(properties[i]) });
-            dropDown.AddOptions(dropDownData);
+            dropdown.AddOptions(dropDownData);
         }
 
         public abstract void SetIndexCurrent();
@@ -50,8 +46,8 @@ namespace qASIC.Options.Menu
         public override void LoadOption()
         {
             if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) ||
-                !int.TryParse(optionValue, out int value) || dropDown == null) return;
-            dropDown.value = value;
+                !int.TryParse(optionValue, out int value) || dropdown == null) return;
+            dropdown.value = value;
         }
     }
 }
