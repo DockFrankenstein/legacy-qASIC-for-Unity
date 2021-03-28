@@ -1,6 +1,8 @@
-<img src="Sprites/qASIC%20banner.png">
-
-## Quick Basics for starting projects fast
+<p align="center">
+  <img src="Sprites/qASIC%20banner.png">
+  </br>
+  Quick Basics for starting projects fast
+</p>
 
 # Table of contents
 * [Introduction](#introduction)
