@@ -8,7 +8,7 @@ namespace qASIC.FileManagment
 {
     public static class FileManager
     {
-        public static string GetCustomFolderPath(System.Environment.SpecialFolder type) { return System.Environment.GetFolderPath(type); }
+        public static string GetCustomFolderPath(Environment.SpecialFolder type) { return System.Environment.GetFolderPath(type); }
 
         #region Trim
         /// <summary>Trims paths end by specified amount of folders</summary>
@@ -165,7 +165,6 @@ namespace qASIC.FileManagment
         }
 
 
-        /// <param name="preattyPrint">If the file should be saved for readability or minimum size</param>
         public static void ReadFileJSON(string path, object objectToOverride)
         {
             try
@@ -178,7 +177,6 @@ namespace qASIC.FileManagment
             }
         }
 
-        /// <param name="preattyPrint">If the file should be saved for readability or minimum size</param>
         public static bool TryReadFileJSON(string path, object objectToOverride)
         {
             try
