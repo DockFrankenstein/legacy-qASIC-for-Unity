@@ -1,22 +1,4 @@
-<table align="center">
-	<tr>
-		<td width="128" height="128">
-			<img src="Sprites/qASIC%20Audio%20logo.png">
-		</td>
-		<td width="192" height="192">
-			<img src="Sprites/qASIC%20Displayer%20logo.png">
-		</td>
-		<td width="256" height="256">
-			<img src="Sprites/qASIC%20logo.png">
-		</td>
-		<td width="192" height="192">
-			<img src="Sprites/qASIC%20Options%20log.png">
-		</td>
-		<td width="128" height="128">
-			<img src="Sprites/qASIC%20File%20logo.png">
-		</td>
-	</tr>
-</table>
+<img src="Sprites/qASIC%20banner.png">
 
 ## Quick Basics for starting projects fast
 
