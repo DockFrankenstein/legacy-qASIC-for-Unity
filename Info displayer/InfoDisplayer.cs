@@ -7,8 +7,8 @@ namespace qASIC.Displayer
     public class InfoDisplayer : MonoBehaviour
     {
         public string DisplayerName = "main";
-        [Tooltip("Seperator between line name and it's value")]
-        public string Seperator = ": ";
+        [Tooltip("Separator between line name and it's value")]
+        public string Separator = ": ";
         [Tooltip("Decides if a line should be displayed if it isn't created by default")]
         public bool ExceptUnknown = true;
 
@@ -57,7 +57,7 @@ namespace qASIC.Displayer
             if (Text == null) return;
             Text.text = StartText;
             foreach (var value in lines)
-                if(!value.Value.Hide) Text.text += $"{value.Key}{Seperator}{value.Value.Value}\n";
+                if(!value.Value.Hide) Text.text += $"{value.Key}{Separator}{value.Value.Value}\n";
             Text.text += EndText;
         }
 
