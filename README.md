@@ -1,10 +1,22 @@
-<p align="center", >
-  <img src="Sprites/qASIC%20Audio%20logo.png" width="128" height="128" allignment>
-  <img src="Sprites/qASIC%20Displayer%20logo.png" width="192" height="192" allignment>
-  <img src="Sprites/qASIC%20logo.png" width="256" height="256" allignment>
-  <img src="Sprites/qASIC%20Options%20log.png" width="192" height="192" allignment>
-  <img src="Sprites/qASIC%20File%20logo.png" width="128" height="128" allignment>
-</p>
+<table align="center">
+	<tr>
+		<td width="128" height="128">
+			<img src="Sprites/qASIC%20Audio%20logo.png">
+		</td>
+		<td width="192" height="192">
+			<img src="Sprites/qASIC%20Displayer%20logo.png">
+		</td>
+		<td width="256" height="256">
+			<img src="Sprites/qASIC%20logo.png">
+		</td>
+		<td width="192" height="192">
+			<img src="Sprites/qASIC%20Options%20log.png">
+		</td>
+		<td width="128" height="128">
+			<img src="Sprites/qASIC%20File%20logo.png">
+		</td>
+	</tr>
+</table>
 
 ## Quick Basics for starting projects fast
 
