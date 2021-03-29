@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using qASIC.InputManagment;
-using qASIC.InputManagment.Menu;
+using qASIC.InputManagement;
+using qASIC.InputManagement.Menu;
 
 namespace qASIC.Backend
 {

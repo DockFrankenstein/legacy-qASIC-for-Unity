@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using qASIC.Backend;
-using qASIC.InputManagment;
+using qASIC.InputManagement;
 
 namespace qASIC.Console.Commands
 {

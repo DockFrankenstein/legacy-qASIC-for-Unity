@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor;
 
-namespace qASIC.InputManagment.Tools
+namespace qASIC.InputManagement.Tools
 {
     [CustomEditor(typeof(InputPreset))]
     public class InputPresetCI : Editor

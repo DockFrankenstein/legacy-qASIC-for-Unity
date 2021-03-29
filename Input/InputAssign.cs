@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-namespace qASIC.InputManagment.Menu
+namespace qASIC.InputManagement.Menu
 {
     public class InputAssign : MonoBehaviour
     {

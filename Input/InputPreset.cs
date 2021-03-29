@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace qASIC.InputManagment
+namespace qASIC.InputManagement
 {
     [CreateAssetMenu(fileName = "NewInputPreset", menuName = "qASIC/Input/Input Preset")]
     public class InputPreset : ScriptableObject, ISerializationCallbackReceiver

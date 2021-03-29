@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace qASIC.InputManagment
+namespace qASIC.InputManagement
 {
     public class SetGlobalInputKeys : MonoBehaviour
     {

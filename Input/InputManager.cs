@@ -1,12 +1,25 @@
 ﻿using qASIC.Console;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace qASIC.InputManagment
+namespace qASIC.InputManagement
 {
     public static class InputManager
     {
+        #region Force
+        private static Dictionary<string, bool> _forcedKeys = new Dictionary<string, bool>();
+
+        public static void ForceKey(string keyName, bool state)
+        {
+            if (_forcedKeys.ContainsKey(keyName))
+            {
+                _forcedKeys[keyName] = state;
+                return;
+            }
+            _forcedKeys.Add(keyName, state);
+        }
+        #endregion
+
         private static InputManagerKeys _global;
         public static InputManagerKeys GlobalKeys
         {
@@ -54,8 +67,9 @@ namespace qASIC.InputManagment
         public static bool GetInput(string keyName)
         {
             if (GlobalKeys == null) return false;
-            if (!GlobalKeys.Presets.ContainsKey(keyName)) return false;
-            return Input.GetKey(GlobalKeys.Presets[keyName]);
+            bool isForced = _forcedKeys.ContainsKey(keyName) ? _forcedKeys[keyName] : false;
+            if (!GlobalKeys.Presets.ContainsKey(keyName)) return isForced;
+            return Input.GetKey(GlobalKeys.Presets[keyName]) || isForced;
         }
 
         public static bool GetInputUp(string keyName)

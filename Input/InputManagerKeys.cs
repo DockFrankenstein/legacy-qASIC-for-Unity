@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace qASIC.InputManagment
+namespace qASIC.InputManagement
 {
     [System.Serializable]
     public class InputManagerKeys

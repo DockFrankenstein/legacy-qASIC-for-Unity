@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-namespace qASIC.InputManagment.Menu
+namespace qASIC.InputManagement.Menu
 {
     public class InputListener : MonoBehaviour
     {
