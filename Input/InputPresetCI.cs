@@ -31,7 +31,7 @@ namespace qASIC.InputManagement.Tools
 
         private void DisplayList()
         {
-            GUIStyle textStyle = new GUIStyle()
+            GUIStyle textStyle = new GUIStyle("Label")
             {
                 alignment = TextAnchor.MiddleLeft
             };
