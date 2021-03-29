@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace qASIC.FileManagment
+namespace qASIC.FileManagement
 {
     public static class ConfigController
     {

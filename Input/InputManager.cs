@@ -38,15 +38,15 @@ namespace qASIC.InputManagement
         {
             string path = $"{Application.persistentDataPath}/{GlobalKeys.SavePath}";
             foreach (var entry in GlobalKeys.Presets)
-                FileManagment.ConfigController.SetSetting(path, entry.Key, entry.Value.ToString());
+                FileManagement.ConfigController.SetSetting(path, entry.Key, entry.Value.ToString());
         }
 
         public static void LoadUserKeys()
         {
             string path = $"{Application.persistentDataPath}/{GlobalKeys.SavePath}";
-            if (!FileManagment.FileManager.TryLoadFileWriter(path, out string content)) return;
+            if (!FileManagement.FileManager.TryLoadFileWriter(path, out string content)) return;
 
-            List<string> settings = FileManagment.ConfigController.CreateOptionList(content);
+            List<string> settings = FileManagement.ConfigController.CreateOptionList(content);
 
             for (int i = 0; i < settings.Count; i++)
             {

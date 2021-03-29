@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
-using qASIC.FileManagment;
+using qASIC.FileManagement;
 
 namespace qASIC.Options
 {
