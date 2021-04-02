@@ -33,9 +33,41 @@ namespace qASIC.Console
         {
             AssignConfig();
             ReloadInterface();
-            if (GameConsoleController.TryGettingConfig(out GameConsoleConfig config) && config.LogScene)
-                UnityEngine.SceneManagement.SceneManager.sceneLoaded += LogLoadedScene;
+            SetupConfig();
             AddLogEvent();
+        }
+
+        /// <summary>Enables features like logging messages to console, or logging the scene</summary>
+        private void SetupConfig()
+        {
+            if (ConsoleConfig == null) return;
+            if (ConsoleConfig.LogScene) UnityEngine.SceneManagement.SceneManager.sceneLoaded += LogLoadedScene;
+            Application.logMessageReceived += (string log, string trace, LogType type) => HandleUnityLog(log, trace, type);
+        }
+
+        private void HandleUnityLog(string logText, string trace, LogType type)
+        {
+            string color = "default";
+            switch (type)
+            {
+                case LogType.Exception:
+                case LogType.Error:
+                case LogType.Assert:
+                    if (!ConsoleConfig.LogUnityErrorsToConsole) return;
+                    color = "error";
+                    break;
+                case LogType.Warning:
+                    if (!ConsoleConfig.LogUnityWarningsToConsole) return;
+                    color = "warning";
+                    break;
+                case LogType.Log:
+                    if (!ConsoleConfig.LogUnityMessagesToConsole) return;
+                    color = "default";
+                    break;
+            }
+
+            Logic.GameConsoleLog log = new Logic.GameConsoleLog(logText, System.DateTime.Now, color, Logic.GameConsoleLog.LogType.game, true);
+            GameConsoleController.Log(log);
         }
 
         private void AddLogEvent()
@@ -51,7 +83,11 @@ namespace qASIC.Console
         private void Start() => RefreshLogs();
         public void AssignConfig() => GameConsoleController.AssignConfig(ConsoleConfig);
 
-        private void OnDestroy() => GameConsoleController.OnLog -= (Logic.GameConsoleLog log) => RefreshLogs();
+        private void OnDestroy()
+        {
+            GameConsoleController.OnLog -= (Logic.GameConsoleLog log) => RefreshLogs();
+            Application.logMessageReceived -= (string log, string trace, LogType type) => HandleUnityLog(log, trace, type);
+        }
 
         private void LogLoadedScene(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
         {

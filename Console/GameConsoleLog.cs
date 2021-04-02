@@ -12,6 +12,9 @@ namespace qASIC.Console.Logic
         public string Message { get; }
         public Color LogColor { get; }
         public string colorName { get; }
+        
+        /// <summary>If the log should be hidden in Unity console</summary>
+        public bool UnityHidden { get; }
 
         public GameConsoleLog(string message, DateTime time, string color, LogType logType)
         {
@@ -22,15 +25,43 @@ namespace qASIC.Console.Logic
             Message = message;
             LogColor = new Color();
             colorName = color;
+            UnityHidden = false;
         }
 
         public GameConsoleLog(string message, DateTime time, Color color, LogType logType)
         {
+            if (message == null) message = string.Empty;
+
             Type = logType;
             Time = time;
             Message = message;
             LogColor = color;
             colorName = string.Empty;
+            UnityHidden = false;
+        }
+
+        public GameConsoleLog(string message, DateTime time, string color, LogType logType, bool unityHidden)
+        {
+            if (message == null) message = string.Empty;
+
+            Type = logType;
+            Time = time;
+            Message = message;
+            LogColor = new Color();
+            colorName = color;
+            UnityHidden = unityHidden;
+        }
+
+        public GameConsoleLog(string message, DateTime time, Color color, LogType logType, bool unityHidden)
+        {
+            if (message == null) message = string.Empty;
+
+            Type = logType;
+            Time = time;
+            Message = message;
+            LogColor = color;
+            colorName = string.Empty;
+            UnityHidden = unityHidden;
         }
 
         public string ToText()
