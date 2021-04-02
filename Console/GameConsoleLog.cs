@@ -15,6 +15,8 @@ namespace qASIC.Console.Logic
 
         public GameConsoleLog(string message, DateTime time, string color, LogType logType)
         {
+            if (message == null) message = string.Empty;
+
             Type = logType;
             Time = time;
             Message = message;

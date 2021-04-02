@@ -11,9 +11,6 @@ namespace qASIC.Console
         [Header("Settings")]
         public int LogLimit = 64;
         public GameConsoleConfig ConsoleConfig;
-        public bool SelectOnOpen = true;
-        public bool ReselectOnSubmit = true;
-        public bool ResetScrollOnRun = true;
 
         [Header("Objects")]
         public GameObject CanvasObject;
@@ -73,7 +70,6 @@ namespace qASIC.Console
         private void Update()
         {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Return) && CanvasObject != null && CanvasObject.activeSelf) RunCommand();
-            if (UnityEngine.Input.GetKeyDown(KeyCode.BackQuote) && CanvasObject != null) ToggleConsole();
             if (UnityEngine.Input.GetKeyDown(KeyCode.UpArrow) && CanvasObject.activeSelf) ReInsertCommand(false);
             if (UnityEngine.Input.GetKeyDown(KeyCode.DownArrow) && CanvasObject.activeSelf) ReInsertCommand(true);
         }
@@ -100,7 +96,11 @@ namespace qASIC.Console
         /// <summary>Updates logs from controller</summary>
         public void RefreshLogs()
         {
-            if (Logs != null) Logs.text = GameConsoleController.LogsToString(LogLimit);
+            if (Logs == null) return;
+            bool isSnapped = false;
+            if (Scroll != null) isSnapped = Scroll.verticalNormalizedPosition == 0;
+            Logs.text = GameConsoleController.LogsToString(LogLimit);
+            if (isSnapped) ResetScroll();
         }
 
         public void ToggleConsole()
@@ -110,7 +110,7 @@ namespace qASIC.Console
 
         public void ToggleConsole(bool state)
         {
-            if (state && SelectOnOpen) StartCoroutine(Reselect());
+            if (state) StartCoroutine(Reselect());
             if (Input != null) Input.text = "";
             OnConsoleChangeState.Invoke(state);
             if(CanvasObject != null) CanvasObject.SetActive(state);
@@ -122,7 +122,7 @@ namespace qASIC.Console
         {
             DiscardPreviousCommand();
             if (Input == null) return;
-            if (ReselectOnSubmit) StartCoroutine(Reselect());
+            StartCoroutine(Reselect());
 
             if (Input.text == "")
             {
@@ -146,7 +146,7 @@ namespace qASIC.Console
 
         public void ResetScroll()
         {
-            if (!ResetScrollOnRun || Scroll == null) return;
+            if (Scroll == null) return;
             Canvas.ForceUpdateCanvases();
             Scroll.verticalNormalizedPosition = 0f;
         }

@@ -20,11 +20,6 @@ namespace qASIC.Displayer
         public string EndText;
         public TextMeshProUGUI Text;
 
-        [Space]
-        public KeyCode ToggleKey = KeyCode.F3;
-        public GameObject ToggleObject;
-        bool isToggled = false;
-
         private Dictionary<string, InfoDisplayerLine> lines = new Dictionary<string, InfoDisplayerLine>();
         private static Dictionary<string, InfoDisplayer> displayers = new Dictionary<string, InfoDisplayer>();
 
@@ -79,34 +74,6 @@ namespace qASIC.Displayer
             }
             return true;
         }
-        #endregion
-
-        #region Toggle
-        private void Update()
-        {
-            if (Input.GetKeyDown(ToggleKey))
-                Toggle();
-        }
-
-        public void Toggle() => Toggle(!isToggled);
-        public void Toggle(bool state)
-        {
-            isToggled = state;
-            ToggleObject.SetActive(isToggled);
-        }
-
-        public static void Toggle(bool state, string displayerName = "main")
-        {
-            if (!GetDisplayer(displayerName, out InfoDisplayer display)) return;
-            display.Toggle(state);
-        }
-
-        public static void Toggle(string displayerName = "main")
-        {
-            if (!GetDisplayer(displayerName, out InfoDisplayer display)) return;
-            display.Toggle();
-        }
-
         #endregion
 
         #region Change
