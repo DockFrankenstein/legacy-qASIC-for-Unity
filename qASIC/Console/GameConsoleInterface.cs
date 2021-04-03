@@ -18,9 +18,6 @@ namespace qASIC.Console
         public TMP_InputField Input;
         public UnityEngine.UI.ScrollRect Scroll;
 
-        [Header("Events")]
-        public UnityEventBool OnConsoleChangeState;
-
         private int _commandIndex = -1;
 
         public RuntimePlatform[] IgnoreReselectPlatforms = new RuntimePlatform[]
@@ -35,6 +32,7 @@ namespace qASIC.Console
             ReloadInterface();
             SetupConfig();
             AddLogEvent();
+            ResetScroll(true);
         }
 
         /// <summary>Enables features like logging messages to console, or logging the scene</summary>
@@ -139,21 +137,6 @@ namespace qASIC.Console
             if (isSnapped) ResetScroll();
         }
 
-        public void ToggleConsole()
-        {
-            ToggleConsole(!CanvasObject.activeSelf);
-        }
-
-        public void ToggleConsole(bool state)
-        {
-            if (state) StartCoroutine(Reselect());
-            if (Input != null) Input.text = "";
-            OnConsoleChangeState.Invoke(state);
-            if(CanvasObject != null) CanvasObject.SetActive(state);
-            DiscardPreviousCommand();
-            ResetScroll();
-        }
-
         public void RunCommand()
         {
             DiscardPreviousCommand();
@@ -162,7 +145,7 @@ namespace qASIC.Console
 
             if (Input.text == "")
             {
-                ResetScroll();
+                ResetScroll(true);
                 return;
             }
 
@@ -180,9 +163,9 @@ namespace qASIC.Console
             Input.ActivateInputField();
         }
 
-        public void ResetScroll()
+        public void ResetScroll(bool force = false)
         {
-            if (Scroll == null) return;
+            if (Scroll == null && !force) return;
             Canvas.ForceUpdateCanvases();
             Scroll.verticalNormalizedPosition = 0f;
         }
