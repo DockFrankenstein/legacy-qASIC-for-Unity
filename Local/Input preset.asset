@@ -14,3 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Preset:
     SavePath: qASIC/Input.txt
+  _keys:
+  - newKey
+  - newKey0
+  - newKey1
+  - newKey2
+  _values: 61000000060100006100000061000000

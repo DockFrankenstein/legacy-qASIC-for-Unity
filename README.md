@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Sprites/qASIC%20banner.png">
+  <img src="qASIC/Sprites/qASIC%20banner.png">
   </br>
   Quick Basics for starting projects fast
 </p>
