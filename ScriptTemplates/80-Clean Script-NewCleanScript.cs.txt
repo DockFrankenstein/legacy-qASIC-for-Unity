@@ -1,0 +1,6 @@
+using qASIC;
+
+public class #SCRIPTNAME# : MonoBehaviour
+{
+	#NOTRIM#
+}

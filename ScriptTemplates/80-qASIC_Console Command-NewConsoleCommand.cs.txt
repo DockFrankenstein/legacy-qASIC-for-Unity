@@ -1,0 +1,18 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using qASIC.Console.Commands;
+
+public class #SCRIPTNAME# : GameConsoleCommand
+{
+    public override string CommandName { get; } = "#SCRIPTNAME#";
+    public override string Description { get; } = "insert description that will be displayed in help here";
+    public override string Help { get; } = "Insert detailed description that will show up in the specific help message fe. Use Hello <option> <value>";
+    public override string[] Aliases { get; } = new string[] { "alias" };
+    #NOTRIM#
+    public override void Run(List<string> args)
+    {
+        if (!CheckForArgumentCount(args, 0)) return;
+        Log("Hello world!", "default");
+    }
+}
