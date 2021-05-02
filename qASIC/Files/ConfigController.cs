@@ -19,7 +19,7 @@ namespace qASIC.FileManagement
 
         public static bool TryGettingSetting(string content, string key, out string setting)
         {
-            string[] settings = content.Split('\n');
+            string[] settings = content.Split(new string[] { "\n", "\r" }, System.StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < settings.Length; i++)
             {
                 if (settings[i].StartsWith("#")) continue;
@@ -46,7 +46,7 @@ namespace qASIC.FileManagement
         {
             bool exists = false;
             string[] settings = new string[0];
-            if (content.Length != 0) settings = content.Split('\n');
+            if (content.Length != 0) settings = content.Split(new string[] { "\n", "\r" }, System.StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < settings.Length; i++)
             {
                 if (settings[i].StartsWith("#")) continue;
@@ -78,7 +78,7 @@ namespace qASIC.FileManagement
         public static void Repair(string path, string template)
         {
             if (!FileManager.TryLoadFileWriter(path, out string content)) return;
-            string[] settings = template.Split('\n');
+            string[] settings = template.Split(new string[] { "\n", "\r" }, System.StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < settings.Length; i++)
             {
                 if (settings[i].StartsWith("#") || string.IsNullOrWhiteSpace(settings[i])) continue;
@@ -93,7 +93,7 @@ namespace qASIC.FileManagement
         public static List<string> CreateOptionList(string content)
         {
             List<string> optionsList = new List<string>();
-            string[] settings = content.Split('\n');
+            string[] settings = content.Split(new string[] { "\n", "\r" }, System.StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < settings.Length; i++)
             {
                 if (settings[i].StartsWith("#")) continue;

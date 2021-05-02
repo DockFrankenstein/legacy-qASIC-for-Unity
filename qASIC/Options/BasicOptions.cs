@@ -23,7 +23,7 @@ namespace qASIC.Options
         public static void ChangeFullScreenMode(bool state)
         {
             if (state == Screen.fullScreen) return;
-            Screen.fullScreen = state;
+            Screen.fullScreenMode = state ? FullScreenMode.MaximizedWindow : FullScreenMode.Windowed;
         }
 
         [OptionsSetting("framelimit", typeof(int))]

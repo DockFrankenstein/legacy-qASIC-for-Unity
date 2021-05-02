@@ -20,5 +20,11 @@ namespace qASIC.InputManagement
             SavePath = savePath;
             Presets = presets;
         }
+
+        public InputManagerKeys(InputManagerKeys original)
+        {
+            SavePath = original.SavePath;
+            Presets = new Dictionary<string, KeyCode>(original.Presets);
+        }
     }
 }

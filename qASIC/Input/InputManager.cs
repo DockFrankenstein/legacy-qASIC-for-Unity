@@ -30,7 +30,7 @@ namespace qASIC.InputManagement
             }
             set
             {
-                _global = value;
+                _global = new InputManagerKeys(value);
             }
         }
 

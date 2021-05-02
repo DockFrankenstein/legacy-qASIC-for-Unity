@@ -1,25 +1,32 @@
 using UnityEngine;
 
-public class Toggler : MonoBehaviour
+namespace qASIC
 {
-    [HideInInspector] public bool state;
-
-    public KeyCode Key = KeyCode.F2;
-    public GameObject ToggleObject;
-
-    private void Awake() => Toggle(ToggleObject.activeSelf);
-
-    private void Update()
+    public class Toggler : MonoBehaviour
     {
-        if (Input.GetKeyDown(Key))
-            Toggle();
-    }
+        public bool state { get; private set; }
 
-    public void Toggle() => Toggle(!state);
+        public KeyCode Key = KeyCode.F2;
+        public GameObject ToggleObject;
 
-    public void Toggle(bool state)
-    {
-        this.state = state;
-        ToggleObject?.SetActive(state);
+        [Space]
+        public UnityEventBool OnChangeState;
+
+        private void Awake() => Toggle(ToggleObject.activeSelf);
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(Key))
+                Toggle();
+        }
+
+        public void Toggle() => Toggle(!state);
+
+        public void Toggle(bool state)
+        {
+            this.state = state;
+            ToggleObject?.SetActive(state);
+            OnChangeState.Invoke(state);
+        }
     }
 }

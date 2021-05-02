@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace qASIC.Options.Menu
 {
-    public class OptionsResolutionDropdown : OptionsDropdown
+    public class OptionsResolutionDropdown : AdvancedOptionsDropdown
     {
         public override void Assign()
         {
@@ -21,21 +21,26 @@ namespace qASIC.Options.Menu
         public override void SetValue(object propertie) =>
             base.SetValue(VectorStringConvertion.Vector2IntToString((Vector2Int)propertie));
 
-        public override void SetIndexCurrent() =>
-            dropdown.value = properties.IndexOf(new Vector2Int(Screen.width, Screen.height));
+        public override void SetCurrentIndex()
+        {
+            int index = properties.IndexOf(new Vector2Int(Screen.width, Screen.height));
+            if (index < 0) return;
+            _dropdown.SetValueWithoutNotify(index);
+        }
 
         public override string GetDropdownValueName(object property)
         {
             if (!(property is Vector2Int)) return string.Empty;
             Vector2Int res = (Vector2Int)property;
-            return $"{res.x}x{res.y}";
+            return VectorStringConvertion.Vector2IntToString(res);
         }
 
         public override void LoadOption()
         {
-            if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) || dropdown == null ||
+            if (_dropdown == null) return;
+            if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) ||
                 !VectorStringConvertion.TryStringToVector2Int(optionValue, out Vector2Int result)) return;
-            dropdown.value = properties.IndexOf(result);
+            _dropdown.SetValueWithoutNotify(properties.IndexOf(result));
         }
     }
 }

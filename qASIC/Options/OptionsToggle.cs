@@ -17,21 +17,17 @@ namespace qASIC.Options.Menu
             OnValueChange.Invoke(state != InvertEvent); 
         }
 
-        private void Update()
+        public override string GetLabel()
         {
-            if (NameText != null && _toggle != null) NameText.text = GetPropertyName(_toggle.isOn);
+            if (_toggle == null) return string.Empty;
+            return $"{OptionLabelName}{_toggle.isOn}";
         }
 
         public override void LoadOption()
         {
             if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) ||
-                !bool.TryParse(optionValue, out bool value) || _toggle == null)
-            {
-                IsActive = true;
-                return;
-            }
-            _toggle.isOn = value;
-            IsActive = true;
+                !bool.TryParse(optionValue, out bool value) || _toggle == null) return;
+            _toggle.SetIsOnWithoutNotify(value);
         }
     }
 }

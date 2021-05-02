@@ -56,8 +56,8 @@ namespace qASIC.Options
                     object param = parameter;
                     if (parameter is string) param = Convert.ChangeType(parameter, attr?.ValueType);
 
-                    if (param.GetType() != typeof(int) && attr.ValueType.IsEnum && param.GetType() != attr?.ValueType
-                        || optionName.ToLower() != attr?.Name) continue;
+                    if ((optionName.ToLower() != attr?.Name.ToLower() || param.GetType() != attr?.ValueType) &&
+                        (param.GetType() == typeof(int) || !attr.ValueType.IsEnum)) continue;
 
                     setting.Invoke(obj, new object[] { param });
 

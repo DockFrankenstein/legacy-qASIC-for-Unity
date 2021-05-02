@@ -557,10 +557,10 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 265208084}
   m_Template: {fileID: 1173251538}
-  m_CaptionText: {fileID: 2117126297}
+  m_CaptionText: {fileID: 0}
   m_CaptionImage: {fileID: 0}
   m_Placeholder: {fileID: 0}
-  m_ItemText: {fileID: 1628116742}
+  m_ItemText: {fileID: 0}
   m_ItemImage: {fileID: 0}
   m_Value: 0
   m_Options:
@@ -635,7 +635,7 @@ MonoBehaviour:
   OptionLabelName: 'Resolution: '
   OptionName: resolution
   Save: 1
-  dropdown: {fileID: 0}
+  _dropdown: {fileID: 0}
 --- !u!1 &291037738
 GameObject:
   m_ObjectHideFlags: 0
@@ -881,8 +881,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   KeyName: WalkDown
-  KeyText: {fileID: 0}
-  Listener: {fileID: 0}
+  KeyText: {fileID: 577205777}
+  Listener: {fileID: 350403864}
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -2442,6 +2442,8 @@ MonoBehaviour:
   OptionLabelName: 'Framerate limit: '
   OptionName: framelimit
   Save: 1
+  Round: 0
+  RoundValue: 0
 --- !u!114 &811089648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3521,8 +3523,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   KeyName: WalkUp
-  KeyText: {fileID: 0}
-  Listener: {fileID: 0}
+  KeyText: {fileID: 1104609408}
+  Listener: {fileID: 1146997127}
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -4514,7 +4516,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -4773,8 +4775,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   KeyName: WalkRight
-  KeyText: {fileID: 0}
-  Listener: {fileID: 0}
+  KeyText: {fileID: 781870866}
+  Listener: {fileID: 1385306869}
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -5334,8 +5336,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   KeyName: WalkLeft
-  KeyText: {fileID: 0}
-  Listener: {fileID: 0}
+  KeyText: {fileID: 57656359}
+  Listener: {fileID: 1569336237}
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -6003,8 +6005,9 @@ MonoBehaviour:
   OptionLabelName: 'Framelimit: '
   OptionName: framelimit
   Save: 1
-  dropdown: {fileID: 0}
-  Values: ffffffff1e0000003c00000078000000f0000000
+  _dropdown: {fileID: 0}
+  ReplaceWithOff: 1
+  Framerates: ffffffff1e0000003c00000078000000f0000000
 --- !u!114 &1629298717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6047,10 +6050,10 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1629298718}
   m_Template: {fileID: 2122515223}
-  m_CaptionText: {fileID: 1314095319}
+  m_CaptionText: {fileID: 0}
   m_CaptionImage: {fileID: 0}
   m_Placeholder: {fileID: 0}
-  m_ItemText: {fileID: 1169019920}
+  m_ItemText: {fileID: 0}
   m_ItemImage: {fileID: 0}
   m_Value: 0
   m_Options:
