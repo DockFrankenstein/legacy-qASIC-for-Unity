@@ -1,7 +1,5 @@
 <p align="center">
-  <img src="qASIC/Sprites/qASIC%20banner.png">
-  </br>
-  Quick Basics for starting projects fast
+  <img src="qASIC/Sprites/qASIC%20banner%20background.png">
 </p>
 
 # Table of contents
@@ -11,10 +9,10 @@
 * [Setup](#setup)
 
 # Introduction
-qASIC i a simple collection of tools to quickly create games in the Unity game engine. Using qASIC makes your games more accesible, easier to create and debug.
+qASIC i a simple collection of tools to quickly create games in the Unity. Using qASIC makes your games more accesible, easier to create and debug. By using such features as: input manager, options or in game console you can add basic things that let users do things that are not expected in almost every game, while you focus on your game. If you are making a proper game you want to add ways of changing fullscreen, vsync or resolution and most likely add your own custom options on top of that. While if there's a game breaking bug you can just tell users to temporarily type a command in the console, while you try fixing it.
 
 # Tools:
-* Console
+* In game console
 * Options
 * Audio manager
 * Input manager
