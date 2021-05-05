@@ -27,7 +27,10 @@ namespace qASIC.Console.Commands
             return true;
         }
 
-        public bool CheckForArgumentCount(List<string> args, int min)
+        public bool CheckForArgumentCount(List<string> args, int amount) =>
+            CheckForArgumentCount(args, amount, amount);
+
+        public bool CheckForArgumentCountMin(List<string> args, int min)
         {
             if (args.Count - 1 < min)
             {

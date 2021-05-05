@@ -116,7 +116,9 @@ namespace qASIC.Console
 
         public static void RunCommand(string cmd)
         {
-            InvokedCommands.Add(cmd);
+            if(InvokedCommands.Count == 0 || InvokedCommands[InvokedCommands.Count - 1].ToLower() != cmd.ToLower())
+                InvokedCommands.Add(cmd);
+
             List<string> args = SortCommand(cmd);
             if (args.Count == 0) return;
 

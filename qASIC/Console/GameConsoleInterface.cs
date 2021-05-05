@@ -137,7 +137,7 @@ namespace qASIC.Console
             }
             _commandIndex = Mathf.Clamp(_commandIndex, 0, GameConsoleController.InvokedCommands.Count - 1);
             if (Input != null)
-                Input.text = GameConsoleController.InvokedCommands[GameConsoleController.InvokedCommands.Count - _commandIndex - 1];
+                Input.SetTextWithoutNotify(GameConsoleController.InvokedCommands[GameConsoleController.InvokedCommands.Count - _commandIndex - 1]);
         }
 
         /// <summary>Updates logs from controller</summary>
@@ -162,7 +162,7 @@ namespace qASIC.Console
 
             GameConsoleController.Log(Input.text, "default", Logic.GameConsoleLog.LogType.user);
             GameConsoleController.RunCommand(Input.text);
-            Input.text = string.Empty;
+            Input.SetTextWithoutNotify(string.Empty);
             RefreshLogs();
             ResetScroll();
         }

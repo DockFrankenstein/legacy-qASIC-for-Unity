@@ -830,7 +830,6 @@ MonoBehaviour:
   Logs: {fileID: 6241433097206589225}
   Input: {fileID: 8713881459255019119}
   Scroll: {fileID: 5475899149899506720}
-  _commandIndex: -1
   IgnoreReselectPlatforms: 080000000b000000
 --- !u!114 &8856867052474242483
 MonoBehaviour:
@@ -1005,7 +1004,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1536572568086542609}
+        m_TargetAssemblyTypeName: qASIC.Console.GameConsoleInterface, Assembly-CSharp
+        m_MethodName: DiscardPreviousCommand
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
