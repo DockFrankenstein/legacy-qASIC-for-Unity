@@ -162,6 +162,7 @@ namespace qASIC.Tools
             placeholder.color = new Color(0f, 0f, 0f, 0.5f);
             placeholder.alignment = TextAlignmentOptions.Left;
             text.alignment = TextAlignmentOptions.Left;
+            text.richText = false;
 
             field.placeholder = placeholder;
             field.textComponent = text;
