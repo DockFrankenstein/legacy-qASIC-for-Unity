@@ -1,24 +1,24 @@
 ﻿namespace qASIC.Displayer.Displayers
 {
     [System.Serializable]
-    public class DisplayerLineSettings
+    public class DisplayerValueAssigner
     {
         public bool Show = true;
         public string DisplayName;
 
-        public DisplayerLineSettings() 
+        public DisplayerValueAssigner() 
         {
             Show = true;
             DisplayName = string.Empty;
         }
 
-        public DisplayerLineSettings(string displayName, bool show)
+        public DisplayerValueAssigner(string displayName, bool show)
         {
             Show = show;
             DisplayName = displayName;
         }
 
-        public DisplayerLineSettings(string displayName)
+        public DisplayerValueAssigner(string displayName)
         {
             Show = true;
             DisplayName = displayName;

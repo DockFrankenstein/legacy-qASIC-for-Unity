@@ -7,9 +7,9 @@ namespace qASIC.Displayer.Displayers
         public string DisplayerName = "main";
 
         [Header("Settings")]
-        public DisplayerLineSettings Project = new DisplayerLineSettings("Version");
-        public DisplayerLineSettings Unity = new DisplayerLineSettings("Unity version");
-        public DisplayerLineSettings qASIC = new DisplayerLineSettings("qASIC version");
+        public DisplayerValueAssigner Project = new DisplayerValueAssigner("Version");
+        public DisplayerValueAssigner Unity = new DisplayerValueAssigner("Unity version");
+        public DisplayerValueAssigner qASIC = new DisplayerValueAssigner("qASIC version");
 
         private void Start()
         {

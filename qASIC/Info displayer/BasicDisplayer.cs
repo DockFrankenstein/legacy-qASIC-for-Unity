@@ -7,14 +7,14 @@ namespace qASIC.Displayer.Displayers
         public string DisplayerName = "main";
 
         [Header("Settings")]
-        public DisplayerLineSettings Framerate = new DisplayerLineSettings("Framerate");
-        public DisplayerLineSettings Resolution = new DisplayerLineSettings("Resolution");
-        public DisplayerLineSettings Fullscreen = new DisplayerLineSettings("Fullscreen");
-        public DisplayerLineSettings GPU = new DisplayerLineSettings("Graphics card");
-        public DisplayerLineSettings CPU = new DisplayerLineSettings("Processor");
-        public DisplayerLineSettings CPUThreads = new DisplayerLineSettings("Threads");
-        public DisplayerLineSettings Memory = new DisplayerLineSettings("Memory");
-        public DisplayerLineSettings OS = new DisplayerLineSettings("OS");
+        public DisplayerValueAssigner Framerate = new DisplayerValueAssigner("framerate");
+        public DisplayerValueAssigner Resolution = new DisplayerValueAssigner("resolution");
+        public DisplayerValueAssigner Fullscreen = new DisplayerValueAssigner("fullscreen");
+        public DisplayerValueAssigner GPU = new DisplayerValueAssigner("gpu");
+        public DisplayerValueAssigner CPU = new DisplayerValueAssigner("cpu");
+        public DisplayerValueAssigner CPUThreads = new DisplayerValueAssigner("cpu threads");
+        public DisplayerValueAssigner Memory = new DisplayerValueAssigner("memory");
+        public DisplayerValueAssigner OS = new DisplayerValueAssigner("os");
 
 
         float time;

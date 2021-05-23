@@ -223,9 +223,9 @@ GameObject:
   - component: {fileID: 7806152894466835072}
   - component: {fileID: 7806152894466835087}
   - component: {fileID: 7806152894466835086}
-  - component: {fileID: 7746815277965608815}
   - component: {fileID: 7806152894466835075}
   - component: {fileID: 7806152894466835085}
+  - component: {fileID: 2572550216287602795}
   m_Layer: 5
   m_Name: Info Displayer
   m_TagString: Untagged
@@ -328,28 +328,55 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplayerName: main
   Separator: ': '
-  ExceptUnknown: 1
-  DefaultLines: []
+  ExceptUnknown: 0
+  DefaultLines:
+  - tag: fps
+    text: Framerate
+    value: 60Fps
+    show: 1
+  - tag: resolution
+    text: Resolution
+    value: 1920x1080
+    show: 1
+  - tag: fullscreen
+    text: Fullscreen mode
+    value: Fullscreen
+    show: 1
+  - tag: gpu
+    text: Graphics card
+    value: GPU
+    show: 1
+  - tag: cpu
+    text: Processor
+    value: CPU
+    show: 1
+  - tag: cpu threads
+    text: Processor threads
+    value: Threads
+    show: 1
+  - tag: memory
+    text: Memory
+    value: 16GB
+    show: 1
+  - tag: os
+    text: Operating system
+    value: Operating System
+    show: 1
+  - tag: version
+    text: Version
+    value: 1.0
+    show: 1
+  - tag: unity version
+    text: Unity version
+    value: version
+    show: 1
+  - tag: qasic version
+    text: qASIC version
+    value: version
+    show: 1
   StartText: 
   EndText: 
   Text: {fileID: 7806152893011616519}
---- !u!114 &7746815277965608815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7806152894466835084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f769db349d6b1bb4c8d44f6fba744575, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ToggleObject: {fileID: 7806152893799071991}
-  OnChangeState:
-    m_PersistentCalls:
-      m_Calls: []
-  Key: 284
 --- !u!114 &7806152894466835075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,28 +392,28 @@ MonoBehaviour:
   DisplayerName: main
   Framerate:
     Show: 1
-    DisplayName: Framerate
+    DisplayName: fps
   Resolution:
     Show: 1
-    DisplayName: Resolution
+    DisplayName: resolution
   Fullscreen:
     Show: 1
-    DisplayName: Fullscreen
+    DisplayName: fullscreen
   GPU:
     Show: 1
-    DisplayName: Graphics card
+    DisplayName: gpu
   CPU:
     Show: 1
-    DisplayName: Processor
+    DisplayName: cpu
   CPUThreads:
     Show: 1
-    DisplayName: Threads
+    DisplayName: cpu threads
   Memory:
     Show: 1
-    DisplayName: Memory
+    DisplayName: memory
   OS:
     Show: 1
-    DisplayName: OS
+    DisplayName: os
 --- !u!114 &7806152894466835085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,10 +429,29 @@ MonoBehaviour:
   DisplayerName: main
   Project:
     Show: 1
-    DisplayName: Version
+    DisplayName: version
   Unity:
     Show: 1
-    DisplayName: Unity version
+    DisplayName: unity version
   qASIC:
     Show: 1
-    DisplayName: qASIC version
+    DisplayName: qasic version
+--- !u!114 &2572550216287602795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7806152894466835084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e75bbe96523a2e547bcbc72e3780bae5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ToggleObject: {fileID: 7806152893799071991}
+  OnChangeState:
+    m_PersistentCalls:
+      m_Calls: []
+  Tag: main displayer
+  AddToDontDestroy: 1
+  Key: 284

@@ -13,14 +13,14 @@ namespace qASIC.Displayer
         public bool ExceptUnknown = true;
 
         [Space]
-        public string[] DefaultLines;
+        public DisplayerLine[] DefaultLines;
 
         [Space]
         public string StartText;
         public string EndText;
         public TextMeshProUGUI Text;
 
-        private Dictionary<string, InfoDisplayerLine> lines = new Dictionary<string, InfoDisplayerLine>();
+        private Dictionary<string, DisplayerLine> lines = new Dictionary<string, DisplayerLine>();
         private static Dictionary<string, InfoDisplayer> displayers = new Dictionary<string, InfoDisplayer>();
 
         private void Awake()
@@ -43,8 +43,8 @@ namespace qASIC.Displayer
         {
             lines.Clear();
             for (int i = 0; i < DefaultLines.Length; i++)
-                if (!lines.ContainsKey(DefaultLines[i]))
-                    lines.Add(DefaultLines[i], new InfoDisplayerLine());
+                if (!lines.ContainsKey(DefaultLines[i].tag))
+                    lines.Add(DefaultLines[i].tag, DefaultLines[i]);
         }
 
         private void LateUpdate()
@@ -52,7 +52,7 @@ namespace qASIC.Displayer
             if (Text == null) return;
             Text.text = StartText;
             foreach (var value in lines)
-                if(!value.Value.Hide) Text.text += $"{value.Key}{Separator}{value.Value.Value}\n";
+                if(value.Value.show) Text.text += $"{value.Value.text}{Separator}{value.Value.value}\n";
             Text.text += EndText;
         }
 
@@ -65,38 +65,38 @@ namespace qASIC.Displayer
             return true;
         }
 
-        private static bool LineExists(string lineName, InfoDisplayer displayer)
+        private static bool LineExists(string tag, InfoDisplayer displayer)
         {
-            if (!displayer.lines.ContainsKey(lineName))
+            if (!displayer.lines.ContainsKey(tag))
             {
                 if (!displayer.ExceptUnknown) return false;
-                displayer.lines.Add(lineName, new InfoDisplayerLine());
+                displayer.lines.Add(tag, new DisplayerLine());
             }
             return true;
         }
         #endregion
 
         #region Change
-        public static void DisplayValue(string lineName, string value, bool hidden, string displayerName = "main")
+        public static void DisplayValue(string tag, string value, bool show, string displayerName = "main")
         {
             if (!GetDisplayer(displayerName, out InfoDisplayer display)) return;
-            if (!LineExists(lineName, display)) return;
-            display.lines[lineName].Value = value;
-            display.lines[lineName].Hide = hidden;
+            if (!LineExists(tag, display)) return;
+            display.lines[tag].value = value;
+            display.lines[tag].show = show;
         }
 
-        public static void DisplayValue(string lineName, string value, string displayerName = "main")
+        public static void DisplayValue(string tag, string value, string displayerName = "main")
         {
             if (!GetDisplayer(displayerName, out InfoDisplayer display)) return;
-            if (!LineExists(lineName, display)) return;
-            display.lines[lineName].Value = value;
+            if (!LineExists(tag, display)) return;
+            display.lines[tag].value = value;
         }
 
-        public static void HideLine(string lineName, bool hide, string displayerName = "main")
+        public static void HideLine(string tag, bool show, string displayerName = "main")
         {
             if (!GetDisplayer(displayerName, out InfoDisplayer display)) return;
-            if (!LineExists(lineName, display)) return;
-            display.lines[lineName].Hide = hide;
+            if (!LineExists(tag, display)) return;
+            display.lines[tag].show = show;
         }
         #endregion
     }
