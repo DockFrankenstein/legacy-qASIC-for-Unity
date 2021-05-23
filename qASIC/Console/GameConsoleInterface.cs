@@ -181,7 +181,7 @@ namespace qASIC.Console
         {
             if (Scroll == null) return;
             Canvas.ForceUpdateCanvases();
-            Scroll.normalizedPosition = new Vector2(Scroll.normalizedPosition.x, 0f); ;
+            Scroll.normalizedPosition = new Vector2(Scroll.normalizedPosition.x, 0f);
         }
     }
 }

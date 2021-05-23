@@ -7,15 +7,15 @@ namespace qASIC.Displayer.Displayers
         public string DisplayerName = "main";
 
         [Header("Settings")]
-        public DisplayerValueAssigner Project = new DisplayerValueAssigner("Version");
-        public DisplayerValueAssigner Unity = new DisplayerValueAssigner("Unity version");
-        public DisplayerValueAssigner qASIC = new DisplayerValueAssigner("qASIC version");
+        public DisplayerValueAssigner Project = new DisplayerValueAssigner("version");
+        public DisplayerValueAssigner Unity = new DisplayerValueAssigner("unity version");
+        public DisplayerValueAssigner qASIC = new DisplayerValueAssigner("qasic version");
 
         private void Start()
         {
             Project.DisplayValue(Application.version, DisplayerName);
             Unity.DisplayValue(Application.unityVersion, DisplayerName);
-            qASIC.DisplayValue(Backend.Info.Version, DisplayerName);
+            qASIC.DisplayValue(Tools.Info.Version, DisplayerName);
         }
     }
 }

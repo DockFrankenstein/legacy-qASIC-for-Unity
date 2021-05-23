@@ -1,4 +1,4 @@
-﻿namespace qASIC.Backend
+﻿namespace qASIC.Tools
 {
     public static class Info
     {
