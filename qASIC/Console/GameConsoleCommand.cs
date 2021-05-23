@@ -7,7 +7,7 @@ namespace qASIC.Console.Commands
     {
         public abstract string CommandName { get; }
         public abstract string Description { get; }
-        public abstract string Help { get; }
+        public virtual string Help { get; }
         public virtual string[] Aliases { get; }
 
         public abstract void Run(List<string> args);
@@ -16,12 +16,12 @@ namespace qASIC.Console.Commands
         {
             if (args.Count - 1 < min)
             {
-                Log("User input - not enough arguments!", "error");
+                LogError("User input - not enough arguments!");
                 return false;
             }
             if (args.Count - 1 > max)
             {
-                Log("User input - index is out of range!", "error");
+                LogError("User input - index is out of range!");
                 return false;
             }
             return true;
@@ -34,7 +34,7 @@ namespace qASIC.Console.Commands
         {
             if (args.Count - 1 < min)
             {
-                Log("User input - not enough arguments!", "error");
+                LogError("User input - not enough arguments!");
                 return false;
             }
             return true;
@@ -45,6 +45,9 @@ namespace qASIC.Console.Commands
 
         public void Log(string text, Color color) =>
             GameConsoleController.Log(text, color, Logic.GameConsoleLog.LogType.game);
+
+        public void LogError(string text) =>
+            GameConsoleController.Log(text, "error", Logic.GameConsoleLog.LogType.game);
 
         public void NoOptionException(string option) =>
             GameConsoleController.Log($"Option <b>{option}</b> does not exist!", "error", Logic.GameConsoleLog.LogType.game);

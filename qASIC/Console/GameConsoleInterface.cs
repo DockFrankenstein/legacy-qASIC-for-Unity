@@ -67,22 +67,30 @@ namespace qASIC.Console
 
         private void HandleUnityLog(string logText, string trace, LogType type)
         {
+            if (!GameConsoleController.TryGettingConfig(out GameConsoleConfig config)) return;
+
             string color = "default";
             switch (type)
             {
                 case LogType.Exception:
+                    if (!ConsoleConfig.LogUnityExceptionsToConsole) return;
+                    color = config.ExceptionColor;
+                    break;
                 case LogType.Error:
-                case LogType.Assert:
                     if (!ConsoleConfig.LogUnityErrorsToConsole) return;
-                    color = "error";
+                    color = config.ErrorColor;
+                    break;
+                case LogType.Assert:
+                    if (!ConsoleConfig.LogUnityAssertsToConsole) return;
+                    color = config.AssertColor;
                     break;
                 case LogType.Warning:
                     if (!ConsoleConfig.LogUnityWarningsToConsole) return;
-                    color = "warning";
+                    color = config.WarningColor;
                     break;
                 case LogType.Log:
                     if (!ConsoleConfig.LogUnityMessagesToConsole) return;
-                    color = "default";
+                    color = config.MessageColor;
                     break;
             }
 
@@ -126,15 +134,8 @@ namespace qASIC.Console
         private void ReInsertCommand(bool reverse)
         {
             if (GameConsoleController.InvokedCommands.Count == 0) return;
-            switch (reverse)
-            {
-                case false:
-                    _commandIndex++;
-                    break;
-                case true:
-                    _commandIndex--;
-                    break;
-            }
+            _commandIndex += reverse ? -1 : 1;
+
             _commandIndex = Mathf.Clamp(_commandIndex, 0, GameConsoleController.InvokedCommands.Count - 1);
             if (Input != null)
                 Input.SetTextWithoutNotify(GameConsoleController.InvokedCommands[GameConsoleController.InvokedCommands.Count - _commandIndex - 1]);

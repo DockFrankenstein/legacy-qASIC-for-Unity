@@ -29,6 +29,11 @@ namespace qASIC.Console.Commands
                             LoadScene(SceneManager.GetActiveScene().name);
                             break;
                         default:
+                            if (!Application.CanStreamedLevelBeLoaded(args[1]))
+                            {
+                                LogError($"Scene <b>{args[1]}</b> does not exist!");
+                                return;
+                            }
                             LoadScene(args[1]);
                             break;
                     }
@@ -37,7 +42,7 @@ namespace qASIC.Console.Commands
                     if (args[1] == "load") LoadScene(args[2]);
                     break;
                 default:
-                    Log("There was an error while executing command <b>Scene</b>", "error");
+                    LogError("There was an error while executing command <b>Scene</b>");
                     break;
             }
         }
@@ -46,7 +51,7 @@ namespace qASIC.Console.Commands
         {
             if (!Application.CanStreamedLevelBeLoaded(sceneName))
             {
-                Log("Scene does not exist!", "error");
+                LogError("Scene does not exist!");
                 return;
             }
             SceneManager.LoadScene(sceneName);

@@ -7,13 +7,28 @@ namespace qASIC.Console.Tools
     {
         public GameConsoleTheme ColorTheme;
         public bool ShowThankYouMessage = true;
-        public bool LogToUnity = false;
         public bool LogConfigAssigment = true;
         public bool ShowInputMessages = true;
         public bool LogScene = true;
+
+        [Header("Unity")]
+        public bool LogToUnity = false;
         [Space]
-        public bool LogUnityErrorsToConsole;
-        public bool LogUnityWarningsToConsole;
-        public bool LogUnityMessagesToConsole;
+        public bool LogUnityErrorsToConsole = true;
+        public string ErrorColor = "error";
+        public bool LogUnityAssertsToConsole = true;
+        public string AssertColor = "error";
+        public bool LogUnityExceptionsToConsole = true;
+        public string ExceptionColor = "error";
+        public bool LogUnityWarningsToConsole = true;
+        public string WarningColor = "warning";
+        public bool LogUnityMessagesToConsole = true;
+        public string MessageColor = "default";
+
+        [Header("Help")]
+        public bool ShowDetailedHelp = true;
+        public bool UsePageCommandLimit = true;
+        [Min(1)]
+        public int PageCommandLimit = 5;
     }
 }

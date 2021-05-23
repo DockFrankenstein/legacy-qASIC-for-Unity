@@ -880,8 +880,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8cb3847f6144a468f386d09c1d87cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NameText: {fileID: 0}
+  OptionLabelName: 
   KeyName: WalkDown
-  KeyText: {fileID: 577205777}
   Listener: {fileID: 350403864}
   OnStartListening:
     m_PersistentCalls:
@@ -1246,7 +1247,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 291037739}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.6145833
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3522,8 +3523,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8cb3847f6144a468f386d09c1d87cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NameText: {fileID: 0}
+  OptionLabelName: 
   KeyName: WalkUp
-  KeyText: {fileID: 1104609408}
   Listener: {fileID: 1146997127}
   OnStartListening:
     m_PersistentCalls:
@@ -4774,8 +4776,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8cb3847f6144a468f386d09c1d87cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NameText: {fileID: 0}
+  OptionLabelName: 
   KeyName: WalkRight
-  KeyText: {fileID: 781870866}
   Listener: {fileID: 1385306869}
   OnStartListening:
     m_PersistentCalls:
@@ -5335,8 +5338,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8cb3847f6144a468f386d09c1d87cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NameText: {fileID: 0}
+  OptionLabelName: 
   KeyName: WalkLeft
-  KeyText: {fileID: 57656359}
   Listener: {fileID: 1569336237}
   OnStartListening:
     m_PersistentCalls:

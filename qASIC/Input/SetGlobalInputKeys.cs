@@ -5,7 +5,13 @@ namespace qASIC.InputManagement
     public class SetGlobalInputKeys : MonoBehaviour
     {
         public InputPreset Preset;
+        private static bool init = false;
 
-        private void Awake() => InputManager.GlobalKeys = Preset?.Preset;
+        private void Awake()
+        {
+            if (init) return;
+            InputManager.GlobalKeys = Preset?.Preset;
+            init = true;
+        }
     }
 }

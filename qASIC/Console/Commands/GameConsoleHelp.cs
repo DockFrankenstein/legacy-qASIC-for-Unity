@@ -10,23 +10,38 @@ namespace qASIC.Console.Commands
         public override string Help { get; } = "Use help; help <index>; help <command>";
 
         int onePageCommandLimit = 5;
+        bool useLimit = true;
+        bool useDetail = true;
         int maxPages;
 
         public override void Run(List<string> args)
         {
             if (!CheckForArgumentCount(args, 0, 1)) return;
+
+            if (GameConsoleController.TryGettingConfig(out Tools.GameConsoleConfig config))
+            {
+                onePageCommandLimit = config.PageCommandLimit;
+                useLimit = config.UsePageCommandLimit;
+                useDetail = config.ShowDetailedHelp;
+            }
+
             if (args.Count == 1) TryHelp(0);
-            else if (int.TryParse(args[1], out int index)) TryHelp(index);
-            else if (GameConsoleCommandList.TryGettingCommandByName(args[1], out GameConsoleCommand command))
+            else if (int.TryParse(args[1], out int index) && useLimit) TryHelp(index);
+            else if (GameConsoleCommandList.TryGettingCommandByName(args[1], out GameConsoleCommand command) && useDetail)
                 DisplayCommand(command);
-            else Log("Command does not exist!", "error");
+            else LogError(useDetail ? "Command does not exist!" : "User input - index is out of range!");
         }
 
         private void TryHelp(int pageIndex)
         {
             CalculateMaxPages();
-            if (pageIndex < maxPages) DisplayHelp(pageIndex);
-            else Log("Page is out of range!", "error");
+            if (pageIndex < maxPages)
+            {
+                DisplayHelp(pageIndex);
+                return;
+            }
+
+            LogError("Page is out of range!");
         }
 
         private void DisplayCommand(GameConsoleCommand command)
@@ -38,23 +53,34 @@ namespace qASIC.Console.Commands
                 for (int i = 0; i < command.Aliases.Length; i++)
                     aliasList += $" {command.Aliases[i]}";
             }
-            Log($"Help for command <b>{command.CommandName}</b>: {command.Help}{aliasList}", "default");
+            string helpMessage = command.Help == null ? $"No help avalible for command <b>{command.CommandName}</b>" 
+                : $"Help for command <b>{(command.CommandName)}</b>: {command.Help}";
+
+            Log($"{helpMessage}{aliasList}", "default");
         }
 
-        private void CalculateMaxPages() => maxPages = (int)Mathf.Ceil((float)GameConsoleCommandList.Commands.Count / onePageCommandLimit);
+        private void CalculateMaxPages()
+        {
+            if (useLimit)
+            {
+                maxPages = (int)Mathf.Ceil((float)GameConsoleCommandList.Commands.Count / onePageCommandLimit);
+                return;
+            }
+            maxPages = 1;
+        }
 
         private void DisplayHelp(int pageIndex)
         {
-            string helpMessage = $"<b>Help page {pageIndex + 1} out of {maxPages}:</b>\n";
+            string helpMessage = useLimit ? $"<b>Help page {pageIndex + 1} out of {maxPages}:</b>\n" : "<b>Avalible commands:</b>\n";
             List<GameConsoleCommand> commands = GameConsoleCommandList.Commands;
 
-            for (int i = 0; i < onePageCommandLimit; i++)
+            int limit = useLimit ? onePageCommandLimit : commands.Count;
+
+            for (int i = 0; i < limit; i++)
             {
-                if (commands.Count > pageIndex * onePageCommandLimit + i)
-                {
-                    GameConsoleCommand command = commands[pageIndex * onePageCommandLimit + i];
-                    helpMessage += $"{command.CommandName} - {command.Description}\n";
-                }
+                if (commands.Count <= pageIndex * limit + i) continue;
+                GameConsoleCommand command = commands[pageIndex * limit + i];
+                helpMessage += $"{command.CommandName} - {command.Description}\n";
             }
             Log(helpMessage, "default");
         }

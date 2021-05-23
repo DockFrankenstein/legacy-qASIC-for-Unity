@@ -342,12 +342,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7806152894466835084}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5226ffb2fcf7d314b8a7075b140b5767, type: 3}
+  m_Script: {fileID: 11500000, guid: f769db349d6b1bb4c8d44f6fba744575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
-  Key: 284
   ToggleObject: {fileID: 7806152893799071991}
+  OnChangeState:
+    m_PersistentCalls:
+      m_Calls: []
+  Key: 284
 --- !u!114 &7806152894466835075
 MonoBehaviour:
   m_ObjectHideFlags: 0
