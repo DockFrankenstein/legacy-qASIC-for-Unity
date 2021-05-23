@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 namespace qASIC.Console.Commands
 {
@@ -12,10 +11,8 @@ namespace qASIC.Console.Commands
 
         public override void Run(List<string> args)
         {
-            if (!CheckForArgumentCount(args, 1)) return;
-            string log = args[1];
-            for (int i = 0; i < args.Count - 2; i++) log += $" {args[i + 2]}";
-            Log(log, "default");
+            if (!CheckForArgumentCountMin(args, 1)) return;
+            Log(System.Text.RegularExpressions.Regex.Replace(string.Join(" ", args.GetRange(1, args.Count - 1).ToArray()), "<.*?>", string.Empty), "default");
         }
     }
 }
