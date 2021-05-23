@@ -3,6 +3,7 @@ using TMPro;
 using qASIC.Console.Tools;
 using System.Collections;
 using UnityEngine.Events;
+using qASIC.Toggling;
 
 namespace qASIC.Console
 {

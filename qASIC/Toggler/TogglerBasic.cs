@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace qASIC
+namespace qASIC.Toggling
 {
     public class TogglerBasic : Toggler
     {

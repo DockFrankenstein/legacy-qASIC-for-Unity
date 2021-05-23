@@ -1,9 +1,9 @@
 using qASIC.InputManagement;
 
-namespace qASIC
+namespace qASIC.Toggling
 {
-	public class TogglerRemapable : Toggler
-	{
+    public class StaticTogglerRemappable : StaticToggler
+    {
         public string KeyName;
 
         private void Update()

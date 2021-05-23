@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace qASIC
+namespace qASIC.Toggling
 {
     public abstract class Toggler : MonoBehaviour
     {
@@ -8,11 +8,11 @@ namespace qASIC
         public GameObject ToggleObject;
         public UnityEventBool OnChangeState;
 
-        private void Awake() => Toggle(ToggleObject.activeSelf);
+        public virtual void Awake() => Toggle(ToggleObject.activeSelf);
 
-        public void Toggle() => Toggle(!state);
+        public virtual void Toggle() => Toggle(!state);
 
-        public void Toggle(bool state)
+        public virtual void Toggle(bool state)
         {
             this.state = state;
             ToggleObject?.SetActive(state);

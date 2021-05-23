@@ -790,7 +790,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2666218724704117114}
   - component: {fileID: 1536572568086542609}
-  - component: {fileID: 8856867052474242483}
+  - component: {fileID: 1193168498945472585}
   m_Layer: 0
   m_Name: Game console
   m_TagString: Untagged
@@ -831,7 +831,7 @@ MonoBehaviour:
   Input: {fileID: 8713881459255019119}
   Scroll: {fileID: 5475899149899506720}
   IgnoreReselectPlatforms: 080000000b000000
---- !u!114 &8856867052474242483
+--- !u!114 &1193168498945472585
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -840,13 +840,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 3569834521637251086}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f769db349d6b1bb4c8d44f6fba744575, type: 3}
+  m_Script: {fileID: 11500000, guid: e75bbe96523a2e547bcbc72e3780bae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ToggleObject: {fileID: 3339577114814308204}
   OnChangeState:
     m_PersistentCalls:
       m_Calls: []
+  Tag: console
+  AddToDontDestroy: 1
   Key: 96
 --- !u!1 &5421854239198661686
 GameObject:
