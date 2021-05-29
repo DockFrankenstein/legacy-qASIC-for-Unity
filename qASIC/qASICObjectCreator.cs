@@ -6,14 +6,52 @@ using qASIC.Displayer;
 using qASIC.Displayer.Displayers;
 using qASIC.Toggling;
 using qASIC.Console;
+using qASIC.InputManagement.Menu;
 
 namespace qASIC.Tools
 {
     public static class qASICObjectCreator
     {
         #region Menu Items
+        public static GameObject CreateInputWindow(string newKeyName)
+        {
+            Canvas canvas = CreateCanvas(null, "Input assign", 20, false);
+
+            InputAssign assign = canvas.gameObject.AddComponent<InputAssign>();
+            assign.KeyName = newKeyName;
+
+            InputListener listener = canvas.gameObject.AddComponent<InputListener>();
+            listener.StartListening(true, true);
+            listener.onInputRecived.AddListener(assign.Assign);
+
+            //back color
+            Image backColor = CreateImageObject(canvas.transform, Color.black, "Color");
+
+            HorizontalLayoutGroup backColorGroup = backColor.gameObject.AddComponent<HorizontalLayoutGroup>();
+            backColorGroup.padding = new RectOffset(5, 5, 5, 5);
+            backColorGroup.childForceExpandHeight = false;
+            backColorGroup.childForceExpandWidth = false;
+            backColorGroup.childAlignment = TextAnchor.MiddleCenter;
+
+            ContentSizeFitter backColorContentFit = backColor.gameObject.AddComponent<ContentSizeFitter>();
+            backColorContentFit.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            backColorContentFit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            //text
+            TextMeshProUGUI text = CreateTextObject(backColor.transform);
+            text.text = "Assign the new key";
+            text.color = new Color(1f, 1f, 1f);
+
+            ContentSizeFitter textContentFit = text.gameObject.AddComponent<ContentSizeFitter>();
+            textContentFit.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            textContentFit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            text.transform.position = new Vector2(0f, 0f);
+
+            return canvas.gameObject;
+        }
+
         [MenuItem("GameObject/qASIC/Game console", false, 1)]
-        static void CreateConsole()
+        public static void CreateConsole()
         {
             GameObject consoleObject = new GameObject("Game console");
             GameObject canvasObject = CreateCanvas(consoleObject.transform, "Canvas", 10).gameObject;
@@ -50,7 +88,7 @@ namespace qASIC.Tools
         }
 
         [MenuItem("GameObject/qASIC/Displayer", false, 1)]
-        static void CreateDisplayer()
+        public static void CreateDisplayer()
         {
             GameObject displayerObject = new GameObject("Info displayer");
             GameObject canvasObject = CreateCanvas(displayerObject.transform, "Canvas", 9, false).gameObject;
@@ -73,7 +111,7 @@ namespace qASIC.Tools
         }
 
         [MenuItem("GameObject/qASIC/Options load", false, 2)]
-        static void CreateOptionsLoad()
+        public static void CreateOptionsLoad()
         {
             GameObject obj = new GameObject("Options load");
             obj.AddComponent<Options.OptionsLoad>();
@@ -81,7 +119,7 @@ namespace qASIC.Tools
         }
 
         [MenuItem("GameObject/qASIC/Input assign", false, 2)]
-        static void CreateInputAssign()
+        public static void CreateInputAssign()
         {
             GameObject obj = new GameObject("Input assign");
             obj.AddComponent<InputManagement.SetGlobalInputKeys>();
@@ -89,7 +127,7 @@ namespace qASIC.Tools
         }
 
         [MenuItem("GameObject/qASIC/Audio manager", false, 3)]
-        static void CreateAudioManager()
+        public static void CreateAudioManager()
         {
             GameObject obj = new GameObject("Audio manager");
             obj.AddComponent<AudioManagment.AudioManager>();
@@ -232,7 +270,7 @@ namespace qASIC.Tools
         #endregion
 
         #region qASIC Scripts
-        static StaticTogglerBasic CreateToggler(GameObject target, string tag, GameObject toggleObject = null, KeyCode key = KeyCode.F2)
+        public static StaticTogglerBasic CreateToggler(GameObject target, string tag, GameObject toggleObject = null, KeyCode key = KeyCode.F2)
         {
             StaticTogglerBasic toggler = target.AddComponent<StaticTogglerBasic>();
             toggler.AddToDontDestroy = true;
@@ -243,7 +281,7 @@ namespace qASIC.Tools
             return toggler;
         }
 
-        static InfoDisplayer CreateDisplayer(GameObject target, TextMeshProUGUI text)
+        public static InfoDisplayer CreateDisplayer(GameObject target, TextMeshProUGUI text)
         {
             InfoDisplayer displayer = target.AddComponent<InfoDisplayer>();
 
@@ -268,7 +306,7 @@ namespace qASIC.Tools
             return displayer;
         }
 
-        static GameConsoleInterface CreateInterface(GameObject target, TextMeshProUGUI text, TMP_InputField input, ScrollRect scroll)
+        public static GameConsoleInterface CreateInterface(GameObject target, TextMeshProUGUI text, TMP_InputField input, ScrollRect scroll)
         {
             GameConsoleInterface console = target.AddComponent<GameConsoleInterface>();
 
@@ -281,13 +319,13 @@ namespace qASIC.Tools
         #endregion
 
         #region Transform Manipulation
-        static void SetAnchors(RectTransform trans, Vector2 min, Vector2 max)
+        public static void SetAnchors(RectTransform trans, Vector2 min, Vector2 max)
         {
             trans.anchorMin = min;
             trans.anchorMax = max;
         }
 
-        static void StretchToAnchors(RectTransform trans)
+        public static void StretchToAnchors(RectTransform trans)
         {
             trans.localPosition = Vector3.zero;
             trans.offsetMin = Vector2.zero;
@@ -296,20 +334,12 @@ namespace qASIC.Tools
         #endregion
 
         #region Other
-        static bool CheckNull(object obj)
-        { 
-            if(obj == null)
-            {
-                Debug.LogError("Couldn't create GameObject! Object is null!");
-                return true;
-            }
-            return false;
-        }
-
         static void FinishObject(GameObject obj)
         {
+#if UNITY_EDITOR
             Undo.RegisterCreatedObjectUndo(obj, $"Create {obj.name}");
             Selection.activeGameObject = obj;
+#endif
         }
         #endregion
     }

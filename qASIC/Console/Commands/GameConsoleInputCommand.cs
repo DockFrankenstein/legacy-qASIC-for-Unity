@@ -18,7 +18,7 @@ namespace qASIC.Console.Commands
             {
                 case "change":
                     if (CheckForArgumentCount(args, 2))
-                        qASICObjectsCreation.CreateInputWindow(args[2]);
+                        qASICObjectCreator.CreateInputWindow(args[2]);
                     break;
                 case "print":
                     if (CheckForArgumentCount(args, 1) && GameConsoleController.TryGettingConfig(out Tools.GameConsoleConfig config) && config.ShowInputMessages)
