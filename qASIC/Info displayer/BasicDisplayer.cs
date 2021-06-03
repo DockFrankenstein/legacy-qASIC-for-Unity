@@ -7,7 +7,7 @@ namespace qASIC.Displayer.Displayers
         public string DisplayerName = "main";
 
         [Header("Settings")]
-        public DisplayerValueAssigner Framerate = new DisplayerValueAssigner("framerate");
+        public DisplayerValueAssigner Framerate = new DisplayerValueAssigner("fps");
         public DisplayerValueAssigner Resolution = new DisplayerValueAssigner("resolution");
         public DisplayerValueAssigner Fullscreen = new DisplayerValueAssigner("fullscreen");
         public DisplayerValueAssigner GPU = new DisplayerValueAssigner("gpu");
@@ -37,6 +37,12 @@ namespace qASIC.Displayer.Displayers
             DisplayFramerate();
             Resolution.DisplayValue($"{Screen.currentResolution.width}x{Screen.currentResolution.height}", DisplayerName);
             Fullscreen.DisplayValue(Screen.fullScreenMode.ToString(), DisplayerName);
+        }
+
+        private void Reset()
+        {
+            InfoDisplayer infoDisplayer = GetComponent<InfoDisplayer>();
+            if (infoDisplayer != null) DisplayerName = infoDisplayer.DisplayerName;
         }
 
         private void DisplayFramerate()

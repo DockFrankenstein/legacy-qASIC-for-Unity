@@ -48,7 +48,7 @@ namespace qASIC.Console
             if (toggler != null) toggler.OnChangeState.AddListener(OnChangeState);
         }
 
-        public void OnChangeState(bool state)
+        void OnChangeState(bool state)
         {
             if (!state) return;
             ResetScroll();

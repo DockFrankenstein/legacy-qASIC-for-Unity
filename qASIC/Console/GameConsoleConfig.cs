@@ -8,7 +8,6 @@ namespace qASIC.Console.Tools
         public GameConsoleTheme ColorTheme;
         public bool ShowThankYouMessage = true;
         public bool LogConfigAssigment = true;
-        public bool ShowInputMessages = true;
         public bool LogScene = true;
 
         [Header("Unity")]

@@ -82,7 +82,7 @@ namespace qASIC.Console.Logic
                     log = $"?{log}";
                     break;
             }
-            string colorHash = ColorUtility.ToHtmlStringRGB(colorName == null ? LogColor : GameConsoleController.GetColor(colorName));
+            string colorHash = ColorUtility.ToHtmlStringRGB(string.IsNullOrWhiteSpace(colorName) ? LogColor : GameConsoleController.GetColor(colorName));
             log = $"<color=#{colorHash}>[{Time:HH:mm:ss}]{log}</color>";
             return log;
         }

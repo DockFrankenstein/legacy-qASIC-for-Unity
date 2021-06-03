@@ -21,8 +21,7 @@ namespace qASIC.Console.Commands
                         qASICObjectCreator.CreateInputWindow(args[2]);
                     break;
                 case "print":
-                    if (CheckForArgumentCount(args, 1) && GameConsoleController.TryGettingConfig(out Tools.GameConsoleConfig config) && config.ShowInputMessages)
-                        Print();
+                    Print();
                     break;
                 default:
                     NoOptionException(args[1]);

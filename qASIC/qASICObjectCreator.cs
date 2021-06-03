@@ -248,22 +248,27 @@ namespace qASIC.Tools
 
         static Scrollbar CreateScrollbar(Transform parent, Color backColor, Color handleColor, string name = "Scrollbar")
         {
+            //scrollbar
             RectTransform trans = CreateImageObject(parent, backColor, name).rectTransform;
             Scrollbar scroll = trans.gameObject.AddComponent<Scrollbar>();
 
             scroll.direction = Scrollbar.Direction.BottomToTop;
 
+            //sliding area
             RectTransform slidingArea = new GameObject("Sliding Area").AddComponent<RectTransform>();
             slidingArea.transform.SetParent(trans);
             SetAnchors(slidingArea, Vector2.zero, Vector2.one);
             StretchToAnchors(slidingArea);
 
-            RectTransform handle = CreateImageObject(parent, handleColor, "Handle").rectTransform;
+            //handle
+            Image handle = CreateImageObject(parent, handleColor, "Handle");
             handle.transform.SetParent(slidingArea);
-            SetAnchors(handle, Vector2.zero, Vector2.one);
-            StretchToAnchors(handle);
+            SetAnchors(handle.rectTransform, Vector2.zero, Vector2.one);
+            StretchToAnchors(handle.rectTransform);
 
-            scroll.handleRect = handle;
+            //setting handle for scrollbar
+            scroll.handleRect = handle.rectTransform;
+            scroll.targetGraphic = handle;
 
             return scroll;
         }

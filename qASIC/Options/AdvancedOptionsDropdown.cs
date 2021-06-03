@@ -33,7 +33,8 @@ namespace qASIC.Options.Menu
             _dropdown.AddOptions(dropDownData);
         }
 
-        public abstract void SetCurrentIndex();
+        public virtual void SetCurrentIndex() { }
+
         public virtual string GetDropdownValueName(object propertie) => propertie.ToString();
         public override string GetLabel()
         {
