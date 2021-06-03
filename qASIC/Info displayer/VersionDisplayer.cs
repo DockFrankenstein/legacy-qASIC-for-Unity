@@ -17,5 +17,11 @@ namespace qASIC.Displayer.Displayers
             Unity.DisplayValue(Application.unityVersion, DisplayerName);
             qASIC.DisplayValue(Tools.Info.Version, DisplayerName);
         }
+
+        private void Reset()
+        {
+            InfoDisplayer infoDisplayer = GetComponent<InfoDisplayer>();
+            if (infoDisplayer != null) DisplayerName = infoDisplayer.DisplayerName;
+        }
     }
 }
