@@ -1,5 +1,3 @@
-<meta name="google-site-verification" content="4PUF3H0a1GKhzf6WaJFB7uE0NJSz21qNMQqisyHHyyM"/>
-
 <p align="center">
   <img src="qASIC/Sprites/qASIC%20banner%20background.png">
 </p>
