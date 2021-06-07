@@ -8,6 +8,12 @@ namespace qASIC.Toggling
         public GameObject ToggleObject;
         public UnityEventBool OnChangeState;
 
+        private void Reset()
+        {
+            if (transform.childCount != 1) return;
+            ToggleObject = transform.GetChild(0).gameObject;
+        }
+
         public virtual void Awake() => Toggle(ToggleObject.activeSelf);
 
         public virtual void Toggle() => Toggle(!state);

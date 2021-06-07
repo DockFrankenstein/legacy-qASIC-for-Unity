@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace qASIC.Toggling
 {
     public class StaticToggler : Toggler
     {
         public string Tag;
-        public bool AddToDontDestroy;
+        public bool AddToDontDestroy = true;
 
         #region Static
         public class TogglerState

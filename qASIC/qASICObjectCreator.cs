@@ -290,21 +290,6 @@ namespace qASIC.Tools
         {
             InfoDisplayer displayer = target.AddComponent<InfoDisplayer>();
 
-            displayer.DefaultLines = new DisplayerLine[]
-                {
-                    new DisplayerLine("fps", "Framerate"),
-                    new DisplayerLine("resolution", "Resolution"),
-                    new DisplayerLine("fullscreen", "Fullscreen mode"),
-                    new DisplayerLine("gpu", "Graphics card"),
-                    new DisplayerLine("cpu", "Processor"),
-                    new DisplayerLine("cpu threads", "Processor threads"),
-                    new DisplayerLine("memory", "Memory"),
-                    new DisplayerLine("os", "Operating system"),
-                    new DisplayerLine("version", "Version"),
-                    new DisplayerLine("unity version", "Unity version"),
-                    new DisplayerLine("qasic version", "qASIC version"),
-                };
-
             displayer.Text = text;
             displayer.ExceptUnknown = false;
 
