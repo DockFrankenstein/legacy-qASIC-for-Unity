@@ -9,7 +9,7 @@ namespace qASIC.InputManagement
 
         private void Awake()
         {
-            if (init) return;
+            if (init || Preset == null) return;
             InputManager.GlobalKeys = Preset?.Preset;
             init = true;
         }

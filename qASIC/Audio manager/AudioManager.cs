@@ -104,7 +104,7 @@ namespace qASIC.AudioManagment
         #region Channels
         private Dictionary<string, AudioChannel> channels = new Dictionary<string, AudioChannel>();
 
-        private static AudioChannel GetChannel(string name)
+        public static AudioChannel GetChannel(string name)
         {
             if (singleton.channels.ContainsKey(name))
             {
@@ -117,7 +117,7 @@ namespace qASIC.AudioManagment
             return data;
         }
 
-        private static void SetChannel(string name, AudioChannel channel)
+        public static void SetChannel(string name, AudioChannel channel)
         {
             if (singleton.channels.ContainsKey(name))
             {
@@ -159,10 +159,22 @@ namespace qASIC.AudioManagment
 
             if (channel.source == null) return;
             Destroy(channel.source);
-            if(channel.destroyEnum != null) singleton.StopCoroutine(channel.destroyEnum);
             channel = new AudioChannel();
 
             SetChannel(channelName, channel);
+        }
+
+        public static void StopAll()
+        {
+            CheckSingleton();
+
+            Dictionary<string, AudioChannel> temp = new Dictionary<string, AudioChannel>(singleton.channels);
+            foreach (var item in temp)
+            {
+                if (singleton.channels[item.Key].source == null) continue;
+                Destroy(singleton.channels[item.Key].source);
+                SetChannel(item.Key, new AudioChannel());
+            }
         }
 
         public static void Pause(string channelName)
@@ -183,6 +195,27 @@ namespace qASIC.AudioManagment
             SetChannel(channelName, channel);
         }
 
+        public static void PauseAll()
+        {
+            CheckSingleton();
+
+            Dictionary<string, AudioChannel> temp = new Dictionary<string, AudioChannel>(singleton.channels);
+            foreach (var item in temp)
+            {
+                AudioChannel channel = singleton.channels[item.Key];
+                if (channel.source == null || !channel.source.isPlaying) continue;
+                channel.source.Pause();
+
+                if (channel.destroyEnum != null)
+                {
+                    singleton.StopCoroutine(channel.destroyEnum);
+                    channel.destroyEnum = null;
+                }
+
+                SetChannel(item.Key, channel);
+            }
+        }
+
         public static void UnPause(string channelName)
         {
             CheckSingleton();
@@ -194,6 +227,24 @@ namespace qASIC.AudioManagment
             channel.destroyEnum = channel.DestroyOnPlaybackEnd();
             singleton.StartCoroutine(channel.destroyEnum);
             SetChannel(channelName, channel);
+        }
+
+        public static void UnPauseAll()
+        {
+            CheckSingleton();
+
+            Dictionary<string, AudioChannel> temp = new Dictionary<string, AudioChannel>(singleton.channels);
+            foreach (var item in temp)
+            {
+                AudioChannel channel = singleton.channels[item.Key];
+                if (channel.source == null || channel.source.isPlaying) continue;
+                channel.source.UnPause();
+
+                channel.destroyEnum = channel.DestroyOnPlaybackEnd();
+                singleton.StartCoroutine(channel.destroyEnum);
+
+                SetChannel(item.Key, channel);
+            }
         }
         #endregion
     }
