@@ -166,6 +166,8 @@ namespace qASIC.AudioManagment
 
         public static void StopAll()
         {
+            AudioSourceController.OnStopAll.Invoke();
+
             CheckSingleton();
 
             Dictionary<string, AudioChannel> temp = new Dictionary<string, AudioChannel>(singleton.channels);
@@ -197,6 +199,8 @@ namespace qASIC.AudioManagment
 
         public static void PauseAll()
         {
+            AudioSourceController.OnPauseAll.Invoke();
+
             CheckSingleton();
 
             Dictionary<string, AudioChannel> temp = new Dictionary<string, AudioChannel>(singleton.channels);
@@ -231,6 +235,8 @@ namespace qASIC.AudioManagment
 
         public static void UnPauseAll()
         {
+            AudioSourceController.OnUnPauseAll.Invoke();
+
             CheckSingleton();
 
             Dictionary<string, AudioChannel> temp = new Dictionary<string, AudioChannel>(singleton.channels);

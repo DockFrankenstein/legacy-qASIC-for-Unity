@@ -113,24 +113,29 @@ namespace qASIC.Tools
         [MenuItem("GameObject/qASIC/Options load", false, 2)]
         public static void CreateOptionsLoad()
         {
-            GameObject obj = new GameObject("Options load");
-            obj.AddComponent<Options.OptionsLoad>();
+            GameObject obj = new GameObject("Options load", typeof(Options.OptionsLoad));
             FinishObject(obj);
         }
 
         [MenuItem("GameObject/qASIC/Input assign", false, 2)]
         public static void CreateInputAssign()
         {
-            GameObject obj = new GameObject("Input assign");
-            obj.AddComponent<InputManagement.SetGlobalInputKeys>();
+            GameObject obj = new GameObject("Input Assign", typeof(InputManagement.SetGlobalInputKeys));
             FinishObject(obj);
         }
 
         [MenuItem("GameObject/qASIC/Audio manager", false, 3)]
         public static void CreateAudioManager()
         {
-            GameObject obj = new GameObject("Audio manager");
-            obj.AddComponent<AudioManagment.AudioManager>();
+            GameObject obj = new GameObject("Audio Manager", typeof(AudioManagment.AudioManager));
+            FinishObject(obj);
+        }
+
+        [MenuItem("GameObject/qASIC/Controlled Audio Source", false, 3)]
+        public static void CreateAudioSource(MenuCommand command)
+        {
+            GameObject obj = new GameObject("Audio Source", typeof(AudioSource), typeof(AudioManagment.AudioSourceController));
+            if(command?.context != null & !(command.context is GameObject)) obj.transform.SetParent((command.context as GameObject).transform);
             FinishObject(obj);
         }
         #endregion
