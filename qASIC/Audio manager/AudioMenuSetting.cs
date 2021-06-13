@@ -12,16 +12,16 @@ namespace qASIC.AudioManagment.Menu
         public void PreviewValue(float value)
         {
             _value = value;
-            AudioManager.ChangeParameterFloat(ParameterName, value, false);
+            AudioManager.SetFloat(ParameterName, value, false);
         }
-        public void SetValue() => AudioManager.ChangeParameterFloat(ParameterName, _value, true);
+        public void SetValue() => AudioManager.SetFloat(ParameterName, _value, true);
 
         private void Start() => Initialize();
 
         public void Initialize()
         {
             Slider slider = GetComponent<Slider>();
-            if (slider != null && AudioManager.GetParameterFloat(ParameterName, out float value)) slider.value = value;
+            if (slider != null && AudioManager.GetFloat(ParameterName, out float value)) slider.value = value;
         }
     }
 }

@@ -63,11 +63,13 @@ namespace qASIC.AudioManagment
                 string[] values = sets[i].Split(':');
                 if (values.Length != 2) continue;
                 if (!float.TryParse(values[1], out float result)) continue;
-                ChangeParameterFloat(values[0], result, false);
+                SetFloat(values[0], result, false);
             }
         }
+        #endregion
 
-        public static bool GetParameterFloat(string name, out float value)
+        #region Parameters
+        public static bool GetFloat(string name, out float value)
         {
             CheckSingleton();
             value = 0f;
@@ -75,7 +77,7 @@ namespace qASIC.AudioManagment
             return singleton.Mixer.GetFloat(name, out value);
         }
 
-        public static void ChangeParameterFloat(string name, float value, bool preview = true)
+        public static void SetFloat(string name, float value, bool preview = true)
         {
             CheckSingleton();
             if (singleton.Mixer == null || !singleton.Mixer.GetFloat(name, out _))
