@@ -56,7 +56,7 @@ namespace qASIC.Console
         {
             if (_config == newConfig) return;
             _config = newConfig;
-            if (_config.LogConfigAssigment) Log("Assigned new config", "sync", GameConsoleLog.LogType.game);
+            if (_config.LogConfigAssigment) Log("Assigned new config", "console", GameConsoleLog.LogType.game);
         }
         #endregion
 

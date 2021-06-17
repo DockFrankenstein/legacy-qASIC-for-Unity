@@ -9,7 +9,14 @@ namespace qASIC.Options.Menu
         public bool ReplaceWithOff = true;
         public int[] Framerates;
 
-        public override void Assign()
+        public override void Start()
+        {
+            CreateList();
+            base.Start();
+            SetCurrentIndex();
+        }
+
+        public void CreateList()
         {
             properties.Clear();
             for (int i = 0; i < Framerates.Length; i++) properties.Add(Framerates[i]);
@@ -23,7 +30,7 @@ namespace qASIC.Options.Menu
             return value.ToString();
         }
 
-        public override void SetCurrentIndex() =>
+        public void SetCurrentIndex() =>
             _dropdown.SetValueWithoutNotify(properties.IndexOf(Application.targetFrameRate));
 
         public override void LoadOption()

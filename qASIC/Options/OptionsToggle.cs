@@ -7,7 +7,11 @@
         public bool InvertEvent;
         public UnityEventBool OnValueChange = new UnityEventBool();
 
-        private void Awake() => _toggle = GetComponent<UnityEngine.UI.Toggle>();
+        private void Awake()
+        {
+            _toggle = GetComponent<UnityEngine.UI.Toggle>();
+            if (_toggle != null) _toggle.onValueChanged.AddListener(SetValue);
+        }
 
         public void SetValue(bool state) 
         { 

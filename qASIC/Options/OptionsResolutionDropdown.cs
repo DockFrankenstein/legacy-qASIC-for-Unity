@@ -5,7 +5,14 @@ namespace qASIC.Options.Menu
 {
     public class OptionsResolutionDropdown : AdvancedOptionsDropdown
     {
-        public override void Assign()
+        public override void Start()
+        {
+            CreateList();
+            base.Start();
+            SetCurrentIndex();
+        }
+
+        public void CreateList()
         {
             Resolution[] resolutions = Screen.resolutions;
             List<object> resolutionList = new List<object>();
@@ -21,7 +28,7 @@ namespace qASIC.Options.Menu
         public override void SetValue(object propertie) =>
             base.SetValue(VectorStringConvertion.Vector2IntToString((Vector2Int)propertie));
 
-        public override void SetCurrentIndex()
+        public void SetCurrentIndex()
         {
             int index = properties.IndexOf(new Vector2Int(Screen.width, Screen.height));
             if (index < 0) return;

@@ -17,7 +17,7 @@ namespace qASIC.Options.Menu
 
         public abstract void LoadOption();
 
-        public void SetValue(object value, bool log) =>
+        public virtual void SetValue(object value, bool log) =>
             OptionsController.ChangeOption(OptionName, value, log, Save);
 
         public abstract string GetLabel();

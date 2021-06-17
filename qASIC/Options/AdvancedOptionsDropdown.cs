@@ -12,16 +12,12 @@ namespace qASIC.Options.Menu
         {
             _dropdown = GetComponent<TMP_Dropdown>();
             if (_dropdown == null) return;
+            _dropdown.onValueChanged.AddListener((int index) => SetValue(properties[index]));
 
-            Assign();
             AssignDropdownOptions();
-            SetCurrentIndex();
             LoadOption();
         }
 
-        public abstract void Assign();
-
-        public void SetValue(int value) => SetValue(properties[value]);
         public virtual void SetValue(object property) => SetValue(property, true);
 
         public virtual void AssignDropdownOptions()
@@ -33,9 +29,7 @@ namespace qASIC.Options.Menu
             _dropdown.AddOptions(dropDownData);
         }
 
-        public virtual void SetCurrentIndex() { }
-
-        public virtual string GetDropdownValueName(object propertie) => propertie.ToString();
+        public virtual string GetDropdownValueName(object property) => property.ToString();
         public override string GetLabel()
         {
             if (_dropdown == null || _dropdown.value >= _dropdown.options.Count) return string.Empty;

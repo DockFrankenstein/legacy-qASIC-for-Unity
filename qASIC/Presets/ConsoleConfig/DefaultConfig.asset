@@ -15,19 +15,13 @@ MonoBehaviour:
   ColorTheme: {fileID: 11400000, guid: df0ca8a39e5d56044acfeff2f5c72a7c, type: 2}
   ShowThankYouMessage: 1
   LogConfigAssigment: 1
-  ShowInputMessages: 1
   LogScene: 1
-  LogToUnity: 0
+  LogToUnity: 1
   LogUnityErrorsToConsole: 1
-  ErrorColor: error
   LogUnityAssertsToConsole: 1
-  AssertColor: error
   LogUnityExceptionsToConsole: 1
-  ExceptionColor: error
   LogUnityWarningsToConsole: 1
-  WarningColor: warning
-  LogUnityMessagesToConsole: 1
-  MessageColor: default
+  LogUnityMessagesToConsole: 0
   ShowDetailedHelp: 1
   UsePageCommandLimit: 1
   PageCommandLimit: 5

@@ -4,20 +4,18 @@ using UnityEngine;
 
 namespace qASIC.Options.Menu
 {
-    public class OptionsSlider : MenuOption, IPointerDownHandler, IPointerUpHandler
+    public class OptionsSlider : MenuOption, IPointerUpHandler
     {
         private Slider _slider;
 
         public bool Round;
-        [Tooltip("Fe. Round value 0.1 will round the value to 1 decimal place")]
+        [Tooltip("Round value multiplier")]
         public double RoundValue;
 
-        private void Awake() => _slider = GetComponent<Slider>();
-
-        public void OnPointerDown(PointerEventData eventData)
+        private void Awake()
         {
-            if (_slider == null) return;
-            SetValueSlider(_slider.value, false);
+            _slider = GetComponent<Slider>();
+            if (_slider != null) _slider.onValueChanged.AddListener((float value) => SetValueSlider(value, false));
         }
 
         public void OnPointerUp(PointerEventData eventData)

@@ -6,6 +6,12 @@ namespace qASIC.Options.Menu
     {
         private TMP_Dropdown _dropdown;
 
+        private void Awake()
+        {
+            _dropdown = GetComponent<TMP_Dropdown>();
+            if (_dropdown != null) _dropdown.onValueChanged.AddListener((int index) => SetValue(index, true));
+        }
+
         public override string GetLabel()
         {
             if (_dropdown == null || _dropdown.value >= _dropdown.options.Count) return string.Empty;

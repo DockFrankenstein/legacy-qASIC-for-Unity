@@ -50,8 +50,9 @@ namespace qASIC.Tools
             return canvas.gameObject;
         }
 
+#if UNITY_EDITOR
         [MenuItem("GameObject/qASIC/Game console", false, 1)]
-        public static void CreateConsole()
+        static void CreateConsole()
         {
             GameObject consoleObject = new GameObject("Game console");
             GameObject canvasObject = CreateCanvas(consoleObject.transform, "Canvas", 10).gameObject;
@@ -88,7 +89,7 @@ namespace qASIC.Tools
         }
 
         [MenuItem("GameObject/qASIC/Displayer", false, 1)]
-        public static void CreateDisplayer()
+        static void CreateDisplayer()
         {
             GameObject displayerObject = new GameObject("Info displayer");
             GameObject canvasObject = CreateCanvas(displayerObject.transform, "Canvas", 9, false).gameObject;
@@ -111,33 +112,35 @@ namespace qASIC.Tools
         }
 
         [MenuItem("GameObject/qASIC/Options load", false, 2)]
-        public static void CreateOptionsLoad()
+        static void CreateOptionsLoad()
         {
             GameObject obj = new GameObject("Options load", typeof(Options.OptionsLoad));
             FinishObject(obj);
         }
 
         [MenuItem("GameObject/qASIC/Input assign", false, 2)]
-        public static void CreateInputAssign()
+        static void CreateInputAssign()
         {
             GameObject obj = new GameObject("Input Assign", typeof(InputManagement.SetGlobalInputKeys));
             FinishObject(obj);
         }
 
         [MenuItem("GameObject/qASIC/Audio manager", false, 3)]
-        public static void CreateAudioManager()
+        static void CreateAudioManager()
         {
             GameObject obj = new GameObject("Audio Manager", typeof(AudioManagment.AudioManager));
             FinishObject(obj);
         }
 
         [MenuItem("GameObject/qASIC/Controlled Audio Source", false, 3)]
-        public static void CreateAudioSource(MenuCommand command)
+        static void CreateAudioSource(MenuCommand command)
         {
             GameObject obj = new GameObject("Audio Source", typeof(AudioSource), typeof(AudioManagment.AudioSourceController));
             if(command?.context != null & !(command.context is GameObject)) obj.transform.SetParent((command.context as GameObject).transform);
             FinishObject(obj);
         }
+#endif
+
         #endregion
 
         #region UI Create

@@ -913,29 +913,17 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 265208084}
   m_Template: {fileID: 1173251538}
-  m_CaptionText: {fileID: 0}
+  m_CaptionText: {fileID: 2117126297}
   m_CaptionImage: {fileID: 0}
   m_Placeholder: {fileID: 0}
-  m_ItemText: {fileID: 0}
+  m_ItemText: {fileID: 1628116742}
   m_ItemImage: {fileID: 0}
   m_Value: 0
   m_Options:
     m_Options: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 265208086}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: SetValue
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &265208084
 MonoBehaviour:
@@ -1556,14 +1544,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplayerName: main
   Project:
-    Show: 1
-    DisplayName: version
+    show: 1
+    tag: version
   Unity:
-    Show: 1
-    DisplayName: unity version
+    show: 1
+    tag: unity version
   qASIC:
-    Show: 1
-    DisplayName: qasic version
+    show: 1
+    tag: qasic version
 --- !u!114 &381658053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1578,29 +1566,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplayerName: main
   Framerate:
-    Show: 1
-    DisplayName: framerate
+    show: 1
+    tag: fps
   Resolution:
-    Show: 1
-    DisplayName: resolution
+    show: 1
+    tag: resolution
   Fullscreen:
-    Show: 1
-    DisplayName: fullscreen
+    show: 1
+    tag: fullscreen
   GPU:
-    Show: 1
-    DisplayName: gpu
+    show: 1
+    tag: gpu
   CPU:
-    Show: 1
-    DisplayName: cpu
+    show: 1
+    tag: cpu
   CPUThreads:
-    Show: 1
-    DisplayName: cpu threads
+    show: 1
+    tag: cpu threads
   Memory:
-    Show: 1
-    DisplayName: memory
+    show: 1
+    tag: memory
   OS:
-    Show: 1
-    DisplayName: os
+    show: 1
+    tag: os
 --- !u!114 &381658054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1912,8 +1900,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 291037740}
   m_HandleRect: {fileID: 291037739}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.6145833
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2756,7 +2744,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -2769,8 +2757,8 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
-  m_textAlignment: 513
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -2961,7 +2949,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &773873099
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2978,10 +2966,10 @@ RectTransform:
   m_Father: {fileID: 1594089468}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -60}
-  m_SizeDelta: {x: -20, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &781870864
 GameObject:
@@ -3128,7 +3116,6 @@ GameObject:
   - component: {fileID: 811089645}
   - component: {fileID: 811089646}
   - component: {fileID: 811089647}
-  - component: {fileID: 811089648}
   m_Layer: 5
   m_Name: framelimit
   m_TagString: Untagged
@@ -3207,19 +3194,7 @@ MonoBehaviour:
   m_Value: 60
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 811089647}
-        m_TargetAssemblyTypeName: qASIC.Options.Menu.OptionsSlider, Assembly-CSharp
-        m_MethodName: PreviewValue
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &811089647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3238,35 +3213,6 @@ MonoBehaviour:
   Save: 1
   Round: 0
   RoundValue: 0
---- !u!114 &811089648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 811089644}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 811089647}
-          m_TargetAssemblyTypeName: 
-          m_MethodName: SetValue
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &829003780
 GameObject:
   m_ObjectHideFlags: 0
@@ -6876,7 +6822,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000030517578}
+  m_AnchoredPosition: {x: 0, y: -0.00012207031}
   m_SizeDelta: {x: 0, y: 370}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1594089469
@@ -7399,29 +7345,17 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1629298718}
   m_Template: {fileID: 2122515223}
-  m_CaptionText: {fileID: 0}
+  m_CaptionText: {fileID: 1314095319}
   m_CaptionImage: {fileID: 0}
   m_Placeholder: {fileID: 0}
-  m_ItemText: {fileID: 0}
+  m_ItemText: {fileID: 1169019920}
   m_ItemImage: {fileID: 0}
   m_Value: 0
   m_Options:
     m_Options: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1629298716}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: SetValue
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &1629298718
 MonoBehaviour:
@@ -7769,7 +7703,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.25, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -8063,8 +7997,8 @@ RectTransform:
   m_Father: {fileID: 1496424630}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.25, y: 0}
-  m_AnchorMax: {x: 0.25, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 40, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
