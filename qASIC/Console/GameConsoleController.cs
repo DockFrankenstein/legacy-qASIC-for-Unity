@@ -37,9 +37,36 @@ namespace qASIC.Console
             if (_config == null || _config.ColorTheme == null) return new Color(1f, 1f, 1f);
             colorName = colorName.ToLower();
 
-            if (colorName == "default") return _config.ColorTheme.DefaultColor;
-            if (colorName == "error") return _config.ColorTheme.ErrorColor;
-            if (colorName == "qasic") return _config.ColorTheme.qASICColor;
+            //base colors
+            switch(colorName)
+            {
+                case "default":
+                    return _config.ColorTheme.DefaultColor;
+                case "warning":
+                    return _config.ColorTheme.WarningColor;
+                case "error":
+                    return _config.ColorTheme.ErrorColor;
+                case "qasic":
+                    return _config.ColorTheme.qASICColor;
+                case "settings":
+                    return _config.ColorTheme.SettingsColor;
+                case "input":
+                    return _config.ColorTheme.InputColor;
+                case "scene":
+                    return _config.ColorTheme.SceneColor;
+                case "unity exception":
+                    return _config.ColorTheme.UnityExceptionColor;
+                case "unity error":
+                    return _config.ColorTheme.UnityErrorColor;
+                case "unity assert":
+                    return _config.ColorTheme.UnityAssertColor;
+                case "unity warning":
+                    return _config.ColorTheme.UnityWarningColor;
+                case "unity message":
+                    return _config.ColorTheme.UnityMessageColor;
+                case "console":
+                    return _config.ColorTheme.ConsoleColor;
+            }
 
             for (int i = 0; i < _config.ColorTheme.Colors.Length; i++)
                 if (_config.ColorTheme.Colors[i].colorName.ToLower() == colorName)
