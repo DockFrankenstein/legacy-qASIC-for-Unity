@@ -75,7 +75,7 @@ namespace qASIC.Console
             {
                 case LogType.Exception:
                     if (!ConsoleConfig.LogUnityExceptionsToConsole) return;
-                    color = "exception";
+                    color = "unity exception";
                     break;
                 case LogType.Error:
                     if (!ConsoleConfig.LogUnityErrorsToConsole) return;
@@ -83,15 +83,15 @@ namespace qASIC.Console
                     break;
                 case LogType.Assert:
                     if (!ConsoleConfig.LogUnityAssertsToConsole) return;
-                    color = "assert";
+                    color = "unity assert";
                     break;
                 case LogType.Warning:
                     if (!ConsoleConfig.LogUnityWarningsToConsole) return;
-                    color = "warning";
+                    color = "unity warning";
                     break;
                 case LogType.Log:
                     if (!ConsoleConfig.LogUnityMessagesToConsole) return;
-                    color = "default";
+                    color = "unity message";
                     break;
             }
 

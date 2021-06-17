@@ -13,24 +13,16 @@ MonoBehaviour:
   m_Name: DefaultColors
   m_EditorClassIdentifier: 
   DefaultColor: {r: 1, g: 1, b: 1, a: 1}
+  WarningColor: {r: 1, g: 1, b: 0, a: 1}
   ErrorColor: {r: 1, g: 0, b: 0, a: 1}
   qASICColor: {r: 0, g: 0.7, b: 1, a: 1}
-  Colors:
-  - colorName: settings
-    color: {r: 0, g: 0.3019608, b: 1, a: 1}
-  - colorName: scene
-    color: {r: 0.7019608, g: 0, b: 1, a: 1}
-  - colorName: file
-    color: {r: 1, g: 0.92156863, b: 0, a: 1}
-  - colorName: reference
-    color: {r: 0, g: 0.7019608, b: 0, a: 1}
-  - colorName: audio
-    color: {r: 1, g: 0, b: 0.5019608, a: 1}
-  - colorName: input
-    color: {r: 0, g: 0.07058824, b: 1, a: 1}
-  - colorName: network
-    color: {r: 0, g: 1, b: 1, a: 1}
-  - colorName: sync
-    color: {r: 1, g: 0, b: 1, a: 1}
-  - colorName: sudo
-    color: {r: 0.5019608, g: 0.8, b: 0.101960786, a: 1}
+  SettingsColor: {r: 0, g: 0.301, b: 1, a: 1}
+  InputColor: {r: 0.878, g: 0.129, b: 0, a: 1}
+  ConsoleColor: {r: 1, g: 0, b: 1, a: 1}
+  SceneColor: {r: 0.7019608, g: 0, b: 1, a: 1}
+  UnityAssertColor: {r: 1, g: 0, b: 0, a: 1}
+  UnityExceptionColor: {r: 1, g: 0, b: 0, a: 1}
+  UnityErrorColor: {r: 1, g: 0, b: 0, a: 1}
+  UnityWarningColor: {r: 1, g: 1, b: 0, a: 1}
+  UnityMessageColor: {r: 1, g: 1, b: 1, a: 1}
+  Colors: []
