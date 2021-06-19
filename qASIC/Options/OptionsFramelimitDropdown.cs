@@ -31,16 +31,16 @@ namespace qASIC.Options.Menu
         }
 
         public void SetCurrentIndex() =>
-            _dropdown.SetValueWithoutNotify(properties.IndexOf(Application.targetFrameRate));
+            dropdown.SetValueWithoutNotify(properties.IndexOf(Application.targetFrameRate));
 
         public override void LoadOption()
         {
-            if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) || _dropdown == null ||
+            if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) || dropdown == null ||
                 !int.TryParse(optionValue, out int result)) return;
 
             int index = properties.IndexOf(result);
             if (index < 0) return;
-            _dropdown.SetValueWithoutNotify(index);
+            dropdown.SetValueWithoutNotify(index);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace qASIC.Options
         [OptionsSetting("resolution", typeof(string))]
         public static void ChangeResolution(string resolution)
         {
-            Vector2Int res = VectorStringConvertion.StringToVector2Int(resolution);
+            Vector2Int res = VectorText.ToVector2Int(resolution);
             if (res == new Vector2Int(Screen.width, Screen.height)) return;
             Screen.SetResolution(res.x, res.y, Screen.fullScreen);
         }

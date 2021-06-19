@@ -10,14 +10,15 @@ namespace qASIC.AudioManagment
         public static Action OnPauseAll = new Action(() => { });
         public static Action OnUnPauseAll = new Action(() => { });
 
-        public AudioSource target { get; private set; }
+        public AudioSource Target { get; private set; }
 
         private void Awake()
         {
-            target = GetComponent<AudioSource>();
-            OnStopAll += () => { target.Stop(); };
-            OnPauseAll += () => { target.Pause(); };
-            OnUnPauseAll += () => { target.UnPause(); };
+            Target = GetComponent<AudioSource>();
+            if (Target == null) return;
+            OnStopAll += () => { Target.Stop(); };
+            OnPauseAll += () => { Target.Pause(); };
+            OnUnPauseAll += () => { Target.UnPause(); };
         }
     }
 }

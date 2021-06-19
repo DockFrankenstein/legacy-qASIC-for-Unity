@@ -26,28 +26,28 @@ namespace qASIC.Options.Menu
         }
 
         public override void SetValue(object propertie) =>
-            base.SetValue(VectorStringConvertion.Vector2IntToString((Vector2Int)propertie));
+            base.SetValue(VectorText.ToText((Vector2Int)propertie));
 
         public void SetCurrentIndex()
         {
             int index = properties.IndexOf(new Vector2Int(Screen.width, Screen.height));
             if (index < 0) return;
-            _dropdown.SetValueWithoutNotify(index);
+            dropdown.SetValueWithoutNotify(index);
         }
 
         public override string GetDropdownValueName(object property)
         {
             if (!(property is Vector2Int)) return string.Empty;
             Vector2Int res = (Vector2Int)property;
-            return VectorStringConvertion.Vector2IntToString(res);
+            return VectorText.ToText(res);
         }
 
         public override void LoadOption()
         {
-            if (_dropdown == null) return;
+            if (dropdown == null) return;
             if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) ||
-                !VectorStringConvertion.TryStringToVector2Int(optionValue, out Vector2Int result)) return;
-            _dropdown.SetValueWithoutNotify(properties.IndexOf(result));
+                !VectorText.TryToVector2Int(optionValue, out Vector2Int result)) return;
+            dropdown.SetValueWithoutNotify(properties.IndexOf(result));
         }
     }
 }

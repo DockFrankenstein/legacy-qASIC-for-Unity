@@ -2,18 +2,18 @@
 
 namespace qASIC
 {
-    public static class VectorStringConvertion
+    public static class VectorText
     {
         #region ToString
-        public static string Vector2ToString(Vector2 vector) => $"{vector.x}x{vector.y}";
-        public static string Vector2IntToString(Vector2Int vector) => $"{vector.x}x{vector.y}";
-        public static string Vector3ToString(Vector3 vector) => $"{vector.x}x{vector.y}x{vector.z}";
-        public static string Vector3IntToString(Vector3Int vector) => $"{vector.x}x{vector.y}x{vector.z}";
-        public static string Vector4ToString(Vector4 vector) => $"{vector.x}x{vector.y}x{vector.z}x{vector.w}";
+        public static string ToText(Vector2 vector) => $"{vector.x}x{vector.y}";
+        public static string ToText(Vector2Int vector) => $"{vector.x}x{vector.y}";
+        public static string ToText(Vector3 vector) => $"{vector.x}x{vector.y}x{vector.z}";
+        public static string ToText(Vector3Int vector) => $"{vector.x}x{vector.y}x{vector.z}";
+        public static string ToText(Vector4 vector) => $"{vector.x}x{vector.y}x{vector.z}x{vector.w}";
         #endregion
 
         #region TryToVector
-        public static bool TryStringToVector2(string s, out Vector2 vector)
+        public static bool TryToVector2(string s, out Vector2 vector)
         {
             vector = new Vector2();
             float[] values = ParseValues(GetStringValues(s, 2));
@@ -22,7 +22,7 @@ namespace qASIC
             return true;
         }
 
-        public static bool TryStringToVector2Int(string s, out Vector2Int vector)
+        public static bool TryToVector2Int(string s, out Vector2Int vector)
         {
             vector = new Vector2Int();
             int[] values = ParseValuesInt(GetStringValues(s, 2));
@@ -30,7 +30,7 @@ namespace qASIC
             vector = new Vector2Int(values[0], values[1]);
             return true;
         }
-        public static bool TryStringToVector3(string s, out Vector3 vector)
+        public static bool TryToVector3(string s, out Vector3 vector)
         {
             vector = new Vector3();
             float[] values = ParseValues(GetStringValues(s, 3));
@@ -39,7 +39,7 @@ namespace qASIC
             return true;
         }
 
-        public static bool TryStringToVector3Int(string s, out Vector3Int vector)
+        public static bool TryToVector3Int(string s, out Vector3Int vector)
         {
             vector = new Vector3Int();
             int[] values = ParseValuesInt(GetStringValues(s, 3));
@@ -48,7 +48,7 @@ namespace qASIC
             return true;
         }
 
-        public static bool TryStringToVector4(string s, out Vector4 vector)
+        public static bool TryToVector4(string s, out Vector4 vector)
         {
             vector = new Vector4();
             float[] values = ParseValues(GetStringValues(s, 4));
@@ -59,32 +59,32 @@ namespace qASIC
         #endregion
 
         #region ToVector
-        public static Vector2 StringToVector2(string s)
+        public static Vector2 ToVector2(string s)
         {
-            if (!TryStringToVector2(s, out Vector2 vector)) qDebug.LogError("Couldn't convert string to Vector2");
+            if (!TryToVector2(s, out Vector2 vector)) qDebug.LogError("Couldn't convert string to Vector2");
             return vector;
         }
 
-        public static Vector2Int StringToVector2Int(string s)
+        public static Vector2Int ToVector2Int(string s)
         {
-            if (!TryStringToVector2Int(s, out Vector2Int vector)) qDebug.LogError("Couldn't convert string to Vector2Int");
+            if (!TryToVector2Int(s, out Vector2Int vector)) qDebug.LogError("Couldn't convert string to Vector2Int");
             return vector;
         }
-        public static Vector3 StringToVector3(string s)
+        public static Vector3 ToVector3(string s)
         {
-            if (!TryStringToVector3(s, out Vector3 vector)) qDebug.LogError("Couldn't convert string to Vector3");
-            return vector;
-        }
-
-        public static Vector3Int StringToVector3Int(string s)
-        {
-            if (!TryStringToVector3Int(s, out Vector3Int vector)) qDebug.LogError("Couldn't convert string to Vector3Int");
+            if (!TryToVector3(s, out Vector3 vector)) qDebug.LogError("Couldn't convert string to Vector3");
             return vector;
         }
 
-        public static Vector4 StringToVector4(string s)
+        public static Vector3Int ToVector3Int(string s)
         {
-            if (!TryStringToVector4(s, out Vector4 vector)) qDebug.LogError("Couldn't convert string to Vector4");
+            if (!TryToVector3Int(s, out Vector3Int vector)) qDebug.LogError("Couldn't convert string to Vector3Int");
+            return vector;
+        }
+
+        public static Vector4 ToVector4(string s)
+        {
+            if (!TryToVector4(s, out Vector4 vector)) qDebug.LogError("Couldn't convert string to Vector4");
             return vector;
         }
         #endregion
