@@ -7,7 +7,6 @@ using qASIC.Toggling;
 
 namespace qASIC.Console
 {
-    [RequireComponent(typeof(Toggler))]
     public class GameConsoleInterface : MonoBehaviour
     {
         [Header("Settings")]
