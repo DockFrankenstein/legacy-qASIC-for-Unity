@@ -147,7 +147,8 @@ namespace qASIC.Tools.Debug
         void DisplayAudio(GUIStyle headerStyle)
         {
             GUIStyle listItemStyle = new GUIStyle("Label");
-            listItemStyle.normal.background = tintedTexture;
+            GUIStyle secondListItemStyle = new GUIStyle(listItemStyle);
+            secondListItemStyle.normal.background = tintedTexture;
 
             GUIStyle scrollStyle = new GUIStyle();
             scrollStyle.normal.background = tintedTexture;
@@ -165,8 +166,7 @@ namespace qASIC.Tools.Debug
                     int i = 0;
                     foreach (var channel in AudioManager.singleton.channels)
                     {
-                        if (i % 2 == 0) GUILayout.Label(channel.Key, listItemStyle);
-                        else GUILayout.Label(channel.Key);
+                        GUILayout.Label(channel.Key, i % 2 == 0 ? secondListItemStyle : listItemStyle, GUILayout.Height(EditorGUIUtility.singleLineHeight));
                         i++;
                     }
                     break;
