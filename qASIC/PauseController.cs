@@ -5,15 +5,13 @@ namespace qASIC
 {
 	public class PauseController : MonoBehaviour
 	{
-        public bool PauseTime;
-        public bool LockCursor;
-        public bool PauseAudio;
+        public bool PauseTime = true;
+        public bool LockCursor = true;
+        public bool PauseAudio = true;
 
         private void Awake()
         {
-            Toggler toggler = GetComponent<Toggler>();
-            if (toggler == null) return;
-            toggler.OnChangeState.AddListener(OnChangeState);
+            GetComponent<Toggler>()?.OnChangeState.AddListener(OnChangeState);
         }
 
         private void OnChangeState(bool state)

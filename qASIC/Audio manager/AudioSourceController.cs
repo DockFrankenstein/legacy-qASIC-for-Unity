@@ -12,6 +12,8 @@ namespace qASIC.AudioManagment
 
         public AudioSource Target { get; private set; }
 
+        public bool Paused { get; private set; }
+
         private void Awake()
         {
             Target = GetComponent<AudioSource>();
@@ -24,7 +26,11 @@ namespace qASIC.AudioManagment
 
         void OnStop() => Target?.Stop();
         void OnPause() => Target?.Pause();
-        void OnUnPause() => Target?.UnPause();
+
+        void OnUnPause()
+        {
+            if(!Paused) Target?.UnPause();
+        }
 
         private void OnDestroy()
         {
@@ -32,5 +38,25 @@ namespace qASIC.AudioManagment
             OnPauseAll -= OnPause;
             OnUnPauseAll -= OnUnPause;
         }
+
+        public void Play()
+        {
+            Target?.Play();
+            if(AudioManager.Paused) Target?.Pause();
+        }
+
+        public void Pause()
+        {
+            Target?.Pause();
+            Paused = true;
+        }
+
+        public void UnPause()
+        {
+            Paused = false;
+            if (!AudioManager.Paused) Target?.UnPause();
+        }
+
+        public void Stop() => Target?.Stop();
     }
 }
