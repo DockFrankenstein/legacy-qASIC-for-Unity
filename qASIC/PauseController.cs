@@ -6,6 +6,7 @@ namespace qASIC
 	public class PauseController : MonoBehaviour
 	{
         public bool PauseTime;
+        public bool LockCursor;
         public bool PauseAudio;
 
         private void Awake()
@@ -18,15 +19,17 @@ namespace qASIC
         private void OnChangeState(bool state)
         {
             if (PauseTime) Time.timeScale = state ? 0f : 1f;
+            if (LockCursor) Cursor.lockState = state ? CursorLockMode.None : CursorLockMode.Locked;
+
             if (PauseAudio)
             {
                 switch(state)
                 {
                     case true:
-                        AudioManagment.AudioManager.UnPauseAll();
+                        AudioManagment.AudioManager.PauseAll();
                         break;
                     default:
-                        AudioManagment.AudioManager.PauseAll();
+                        AudioManagment.AudioManager.UnPauseAll();
                         break;
                 }
             }
