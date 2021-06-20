@@ -16,8 +16,17 @@ namespace qASIC.AudioManagment
         public string EditorUserSavePath = "qASIC/Audio-editor.txt";
         private static string _config = string.Empty;
 
+        public static int ChannelCount 
+        {
+            get
+            {
+                if (singleton == null) return 0;
+                return singleton.channels.Count;
+            }
+        }
+
         #region Singleton
-        private static AudioManager singleton;
+        public static AudioManager singleton;
 
         private void Awake() => AssignSingleton();
 
@@ -103,7 +112,7 @@ namespace qASIC.AudioManagment
         #endregion
 
         #region Channels
-        private Dictionary<string, AudioChannel> channels = new Dictionary<string, AudioChannel>();
+        public Dictionary<string, AudioChannel> channels = new Dictionary<string, AudioChannel>();
 
         public static AudioChannel GetChannel(string name)
         {
