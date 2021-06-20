@@ -16,9 +16,9 @@ namespace qASIC.AudioManagment
         {
             Target = GetComponent<AudioSource>();
             if (Target == null) return;
-            OnStopAll += () => { Target.Stop(); };
-            OnPauseAll += () => { Target.Pause(); };
-            OnUnPauseAll += () => { Target.UnPause(); };
+            OnStopAll += () => { Target?.Stop(); };
+            OnPauseAll += () => { Target?.Pause(); };
+            OnUnPauseAll += () => { Target?.UnPause(); };
         }
     }
 }

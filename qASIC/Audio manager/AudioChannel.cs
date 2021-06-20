@@ -6,6 +6,9 @@ namespace qASIC.AudioManagment
     [System.Serializable]
     public class AudioChannel
     {
+        public bool paused;
+        public bool useGlobalControlls;
+
         public AudioSource source { get; set; }
         public IEnumerator destroyEnum { get; set; }
 

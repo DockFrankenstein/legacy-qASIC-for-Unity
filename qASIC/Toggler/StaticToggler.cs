@@ -77,7 +77,7 @@ namespace qASIC.Toggling
         {
             base.Toggle(state);
             ChangeStateSilent(Tag, state);
-        } 
+        }
 
         public static void ChangeState(string tag, bool state)
         {

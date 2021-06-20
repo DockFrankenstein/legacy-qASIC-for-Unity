@@ -6,7 +6,10 @@ namespace qASIC.Toggling
     {
         public bool state { get; private set; }
         public GameObject ToggleObject;
+        public KeyToggleMode KeyMode;
         public UnityEventBool OnChangeState;
+
+        public enum KeyToggleMode { both, on, off }
 
         private void Reset()
         {
@@ -17,6 +20,12 @@ namespace qASIC.Toggling
         public virtual void Awake() => Toggle(ToggleObject.activeSelf);
 
         public virtual void Toggle() => Toggle(!state);
+
+        public virtual void KeyToggle()
+        {
+            if (!state && KeyMode == KeyToggleMode.off || state && KeyMode == KeyToggleMode.on) return;
+            Toggle(!state);
+        }
 
         public virtual void Toggle(bool state)
         {

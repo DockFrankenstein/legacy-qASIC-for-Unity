@@ -10,5 +10,7 @@ namespace qASIC.AudioManagment
         public AudioMixerGroup group;
         public bool loop;
         public bool replace = true;
+
+        public bool UseGlobalControlls = true;
     }
 }

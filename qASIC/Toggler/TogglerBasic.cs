@@ -9,7 +9,7 @@ namespace qASIC.Toggling
         private void Update()
         {
             if (Input.GetKeyDown(Key))
-                Toggle();
+                KeyToggle();
         }
     }
 }
