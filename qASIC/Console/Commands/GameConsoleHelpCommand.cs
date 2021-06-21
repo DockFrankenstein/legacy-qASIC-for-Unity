@@ -3,8 +3,9 @@ using UnityEngine;
 
 namespace qASIC.Console.Commands
 {
-    public class GameConsoleHelp : GameConsoleCommand
+    public class GameConsoleHelpCommand : GameConsoleCommand
     {
+        public override bool Active { get => GameConsoleController.GetConfig().HelpCommand; }
         public override string CommandName { get; } = "help";
         public override string Description { get; } = "displays help";
         public override string Help { get; } = "Use help; help <index>; help <command>";

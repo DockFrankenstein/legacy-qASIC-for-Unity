@@ -77,13 +77,37 @@ namespace qASIC.Console
 
         #region Config
         private static GameConsoleConfig _config;
-        public static GameConsoleConfig GetConfig() { return _config; }
-        public static bool TryGettingConfig(out GameConsoleConfig _config) { _config = GameConsoleController._config; return _config != null; }
+
+        public static bool TryGettingConfig(out GameConsoleConfig config) 
+        { 
+            config = _config;
+            return config != null;
+        }
+
+        public static GameConsoleConfig GetConfig()
+        {
+            if(_config == null)
+            {
+                GameConsoleConfig defaultConfig = Resources.Load<GameConsoleConfig>("Console/DefaultConfig");
+
+                if(defaultConfig == null)
+                {
+                    Debug.LogError("Internal qASIC exception! Couldn't locate default configuration for Game Console. Package has been modified or corrupted. Please reinstall or update!");
+                    return _config;
+                }
+
+                Log("Console configuration isn't assigned, default has been loaded", "warning");
+                _config = defaultConfig;
+            }
+
+            return _config;
+        }
+
         public static void AssignConfig(GameConsoleConfig newConfig)
         {
             if (_config == newConfig) return;
             _config = newConfig;
-            if (_config.LogConfigAssigment) Log("Assigned new config", "console", GameConsoleLog.LogType.game);
+            if (_config.LogConfigAssigment) Log("Assigned new config", "console");
         }
         #endregion
 
@@ -151,7 +175,7 @@ namespace qASIC.Console
 
             if (!GameConsoleCommandList.TryGettingCommandByName(args[0].ToLower(), out GameConsoleCommand command))
             {
-                Log("Command not found!", "error", GameConsoleLog.LogType.game);
+                Log("Command not found!", "error");
                 return;
             }
 

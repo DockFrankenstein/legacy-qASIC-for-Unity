@@ -4,6 +4,7 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleClearCommand : GameConsoleCommand
     {
+        public override bool Active { get => GameConsoleController.GetConfig().ClearCommand; }
         public override string CommandName { get; } = "clear";
         public override string Description { get; } = "clears console";
         public override string Help { get; } = "Clears console";

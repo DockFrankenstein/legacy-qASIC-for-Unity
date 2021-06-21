@@ -2,8 +2,9 @@
 
 namespace qASIC.Console.Commands
 {
-    public class GameConsoleEcho : GameConsoleCommand
+    public class GameConsoleEchoCommand : GameConsoleCommand
     {
+        public override bool Active { get => GameConsoleController.GetConfig().EchoCommand; }
         public override string CommandName { get; } = "echo";
         public override string Description { get; } = "creates a new log containing a message";
         public override string Help { get; } = "Write a message to echo";

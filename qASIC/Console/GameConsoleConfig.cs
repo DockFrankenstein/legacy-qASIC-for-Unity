@@ -10,6 +10,15 @@ namespace qASIC.Console.Tools
         public bool LogConfigAssigment = true;
         public bool LogScene = true;
 
+        [Header("Built in commands")]
+        public bool ClearCommand = true;
+        public bool EchoCommand = true;
+        public bool ExitCommand = true;
+        public bool HelpCommand = true;
+        public bool InputCommand = true;
+        public bool OptionCommand = true;
+        public bool SceneCommand = true;
+
         [Header("Unity")]
         public bool LogToUnity = false;
         [Space]
