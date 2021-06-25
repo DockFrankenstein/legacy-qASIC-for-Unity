@@ -13,6 +13,12 @@ namespace qASIC.Displayer
         public bool ExceptUnknown = true;
 
         [Space]
+        [Tooltip("If the text of a line is empty, the separator will be removed from it")]
+        public bool RemoveSeparatorText = true;
+        [Tooltip("If the value of a line is empty, the separator will be removed from it")]
+        public bool RemoveSeparatorValue = false;
+
+        [Space]
         public DisplayerLine[] DefaultLines = new DisplayerLine[]
                 {
                     new DisplayerLine("fps", "Framerate"),
@@ -65,7 +71,12 @@ namespace qASIC.Displayer
             if (Text == null) return;
             Text.text = StartText;
             foreach (var value in lines)
-                if(value.Value.show) Text.text += $"{value.Value.text}{Separator}{value.Value.value}\n";
+            {
+                if (!value.Value.show) continue;
+                string separator = Separator;
+                if ((RemoveSeparatorText && string.IsNullOrWhiteSpace(value.Value.text)) || (RemoveSeparatorValue && string.IsNullOrWhiteSpace(value.Value.value))) separator = string.Empty;
+                Text.text += $"{value.Value.text}{separator}{value.Value.value}\n";
+            }
             Text.text += EndText;
         }
 
