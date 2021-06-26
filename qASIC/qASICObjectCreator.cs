@@ -81,7 +81,7 @@ namespace qASIC.Tools
             CreateToggler(consoleObject, "console", canvasObject, KeyCode.BackQuote);
             GameConsoleInterface consoleScript = CreateInterface(consoleObject, text, field, scroll);
 
-            field.onValueChanged.AddListener((string text) => consoleScript.DiscardPreviousCommand());
+            field.onValueChanged.AddListener(_ => consoleScript.DiscardPreviousCommand());
 
             canvasObject.SetActive(false);
 
@@ -174,10 +174,10 @@ namespace qASIC.Tools
             GameObject go = new GameObject(name);
             go.transform.SetParent(parent);
             RectTransform trans = go.AddComponent<RectTransform>();
-            SetAnchors(trans, Vector2.zero, Vector2.one);
-            StretchToAnchors(trans);
             TextMeshProUGUI text = go.AddComponent<TextMeshProUGUI>();
             text.color = Color.black;
+            SetAnchors(trans, Vector2.zero, Vector2.one);
+            StretchToAnchors(trans);
             return text;
         }
 

@@ -153,7 +153,18 @@ namespace qASIC.Tools.Debug
             GUIStyle scrollStyle = new GUIStyle();
             scrollStyle.normal.background = tintedTexture;
 
+            GUIStyle centeredLabelStyle = new GUIStyle("Label")
+            {
+                alignment = TextAnchor.MiddleCenter,
+            };
+            
             GUILayout.Label("Audio", headerStyle);
+            if (AudioManager.singleton == null)
+            {
+                GUILayout.Label(EditorApplication.isPlaying ? "There is no audio manager in the scene" : "Offline", centeredLabelStyle);
+                return;
+            }
+
             GUILayout.Label($"Paused: {AudioManager.Paused}");
             GUILayout.Label($"Channel count: {AudioManager.ChannelCount}");
 
