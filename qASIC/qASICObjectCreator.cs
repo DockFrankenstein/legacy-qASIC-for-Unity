@@ -85,6 +85,8 @@ namespace qASIC.Tools
 
             canvasObject.SetActive(false);
 
+            CheckForEventSystem();
+
             FinishObject(consoleObject);
         }
 
@@ -337,6 +339,14 @@ namespace qASIC.Tools
 #if UNITY_EDITOR
             Undo.RegisterCreatedObjectUndo(obj, $"Create {obj.name}");
             Selection.activeGameObject = obj;
+#endif
+        }
+
+        static void CheckForEventSystem()
+        {
+#if UNITY_EDITOR
+            if (Resources.FindObjectsOfTypeAll<UnityEngine.EventSystems.EventSystem>().Length != 0) return;
+            EditorApplication.ExecuteMenuItem("GameObject/UI/Event System");
 #endif
         }
         #endregion
