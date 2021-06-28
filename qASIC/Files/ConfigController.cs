@@ -7,14 +7,20 @@ namespace qASIC.FileManagement
         #region GetSetting
         public static string GetSettingFromFile(string path, string key)
         {
-            TryGettingSettingFromFile(path, key, out string setting);
+            if (TryGettingSettingFromFile(path, key, out string setting)) throw new System.Exception("Couldn't get setting from file: setting or file doesn't exist!");
             return setting;
         }
 
         public static string GetSetting(string content, string key)
         {
-            TryGettingSetting(content, key, out string setting);
+            if(TryGettingSetting(content, key, out string setting)) throw new System.Exception("Couldn't get setting: setting doesn't exist!");
             return setting;
+        }
+
+        public static bool TryGettingSettingFromFile(string path, string key, out string setting)
+        {
+            setting = string.Empty;
+            return FileManager.TryLoadFileWriter(path, out string content) && TryGettingSetting(content, key, out setting);
         }
 
         public static bool TryGettingSetting(string content, string key, out string setting)
@@ -32,12 +38,6 @@ namespace qASIC.FileManagement
             }
             setting = string.Empty;
             return false;
-        }
-
-        public static bool TryGettingSettingFromFile(string path, string key, out string setting)
-        {
-            setting = string.Empty;
-            return FileManager.TryLoadFileWriter(path, out string content) && TryGettingSetting(content, key, out setting);
         }
         #endregion
 

@@ -1,14 +1,13 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-using qASIC.Console;
 using System;
 
 namespace qASIC.FileManagement
 {
     public static class FileManager
     {
-        public static string GetCustomFolderPath(Environment.SpecialFolder type) { return System.Environment.GetFolderPath(type); }
+        public static string GetCustomFolderPath(Environment.SpecialFolder type) { return Environment.GetFolderPath(type); }
 
         #region Trim
         /// <summary>Trims paths end by specified amount of folders</summary>
