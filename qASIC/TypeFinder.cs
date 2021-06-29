@@ -3,18 +3,21 @@ using System;
 using System.Reflection;
 using System.Linq;
 
-public static class TypeFinder
+namespace qASIC.Tools
 {
-    public static List<Type> FindAllTypes<T>()
+    public static class TypeFinder
     {
-        var type = typeof(T);
-        return Assembly.GetAssembly(typeof(T)).GetTypes().Where(t => t != type && type.IsAssignableFrom(t)).ToList();
-    }
+        public static List<Type> FindAllTypes<T>()
+        {
+            var type = typeof(T);
+            return Assembly.GetAssembly(typeof(T)).GetTypes().Where(t => t != type && type.IsAssignableFrom(t)).ToList();
+        }
 
-    public static IEnumerable<MethodInfo> FindAllAttributes<T>()
-    {
-        var atributes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).Where(x => x.IsClass)
-            .SelectMany(x => x.GetMethods()).Where(x => x.GetCustomAttributes(typeof(T), false).FirstOrDefault() != null);
-        return atributes;
+        public static IEnumerable<MethodInfo> FindAllAttributes<T>()
+        {
+            var atributes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).Where(x => x.IsClass)
+                .SelectMany(x => x.GetMethods()).Where(x => x.GetCustomAttributes(typeof(T), false).FirstOrDefault() != null);
+            return atributes;
+        }
     }
 }
