@@ -9,10 +9,15 @@ namespace qASIC
         public bool LockCursor = true;
         public bool PauseAudio = true;
 
+        Toggler toggler;
+
         private void Awake()
         {
-            GetComponent<Toggler>()?.OnChangeState.AddListener(OnChangeState);
+            toggler = GetComponent<Toggler>();
+            toggler?.OnChangeState.AddListener(OnChangeState);
         }
+
+        public void Toggle(bool state) => toggler?.Toggle(state);
 
         private void OnChangeState(bool state)
         {
