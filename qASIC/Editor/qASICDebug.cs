@@ -8,10 +8,13 @@ namespace qASIC.Tools.Debug
 {
     public class qASICDebug : EditorWindow
     {
+        public Texture icon;
+
         [MenuItem("Window/qASIC/Debug")]
         static void Init()
         {
             qASICDebug window = (qASICDebug)GetWindow(typeof(qASICDebug), false, "qASIC Debug", true);
+            window.titleContent.image = window.icon;
             window.Show();
         }
 
@@ -111,6 +114,41 @@ namespace qASIC.Tools.Debug
             GUIStyle tintedBox = new GUIStyle("Label");
             tintedBox.normal.background = tintedTexture;
 
+            GUIStyle tittleStyle = new GUIStyle("Label")
+            {
+                alignment = TextAnchor.MiddleLeft,
+                fontSize = 48,
+            };
+
+            GUIStyle linkStyle = new GUIStyle("Label")
+            {
+                alignment = TextAnchor.MiddleCenter,
+                normal = new GUIStyleState()
+                {
+                    textColor = new Color(0f, 0.7f, 1f),
+                },
+            };
+            linkStyle.hover = linkStyle.normal;
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.BeginVertical(tintedBox);
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(icon, GUILayout.Height(100), GUILayout.Width(100));
+            GUILayout.Label($"qASIC v{Info.Version}", tittleStyle, GUILayout.Height(100));
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Website", linkStyle)) Application.OpenURL("https://qasictools.com");
+            if (GUILayout.Button("Docs", linkStyle)) Application.OpenURL("https://docs.qasictools.com");
+            if (GUILayout.Button("Github", linkStyle)) Application.OpenURL("https://github.com/DockFrankenstein/qASIC");
+            GUILayout.EndHorizontal();
+
+            GUILayout.EndVertical();
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+
             GUILayout.Label("Versions", headerStyle);
 
             GUILayout.BeginVertical(tintedBox);
@@ -161,7 +199,8 @@ namespace qASIC.Tools.Debug
             GUILayout.Label("Audio", headerStyle);
             if (AudioManager.singleton == null)
             {
-                GUILayout.Label(EditorApplication.isPlaying ? "There is no audio manager in the scene" : "Offline", centeredLabelStyle);
+                GUILayout.Label(EditorApplication.isPlaying ? "There is no Audio Manager in the scene" : "Offline", centeredLabelStyle);
+                if (EditorApplication.isPlaying && GUILayout.Button("Generate Audio Manager")) new GameObject("Audio Manager").AddComponent<AudioManager>();
                 return;
             }
 

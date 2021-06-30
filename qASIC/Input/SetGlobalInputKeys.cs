@@ -11,6 +11,7 @@ namespace qASIC.InputManagement
         {
             if (init || Preset == null) return;
             InputManager.GlobalKeys = Preset?.Preset;
+            InputManager.LoadUserKeys();
             init = true;
         }
     }

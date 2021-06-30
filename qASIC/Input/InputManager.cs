@@ -38,7 +38,7 @@ namespace qASIC.InputManagement
         {
             string path = $"{Application.persistentDataPath}/{GlobalKeys.SavePath}";
             foreach (var entry in GlobalKeys.Presets)
-                FileManagement.ConfigController.SetSetting(path, entry.Key, entry.Value.ToString());
+                FileManagement.ConfigController.SetSettingFromFile(path, entry.Key, entry.Value.ToString());
         }
 
         public static void LoadUserKeys()
@@ -50,10 +50,10 @@ namespace qASIC.InputManagement
 
             for (int i = 0; i < settings.Count; i++)
             {
-                if (!settings[i].StartsWith("#")) continue;
+                if (settings[i].StartsWith("#")) continue;
                 string[] values = settings[i].Split(':');
                 if (values.Length != 2) continue;
-                if (GlobalKeys.Presets.ContainsKey(values[0]) && System.Enum.TryParse(values[1], out KeyCode result)) GlobalKeys.Presets[values[1]] = result;
+                if (GlobalKeys.Presets.ContainsKey(values[0]) && System.Enum.TryParse(values[1], out KeyCode result)) GlobalKeys.Presets[values[0]] = result;
             }
         }
 
