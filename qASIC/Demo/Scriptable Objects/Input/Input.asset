@@ -10,13 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20885221358986048be5eb3c58b3a856, type: 3}
-  m_Name: Example preset
+  m_Name: Input
   m_EditorClassIdentifier: 
   Preset:
-    SavePath: qASIC/Input.txt
+    SavePath: qASIC demo/Input.txt
   _keys:
-  - WalkUp
-  - WalkDown
-  - WalkLeft
-  - WalkRight
-  _values: 77000000730000006100000064000000
+  - Up
+  - Down
+  - Left
+  - Right
+  - Console
+  - Interact
+  _values: 770000007300000061000000640000006000000065000000

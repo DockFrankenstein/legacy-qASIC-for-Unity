@@ -1,0 +1,4 @@
+resolution: 1920x1080
+fullscreen: True
+framelimit: -1
+vsync: True
