@@ -1,12 +1,11 @@
 using UnityEngine;
+using qASIC.Demo.ColorZones;
 
 namespace qASIC.Demo.Dialogue
 {
 	public class BackgroundAnimation : MonoBehaviour
 	{
 		public AnimationCurve curve;
-		public Color startColor;
-		public Color endColor;
 
         public float duration = 2f;
 
@@ -20,6 +19,10 @@ namespace qASIC.Demo.Dialogue
 
         private void Update()
         {
+            if (ColorZoneManager.singleton == null) return;
+            Color startColor = ColorZoneManager.singleton.current.backgroundColorMain;
+            Color endColor = ColorZoneManager.singleton.current.backgroundColorSecondary;
+
             time += Time.deltaTime;
             can.backgroundColor = Color.Lerp(startColor, endColor, curve.Evaluate(time / duration));
             time %= duration;

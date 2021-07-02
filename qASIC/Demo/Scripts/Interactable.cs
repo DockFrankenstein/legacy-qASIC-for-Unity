@@ -1,30 +1,49 @@
 using qASIC.InputManagement;
 using UnityEngine;
+using qASIC.Demo.ColorZones;
 
 namespace qASIC.Demo.Dialogue
 {
 	public class Interactable : MonoBehaviour
 	{
-		public GameObject Toggable;
+		public TMPro.TextMeshPro text;
 		public string[] dialogue;
+
+		public int colorZoneIndex;
 
 		bool isActive = false;
 
-		public void ChangeState(bool state)
+		SpriteRenderer spriteRenderer;
+
+        private void Awake()
         {
-			Toggable.SetActive(state);
+			spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+        public void ChangeState(bool state)
+        {
+			text.gameObject.SetActive(state);
 			isActive = state;
 		}
 
         private void Update()
         {
+			ChangeColor();
 			if (!isActive || DialogueController.Active) return;
 			if (InputManager.GetInputDown("Interact")) OnInteract();
+		}
+
+		void ChangeColor()
+        {
+			if (ColorZoneManager.singleton == null) return;
+			if (text != null) text.color = ColorZoneManager.singleton.current.textColor;
+			if (spriteRenderer != null) spriteRenderer.color = ColorZoneManager.singleton.current.interactableColor;
 		}
 
 		void OnInteract()
         {
 			DialogueController.singleton?.DisplayDialogue(dialogue);
+			ColorZoneManager.singleton?.ChangeColorZone(colorZoneIndex);
         }
     }
 }
