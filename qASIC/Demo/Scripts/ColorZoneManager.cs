@@ -37,6 +37,7 @@ namespace qASIC.Demo.ColorZones
 		public ColorZone[] colorZones;
 
 		public ColorZone current;
+		public int index = 0;
 
 		private void Awake()
         {
@@ -55,12 +56,15 @@ namespace qASIC.Demo.ColorZones
 
         public void ChangeColorZone(int index)
         {
+			if (index == this.index) return;
+
 			if(index >= colorZones.Length || index < 0)
             {
 				qDebug.LogError("Color zone index is out of range!");
 				return;
             }
 
+			this.index = index;
 			StartCoroutine(ChangeColorZone(colorZones[index]));
         }
 

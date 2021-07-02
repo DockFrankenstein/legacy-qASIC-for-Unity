@@ -6793,7 +6793,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PauseTime: 1
-  LockCursor: 1
+  LockCursor: 0
   PauseAudio: 0
 --- !u!4 &690019135
 Transform:
@@ -11115,7 +11115,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 6
-  LockCursor: 1
+  LockCursor: 0
 --- !u!212 &1376857519
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -13023,6 +13023,7 @@ MonoBehaviour:
     playerColor: {r: 0.12941177, g: 0.12941177, b: 0.12941177, a: 1}
     interactableColor: {r: 0.8627451, g: 0.8666667, b: 0.88235295, a: 1}
     textColor: {r: 1, g: 1, b: 1, a: 1}
+  index: 0
 --- !u!4 &1646941143
 Transform:
   m_ObjectHideFlags: 0
