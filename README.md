@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="qASIC/Sprites/qASIC%20banner%20background.png">
+  <img src="Tools/qASIC/Sprites/qASIC%20banner%20background.png">
 </p>
 
 # Table of contents
