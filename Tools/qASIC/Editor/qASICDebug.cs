@@ -1,5 +1,4 @@
 #if UNITY_EDITOR
-using qASIC.AudioManagment;
 using qASIC.Console;
 using UnityEngine;
 using UnityEditor;
@@ -197,24 +196,24 @@ namespace qASIC.Tools.Debug
             };
             
             GUILayout.Label("Audio", headerStyle);
-            if (AudioManager.singleton == null)
+            if (AudioManagment.AudioManager.singleton == null)
             {
                 GUILayout.Label(EditorApplication.isPlaying ? "There is no Audio Manager in the scene" : "Offline", centeredLabelStyle);
-                if (EditorApplication.isPlaying && GUILayout.Button("Generate Audio Manager")) new GameObject("Audio Manager").AddComponent<AudioManager>();
+                if (EditorApplication.isPlaying && GUILayout.Button("Generate Audio Manager")) new GameObject("Audio Manager").AddComponent<AudioManagment.AudioManager>();
                 return;
             }
 
-            GUILayout.Label($"Paused: {AudioManager.Paused}");
-            GUILayout.Label($"Channel count: {AudioManager.ChannelCount}");
+            GUILayout.Label($"Paused: {AudioManagment.AudioManager.Paused}");
+            GUILayout.Label($"Channel count: {AudioManagment.AudioManager.ChannelCount}");
 
             audioScroll = GUILayout.BeginScrollView(audioScroll, scrollStyle, GUILayout.Height(128));
-            switch (Application.isPlaying && AudioManager.singleton != null)
+            switch (Application.isPlaying && AudioManagment.AudioManager.singleton != null)
             {
                 default:
                     break;
                 case true:
                     int i = 0;
-                    foreach (var channel in AudioManager.singleton.channels)
+                    foreach (var channel in AudioManagment.AudioManager.singleton.channels)
                     {
                         GUILayout.Label(channel.Key, i % 2 == 0 ? secondListItemStyle : listItemStyle, GUILayout.Height(EditorGUIUtility.singleLineHeight));
                         i++;
@@ -224,9 +223,9 @@ namespace qASIC.Tools.Debug
             GUILayout.EndScrollView();
 
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Pause All") && AudioManager.singleton != null) AudioManager.PauseAll();
-            if (GUILayout.Button("Un Pause All") && AudioManager.singleton != null) AudioManager.UnPauseAll();
-            if (GUILayout.Button("Stop All") && AudioManager.singleton != null) AudioManager.StopAll();
+            if (GUILayout.Button("Pause All") && AudioManagment.AudioManager.singleton != null) AudioManagment.AudioManager.PauseAll();
+            if (GUILayout.Button("Un Pause All") && AudioManagment.AudioManager.singleton != null) AudioManagment.AudioManager.UnPauseAll();
+            if (GUILayout.Button("Stop All") && AudioManagment.AudioManager.singleton != null) AudioManagment.AudioManager.StopAll();
             GUILayout.EndHorizontal();
         }
 
