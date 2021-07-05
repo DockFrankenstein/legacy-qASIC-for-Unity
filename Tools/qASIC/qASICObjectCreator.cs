@@ -214,6 +214,7 @@ namespace qASIC.Tools
 
             field.placeholder = placeholder;
             field.textComponent = text;
+            field.textViewport = maskTrans;
 
             return field;
         }
