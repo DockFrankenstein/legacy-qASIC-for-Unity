@@ -5,8 +5,8 @@
 [![Asset Store](https://img.shields.io/badge/-Asset%20Store-blueviolet.svg?style=for-the-badge)](https://assetstore.unity.com/)
 [![Documentation](https://img.shields.io/badge/-Documentation-blue.svg?style=for-the-badge)](https://docs.qasictools.com/)
 [![Releases](https://img.shields.io/github/downloads/DockFrankenstein/qASIC/total?color=brightgreen&label=Downloads&style=for-the-badge)](https://github.com/DockFrankenstein/qASIC/releases)
-[![GitHub issues](https://img.shields.io/github/issues/DockFrankenstein/qASIC?color=red&label=Issues&style=for-the-badge)](https://docs.qasictools.com/)
-[![Website](https://img.shields.io/website?down_color=red&down_message=offline&label=Website&up_color=brightgreen&up_message=online&url=https%3A%2F%2Fqasictools.com&style=for-the-badge)](https://docs.qasictools.com/)
+[![GitHub issues](https://img.shields.io/github/issues/DockFrankenstein/qASIC?color=red&label=Issues&style=for-the-badge)](https://github.com/DockFrankenstein/qASIC/issues)
+[![Website](https://img.shields.io/website?down_color=red&down_message=offline&label=Website&up_color=brightgreen&up_message=online&url=https%3A%2F%2Fqasictools.com&style=for-the-badge)](https://qasictools.com/)
 
 # Table of contents
 * [Introduction](#introduction)
