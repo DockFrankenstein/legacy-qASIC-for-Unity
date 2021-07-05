@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace qASIC.Toggling
 {
-    public abstract class Toggler : MonoBehaviour
+    public class Toggler : MonoBehaviour
     {
         public bool state { get; private set; }
         public GameObject ToggleObject;
