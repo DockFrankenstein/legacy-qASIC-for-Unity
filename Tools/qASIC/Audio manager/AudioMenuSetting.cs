@@ -1,27 +1,40 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace qASIC.AudioManagment.Menu
 {
     [RequireComponent(typeof(Slider))]
-    public class AudioMenuSetting : MonoBehaviour
+    public class AudioMenuSetting : MonoBehaviour, IPointerUpHandler
     {
-        public string ParameterName;
-        private float _value;
+        private Slider _slider;
 
-        public void PreviewValue(float value)
+        public string ParameterName;
+
+        private void Reset()
         {
-            _value = value;
-            AudioManager.SetFloat(ParameterName, value, false);
+            Slider slider = GetComponent<Slider>();
+            if (slider == null) slider = gameObject.AddComponent<Slider>();
+            slider.minValue = -60;
+            slider.maxValue = 0;
         }
-        public void SetValue() => AudioManager.SetFloat(ParameterName, _value, true);
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            if (_slider == null) return;
+            AudioManager.SetFloat(ParameterName, _slider.value, true);
+        }
+
+        public void SetValue(float value, bool preview) => AudioManager.SetFloat(ParameterName, value, preview);
 
         private void Start() => Initialize();
 
         public void Initialize()
         {
-            Slider slider = GetComponent<Slider>();
-            if (slider != null && AudioManager.GetFloat(ParameterName, out float value)) slider.value = value;
+            _slider = GetComponent<Slider>();
+            if (_slider == null) return;
+            _slider.onValueChanged.AddListener((float value) => SetValue(value, false));
+            if (AudioManager.GetFloat(ParameterName, out float newValue)) _slider.SetValueWithoutNotify(newValue);
         }
     }
 }

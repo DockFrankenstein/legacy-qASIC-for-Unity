@@ -73,23 +73,23 @@ namespace qASIC.Console
             switch (type)
             {
                 case LogType.Exception:
-                    if (!ConsoleConfig.LogUnityExceptionsToConsole) return;
+                    if (!config.LogUnityExceptionsToConsole) return;
                     color = "unity exception";
                     break;
                 case LogType.Error:
-                    if (!ConsoleConfig.LogUnityErrorsToConsole) return;
+                    if (!config.LogUnityErrorsToConsole) return;
                     color = "unity error";
                     break;
                 case LogType.Assert:
-                    if (!ConsoleConfig.LogUnityAssertsToConsole) return;
+                    if (!config.LogUnityAssertsToConsole) return;
                     color = "unity assert";
                     break;
                 case LogType.Warning:
-                    if (!ConsoleConfig.LogUnityWarningsToConsole) return;
+                    if (!config.LogUnityWarningsToConsole) return;
                     color = "unity warning";
                     break;
                 case LogType.Log:
-                    if (!ConsoleConfig.LogUnityMessagesToConsole) return;
+                    if (!config.LogUnityMessagesToConsole) return;
                     color = "unity message";
                     break;
             }

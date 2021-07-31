@@ -16,6 +16,13 @@ MonoBehaviour:
   ShowThankYouMessage: 1
   LogConfigAssigment: 1
   LogScene: 1
+  ClearCommand: 1
+  EchoCommand: 1
+  ExitCommand: 1
+  HelpCommand: 1
+  InputCommand: 1
+  OptionCommand: 1
+  SceneCommand: 1
   LogToUnity: 1
   LogUnityErrorsToConsole: 1
   LogUnityAssertsToConsole: 1
