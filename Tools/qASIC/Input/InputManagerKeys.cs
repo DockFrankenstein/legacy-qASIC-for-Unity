@@ -6,8 +6,8 @@ namespace qASIC.InputManagement
     [System.Serializable]
     public class InputManagerKeys
     {
-        public string SavePath;
-        public Dictionary<string, KeyCode> Presets;
+        public string SavePath { get; set; }
+        public Dictionary<string, KeyCode> Presets { get; set; }
 
         public InputManagerKeys()
         {
@@ -21,10 +21,10 @@ namespace qASIC.InputManagement
             Presets = presets;
         }
 
-        public InputManagerKeys(InputManagerKeys original)
+        public InputManagerKeys(InputManagerKeys source)
         {
-            SavePath = original.SavePath;
-            Presets = new Dictionary<string, KeyCode>(original.Presets);
+            SavePath = source.SavePath;
+            Presets = new Dictionary<string, KeyCode>(source.Presets);
         }
     }
 }

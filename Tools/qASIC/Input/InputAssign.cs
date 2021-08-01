@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
+using UnityEngine.UI;
 
 namespace qASIC.InputManagement.Menu
 {
@@ -10,14 +11,24 @@ namespace qASIC.InputManagement.Menu
         public TextMeshProUGUI NameText;
         public string OptionLabelName;
 
+        [Header("Options")]
         public string KeyName;
+
+        [Header("Listener")]
         public InputListener Listener;
         public UnityEvent OnStartListening = new UnityEvent();
         public UnityEvent OnAssign = new UnityEvent();
 
         UnityAction<KeyCode> listinerAction;
 
-        private void Awake() => listinerAction = Assign;
+        private void Awake()
+        {
+            listinerAction = Assign;
+
+            Button button = GetComponent<Button>();
+            if (button == null) return;
+            button.onClick.AddListener(StartListening);
+        }
 
         private void Update()
         {

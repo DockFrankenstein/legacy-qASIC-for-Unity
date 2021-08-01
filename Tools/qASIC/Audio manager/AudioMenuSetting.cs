@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 namespace qASIC.AudioManagment.Menu
 {
@@ -8,7 +9,11 @@ namespace qASIC.AudioManagment.Menu
     public class AudioMenuSetting : MonoBehaviour, IPointerUpHandler
     {
         private Slider _slider;
+        [Header("Updating name")]
+        public TextMeshProUGUI NameText;
+        public string ParameterLabelName;
 
+        [Header("Options")]
         public string ParameterName;
 
         private void Reset()
@@ -35,6 +40,19 @@ namespace qASIC.AudioManagment.Menu
             if (_slider == null) return;
             _slider.onValueChanged.AddListener((float value) => SetValue(value, false));
             if (AudioManager.GetFloat(ParameterName, out float newValue)) _slider.SetValueWithoutNotify(newValue);
+        }
+
+        public virtual string GetLabel()
+        {
+            string value = "";
+            if (_slider != null) value = $"{Mathf.Round(_slider.normalizedValue * 100)}%";
+            return $"{ParameterLabelName}{value}";
+        }
+
+        public virtual void Update()
+        {
+            if (NameText != null)
+                NameText.text = GetLabel();
         }
     }
 }

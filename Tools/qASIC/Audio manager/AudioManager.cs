@@ -167,7 +167,7 @@ namespace qASIC.AudioManagment
 
             channel.source.clip = data.clip;
             channel.source.loop = data.loop;
-            channel.useGlobalControlls = data.UseGlobalControlls;
+            channel.useGlobalControlls = data.UseGlobalControls;
 
             if (singleton.Mixer != null) channel.source.outputAudioMixerGroup = data.group;
 
