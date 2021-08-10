@@ -35,15 +35,15 @@ namespace qASIC.Demo.Dialogue
 
 		void ChangeColor()
         {
-			if (ColorZoneManager.singleton == null) return;
-			if (text != null) text.color = ColorZoneManager.singleton.current.textColor;
-			if (spriteRenderer != null) spriteRenderer.color = ColorZoneManager.singleton.current.interactableColor;
+			if (ColorZoneManager.Singleton == null) return;
+			if (text != null) text.color = ColorZoneManager.Singleton.current.textColor;
+			if (spriteRenderer != null) spriteRenderer.color = ColorZoneManager.Singleton.current.interactableColor;
 		}
 
 		void OnInteract()
         {
 			DialogueController.singleton?.DisplayDialogue(dialogue);
-			ColorZoneManager.singleton?.ChangeColorZone(colorZoneIndex);
+			ColorZoneManager.Singleton?.ChangeColorZone(colorZoneIndex);
         }
     }
 }

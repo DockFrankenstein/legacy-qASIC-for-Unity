@@ -8,37 +8,30 @@ namespace qASIC.Options
         public static void ChangeResolution(string resolution)
         {
             Vector2Int res = VectorText.ToVector2Int(resolution);
-            if (res == new Vector2Int(Screen.width, Screen.height)) return;
             Screen.SetResolution(res.x, res.y, Screen.fullScreen);
         }
 
         [OptionsSetting("fullscreen", typeof(FullScreenMode))]
-        public static void ChangeFullScreenMode(FullScreenMode state)
-        {
-            if(state == Screen.fullScreenMode) return;
+        public static void ChangeFullScreenMode(FullScreenMode state) =>
             Screen.fullScreenMode = state;
-        }
 
         [OptionsSetting("fullscreen", typeof(bool))]
-        public static void ChangeFullScreenMode(bool state)
-        {
-            if (state == Screen.fullScreen) return;
-            Screen.fullScreenMode = state ? FullScreenMode.MaximizedWindow : FullScreenMode.Windowed;
-        }
+        public static void ChangeFullScreenMode(bool state) =>
+            Screen.fullScreen = state;
 
         [OptionsSetting("framelimit", typeof(int))]
-        public static void ChangeFramerateLimit(int value)
-        {
-            if (value == Application.targetFrameRate) return;
+        public static void ChangeFramerateLimit(int value) =>
             Application.targetFrameRate = value;
-        }
 
         [OptionsSetting("vsync", typeof(bool))]
         public static void ChangeVSync(bool value)
         {
             int intValue = value ? 1 : 0;
-            if (intValue == QualitySettings.vSyncCount) return;
             QualitySettings.vSyncCount = intValue;
         }
+
+        [OptionsSetting("vsync", typeof(int))]
+        public static void ChangeVSync(int value) =>
+            QualitySettings.vSyncCount = value;
     }
 }

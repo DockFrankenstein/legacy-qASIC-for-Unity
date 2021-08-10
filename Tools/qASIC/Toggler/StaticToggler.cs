@@ -4,8 +4,8 @@ namespace qASIC.Toggling
 {
     public class StaticToggler : Toggler
     {
-        public string Tag;
-        public bool AddToDontDestroy = true;
+        public string togglerTag;
+        public bool addToDontDestroy = true;
 
         #region Static
         public class TogglerState
@@ -36,28 +36,28 @@ namespace qASIC.Toggling
 
         public override void Awake()
         {
-            if (AddToDontDestroy) AssignSingleton();
+            if (addToDontDestroy) AssignSingleton();
             AssignListiner();
 
-            if (!states.ContainsKey(Tag))
+            if (!states.ContainsKey(togglerTag))
             {
                 base.Awake();
                 return;
             }
 
-            Toggle(states[Tag].state);
+            Toggle(states[togglerTag].state);
         }
 
         private void AssignListiner()
         {
-            if (!states.ContainsKey(Tag)) states.Add(Tag, new TogglerState());
-            if (states[Tag].OnChange == null) states[tag].OnChange = new TogglerState.TogglerStateChange((bool state) => { });
-            states[Tag].OnChange += Toggle;
+            if (!states.ContainsKey(togglerTag)) states.Add(togglerTag, new TogglerState());
+            if (states[togglerTag].OnChange == null) states[base.tag].OnChange = new TogglerState.TogglerStateChange((bool state) => { });
+            states[togglerTag].OnChange += Toggle;
         }
 
         private void AssignSingleton()
         {
-            if (states.ContainsKey(Tag))
+            if (states.ContainsKey(togglerTag))
             {
                 Destroy(gameObject);
                 return;
@@ -67,8 +67,8 @@ namespace qASIC.Toggling
 
         private void OnDestroy()
         {
-            if (!states.ContainsKey(Tag) || states[Tag].OnChange == null) return;
-            states[Tag].OnChange -= Toggle;
+            if (!states.ContainsKey(togglerTag) || states[togglerTag].OnChange == null) return;
+            states[togglerTag].OnChange -= Toggle;
         }
         #endregion
 
@@ -76,7 +76,7 @@ namespace qASIC.Toggling
         public override void Toggle(bool state)
         {
             base.Toggle(state);
-            ChangeStateSilent(Tag, state);
+            ChangeStateSilent(togglerTag, state);
         }
 
         public static void ChangeState(string tag, bool state)

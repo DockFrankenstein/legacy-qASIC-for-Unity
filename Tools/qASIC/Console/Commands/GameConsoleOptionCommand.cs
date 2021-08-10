@@ -5,7 +5,7 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleOptionCommand : GameConsoleCommand
     {
-        public override bool Active { get => GameConsoleController.GetConfig().OptionCommand; }
+        public override bool Active { get => GameConsoleController.GetConfig().optionCommand; }
         public override string CommandName { get; } = "changeoption";
         public override string Description { get; } = "changes basic options";
         public override string Help { get; } = "Use changeoption <setting name> <value>";

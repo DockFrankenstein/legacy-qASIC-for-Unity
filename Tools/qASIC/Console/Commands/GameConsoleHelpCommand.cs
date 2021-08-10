@@ -5,7 +5,7 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleHelpCommand : GameConsoleCommand
     {
-        public override bool Active { get => GameConsoleController.GetConfig().HelpCommand; }
+        public override bool Active { get => GameConsoleController.GetConfig().helpCommand; }
         public override string CommandName { get; } = "help";
         public override string Description { get; } = "displays help";
         public override string Help { get; } = "Use help; help <index>; help <command>";
@@ -21,9 +21,9 @@ namespace qASIC.Console.Commands
 
             if (GameConsoleController.TryGettingConfig(out Tools.GameConsoleConfig config))
             {
-                onePageCommandLimit = config.PageCommandLimit;
-                useLimit = config.UsePageCommandLimit;
-                useDetail = config.ShowDetailedHelp;
+                onePageCommandLimit = config.pageCommandLimit;
+                useLimit = config.usePageCommandLimit;
+                useDetail = config.showDetailedHelp;
             }
 
             if (args.Count == 1) TryHelp(0);

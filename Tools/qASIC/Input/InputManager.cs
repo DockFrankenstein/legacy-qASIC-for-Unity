@@ -84,7 +84,7 @@ namespace qASIC.InputManagement
             if (GlobalKeys == null || !GlobalKeys.Presets.ContainsKey(keyName)) return;
             GlobalKeys.Presets[keyName] = newKey;
             SaveKeys();
-            GameConsoleController.Log($"Changed input <b>{keyName}</b> to: {newKey}", "input", Console.Logic.GameConsoleLog.LogType.game);
+            GameConsoleController.Log($"Changed input <b>{keyName}</b> to: {newKey}", "input", Console.Logic.GameConsoleLog.LogType.Game);
         }
 
         public static float GetAxis(string positive, string negative)

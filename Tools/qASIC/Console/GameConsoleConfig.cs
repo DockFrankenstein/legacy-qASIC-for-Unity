@@ -5,33 +5,33 @@ namespace qASIC.Console.Tools
     [CreateAssetMenu(fileName = "NewConsoleConfig", menuName = "qASIC/Console/Console Config")]
     public class GameConsoleConfig : ScriptableObject
     {
-        public GameConsoleTheme ColorTheme;
-        public bool ShowThankYouMessage = true;
-        public bool LogConfigAssigment = true;
-        public bool LogScene = true;
+        public GameConsoleTheme colorTheme;
+        public bool showThankYouMessage = true;
+        public bool logConfigAssigment = true;
+        public bool logScene = true;
 
         [Header("Built in commands")]
-        public bool ClearCommand = true;
-        public bool EchoCommand = true;
-        public bool ExitCommand = true;
-        public bool HelpCommand = true;
-        public bool InputCommand = true;
-        public bool OptionCommand = true;
-        public bool SceneCommand = true;
+        public bool clearCommand = true;
+        public bool echoCommand = true;
+        public bool exitCommand = true;
+        public bool helpCommand = true;
+        public bool inputCommand = true;
+        public bool optionCommand = true;
+        public bool sceneCommand = true;
 
         [Header("Unity")]
-        public bool LogToUnity = false;
+        public bool logToUnity = false;
         [Space]
-        public bool LogUnityErrorsToConsole = true;
-        public bool LogUnityAssertsToConsole = true;
-        public bool LogUnityExceptionsToConsole = true;
-        public bool LogUnityWarningsToConsole = true;
-        public bool LogUnityMessagesToConsole = true;
+        public bool logUnityErrorsToConsole = true;
+        public bool logUnityAssertsToConsole = true;
+        public bool logUnityExceptionsToConsole = true;
+        public bool logUnityWarningsToConsole = true;
+        public bool logUnityMessagesToConsole = true;
 
         [Header("Help")]
-        public bool ShowDetailedHelp = true;
-        public bool UsePageCommandLimit = true;
+        public bool showDetailedHelp = true;
+        public bool usePageCommandLimit = true;
         [Min(1)]
-        public int PageCommandLimit = 5;
+        public int pageCommandLimit = 5;
     }
 }

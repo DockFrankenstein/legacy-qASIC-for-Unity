@@ -15,11 +15,11 @@ namespace qASIC.Demo.ColorZones
 
         private void Update()
         {
-            if (ColorZoneManager.singleton == null) return;
+            if (ColorZoneManager.Singleton == null) return;
 
             for (int i = 0; i < walls.Length; i++)
                 if (walls[i] != null)
-                    walls[i].color = ColorZoneManager.singleton.current.wallColor;
+                    walls[i].color = ColorZoneManager.Singleton.current.wallColor;
         }
     }
 }

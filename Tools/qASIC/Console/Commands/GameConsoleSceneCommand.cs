@@ -6,7 +6,7 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleSceneCommand : GameConsoleCommand
     {
-        public override bool Active { get => GameConsoleController.GetConfig().SceneCommand; }
+        public override bool Active { get => GameConsoleController.GetConfig().sceneCommand; }
         public override string CommandName { get; } = "scene";
         public override string Description { get; } = "get, load scene";
         public override string Help { get; } = "Use scene; scene get; scene load <scene name>";

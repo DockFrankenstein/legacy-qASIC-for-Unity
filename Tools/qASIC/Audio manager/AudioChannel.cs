@@ -9,23 +9,22 @@ namespace qASIC.AudioManagment
         public bool paused;
         public bool useGlobalControlls;
 
-        public AudioSource source { get; set; }
-        public IEnumerator destroyEnum { get; set; }
+        public AudioSource Source { get; set; }
+        public IEnumerator DestroyEnum { get; set; }
 
         public IEnumerator DestroyOnPlaybackEnd()
         {
-            if (source == null || source.loop) yield break;
-            float delay = 0.1f;
-            yield return new WaitForSecondsRealtime(source.clip.length - source.time + delay);
-            Object.Destroy(source);
-            source = null;
-            destroyEnum = null;
+            if (Source == null || Source.loop) yield break;
+            yield return new WaitForSecondsRealtime(Source.clip.length - Source.time + 0.1f);
+            Object.Destroy(Source);
+            Source = null;
+            DestroyEnum = null;
         }
 
         public AudioChannel()
         {
-            source = null;
-            destroyEnum = null;
+            Source = null;
+            DestroyEnum = null;
         }
     }
 }

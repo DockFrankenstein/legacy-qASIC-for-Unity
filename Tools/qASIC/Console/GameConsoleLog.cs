@@ -6,12 +6,12 @@ namespace qASIC.Console.Logic
 {
     public class GameConsoleLog
     {
-        public enum LogType { user, game, clear };
+        public enum LogType { User, Game, Clear };
         public LogType Type { get; }
         public DateTime Time { get; }
         public string Message { get; }
         public Color LogColor { get; }
-        public string colorName { get; }
+        public string ColorName { get; }
         
         /// <summary>If the log should be hidden in Unity console</summary>
         public bool UnityHidden { get; }
@@ -24,7 +24,7 @@ namespace qASIC.Console.Logic
             Time = time;
             Message = message;
             LogColor = new Color();
-            colorName = color;
+            ColorName = color;
             UnityHidden = false;
         }
 
@@ -36,7 +36,7 @@ namespace qASIC.Console.Logic
             Time = time;
             Message = message;
             LogColor = color;
-            colorName = string.Empty;
+            ColorName = string.Empty;
             UnityHidden = false;
         }
 
@@ -48,7 +48,7 @@ namespace qASIC.Console.Logic
             Time = time;
             Message = message;
             LogColor = new Color();
-            colorName = color;
+            ColorName = color;
             UnityHidden = unityHidden;
         }
 
@@ -60,7 +60,7 @@ namespace qASIC.Console.Logic
             Time = time;
             Message = message;
             LogColor = color;
-            colorName = string.Empty;
+            ColorName = string.Empty;
             UnityHidden = unityHidden;
         }
 
@@ -69,20 +69,20 @@ namespace qASIC.Console.Logic
             string log = Message.Replace('\r','\n');
             switch (Type)
             {
-                case LogType.user:
+                case LogType.User:
                     log = $">{Regex.Replace(log, "<.*?>", string.Empty)}";
                     break;
-                case LogType.game:
+                case LogType.Game:
                     log = $" {log}";
                     break;
-                case LogType.clear:
+                case LogType.Clear:
                     log = " !clear";
                     break;
                 default:
                     log = $"?{log}";
                     break;
             }
-            string colorHash = ColorUtility.ToHtmlStringRGB(string.IsNullOrWhiteSpace(colorName) ? LogColor : GameConsoleController.GetColor(colorName));
+            string colorHash = ColorUtility.ToHtmlStringRGB(string.IsNullOrWhiteSpace(ColorName) ? LogColor : GameConsoleController.GetColor(ColorName));
             log = $"<color=#{colorHash}>[{Time:HH:mm:ss}]{log}</color>";
             return log;
         }

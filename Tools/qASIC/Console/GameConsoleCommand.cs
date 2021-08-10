@@ -42,18 +42,18 @@ namespace qASIC.Console.Commands
         }
 
         public void Log(string text, string color) =>
-            GameConsoleController.Log(text, color, Logic.GameConsoleLog.LogType.game);
+            GameConsoleController.Log(text, color, Logic.GameConsoleLog.LogType.Game);
 
         public void Log(string text, Color color) =>
-            GameConsoleController.Log(text, color, Logic.GameConsoleLog.LogType.game);
+            GameConsoleController.Log(text, color, Logic.GameConsoleLog.LogType.Game);
 
         public void LogError(string text) =>
-            GameConsoleController.Log(text, "error", Logic.GameConsoleLog.LogType.game);
+            GameConsoleController.Log(text, "error", Logic.GameConsoleLog.LogType.Game);
 
         public void NoOptionException(string option) =>
-            GameConsoleController.Log($"Option <b>{option}</b> does not exist!", "error", Logic.GameConsoleLog.LogType.game);
+            GameConsoleController.Log($"Option <b>{option}</b> does not exist!", "error", Logic.GameConsoleLog.LogType.Game);
 
         public void ParseException(string text, string type) =>
-            GameConsoleController.Log($"Couldn't parse <b>{text}</b> to {type}!", "error", Logic.GameConsoleLog.LogType.game);
+            GameConsoleController.Log($"Couldn't parse <b>{text}</b> to {type}!", "error", Logic.GameConsoleLog.LogType.Game);
     }
 }

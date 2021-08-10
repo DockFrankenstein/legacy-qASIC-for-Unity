@@ -19,9 +19,9 @@ namespace qASIC.Demo.Dialogue
 
         private void Update()
         {
-            if (ColorZoneManager.singleton == null) return;
-            Color startColor = ColorZoneManager.singleton.current.backgroundColorMain;
-            Color endColor = ColorZoneManager.singleton.current.backgroundColorSecondary;
+            if (ColorZoneManager.Singleton == null) return;
+            Color startColor = ColorZoneManager.Singleton.current.backgroundColorMain;
+            Color endColor = ColorZoneManager.Singleton.current.backgroundColorSecondary;
 
             time += Time.deltaTime;
             can.backgroundColor = Color.Lerp(startColor, endColor, curve.Evaluate(time / duration));

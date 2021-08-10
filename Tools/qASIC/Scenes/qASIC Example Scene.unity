@@ -1609,11 +1609,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 824f08bb9225c4f4aaf5cb7d35fd9476, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NameText: {fileID: 0}
-  OptionLabelName: 
-  OptionName: fullscreen
-  Save: 1
-  InvertEvent: 0
+  nameText: {fileID: 0}
+  optionLabelName: 
+  optionName: fullscreen
+  save: 1
+  invertEvent: 0
   OnValueChange:
     m_PersistentCalls:
       m_Calls: []
@@ -2051,7 +2051,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32eecd15f72ab44b9f4802d2d31a2c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onInputRecived:
+  OnInputRecived:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &280564066
@@ -2066,10 +2066,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8cb3847f6144a468f386d09c1d87cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NameText: {fileID: 1728625461}
-  OptionLabelName: 'Up: '
-  KeyName: Up
-  Listener: {fileID: 280564065}
+  nameText: {fileID: 1728625461}
+  optionLabelName: 'Up: '
+  keyName: Up
+  listener: {fileID: 280564065}
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -2789,11 +2789,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 824f08bb9225c4f4aaf5cb7d35fd9476, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NameText: {fileID: 0}
-  OptionLabelName: 
-  OptionName: vsync
-  Save: 1
-  InvertEvent: 1
+  nameText: {fileID: 0}
+  optionLabelName: 
+  optionName: vsync
+  save: 1
+  invertEvent: 0
   OnValueChange:
     m_PersistentCalls:
       m_Calls:
@@ -3310,7 +3310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32eecd15f72ab44b9f4802d2d31a2c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onInputRecived:
+  OnInputRecived:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &375491671
@@ -3325,10 +3325,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8cb3847f6144a468f386d09c1d87cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NameText: {fileID: 2022365670}
-  OptionLabelName: 'Interact: '
-  KeyName: Interact
-  Listener: {fileID: 375491670}
+  nameText: {fileID: 2022365670}
+  optionLabelName: 'Interact: '
+  keyName: Interact
+  listener: {fileID: 375491670}
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -4559,10 +4559,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aed4f971ec8a92443a265e4f3d0ae9c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LoadOnce: 1
-  UserSavePath: qASIC demo/Settings.txt
-  EditorUserSavePath: qASIC demo/Setting-editor.txt
-  SaveFilePreset: {fileID: 4900000, guid: fd3d12d5bfd9947449045bf0a9273de6, type: 3}
+  loadOnce: 1
+  userSavePath: qASIC demo/Settings.txt
+  editorUserSavePath: qASIC demo/Setting-editor.txt
+  saveFilePreset: {fileID: 4900000, guid: fd3d12d5bfd9947449045bf0a9273de6, type: 3}
 --- !u!114 &520468625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4575,7 +4575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f432c0fcf534b1a4aa392e8d9a7a9fc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Preset: {fileID: 11400000, guid: d2d10382bfa4fd448a54ebc8ce629334, type: 2}
+  preset: {fileID: 11400000, guid: d2d10382bfa4fd448a54ebc8ce629334, type: 2}
 --- !u!4 &520468626
 Transform:
   m_ObjectHideFlags: 0
@@ -5475,7 +5475,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32eecd15f72ab44b9f4802d2d31a2c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onInputRecived:
+  OnInputRecived:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &591809749
@@ -5490,10 +5490,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8cb3847f6144a468f386d09c1d87cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NameText: {fileID: 1464753235}
-  OptionLabelName: 'Console: '
-  KeyName: Console
-  Listener: {fileID: 591809748}
+  nameText: {fileID: 1464753235}
+  optionLabelName: 'Console: '
+  keyName: Console
+  listener: {fileID: 591809748}
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -6601,8 +6601,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f769db349d6b1bb4c8d44f6fba744575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ToggleObject: {fileID: 230947810}
-  KeyMode: 0
+  toggleObject: {fileID: 0}
+  keyMode: 0
   OnChangeState:
     m_PersistentCalls:
       m_Calls:
@@ -6617,7 +6617,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  Key: 27
+  key: 27
 --- !u!114 &690019134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6630,9 +6630,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8349a5ff16eb20542821824207a6d18f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PauseTime: 1
-  LockCursor: 0
-  PauseAudio: 0
+  pauseTime: 1
+  lockCursor: 0
+  pauseAudio: 0
 --- !u!4 &690019135
 Transform:
   m_ObjectHideFlags: 0
@@ -8831,8 +8831,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dd406edce92a324a9c1959c2eb28576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ToggleObject: {fileID: 77723860}
-  Text: {fileID: 359389663}
+  toggleObject: {fileID: 77723860}
+  text: {fileID: 359389663}
 --- !u!114 &1089685563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8845,12 +8845,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f769db349d6b1bb4c8d44f6fba744575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ToggleObject: {fileID: 418232067}
-  KeyMode: 0
+  toggleObject: {fileID: 418232067}
+  keyMode: 0
   OnChangeState:
     m_PersistentCalls:
       m_Calls: []
-  Key: 283
+  key: 283
 --- !u!4 &1089685564
 Transform:
   m_ObjectHideFlags: 0
@@ -9252,11 +9252,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7a619bbce4bb104a82bb08dea9e392f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DisplayerName: main
-  Project:
-    show: 0
+  displayerName: main
+  project:
+    show: 1
     tag: version
-  Unity:
+  unity:
     show: 1
     tag: unity version
   qASIC:
@@ -9274,14 +9274,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 674d405e8418a4e43badbb0caa1bc14c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DisplayerName: main
-  Framerate:
+  displayerName: main
+  framerate:
     show: 1
     tag: fps
-  Resolution:
+  resolution:
     show: 1
     tag: resolution
-  Fullscreen:
+  fullscreen:
     show: 1
     tag: fullscreen
   GPU:
@@ -9293,7 +9293,7 @@ MonoBehaviour:
   CPUThreads:
     show: 1
     tag: cpu threads
-  Memory:
+  memory:
     show: 1
     tag: memory
   OS:
@@ -9311,16 +9311,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51ef33dc59f6e3443b5d5b426f2bd751, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DisplayerName: main
-  Separator: ': '
-  ExceptUnknown: 0
-  RemoveSeparatorText: 1
-  RemoveSeparatorValue: 0
-  DefaultLines:
-  - tag: pos
-    text: Position
-    value: 
-    show: 1
+  displayerName: main
+  separator: ': '
+  exceptUnknown: 1
+  removeSeparatorText: 1
+  removeSeparatorValue: 0
+  defaultLines:
   - tag: fps
     text: Framerate
     value: 
@@ -9353,6 +9349,10 @@ MonoBehaviour:
     text: Operating system
     value: 
     show: 1
+  - tag: version
+    text: Version
+    value: 
+    show: 1
   - tag: unity version
     text: Unity version
     value: 
@@ -9361,9 +9361,13 @@ MonoBehaviour:
     text: qASIC version
     value: 
     show: 1
-  StartText: 
-  EndText: 
-  Text: {fileID: 1706910859}
+  - tag: pos
+    text: Position
+    value: 
+    show: 1
+  startText: 
+  endText: 
+  text: {fileID: 1706910859}
 --- !u!114 &1154105940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9376,14 +9380,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e75bbe96523a2e547bcbc72e3780bae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ToggleObject: {fileID: 1690943428}
-  KeyMode: 0
+  toggleObject: {fileID: 1690943428}
+  keyMode: 0
   OnChangeState:
     m_PersistentCalls:
       m_Calls: []
-  Tag: main displayer
-  AddToDontDestroy: 1
-  Key: 284
+  togglerTag: 
+  addToDontDestroy: 1
+  key: 284
 --- !u!4 &1154105941
 Transform:
   m_ObjectHideFlags: 0
@@ -10881,8 +10885,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1bdc8adaf9cb5443b0522b9e9939dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 6
-  LockCursor: 0
+  speed: 6
+  lockCursor: 0
 --- !u!212 &1376857519
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11109,13 +11113,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cba1ca36f84f1ae4ea64ce1f58d89e66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NameText: {fileID: 314855588}
-  OptionLabelName: 'Framerate limit: '
-  OptionName: framelimit
-  Save: 1
+  nameText: {fileID: 314855588}
+  optionLabelName: 'Framerate limit: '
+  optionName: framelimit
+  save: 1
   dropdown: {fileID: 0}
-  ReplaceWithOff: 1
-  Framerates: ffffffff1e0000003c00000078000000f0000000
+  replaceWithOff: 1
+  framerates: ffffffff1e0000003c00000078000000f0000000
 --- !u!114 &1404149134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11692,7 +11696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32eecd15f72ab44b9f4802d2d31a2c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onInputRecived:
+  OnInputRecived:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &1533533150
@@ -11707,10 +11711,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8cb3847f6144a468f386d09c1d87cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NameText: {fileID: 683230934}
-  OptionLabelName: 'Right: '
-  KeyName: Right
-  Listener: {fileID: 1533533149}
+  nameText: {fileID: 683230934}
+  optionLabelName: 'Right: '
+  keyName: Right
+  listener: {fileID: 1533533149}
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -11984,7 +11988,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32eecd15f72ab44b9f4802d2d31a2c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onInputRecived:
+  OnInputRecived:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &1560003290
@@ -11999,10 +12003,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8cb3847f6144a468f386d09c1d87cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NameText: {fileID: 1291388893}
-  OptionLabelName: 'Down: '
-  KeyName: Down
-  Listener: {fileID: 1560003289}
+  nameText: {fileID: 1291388893}
+  optionLabelName: 'Down: '
+  keyName: Down
+  listener: {fileID: 1560003289}
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -14066,8 +14070,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5226ffb2fcf7d314b8a7075b140b5767, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ToggleObject: {fileID: 768445249}
-  KeyMode: 0
+  toggleObject: {fileID: 768445249}
+  keyMode: 0
   OnChangeState:
     m_PersistentCalls:
       m_Calls: []
@@ -14910,7 +14914,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32eecd15f72ab44b9f4802d2d31a2c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onInputRecived:
+  OnInputRecived:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &1819052090
@@ -14925,10 +14929,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8cb3847f6144a468f386d09c1d87cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NameText: {fileID: 1705672479}
-  OptionLabelName: 'Left: '
-  KeyName: Left
-  Listener: {fileID: 1819052089}
+  nameText: {fileID: 1705672479}
+  optionLabelName: Left
+  keyName: Left
+  listener: {fileID: 1819052089}
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -15310,10 +15314,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b924967bdb283b741899c3d088cae6c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NameText: {fileID: 1321288261}
-  OptionLabelName: 'Resolution: '
-  OptionName: resolution
-  Save: 1
+  nameText: {fileID: 1321288261}
+  optionLabelName: 'Resolution: '
+  optionName: resolution
+  save: 1
   dropdown: {fileID: 0}
 --- !u!114 &1878354439
 MonoBehaviour:
@@ -17262,12 +17266,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3279f7cda7f2da43adc890adb1647a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LogLimit: 64
+  logLimit: 64
   ConsoleConfig: {fileID: 11400000, guid: 67849b547219c6544b513c8321bd7756, type: 2}
-  Logs: {fileID: 1903444012}
-  Input: {fileID: 1642712388}
-  Scroll: {fileID: 548043582}
-  IgnoreReselectPlatforms: 080000000b000000
+  logText: {fileID: 1903444012}
+  inputField: {fileID: 1642712388}
+  scrollRect: {fileID: 548043582}
+  ignoreReselectPlatforms: 080000000b000000
 --- !u!114 &2045916093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17277,15 +17281,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 2045916091}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9265045c5fe50a54282108da502288b6, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b67d99c8fdd9314a82dc367d7cfd6f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ToggleObject: {fileID: 1078794179}
-  KeyMode: 0
+  toggleObject: {fileID: 1078794179}
+  keyMode: 0
   OnChangeState:
     m_PersistentCalls:
       m_Calls: []
-  KeyName: Console
+  togglerTag: console
+  addToDontDestroy: 1
+  keyName: Console
 --- !u!4 &2045916094
 Transform:
   m_ObjectHideFlags: 0

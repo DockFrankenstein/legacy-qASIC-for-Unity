@@ -11,7 +11,7 @@ namespace qASIC.AudioManagment
         public bool loop;
         public bool replace;
 
-        public bool UseGlobalControls;
+        public bool useGlobalControls;
 
         public AudioData(AudioClip clip)
         {
@@ -19,7 +19,7 @@ namespace qASIC.AudioManagment
             group = null;
             loop = false;
             replace = true;
-            UseGlobalControls = true;
+            useGlobalControls = true;
         }
 
         public AudioData(AudioClip clip, AudioMixerGroup group)
@@ -28,7 +28,7 @@ namespace qASIC.AudioManagment
             this.group = group;
             loop = false;
             replace = true;
-            UseGlobalControls = true;
+            useGlobalControls = true;
         }
 
         public AudioData(AudioClip clip, AudioMixerGroup group, bool loop, bool replace, bool useGlobalControls)
@@ -37,7 +37,7 @@ namespace qASIC.AudioManagment
             this.group = group;
             this.loop = loop;
             this.replace = replace;
-            UseGlobalControls = useGlobalControls;
+            this.useGlobalControls = useGlobalControls;
         }
     }
 }

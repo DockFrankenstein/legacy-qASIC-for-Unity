@@ -18,11 +18,11 @@ namespace qASIC.Tools
             Canvas canvas = CreateCanvas(null, "Input assign", 20, false);
 
             InputAssign assign = canvas.gameObject.AddComponent<InputAssign>();
-            assign.KeyName = newKeyName;
+            assign.keyName = newKeyName;
 
             InputListener listener = canvas.gameObject.AddComponent<InputListener>();
             listener.StartListening(true, true);
-            listener.onInputRecived.AddListener(assign.Assign);
+            listener.OnInputRecived.AddListener(assign.Assign);
 
             //back color
             Image backColor = CreateImageObject(canvas.transform, Color.black, "Color");
@@ -289,10 +289,10 @@ namespace qASIC.Tools
         public static StaticTogglerBasic CreateToggler(GameObject target, string tag, GameObject toggleObject = null, KeyCode key = KeyCode.F2)
         {
             StaticTogglerBasic toggler = target.AddComponent<StaticTogglerBasic>();
-            toggler.AddToDontDestroy = true;
-            toggler.Tag = tag;
-            toggler.Key = key;
-            toggler.ToggleObject = toggleObject;
+            toggler.addToDontDestroy = true;
+            toggler.togglerTag = tag;
+            toggler.key = key;
+            toggler.toggleObject = toggleObject;
 
             return toggler;
         }
@@ -301,8 +301,8 @@ namespace qASIC.Tools
         {
             InfoDisplayer displayer = target.AddComponent<InfoDisplayer>();
 
-            displayer.Text = text;
-            displayer.ExceptUnknown = false;
+            displayer.text = text;
+            displayer.exceptUnknown = false;
 
             return displayer;
         }
@@ -311,9 +311,9 @@ namespace qASIC.Tools
         {
             GameConsoleInterface console = target.AddComponent<GameConsoleInterface>();
 
-            console.Logs = text;
-            console.Input = input;
-            console.Scroll = scroll;
+            console.logText = text;
+            console.inputField = input;
+            console.scrollRect = scroll;
 
             return console;
         }

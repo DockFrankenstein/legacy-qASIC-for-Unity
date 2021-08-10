@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20885221358986048be5eb3c58b3a856, type: 3}
   m_Name: Input
   m_EditorClassIdentifier: 
-  Preset:
-    SavePath: qASIC demo/Input.txt
   _keys:
   - Up
   - Down

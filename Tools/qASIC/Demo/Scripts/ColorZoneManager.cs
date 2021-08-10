@@ -32,7 +32,7 @@ namespace qASIC.Demo.ColorZones
 			}
         }
 
-		public static ColorZoneManager singleton { get; private set; }
+		public static ColorZoneManager Singleton { get; private set; }
 
 		public ColorZone[] colorZones;
 
@@ -41,9 +41,9 @@ namespace qASIC.Demo.ColorZones
 
 		private void Awake()
         {
-            if(singleton == null)
+            if(Singleton == null)
             {
-				singleton = this;
+				Singleton = this;
 				return;
             }
 			Destroy(this);

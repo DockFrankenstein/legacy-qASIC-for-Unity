@@ -6,7 +6,7 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleInputCommand : GameConsoleCommand
     {
-        public override bool Active { get => GameConsoleController.GetConfig().InputCommand; }
+        public override bool Active { get => GameConsoleController.GetConfig().inputCommand; }
         public override string CommandName { get; } = "input";
         public override string Description { get; } = "change, print input";
         public override string Help { get; } = "Use input change <input name>; input print";

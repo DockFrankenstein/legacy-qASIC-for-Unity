@@ -5,7 +5,7 @@ namespace qASIC.InputManagement.Menu
 {
     public class InputListener : MonoBehaviour
     {
-        public UnityEventKeyCode onInputRecived = new UnityEventKeyCode();
+        public UnityEventKeyCode OnInputRecived = new UnityEventKeyCode();
 
         bool isListening = false;
         private bool _stopOnKeyPress = true;
@@ -29,7 +29,7 @@ namespace qASIC.InputManagement.Menu
                 if (!Input.GetKeyDown(key)) continue;
                 if (_stopOnKeyPress) StopListening();
                 if (_destroyOnKeyPress) Destroy(gameObject);
-                onInputRecived.Invoke(key);
+                OnInputRecived.Invoke(key);
                 ResetListiner();
                 return;
             }

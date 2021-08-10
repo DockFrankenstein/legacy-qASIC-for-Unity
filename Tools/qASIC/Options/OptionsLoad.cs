@@ -5,28 +5,28 @@ namespace qASIC.Options
 {
     public class OptionsLoad : MonoBehaviour
     {
-        public bool LoadOnce = true;
-        public string UserSavePath = "qASIC/Settings.txt";
-        public string EditorUserSavePath = "qASIC/Setting-editor.txt";
-        public TextAsset SaveFilePreset;
+        public bool loadOnce = true;
+        public string userSavePath = "qASIC/Settings.txt";
+        public string editorUserSavePath = "qASIC/Setting-editor.txt";
+        public TextAsset saveFilePreset;
 
-        private static bool _init = false;
+        private static bool init = false;
 
         private void Awake()
         {
-            if(!_init) OptionsController.LoadSettings();
+            if(!init) OptionsController.LoadSettings();
             LoadPreferences();
-            _init = true;
+            init = true;
         }
 
         public void LoadPreferences()
         {
-            if (_init && LoadOnce) return;
-            string path = UserSavePath;
+            if (init && loadOnce) return;
+            string path = userSavePath;
 #if UNITY_EDITOR
-            path = EditorUserSavePath;
+            path = editorUserSavePath;
 #endif
-            if(SaveFilePreset != null) ConfigController.Repair($"{Application.persistentDataPath}/{path}", SaveFilePreset.text);
+            if(saveFilePreset != null) ConfigController.Repair($"{Application.persistentDataPath}/{path}", saveFilePreset.text);
             OptionsController.Load($"{Application.persistentDataPath}/{path}");
         }
     }

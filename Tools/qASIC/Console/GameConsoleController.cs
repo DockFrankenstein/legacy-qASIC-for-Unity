@@ -9,69 +9,69 @@ namespace qASIC.Console
 {
     public static class GameConsoleController
     {
-        public static List<GameConsoleLog> Logs = new List<GameConsoleLog>();
-        public static List<string> InvokedCommands = new List<string>();
+        public static List<GameConsoleLog> logs = new List<GameConsoleLog>();
+        public static List<string> invokedCommands = new List<string>();
 
         public static UnityAction<GameConsoleLog> OnLog;
 
         #region Log
         /// <param name="color">color name from the color settings</param>
-        public static void Log(string text, string color) => Log(new GameConsoleLog(text, System.DateTime.Now, color, GameConsoleLog.LogType.game));
+        public static void Log(string text, string color) => Log(new GameConsoleLog(text, System.DateTime.Now, color, GameConsoleLog.LogType.Game));
         /// <param name="color">color name from the color settings</param>
         public static void Log(string text, string color, GameConsoleLog.LogType type) => Log(new GameConsoleLog(text, System.DateTime.Now, color, type));
-        public static void Log(string text, Color color) => Log(new GameConsoleLog(text, System.DateTime.Now, color, GameConsoleLog.LogType.game));
+        public static void Log(string text, Color color) => Log(new GameConsoleLog(text, System.DateTime.Now, color, GameConsoleLog.LogType.Game));
         public static void Log(string text, Color color, GameConsoleLog.LogType type) => Log(new GameConsoleLog(text, System.DateTime.Now, color, type));
 
         public static void Log(GameConsoleLog log)
         {
-            if (Logs.Count == 0 && TryGettingConfig(out GameConsoleConfig config) && config.ShowThankYouMessage)
-                Logs.Add(new GameConsoleLog("Thank you for using qASIC console", System.DateTime.Now, "qasic", GameConsoleLog.LogType.game));
-            Logs.Add(log);
-            if (_config != null && _config.LogToUnity && log.Type != GameConsoleLog.LogType.user && !log.UnityHidden) Debug.Log($"qASIC game console: {log.Message}");
+            if (logs.Count == 0 && TryGettingConfig(out GameConsoleConfig config) && config.showThankYouMessage)
+                logs.Add(new GameConsoleLog("Thank you for using qASIC console", System.DateTime.Now, "qasic", GameConsoleLog.LogType.Game));
+            logs.Add(log);
+            if (_config != null && _config.logToUnity && log.Type != GameConsoleLog.LogType.User && !log.UnityHidden) Debug.Log($"qASIC game console: {log.Message}");
             OnLog?.Invoke(log);
         }
 
         /// <summary>Get color from color settings</summary>
         public static Color GetColor(string colorName)
         {
-            if (_config == null || _config.ColorTheme == null) return new Color(1f, 1f, 1f);
+            if (_config == null || _config.colorTheme == null) return new Color(1f, 1f, 1f);
             colorName = colorName.ToLower();
 
             //base colors
             switch(colorName)
             {
                 case "default":
-                    return _config.ColorTheme.DefaultColor;
+                    return _config.colorTheme.DefaultColor;
                 case "warning":
-                    return _config.ColorTheme.WarningColor;
+                    return _config.colorTheme.WarningColor;
                 case "error":
-                    return _config.ColorTheme.ErrorColor;
+                    return _config.colorTheme.ErrorColor;
                 case "qasic":
-                    return _config.ColorTheme.qASICColor;
+                    return _config.colorTheme.qASICColor;
                 case "settings":
-                    return _config.ColorTheme.SettingsColor;
+                    return _config.colorTheme.SettingsColor;
                 case "input":
-                    return _config.ColorTheme.InputColor;
+                    return _config.colorTheme.InputColor;
                 case "scene":
-                    return _config.ColorTheme.SceneColor;
+                    return _config.colorTheme.SceneColor;
                 case "unity exception":
-                    return _config.ColorTheme.UnityExceptionColor;
+                    return _config.colorTheme.UnityExceptionColor;
                 case "unity error":
-                    return _config.ColorTheme.UnityErrorColor;
+                    return _config.colorTheme.UnityErrorColor;
                 case "unity assert":
-                    return _config.ColorTheme.UnityAssertColor;
+                    return _config.colorTheme.UnityAssertColor;
                 case "unity warning":
-                    return _config.ColorTheme.UnityWarningColor;
+                    return _config.colorTheme.UnityWarningColor;
                 case "unity message":
-                    return _config.ColorTheme.UnityMessageColor;
+                    return _config.colorTheme.UnityMessageColor;
                 case "console":
-                    return _config.ColorTheme.ConsoleColor;
+                    return _config.colorTheme.ConsoleColor;
             }
 
-            for (int i = 0; i < _config.ColorTheme.Colors.Length; i++)
-                if (_config.ColorTheme.Colors[i].colorName.ToLower() == colorName)
-                    return _config.ColorTheme.Colors[i].color;
-            return _config.ColorTheme.DefaultColor;
+            for (int i = 0; i < _config.colorTheme.Colors.Length; i++)
+                if (_config.colorTheme.Colors[i].colorName.ToLower() == colorName)
+                    return _config.colorTheme.Colors[i].color;
+            return _config.colorTheme.DefaultColor;
         }
         #endregion
 
@@ -107,7 +107,7 @@ namespace qASIC.Console
         {
             if (_config == newConfig) return;
             _config = newConfig;
-            if (_config.LogConfigAssigment) Log("Assigned new config", "console");
+            if (_config.logConfigAssigment) Log("Assigned new config", "console");
         }
         #endregion
 
@@ -155,11 +155,11 @@ namespace qASIC.Console
             string log = string.Empty;
             for (int i = 0; i < logLimit; i++)
             {
-                if (i >= Logs.Count) break;
-                int index = Mathf.Clamp(Logs.Count - logLimit, 0, int.MaxValue) + i;
-                if (Logs[index].Type == GameConsoleLog.LogType.clear) log = "";
-                else if (log != string.Empty) log += $"\n{Logs[index].ToText()}";
-                else log += Logs[index].ToText();
+                if (i >= logs.Count) break;
+                int index = Mathf.Clamp(logs.Count - logLimit, 0, int.MaxValue) + i;
+                if (logs[index].Type == GameConsoleLog.LogType.Clear) log = "";
+                else if (log != string.Empty) log += $"\n{logs[index].ToText()}";
+                else log += logs[index].ToText();
             }
             return log;
         }
@@ -167,8 +167,8 @@ namespace qASIC.Console
 
         public static void RunCommand(string cmd)
         {
-            if(InvokedCommands.Count == 0 || InvokedCommands[InvokedCommands.Count - 1].ToLower() != cmd.ToLower())
-                InvokedCommands.Add(cmd);
+            if(invokedCommands.Count == 0 || invokedCommands[invokedCommands.Count - 1].ToLower() != cmd.ToLower())
+                invokedCommands.Add(cmd);
 
             List<string> args = SortCommand(cmd);
             if (args.Count == 0) return;

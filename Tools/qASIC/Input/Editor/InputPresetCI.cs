@@ -18,13 +18,13 @@ namespace qASIC.InputManagement.Tools
         private void OnEnable() 
         { 
             preset = (InputPreset)target;
-            keys = preset.Preset.Presets;
+            keys = preset.preset.Presets;
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            preset.Preset.SavePath = EditorGUILayout.TextField("Save path", preset.Preset.SavePath);
+            preset.preset.SavePath = EditorGUILayout.TextField("Save path", preset.preset.SavePath);
             DisplayList();
             EditorUtility.SetDirty(preset);
         }
@@ -44,7 +44,7 @@ namespace qASIC.InputManagement.Tools
             };
 
             GUILayout.BeginVertical();
-            Dictionary<string, KeyCode> keys = preset.Preset.Presets;
+            Dictionary<string, KeyCode> keys = preset.preset.Presets;
             List<string> keyList = new List<string>(keys.Keys);
 
             for (int i = 0; i < keyList.Count; i++)
@@ -78,7 +78,7 @@ namespace qASIC.InputManagement.Tools
             GUILayout.EndVertical();
 
             if (GUILayout.Button("Add")) keys.Add(CreateNewName("newKey"), KeyCode.A);
-            preset.Preset.Presets = keys;
+            preset.preset.Presets = keys;
         }
 
         private void ResetEdit(List<string> keyList)
@@ -94,8 +94,8 @@ namespace qASIC.InputManagement.Tools
         {
             string newName = baseName;
             int newIndex = 0;
-            if (!preset.Preset.Presets.ContainsKey(newName)) { return newName; }
-            while (preset.Preset.Presets.ContainsKey(newName))
+            if (!preset.preset.Presets.ContainsKey(newName)) { return newName; }
+            while (preset.preset.Presets.ContainsKey(newName))
             {
                 newName = $"{baseName}{newIndex}";
                 newIndex++;

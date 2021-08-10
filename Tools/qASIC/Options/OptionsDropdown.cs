@@ -4,28 +4,28 @@ namespace qASIC.Options.Menu
 {
     public class OptionsDropdown : MenuOption
     {
-        private TMP_Dropdown _dropdown;
+        private TMP_Dropdown dropdown;
 
         private void Awake()
         {
-            _dropdown = GetComponent<TMP_Dropdown>();
-            if (_dropdown != null) _dropdown.onValueChanged.AddListener((int index) => SetValue(index, true));
+            dropdown = GetComponent<TMP_Dropdown>();
+            if (dropdown != null) dropdown.onValueChanged.AddListener((int index) => SetValue(index, true));
         }
 
         public override string GetLabel()
         {
-            if (_dropdown == null || _dropdown.value >= _dropdown.options.Count) return string.Empty;
-            return $"{NameText}{_dropdown.options[_dropdown.value].text}";
+            if (dropdown == null || dropdown.value >= dropdown.options.Count) return string.Empty;
+            return $"{nameText}{dropdown.options[dropdown.value].text}";
         }
 
         public override void LoadOption()
         {
-            if (_dropdown == null) return;
-            if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) ||
+            if (dropdown == null) return;
+            if (!OptionsController.TryGetUserSetting(optionName, out string optionValue) ||
                 !int.TryParse(optionValue, out int result)) return;
 
-            if (result >= _dropdown.options.Count) return;
-            _dropdown.SetValueWithoutNotify(result);
+            if (result >= dropdown.options.Count) return;
+            dropdown.SetValueWithoutNotify(result);
         }
     }
 }

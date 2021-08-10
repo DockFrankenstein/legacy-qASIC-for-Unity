@@ -8,14 +8,14 @@ namespace qASIC.InputManagement.Menu
     public class InputAssign : MonoBehaviour
     {
         [Header("Updating name")]
-        public TextMeshProUGUI NameText;
-        public string OptionLabelName;
+        public TextMeshProUGUI nameText;
+        public string optionLabelName;
 
         [Header("Options")]
-        public string KeyName;
+        public string keyName;
 
         [Header("Listener")]
-        public InputListener Listener;
+        public InputListener listener;
         public UnityEvent OnStartListening = new UnityEvent();
         public UnityEvent OnAssign = new UnityEvent();
 
@@ -32,36 +32,36 @@ namespace qASIC.InputManagement.Menu
 
         private void Update()
         {
-            if (NameText != null)
-                NameText.text = GetLabel();
+            if (nameText != null)
+                nameText.text = GetLabel();
         }
 
         public string GetLabel()
         {
             string currentKey = "none";
-            if (InputManager.GlobalKeys.Presets.ContainsKey(KeyName)) 
-                currentKey = InputManager.GlobalKeys.Presets[KeyName].ToString();
-            return $"{OptionLabelName}{currentKey}";
+            if (InputManager.GlobalKeys.Presets.ContainsKey(keyName)) 
+                currentKey = InputManager.GlobalKeys.Presets[keyName].ToString();
+            return $"{optionLabelName}{currentKey}";
         }
 
         public void StartListening()
         {
-            if (Listener == null)
+            if (listener == null)
             {
                 qDebug.LogError("Listiner is not assigned!");
                 return;
             }
             OnStartListening.Invoke();
-            Listener.onInputRecived.AddListener(listinerAction);
-            Listener.StartListening(true, false);
+            listener.OnInputRecived.AddListener(listinerAction);
+            listener.StartListening(true, false);
         }
 
         public void Assign(KeyCode key)
         {
-            InputManager.ChangeInput(KeyName, key);
+            InputManager.ChangeInput(keyName, key);
             OnAssign.Invoke();
 
-            if (Listener != null) Listener.onInputRecived.RemoveListener(listinerAction);
+            if (listener != null) listener.OnInputRecived.RemoveListener(listinerAction);
         }
     }
 }

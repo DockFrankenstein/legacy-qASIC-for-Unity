@@ -33,13 +33,13 @@ namespace qASIC.Options.Menu
         public override string GetLabel()
         {
             if (dropdown == null || dropdown.value >= dropdown.options.Count) return string.Empty;
-            return $"{OptionLabelName}{dropdown.options[dropdown.value].text}";
+            return $"{optionLabelName}{dropdown.options[dropdown.value].text}";
         }
 
         public override void LoadOption()
         {
             if (dropdown == null) return;
-            if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) ||
+            if (!OptionsController.TryGetUserSetting(optionName, out string optionValue) ||
                 !int.TryParse(optionValue, out int value)) return;
             dropdown.SetValueWithoutNotify(value);
         }

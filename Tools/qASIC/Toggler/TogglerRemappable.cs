@@ -4,11 +4,11 @@ namespace qASIC.Toggling
 {
 	public class TogglerRemappable : Toggler
 	{
-        public string KeyName;
+        public string keyName;
 
         private void Update()
         {
-            if (InputManager.GetInputDown(KeyName))
+            if (InputManager.GetInputDown(keyName))
                 KeyToggle();
         }
     }

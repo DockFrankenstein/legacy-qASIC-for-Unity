@@ -4,11 +4,11 @@ namespace qASIC.Toggling
 {
     public class StaticTogglerBasic : StaticToggler
     {
-        public KeyCode Key = KeyCode.F2;
+        public KeyCode key = KeyCode.F2;
 
         private void Update()
         {
-            if (Input.GetKeyDown(Key))
+            if (Input.GetKeyDown(key))
                 KeyToggle();
         }
     }

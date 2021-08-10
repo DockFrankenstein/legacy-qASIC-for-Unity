@@ -12,23 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 569f2b6a606c9ec4b882a30ffe6a32e1, type: 3}
   m_Name: DefaultConfig
   m_EditorClassIdentifier: 
-  ColorTheme: {fileID: 11400000, guid: df0ca8a39e5d56044acfeff2f5c72a7c, type: 2}
-  ShowThankYouMessage: 1
-  LogConfigAssigment: 1
-  LogScene: 1
-  ClearCommand: 1
-  EchoCommand: 1
-  ExitCommand: 1
-  HelpCommand: 1
-  InputCommand: 1
-  OptionCommand: 1
-  SceneCommand: 1
-  LogToUnity: 1
-  LogUnityErrorsToConsole: 1
-  LogUnityAssertsToConsole: 1
-  LogUnityExceptionsToConsole: 1
-  LogUnityWarningsToConsole: 1
-  LogUnityMessagesToConsole: 0
-  ShowDetailedHelp: 1
-  UsePageCommandLimit: 1
-  PageCommandLimit: 5
+  colorTheme: {fileID: 11400000, guid: df0ca8a39e5d56044acfeff2f5c72a7c, type: 2}
+  showThankYouMessage: 1
+  logConfigAssigment: 1
+  logScene: 1
+  clearCommand: 1
+  echoCommand: 1
+  exitCommand: 1
+  helpCommand: 1
+  inputCommand: 1
+  optionCommand: 1
+  sceneCommand: 1
+  logToUnity: 0
+  logUnityErrorsToConsole: 1
+  logUnityAssertsToConsole: 1
+  logUnityExceptionsToConsole: 1
+  logUnityWarningsToConsole: 1
+  logUnityMessagesToConsole: 1
+  showDetailedHelp: 1
+  usePageCommandLimit: 1
+  pageCommandLimit: 5

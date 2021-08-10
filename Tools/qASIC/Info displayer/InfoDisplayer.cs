@@ -6,20 +6,20 @@ namespace qASIC.Displayer
 {
     public class InfoDisplayer : MonoBehaviour
     {
-        public string DisplayerName = "main";
+        public string displayerName = "main";
         [Tooltip("Separator between line name and it's value")]
-        public string Separator = ": ";
+        public string separator = ": ";
         [Tooltip("Decides if a line should be displayed if it isn't created by default")]
-        public bool ExceptUnknown = true;
+        public bool exceptUnknown = true;
 
         [Space]
         [Tooltip("If the text of a line is empty, the separator will be removed from it")]
-        public bool RemoveSeparatorText = true;
+        public bool removeSeparatorText = true;
         [Tooltip("If the value of a line is empty, the separator will be removed from it")]
-        public bool RemoveSeparatorValue = false;
+        public bool removeSeparatorValue = false;
 
         [Space]
-        public DisplayerLine[] DefaultLines = new DisplayerLine[]
+        public DisplayerLine[] defaultLines = new DisplayerLine[]
                 {
                     new DisplayerLine("fps", "Framerate"),
                     new DisplayerLine("resolution", "Resolution"),
@@ -35,18 +35,18 @@ namespace qASIC.Displayer
                 };
 
         [Space]
-        public string StartText;
-        public string EndText;
-        public TextMeshProUGUI Text;
+        public string startText;
+        public string endText;
+        public TextMeshProUGUI text;
 
-        private Dictionary<string, DisplayerLine> lines = new Dictionary<string, DisplayerLine>();
-        private static Dictionary<string, InfoDisplayer> displayers = new Dictionary<string, InfoDisplayer>();
+        private readonly Dictionary<string, DisplayerLine> lines = new Dictionary<string, DisplayerLine>();
+        private static readonly Dictionary<string, InfoDisplayer> displayers = new Dictionary<string, InfoDisplayer>();
 
         private void Awake()
         {
-            if (!displayers.ContainsKey(DisplayerName))
+            if (!displayers.ContainsKey(displayerName))
             {
-                displayers.Add(DisplayerName, this);
+                displayers.Add(displayerName, this);
                 Initialize();
                 return;
             }
@@ -55,29 +55,29 @@ namespace qASIC.Displayer
 
         private void OnDestroy()
         {
-            if (displayers.ContainsKey(DisplayerName)) displayers.Remove(DisplayerName);
+            if (displayers.ContainsKey(displayerName)) displayers.Remove(displayerName);
         }
 
         public void Initialize()
         {
             lines.Clear();
-            for (int i = 0; i < DefaultLines.Length; i++)
-                if (!lines.ContainsKey(DefaultLines[i].tag))
-                    lines.Add(DefaultLines[i].tag, DefaultLines[i]);
+            for (int i = 0; i < defaultLines.Length; i++)
+                if (!lines.ContainsKey(defaultLines[i].tag))
+                    lines.Add(defaultLines[i].tag, defaultLines[i]);
         }
 
         private void LateUpdate()
         {
-            if (Text == null) return;
-            Text.text = StartText;
+            if (text == null) return;
+            text.text = startText;
             foreach (var value in lines)
             {
                 if (!value.Value.show) continue;
-                string separator = Separator;
-                if ((RemoveSeparatorText && string.IsNullOrWhiteSpace(value.Value.text)) || (RemoveSeparatorValue && string.IsNullOrWhiteSpace(value.Value.value))) separator = string.Empty;
-                Text.text += $"{value.Value.text}{separator}{value.Value.value}\n";
+                string separator = this.separator;
+                if ((removeSeparatorText && string.IsNullOrWhiteSpace(value.Value.text)) || (removeSeparatorValue && string.IsNullOrWhiteSpace(value.Value.value))) separator = string.Empty;
+                text.text += $"{value.Value.text}{separator}{value.Value.value}\n";
             }
-            Text.text += EndText;
+            text.text += endText;
         }
 
         #region Logic
@@ -93,7 +93,7 @@ namespace qASIC.Displayer
         {
             if (!displayer.lines.ContainsKey(tag))
             {
-                if (!displayer.ExceptUnknown) return false;
+                if (!displayer.exceptUnknown) return false;
                 displayer.lines.Add(tag, new DisplayerLine());
             }
             return true;

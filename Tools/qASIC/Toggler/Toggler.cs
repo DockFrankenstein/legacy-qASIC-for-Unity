@@ -4,34 +4,38 @@ namespace qASIC.Toggling
 {
     public class Toggler : MonoBehaviour
     {
-        public bool state { get; private set; }
-        public GameObject ToggleObject;
-        public KeyToggleMode KeyMode;
+        public bool State { get; private set; }
+        public GameObject toggleObject;
+        public KeyToggleMode keyMode;
         public UnityEventBool OnChangeState;
 
-        public enum KeyToggleMode { both, on, off }
+        public enum KeyToggleMode { Both, On, Off }
 
         private void Reset()
         {
             if (transform.childCount != 1) return;
-            ToggleObject = transform.GetChild(0).gameObject;
+            toggleObject = transform.GetChild(0).gameObject;
         }
 
-        public virtual void Awake() => Toggle(ToggleObject.activeSelf);
+        public virtual void Awake()
+        {
+            if (toggleObject == null) return;
+            Toggle(toggleObject.activeSelf);
+        }
 
-        public virtual void Toggle() => Toggle(!state);
+        public virtual void Toggle() => Toggle(!State);
 
         public virtual void KeyToggle()
         {
-            if (!state && KeyMode == KeyToggleMode.off || state && KeyMode == KeyToggleMode.on) return;
-            Toggle(!state);
+            if (!State && keyMode == KeyToggleMode.Off || State && keyMode == KeyToggleMode.On) return;
+            Toggle(!State);
         }
 
         public virtual void Toggle(bool state)
         {
-            this.state = state;
-            ToggleObject?.SetActive(state);
-            OnChangeState.Invoke(state);
+            State = state;
+            toggleObject?.SetActive(state);
+            OnChangeState?.Invoke(state);
         }
     }
 }

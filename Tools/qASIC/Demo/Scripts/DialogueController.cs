@@ -12,8 +12,8 @@ namespace qASIC.Demo
 
         public static bool Active { get; private set; }
 
-        public GameObject ToggleObject;
-        public TMPro.TextMeshProUGUI Text;
+        public GameObject toggleObject;
+        public TMPro.TextMeshProUGUI text;
 
         private void Awake()
         {
@@ -32,10 +32,10 @@ namespace qASIC.Demo
 
             Active = true;
 
-            ToggleObject.SetActive(true);
+            toggleObject.SetActive(true);
             index = -1;
             currentDialogue = dialogue;
-            PlayerController.Freeze = true;
+            PlayerController.freeze = true;
         }
 
         private void LateUpdate()
@@ -53,18 +53,18 @@ namespace qASIC.Demo
                 return;
             }
 
-            Text.text = currentDialogue[index];
+            text.text = currentDialogue[index];
         }
 
         public void HideDialogue()
         {
             Active = false;
 
-            ToggleObject.SetActive(false);
+            toggleObject.SetActive(false);
             index = 0;
             currentDialogue = new string[0];
-            Text.text = string.Empty;
-            PlayerController.Freeze = false;
+            text.text = string.Empty;
+            PlayerController.freeze = false;
         }
     }
 }

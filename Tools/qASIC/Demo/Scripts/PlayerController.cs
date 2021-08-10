@@ -8,34 +8,34 @@ namespace qASIC.Demo
 {
 	public class PlayerController : MonoBehaviour
 	{
-        public static bool Freeze = false;
+        public static bool freeze = false;
         public static float SpeedMultiplier { get; set; } = 1f;
 
-        public float Speed = 6f;
-        public bool LockCursor = true;
+        public float speed = 6f;
+        public bool lockCursor = true;
 
 		Rigidbody2D rb;
         SpriteRenderer spriteRenderer;
 
         private void Awake()
         {
-            if (LockCursor) Cursor.lockState = CursorLockMode.Locked;
+            if (lockCursor) Cursor.lockState = CursorLockMode.Locked;
             rb = GetComponent<Rigidbody2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
         private void Update()
         {
-            if (ColorZoneManager.singleton != null && spriteRenderer != null)
-                spriteRenderer.color = ColorZoneManager.singleton.current.playerColor;
+            if (ColorZoneManager.Singleton != null && spriteRenderer != null)
+                spriteRenderer.color = ColorZoneManager.Singleton.current.playerColor;
 
-            if (Freeze)
+            if (freeze)
             {
                 rb.velocity = Vector2.zero;
                 return;
             }
 
-            rb.velocity = new Vector2(InputManager.GetAxis("Right", "Left"), InputManager.GetAxis("Up", "Down")) * Speed * SpeedMultiplier;
+            rb.velocity = new Vector2(InputManager.GetAxis("Right", "Left"), InputManager.GetAxis("Up", "Down")) * speed * SpeedMultiplier;
             InfoDisplayer.DisplayValue("pos", VectorText.ToText(new Vector2(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y))));
         }
 

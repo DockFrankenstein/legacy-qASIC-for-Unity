@@ -6,46 +6,46 @@ namespace qASIC.Options.Menu
 {
     public class OptionsSlider : MenuOption, IPointerUpHandler
     {
-        private Slider _slider;
+        private Slider slider;
 
-        public bool Round;
+        public bool round;
         [Tooltip("Round value multiplier")]
-        public double RoundValue;
+        public double roundValue;
 
         private void Awake()
         {
-            _slider = GetComponent<Slider>();
-            if (_slider != null) _slider.onValueChanged.AddListener((float value) => SetValueSlider(value, false));
+            slider = GetComponent<Slider>();
+            if (slider != null) slider.onValueChanged.AddListener((float value) => SetValueSlider(value, false));
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            if (_slider == null) return;
-            SetValueSlider(_slider.value, true);
+            if (slider == null) return;
+            SetValueSlider(slider.value, true);
         }
 
         private void SetValueSlider(float value, bool log)
         {
-            if (_slider.wholeNumbers && int.TryParse(value.ToString(), out int intResult))
+            if (slider.wholeNumbers && int.TryParse(value.ToString(), out int intResult))
             {
                 SetValue(intResult, log);
                 return;
             }
-            SetValue(Round ? Mathf.Round(value / (float)RoundValue) * RoundValue : value, log);
+            SetValue(round ? Mathf.Round(value / (float)roundValue) * roundValue : value, log);
         }
 
         public override string GetLabel()
         {
-            if (_slider == null) return string.Empty;
-            return $"{OptionLabelName}{(Round ? Mathf.Round(_slider.value / (float)RoundValue) * RoundValue : _slider.value)}";
+            if (slider == null) return string.Empty;
+            return $"{optionLabelName}{(round ? Mathf.Round(slider.value / (float)roundValue) * roundValue : slider.value)}";
         }
 
         public override void LoadOption()
         {
-            if (_slider == null) return;
-            if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) || 
+            if (slider == null) return;
+            if (!OptionsController.TryGetUserSetting(optionName, out string optionValue) || 
                 !float.TryParse(optionValue, out float value)) return;
-            _slider.SetValueWithoutNotify(value);
+            slider.SetValueWithoutNotify(value);
         }
     }
 }

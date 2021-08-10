@@ -8,13 +8,13 @@ namespace qASIC.AudioManagment.Menu
     [RequireComponent(typeof(Slider))]
     public class AudioMenuSetting : MonoBehaviour, IPointerUpHandler
     {
-        private Slider _slider;
+        private Slider slider;
         [Header("Updating name")]
-        public TextMeshProUGUI NameText;
-        public string ParameterLabelName;
+        public TextMeshProUGUI nameText;
+        public string parameterLabelName;
 
         [Header("Options")]
-        public string ParameterName;
+        public string parameterName;
 
         private void Reset()
         {
@@ -26,33 +26,33 @@ namespace qASIC.AudioManagment.Menu
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            if (_slider == null) return;
-            AudioManager.SetFloat(ParameterName, _slider.value, true);
+            if (slider == null) return;
+            AudioManager.SetFloat(parameterName, slider.value, true);
         }
 
-        public void SetValue(float value, bool preview) => AudioManager.SetFloat(ParameterName, value, preview);
+        public void SetValue(float value, bool preview) => AudioManager.SetFloat(parameterName, value, preview);
 
         private void Start() => Initialize();
 
         public void Initialize()
         {
-            _slider = GetComponent<Slider>();
-            if (_slider == null) return;
-            _slider.onValueChanged.AddListener((float value) => SetValue(value, false));
-            if (AudioManager.GetFloat(ParameterName, out float newValue)) _slider.SetValueWithoutNotify(newValue);
+            slider = GetComponent<Slider>();
+            if (slider == null) return;
+            slider.onValueChanged.AddListener((float value) => SetValue(value, false));
+            if (AudioManager.GetFloat(parameterName, out float newValue)) slider.SetValueWithoutNotify(newValue);
         }
 
         public virtual string GetLabel()
         {
             string value = "";
-            if (_slider != null) value = $"{Mathf.Round(_slider.normalizedValue * 100)}%";
-            return $"{ParameterLabelName}{value}";
+            if (slider != null) value = $"{Mathf.Round(slider.normalizedValue * 100)}%";
+            return $"{parameterLabelName}{value}";
         }
 
         public virtual void Update()
         {
-            if (NameText != null)
-                NameText.text = GetLabel();
+            if (nameText != null)
+                nameText.text = GetLabel();
         }
     }
 }

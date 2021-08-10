@@ -6,8 +6,8 @@ namespace qASIC.Options.Menu
     {
         [Space]
         [Tooltip("Toggles if value -1 should be replaced with off")]
-        public bool ReplaceWithOff = true;
-        public int[] Framerates;
+        public bool replaceWithOff = true;
+        public int[] framerates;
 
         public override void Start()
         {
@@ -19,14 +19,14 @@ namespace qASIC.Options.Menu
         public void CreateList()
         {
             properties.Clear();
-            for (int i = 0; i < Framerates.Length; i++) properties.Add(Framerates[i]);
+            for (int i = 0; i < framerates.Length; i++) properties.Add(framerates[i]);
         }
 
         public override string GetDropdownValueName(object property)
         {
             if (!(property is int)) return base.GetDropdownValueName(property);
             int value = (int)property;
-            if (value == -1 && ReplaceWithOff) return "Off";
+            if (value == -1 && replaceWithOff) return "Off";
             return value.ToString();
         }
 
@@ -35,7 +35,7 @@ namespace qASIC.Options.Menu
 
         public override void LoadOption()
         {
-            if (!OptionsController.TryGetUserSetting(OptionName, out string optionValue) || dropdown == null ||
+            if (!OptionsController.TryGetUserSetting(optionName, out string optionValue) || dropdown == null ||
                 !int.TryParse(optionValue, out int result)) return;
 
             int index = properties.IndexOf(result);
