@@ -47,8 +47,8 @@ namespace qASIC.AudioManagment
 
         public void Pause()
         {
-            Target?.Pause();
             Paused = true;
+            Target?.Pause();
         }
 
         public void UnPause()

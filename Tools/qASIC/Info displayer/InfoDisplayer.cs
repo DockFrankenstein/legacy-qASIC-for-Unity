@@ -55,7 +55,7 @@ namespace qASIC.Displayer
 
         private void OnDestroy()
         {
-            if (displayers.ContainsKey(displayerName)) displayers.Remove(displayerName);
+            if (displayers.ContainsKey(displayerName) && !gameObject.scene.isLoaded) displayers.Remove(displayerName);
         }
 
         public void Initialize()
