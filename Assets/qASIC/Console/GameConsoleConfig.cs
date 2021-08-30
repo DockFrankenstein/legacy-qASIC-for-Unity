@@ -18,7 +18,7 @@ namespace qASIC.Console.Tools
         public bool inputCommand = true;
         public bool optionCommand = true;
         public bool sceneCommand = true;
-        public bool versionCommand = false;
+        public bool versionCommand = true;
         public bool specsCommand = false;
 
         [Header("Unity")]

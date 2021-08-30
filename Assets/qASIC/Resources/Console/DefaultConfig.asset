@@ -23,7 +23,7 @@ MonoBehaviour:
   inputCommand: 1
   optionCommand: 1
   sceneCommand: 1
-  versionCommand: 0
+  versionCommand: 1
   specsCommand: 0
   logToUnity: 0
   logUnityErrorsToConsole: 1
