@@ -36,7 +36,7 @@ namespace qASIC.Console
                 RuntimePlatform.Android,
             };
 
-        private void Awake()
+        public virtual void Awake()
         {
             AssignConfig();
             SetupConfig();
@@ -58,7 +58,7 @@ namespace qASIC.Console
         }
 
         /// <summary>Enables features like logging messages to console, or logging the scene</summary>
-        private void SetupConfig()
+        public void SetupConfig()
         {
             if (ConsoleConfig == null) return;
             if (ConsoleConfig.logScene) UnityEngine.SceneManagement.SceneManager.sceneLoaded += LogLoadedScene;
@@ -100,14 +100,17 @@ namespace qASIC.Console
 
         private void AddLogEvent()
         {
+            UnityAction<Logic.GameConsoleLog> refreshLogs = _ => RefreshLogs();
             if (GameConsoleController.OnLog == null)
             {
-                GameConsoleController.OnLog = new UnityAction<Logic.GameConsoleLog>((Logic.GameConsoleLog log) => RefreshLogs());
+                GameConsoleController.OnLog = refreshLogs;
                 return;
             }
-            GameConsoleController.OnLog += (Logic.GameConsoleLog log) => RefreshLogs();
+            GameConsoleController.OnLog += refreshLogs;
         }
-        public void AssignConfig() => GameConsoleController.AssignConfig(ConsoleConfig);
+
+        public void AssignConfig() =>
+            GameConsoleController.AssignConfig(ConsoleConfig);
 
         private void OnDestroy()
         {
@@ -115,15 +118,22 @@ namespace qASIC.Console
             Application.logMessageReceived -= (string log, string trace, LogType type) => HandleUnityLog(log, trace, type);
         }
 
-        private void LogLoadedScene(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+        public virtual void LogLoadedScene(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
         {
             UnityEngine.SceneManagement.SceneManager.sceneLoaded -= LogLoadedScene;
             GameConsoleController.Log($"Loaded scene {scene.name}", "scene", Logic.GameConsoleLog.LogType.Game);
         }
 
-        private void Update()
+        public virtual void Update()
         {
-            if (scrollRect != null) IsScrollSnapped = scrollRect.horizontalNormalizedPosition == 0;
+            if (scrollRect != null) 
+                IsScrollSnapped = scrollRect.horizontalNormalizedPosition == 0;
+
+            HandleInput();
+        }
+
+        public virtual void HandleInput()
+        {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Return) && toggler.State) RunCommand();
             if (UnityEngine.Input.GetKeyDown(KeyCode.UpArrow) && toggler.State) ReInsertCommand(false);
             if (UnityEngine.Input.GetKeyDown(KeyCode.DownArrow) && toggler.State) ReInsertCommand(true);
@@ -142,14 +152,14 @@ namespace qASIC.Console
         }
 
         /// <summary>Updates logs from controller</summary>
-        public void RefreshLogs()
+        public virtual void RefreshLogs()
         {
             if (logText == null) return;
             logText.text = GameConsoleController.LogsToString(logLimit);
             if (IsScrollSnapped) ResetScroll();
         }
 
-        public void RunCommand()
+        public virtual void RunCommand()
         {
             DiscardPreviousCommand();
             StartCoroutine(Reselect());
@@ -168,7 +178,7 @@ namespace qASIC.Console
             ResetScroll();
         }
 
-        private IEnumerator Reselect()
+        IEnumerator Reselect()
         {
             if (inputField == null) yield break;
             if (System.Array.IndexOf(ignoreReselectPlatforms, Application.platform) >= 0) yield break;

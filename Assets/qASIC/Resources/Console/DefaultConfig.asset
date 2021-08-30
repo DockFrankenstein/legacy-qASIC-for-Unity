@@ -23,12 +23,22 @@ MonoBehaviour:
   inputCommand: 1
   optionCommand: 1
   sceneCommand: 1
+  versionCommand: 0
+  specsCommand: 0
   logToUnity: 0
   logUnityErrorsToConsole: 1
   logUnityAssertsToConsole: 1
   logUnityExceptionsToConsole: 1
-  logUnityWarningsToConsole: 1
-  logUnityMessagesToConsole: 1
+  logUnityWarningsToConsole: 0
+  logUnityMessagesToConsole: 0
+  displayGameVersion: 1
+  displayUnityVerion: 1
+  displayQasicVersion: 1
+  displayCpu: 1
+  displayCpuThreads: 1
+  displayGpu: 1
+  displayMemory: 1
+  displaySystem: 1
   showDetailedHelp: 1
   usePageCommandLimit: 1
   pageCommandLimit: 5

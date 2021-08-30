@@ -57,7 +57,7 @@ namespace qASIC.Console.Commands
             string helpMessage = command.Help == null ? $"No help avalible for command <b>{command.CommandName}</b>" 
                 : $"Help for command <b>{(command.CommandName)}</b>: {command.Help}";
 
-            Log($"{helpMessage}{aliasList}", "default");
+            Log($"{helpMessage}{aliasList}", "info");
         }
 
         private void CalculateMaxPages()
@@ -83,7 +83,7 @@ namespace qASIC.Console.Commands
                 GameConsoleCommand command = commands[pageIndex * limit + i];
                 helpMessage += $"{command.CommandName} - {command.Description}\n";
             }
-            Log(helpMessage, "default");
+            Log(helpMessage, "info");
         }
     }
 }

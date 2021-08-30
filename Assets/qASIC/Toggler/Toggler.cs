@@ -33,8 +33,9 @@ namespace qASIC.Toggling
 
         public virtual void Toggle(bool state)
         {
+            if (toggleObject == null) return;
             State = state;
-            toggleObject?.SetActive(state);
+            toggleObject.SetActive(state);
             OnChangeState?.Invoke(state);
         }
     }

@@ -25,7 +25,7 @@ namespace qASIC.Console
         public static void Log(GameConsoleLog log)
         {
             if (logs.Count == 0 && TryGettingConfig(out GameConsoleConfig config) && config.showThankYouMessage)
-                logs.Add(new GameConsoleLog("Thank you for using qASIC console", System.DateTime.Now, "qasic", GameConsoleLog.LogType.Game));
+                logs.Add(new GameConsoleLog($"Thank you for using qASIC console v{qASIC.Tools.Info.Version}", System.DateTime.Now, "qasic", GameConsoleLog.LogType.Game));
             logs.Add(log);
             if (_config != null && _config.logToUnity && log.Type != GameConsoleLog.LogType.User && !log.UnityHidden) Debug.Log($"qASIC game console: {log.Message}");
             OnLog?.Invoke(log);
@@ -66,6 +66,8 @@ namespace qASIC.Console
                     return _config.colorTheme.UnityMessageColor;
                 case "console":
                     return _config.colorTheme.ConsoleColor;
+                case "info":
+                    return _config.colorTheme.InfoColor;
             }
 
             for (int i = 0; i < _config.colorTheme.Colors.Length; i++)

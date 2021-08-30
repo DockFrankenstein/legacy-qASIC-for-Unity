@@ -18,6 +18,8 @@ namespace qASIC.Console.Tools
         public bool inputCommand = true;
         public bool optionCommand = true;
         public bool sceneCommand = true;
+        public bool versionCommand = false;
+        public bool specsCommand = false;
 
         [Header("Unity")]
         public bool logToUnity = false;
@@ -25,10 +27,22 @@ namespace qASIC.Console.Tools
         public bool logUnityErrorsToConsole = true;
         public bool logUnityAssertsToConsole = true;
         public bool logUnityExceptionsToConsole = true;
-        public bool logUnityWarningsToConsole = true;
-        public bool logUnityMessagesToConsole = true;
+        public bool logUnityWarningsToConsole = false;
+        public bool logUnityMessagesToConsole = false;
 
-        [Header("Help")]
+        [Header("Version command")]
+        public bool displayGameVersion = true;
+        public bool displayUnityVerion = true;
+        public bool displayQasicVersion = true;
+
+        [Header("Specs command")]
+        public bool displayCpu = true;
+        public bool displayCpuThreads = true;
+        public bool displayGpu = true;
+        public bool displayMemory = true;
+        public bool displaySystem = true;
+
+        [Header("Help command")]
         public bool showDetailedHelp = true;
         public bool usePageCommandLimit = true;
         [Min(1)]

@@ -2,7 +2,7 @@
 {
     public static class Info
     {
-        public const string Version = "0.1.0";
+        public const string Version = "0.1.1";
         public const string ConsoleVersion = "1.0.1";
         public const string DisplayerVersion = "0.2.1";
         public const string OptionsVersion = "0.1.1";
