@@ -1,10 +1,10 @@
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
-namespace qASIC.Displayer.Tools
+namespace qASIC.Console.Tools
 {
-    [CustomPropertyDrawer(typeof(DisplayerLine))]
-    public class DisplayerLineDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(GameConsoleColor))]
+    public class GameConsoleColorDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -21,22 +21,16 @@ namespace qASIC.Displayer.Tools
             int indent = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 0;
 
-            Vector2 show = new Vector2(0, 18);
-            Vector2 tag = new Vector2(22, 71);
-            Vector2 text = new Vector2(101, position.width - 165);
-            Vector2 value = new Vector2(position.width - 60, 60);
+            Vector2 colorName = new Vector2(0, position.width * 0.5f - 2);
+            Vector2 color = new Vector2(position.width * 0.5f + 2, position.width * 0.5f);
 
-            DrawLabel(position, "tag", tag);
-            DrawLabel(position, "text", text);
-            DrawLabel(position, "value", value);
+            DrawLabel(position, "name", colorName);
+            DrawLabel(position, "color", color);
             position.y += position.height;
 
-            DrawProperty(position, property, "show", show);
-            DrawProperty(position, property, "tag", tag);
-            DrawProperty(position, property, "text", text);
-            DrawProperty(position, property, "value", value);
+            DrawProperty(position, property, "colorName", colorName);
+            DrawProperty(position, property, "color", color);
 
-            EditorGUI.indentLevel = indent;
             EditorGUI.EndProperty();
         }
 
