@@ -34,7 +34,7 @@ namespace qASIC.Tools.Debug
         Vector2 audioScroll;
         bool resetPrefsWindow;
 
-        enum DebugWindow { Info, Creation, Audio, Console, Other };
+        enum DebugWindow { Info, Audio, Console, Other };
         DebugWindow window = DebugWindow.Info;
 
         Texture2D tintedTexture { get => CreateColorTexture(1, 1, new Color(0f, 0f, 0f, 0.2f)); }
@@ -69,9 +69,8 @@ namespace qASIC.Tools.Debug
 
             GUILayout.BeginHorizontal();
 
-            GUILayout.BeginVertical(menuStyle, GUILayout.Width(64), GUILayout.Height(Screen.height));
+            GUILayout.BeginVertical(menuStyle, GUILayout.Width(100), GUILayout.Height(Screen.height));
             if (GUILayout.Button("Info", window == DebugWindow.Info ? menuSelectedButtonStyle : menuButtonStyle)) window = DebugWindow.Info;
-            if (GUILayout.Button("Creation menu", window == DebugWindow.Creation ? menuSelectedButtonStyle : menuButtonStyle)) window = DebugWindow.Creation;
             if (GUILayout.Button("Audio", window == DebugWindow.Audio ? menuSelectedButtonStyle : menuButtonStyle)) window = DebugWindow.Audio;
             if (GUILayout.Button("Console", window == DebugWindow.Console ? menuSelectedButtonStyle : menuButtonStyle)) window = DebugWindow.Console;
             if (GUILayout.Button("Other", window == DebugWindow.Other ? menuSelectedButtonStyle : menuButtonStyle)) window = DebugWindow.Other;
@@ -86,9 +85,6 @@ namespace qASIC.Tools.Debug
             {
                 default:
                     DisplayInfo(headerStyle);
-                    break;
-                case DebugWindow.Creation:
-                    DisplayCreate(headerStyle);
                     break;
                 case DebugWindow.Audio:
                     DisplayAudio(headerStyle);
@@ -110,13 +106,22 @@ namespace qASIC.Tools.Debug
 
         void DisplayInfo(GUIStyle headerStyle)
         {
-            GUIStyle tintedBox = new GUIStyle("Label");
+            GUIStyle tintedBox = new GUIStyle("Label")
+            {
+                margin = new RectOffset(),
+                padding = new RectOffset(),
+            };
             tintedBox.normal.background = tintedTexture;
 
             GUIStyle tittleStyle = new GUIStyle("Label")
             {
                 alignment = TextAnchor.MiddleLeft,
                 fontSize = 48,
+            };
+
+            GUIStyle logoStyle = new GUIStyle()
+            {
+                margin = new RectOffset(4, 4, 4, 4),
             };
 
             GUIStyle linkStyle = new GUIStyle("Label")
@@ -133,12 +138,12 @@ namespace qASIC.Tools.Debug
             GUILayout.FlexibleSpace();
             GUILayout.BeginVertical(tintedBox);
 
-            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal(logoStyle);
             GUILayout.Label(icon, GUILayout.Height(100), GUILayout.Width(100));
             GUILayout.Label($"qASIC v{Info.Version}", tittleStyle, GUILayout.Height(100));
             GUILayout.EndHorizontal();
 
-            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal(tintedBox);
             if (GUILayout.Button("Website", linkStyle)) Application.OpenURL("https://qasictools.com");
             if (GUILayout.Button("Docs", linkStyle)) Application.OpenURL("https://docs.qasictools.com");
             if (GUILayout.Button("Github", linkStyle)) Application.OpenURL("https://github.com/DockFrankenstein/qASIC");
@@ -171,14 +176,6 @@ namespace qASIC.Tools.Debug
             GUILayout.Label($"OS: {SystemInfo.operatingSystem}");
             GUILayout.Label($"Unity Engine: {Application.unityVersion}");
             GUILayout.EndVertical();
-        }
-
-        void DisplayCreate(GUIStyle headerStyle)
-        {
-            GUILayout.Label("Creation Menu", headerStyle);
-            if (GUILayout.Button("Create Info Displayer")) EditorApplication.ExecuteMenuItem("GameObject/qASIC/Displayer");
-            if (GUILayout.Button("Create Game Console")) EditorApplication.ExecuteMenuItem("GameObject/qASIC/Game console");
-            if (GUILayout.Button("Create Audio Manager")) EditorApplication.ExecuteMenuItem("GameObject/qASIC/Audio manager");
         }
 
         void DisplayAudio(GUIStyle headerStyle)
