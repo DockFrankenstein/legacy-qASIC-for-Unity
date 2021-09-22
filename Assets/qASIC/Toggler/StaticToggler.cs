@@ -28,41 +28,26 @@ namespace qASIC.Toggling
             public TogglerState()
             {
                 state = false;
-                OnChange = new TogglerStateChange((bool state) => { });
+                OnChange = new TogglerStateChange(_ => { });
             }
         }
 
-        public static Dictionary<string, TogglerState> states = new Dictionary<string, TogglerState>();
+        public static readonly Dictionary<string, TogglerState> states = new Dictionary<string, TogglerState>();
 
         public override void Awake()
         {
-            if (addToDontDestroy) AssignSingleton();
-            AssignListiner();
+            if (toggleObject == null) return;
 
-            if (!states.ContainsKey(togglerTag))
-            {
-                base.Awake();
-                return;
-            }
+            if (addToDontDestroy) DontDestroyOnLoad(gameObject);
+            AssignSingleton();
 
             Toggle(states[togglerTag].state);
         }
 
-        private void AssignListiner()
-        {
-            if (!states.ContainsKey(togglerTag)) states.Add(togglerTag, new TogglerState());
-            if (states[togglerTag].OnChange == null) states[base.tag].OnChange = new TogglerState.TogglerStateChange((bool state) => { });
-            states[togglerTag].OnChange += Toggle;
-        }
-
         private void AssignSingleton()
         {
-            if (states.ContainsKey(togglerTag))
-            {
-                Destroy(gameObject);
-                return;
-            }
-            DontDestroyOnLoad(gameObject);
+            if (!states.ContainsKey(togglerTag)) states.Add(togglerTag, new TogglerState(toggleObject.activeSelf));
+            states[togglerTag].OnChange += Toggle;
         }
 
         private void OnDestroy()

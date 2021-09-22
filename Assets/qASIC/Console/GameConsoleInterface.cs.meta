@@ -9,7 +9,7 @@ MonoImporter:
   - Logs: {instanceID: 0}
   - Input: {instanceID: 0}
   - Scroll: {instanceID: 0}
-  executionOrder: 0
+  executionOrder: -2100
   icon: {fileID: 2800000, guid: e355bcd6386461844ace6e5d581bd99e, type: 3}
   userData: 
   assetBundleName: 

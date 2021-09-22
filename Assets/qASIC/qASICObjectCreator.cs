@@ -50,6 +50,27 @@ namespace qASIC.Tools
             return canvas.gameObject;
         }
 
+        public static void CreateDebugDisplyer()
+        {
+            GameObject displayerObject = new GameObject("Debug displayer - auto generated editor");
+            displayerObject.SetActive(false);
+            GameObject canvasObject = CreateCanvas(displayerObject.transform, "Canvas", 20, false).gameObject;
+
+            TextMeshProUGUI text = CreateTextObject(canvasObject.transform, "Text", 24);
+            text.alignment = TextAlignmentOptions.TopLeft;
+            text.color = Color.white;
+
+            InfoDisplayer displayer = CreateDisplayer(displayerObject, text);
+            displayer.displayerName = "debug";
+            displayer.defaultLines = new DisplayerLine[0];
+            displayer.acceptUnknown = true;
+
+            StaticToggler toggler = displayer.gameObject.AddComponent<StaticToggler>();
+            toggler.togglerTag = "debug displayer";
+            toggler.toggleObject = canvasObject;
+            displayerObject.SetActive(true);
+        }
+
 #if UNITY_EDITOR
         [MenuItem("GameObject/qASIC/Game console", false, 1)]
         static void CreateConsole()
@@ -302,7 +323,7 @@ namespace qASIC.Tools
             InfoDisplayer displayer = target.AddComponent<InfoDisplayer>();
 
             displayer.text = text;
-            displayer.exceptUnknown = false;
+            displayer.acceptUnknown = false;
 
             return displayer;
         }

@@ -10,7 +10,7 @@ namespace qASIC.Console.Commands
         public override bool Active { get => GameConsoleController.GetConfig().versionCommand; }
         public override string CommandName { get; } = "version";
         public override string Description { get; } = "displays version";
-        public override string Help { get; } = "displays version";
+        public override string Help { get; } = "Displays version";
         public override string[] Aliases { get; } = new string[] { "info", "about" };
 
         int toolCount = 0;

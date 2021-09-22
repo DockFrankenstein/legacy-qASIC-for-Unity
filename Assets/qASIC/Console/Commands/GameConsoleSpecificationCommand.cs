@@ -9,7 +9,7 @@ namespace qASIC.Console.Commands
         public override bool Active { get => GameConsoleController.GetConfig().specsCommand; }
         public override string CommandName { get; } = "specification";
         public override string Description { get; } = "displays system specs";
-        public override string Help { get; } = "displays system specs";
+        public override string Help { get; } = "Displays system specs";
         public override string[] Aliases { get; } = new string[] { "hardware", "hardware info", "specs", "hardware specification", "hardware specs" };
 
         public override void Run(List<string> args)

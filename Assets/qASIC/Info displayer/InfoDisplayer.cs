@@ -10,7 +10,7 @@ namespace qASIC.Displayer
         [Tooltip("Separator between line name and it's value")]
         public string separator = ": ";
         [Tooltip("Decides if a line should be displayed if it isn't created by default")]
-        public bool exceptUnknown = true;
+        public bool acceptUnknown = true;
 
         [Space]
         [Tooltip("If the text of a line is empty, the separator will be removed from it")]
@@ -41,6 +41,18 @@ namespace qASIC.Displayer
 
         private readonly Dictionary<string, DisplayerLine> lines = new Dictionary<string, DisplayerLine>();
         private static readonly Dictionary<string, InfoDisplayer> displayers = new Dictionary<string, InfoDisplayer>();
+
+        public static bool DisplayerExists(string displayerName) =>
+            displayers.ContainsKey(displayerName);
+
+        /// <summary>Resets displayer values</summary>
+        /// <returns>If reset was successfull</returns>
+        public static bool ClearDisplayer(string displayerName)
+        {
+            if (!DisplayerExists(displayerName)) return false;
+            displayers[displayerName].lines.Clear();
+            return true;
+        }
 
         private void Awake()
         {
@@ -93,8 +105,8 @@ namespace qASIC.Displayer
         {
             if (!displayer.lines.ContainsKey(tag))
             {
-                if (!displayer.exceptUnknown) return false;
-                displayer.lines.Add(tag, new DisplayerLine());
+                if (!displayer.acceptUnknown) return false;
+                displayer.lines.Add(tag, new DisplayerLine(tag, tag));
             }
             return true;
         }
