@@ -14,7 +14,8 @@ namespace qASIC.Console
         public Color qASICColor = new Color(0f, 0.7f, 1f);
         public Color SettingsColor = new Color(0f, 0.301f, 1f);
         public Color InputColor = new Color(0.878f, 0.129f, 0f);
-        public Color ConsoleColor = new Color(1f, 0f, 1f);
+        public Color AudioColor = new Color(1f, 0f, 0.5f);
+        public Color ConsoleColor = new Color(0f, 0.518f, 0.663f);
         public Color SceneColor = new Color(0.7019608f, 0f, 1f);
         [Tooltip("The color used by commands that display information")] 
         public Color InfoColor = Color.white;

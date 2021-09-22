@@ -52,6 +52,8 @@ namespace qASIC.Console
                     return _config.colorTheme.SettingsColor;
                 case "input":
                     return _config.colorTheme.InputColor;
+                case "audio":
+                    return _config.colorTheme.AudioColor;
                 case "scene":
                     return _config.colorTheme.SceneColor;
                 case "unity exception":

@@ -27,7 +27,7 @@ namespace qASIC.AudioManagment.Menu
         public void OnPointerUp(PointerEventData eventData)
         {
             if (slider == null) return;
-            AudioManager.SetFloat(parameterName, slider.value, true);
+            AudioManager.SetFloat(parameterName, slider.value, false);
         }
 
         public void SetValue(float value, bool preview) => AudioManager.SetFloat(parameterName, value, preview);
@@ -38,7 +38,7 @@ namespace qASIC.AudioManagment.Menu
         {
             slider = GetComponent<Slider>();
             if (slider == null) return;
-            slider.onValueChanged.AddListener((float value) => SetValue(value, false));
+            slider.onValueChanged.AddListener((float value) => SetValue(value, true));
             if (AudioManager.GetFloat(parameterName, out float newValue)) slider.SetValueWithoutNotify(newValue);
         }
 
