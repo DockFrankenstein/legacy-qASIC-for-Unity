@@ -38,7 +38,9 @@ namespace qASIC.Console
             for (int i = 0; i < types.Count; i++)
             {
                 ConstructorInfo constructor = types[i].GetConstructor(Type.EmptyTypes);
-                _commands.Add((GameConsoleCommand)constructor.Invoke(null));
+                GameConsoleCommand command = (GameConsoleCommand)constructor.Invoke(null);
+                if(command.Active)
+                    _commands.Add(command);
             }
             return _commands;
         }
