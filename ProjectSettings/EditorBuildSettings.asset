@@ -4,35 +4,5 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-    path: Assets/Local/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
-    path: Assets/Local/Scenes/Another scene.unity
-    guid: c2d1517d9814f86499e23ca560f13024
-  - enabled: 1
-    path: Assets/Local/Scenes/asd.unity
-    guid: 5069ad6cd6b43a34483ab4c0cd6aa7a9
-  - enabled: 1
-    path: Assets/Local/Scenes/dsa.unity
-    guid: 75eb73ed9df73ca4ea444f38f54ba879
-  - enabled: 1
-    path: Assets/Local/Scenes/Fun map.unity
-    guid: 46cb0079945c3e844b2bc6c99e840eaa
-  - enabled: 1
-    path: Assets/Local/Scenes/level 93.unity
-    guid: bdac02c8db341d34da5b5b4acfadcbd2
-  - enabled: 1
-    path: Assets/Local/Scenes/random scene.unity
-    guid: a0c54185c54359d40b9323ab0b2b76a0
-  - enabled: 1
-    path: Assets/Local/Scenes/some scene.unity
-    guid: cf62cf1582d3bbc438862c44478dcd00
-  - enabled: 1
-    path: Assets/Local/Scenes/The return.unity
-    guid: fb6b3d892aec55e4f894fd6328cdf90e
-  - enabled: 1
-    path: Assets/Local/Scenes/This is so cool.unity
-    guid: f193b99eb29e09945b1ab249247c50d0
+  m_Scenes: []
   m_configObjects: {}
