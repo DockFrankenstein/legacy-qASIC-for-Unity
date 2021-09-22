@@ -17,9 +17,15 @@ namespace qASIC.Console.Tools
         public bool helpCommand = true;
         public bool inputCommand = true;
         public bool optionCommand = true;
+        public bool audioCommand = true;
         public bool sceneCommand = true;
+        public bool sceneListCommand = true;
         public bool versionCommand = true;
-        public bool specsCommand = false;
+        public bool specsCommand = true;
+        public bool debugDisplayerCommand = true;
+        public bool clearDebugDisplayerCommand = true;
+        public bool timeScaleCommand = true;
+        public bool fovCommand = true;
 
         [Header("Unity")]
         public bool logToUnity = false;

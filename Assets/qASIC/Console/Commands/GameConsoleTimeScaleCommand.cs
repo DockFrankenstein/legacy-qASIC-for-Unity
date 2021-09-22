@@ -5,6 +5,7 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleTimeScaleCommand : GameConsoleCommand
     {
+        public override bool Active { get => GameConsoleController.GetConfig().timeScaleCommand; }
         public override string CommandName { get; } = "timescale";
         public override string Description { get; } = "changes the time scale";
         public override string Help { get; } = "Use timescale; timescale <value>";

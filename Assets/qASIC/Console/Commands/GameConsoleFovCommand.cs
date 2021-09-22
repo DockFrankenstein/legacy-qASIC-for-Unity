@@ -5,6 +5,7 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleFovCommand : GameConsoleCommand
     {
+        public override bool Active { get => GameConsoleController.GetConfig().fovCommand; }
         public override string CommandName { get; } = "fov";
         public override string Description { get; } = "Changes camera field of view";
         public override string Help { get; } = "Use fov; fov <value>";

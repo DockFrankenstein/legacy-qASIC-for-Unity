@@ -6,6 +6,7 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleDebugDisplayerCommand : GameConsoleCommand
     {
+        public override bool Active { get => GameConsoleController.GetConfig().debugDisplayerCommand; }
         public override string CommandName { get; } = "debugdisplayer";
         public override string Description { get; } = "Toggles debug displayer";
         public override string Help { get; } = "Use debugdisplayer; debugdisplayer <value>";
