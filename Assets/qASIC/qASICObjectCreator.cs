@@ -59,6 +59,7 @@ namespace qASIC.Tools
             TextMeshProUGUI text = CreateTextObject(canvasObject.transform, "Text", 24);
             text.alignment = TextAlignmentOptions.TopLeft;
             text.color = Color.white;
+            text.margin = new Vector4(10f, 10f, 10f, 10f);
 
             InfoDisplayer displayer = CreateDisplayer(displayerObject, text);
             displayer.displayerName = "debug";
