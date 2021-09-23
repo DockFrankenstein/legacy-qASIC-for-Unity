@@ -7,8 +7,8 @@ namespace qASIC.Console.Commands
     {
         public override bool Active { get => GameConsoleController.GetConfig().audioCommand; }
         public override string CommandName { get; } = "audioparameter";
-        public override string Description { get; } = "insert description that will be displayed in help here";
-        public override string Help { get; } = "Insert detailed description that will show up in the specific help message fe. Use Hello <option> <value>";
+        public override string Description { get; } = "changes the specified audio parameters value";
+        public override string Help { get; } = "Use audioparameter <parameter>; audioparameter <parameter> <value>";
         public override string[] Aliases { get; } = new string[] { "changeparameter", "changeaudioparameter" };
 
         public override void Run(List<string> args)
