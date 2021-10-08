@@ -5,7 +5,7 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleExitCommand : GameConsoleCommand
     {
-        public override bool Active { get => GameConsoleController.GetConfig().exitCommand; }
+        public override bool Active { get => Application.platform != RuntimePlatform.WebGLPlayer && GameConsoleController.GetConfig().exitCommand; }
         public override string CommandName { get; } = "exit";
         public override string Description { get; } = "closes the game";
         public override string Help { get; } = "Closes the game";

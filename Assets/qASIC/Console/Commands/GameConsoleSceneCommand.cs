@@ -8,8 +8,8 @@ namespace qASIC.Console.Commands
     {
         public override bool Active { get => GameConsoleController.GetConfig().sceneCommand; }
         public override string CommandName { get; } = "scene";
-        public override string Description { get; } = "get, load scene";
-        public override string Help { get; } = "Use scene; scene get; scene load <scene name>";
+        public override string Description { get; } = "loads specified scene";
+        public override string Help { get; } = "Use scene; scene <name>";
         public override string[] Aliases { get; } = new string[] { "loadscene", "level", "loadlevel" };
 
         public override void Run(List<string> args)
@@ -19,45 +19,50 @@ namespace qASIC.Console.Commands
             {
                 case 1:
                     LogScene();
-                    break;
+                    return;
                 case 2:
-                    switch (args[1].ToLower())
+                    if (args[1].ToLower() == "reload")
                     {
-                        case "get":
-                            LogScene();
-                            break;
-                        case "reload":
-                            LoadScene(SceneManager.GetActiveScene().name);
-                            break;
-                        default:
-                            if (!Application.CanStreamedLevelBeLoaded(args[1]))
-                            {
-                                LogError($"Scene <b>{args[1]}</b> does not exist!");
-                                return;
-                            }
-                            LoadScene(args[1]);
-                            break;
+                        ReloadScene();
+                        return;
                     }
-                    break;
-                case 3:
-                    if (args[1] == "load") LoadScene(args[2]);
-                    break;
+
+                    if (int.TryParse(args[1], out int sceneIndex))
+                    {
+                        LoadScene(sceneIndex);
+                        return;
+                    }
+
+                    LoadScene(args[1]);
+                    return;
                 default:
                     LogError("There was an error while executing command <b>Scene</b>");
-                    break;
+                    return;
             }
         }
 
-        private void LoadScene(string sceneName)
+        void LoadScene(string sceneName)
         {
             if (!Application.CanStreamedLevelBeLoaded(sceneName))
             {
-                LogError("Scene does not exist!");
+                LogError($"Scene <b>{sceneName}</b> does not exist!");
                 return;
             }
-            SceneManager.LoadScene(sceneName);
+            SceneManager.LoadScene(SceneManager.GetSceneByName(sceneName).buildIndex);
         }
 
-        private void LogScene() => Log($"Current scene: <b>{SceneManager.GetActiveScene().name}</b>", "scene");
+        void LoadScene(int sceneIndex)
+        {
+            if (!Application.CanStreamedLevelBeLoaded(sceneIndex))
+            {
+                LogError("Index is out of range!");
+                return;
+            }
+            SceneManager.LoadScene(sceneIndex);
+        }
+
+        void LogScene() => Log($"Current scene: <b>{SceneManager.GetActiveScene().name}</b>", "scene");
+
+        void ReloadScene() => LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

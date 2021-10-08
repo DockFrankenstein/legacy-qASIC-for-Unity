@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Linq;
 using qASIC.FileManagement;
 using qASIC.Tools;
+using UnityEngine;
 
 namespace qASIC.Options
 {
@@ -13,6 +14,7 @@ namespace qASIC.Options
         private static string path = "qASIC/Settings.txt";
 
         private static List<MethodInfo> settings;
+
         public static List<MethodInfo> Settings
         {
             get
@@ -21,6 +23,8 @@ namespace qASIC.Options
                 return settings;
             }
         }
+
+        static GameObject tempGameObject;
 
         public static void Load(string path)
         {
@@ -49,7 +53,8 @@ namespace qASIC.Options
         {
             foreach (MethodInfo setting in Settings)
             {
-                var obj = Activator.CreateInstance(setting.DeclaringType);
+                DisposeTemp();
+
                 try
                 {
                     OptionsSetting attr = (OptionsSetting)setting.GetCustomAttributes(typeof(OptionsSetting), true)[0];
@@ -60,6 +65,7 @@ namespace qASIC.Options
                     if ((optionName.ToLower() != attr?.name.ToLower() || param.GetType() != attr?.type) &&
                         (param.GetType() == typeof(int) || !attr.type.IsEnum)) continue;
 
+                    var obj = CreateClass(setting.DeclaringType);
                     setting.Invoke(obj, new object[] { param });
 
                     if (log) Console.GameConsoleController.Log($"Changed <b>{attr.name}</b> to {param}", "settings");
@@ -69,7 +75,25 @@ namespace qASIC.Options
                 }
                 catch { }
             }
+            DisposeTemp();
             if (save) Save();
+        }
+
+        static object CreateClass(Type type)
+        {
+            if (type.IsSubclassOf(typeof(MonoBehaviour)))
+            {
+                tempGameObject = new GameObject("Options Setting temp script");
+                tempGameObject.SetActive(false);
+                return tempGameObject.AddComponent(type);
+            }
+            return Activator.CreateInstance(type);
+        }
+
+        static void DisposeTemp()
+        {
+            if (tempGameObject)
+                GameObject.Destroy(tempGameObject);
         }
     }
 }

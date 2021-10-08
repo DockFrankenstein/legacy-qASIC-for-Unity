@@ -3,7 +3,8 @@ using UnityEngine;
 using qASIC.Console.Commands;
 using qASIC.Console.Logic;
 using qASIC.Console.Tools;
-using UnityEngine.Events;
+using System;
+using UnityEngine.SceneManagement;
 
 namespace qASIC.Console
 {
@@ -12,7 +13,52 @@ namespace qASIC.Console
         public static List<GameConsoleLog> logs = new List<GameConsoleLog>();
         public static List<string> invokedCommands = new List<string>();
 
-        public static UnityAction<GameConsoleLog> OnLog;
+        public static Action<GameConsoleLog> OnLog;
+
+        [RuntimeInitializeOnLoadMethod]
+        static void Initialize()
+        {
+            SceneManager.sceneLoaded += HandleSceneLoad;
+            Application.logMessageReceived += HandleUnityLog;
+        }
+
+        static void HandleSceneLoad(Scene scene, LoadSceneMode mode)
+        {
+            if (_config?.logScene != true) return;
+            Log($"Loaded scene <b>{scene.name}</b> in mode <b>{mode}</b>", "scene");
+        }
+
+        static void HandleUnityLog(string logText, string trace, LogType type)
+        {
+            if (_config == null) return;
+            string color = "default";
+            switch (type)
+            {
+                case LogType.Exception:
+                    if (!_config.logUnityExceptionsToConsole) return;
+                    color = "unity exception";
+                    break;
+                case LogType.Error:
+                    if (!_config.logUnityErrorsToConsole) return;
+                    color = "unity error";
+                    break;
+                case LogType.Assert:
+                    if (!_config.logUnityAssertsToConsole) return;
+                    color = "unity assert";
+                    break;
+                case LogType.Warning:
+                    if (!_config.logUnityWarningsToConsole) return;
+                    color = "unity warning";
+                    break;
+                case LogType.Log:
+                    if (!_config.logUnityMessagesToConsole) return;
+                    color = "unity message";
+                    break;
+            }
+
+            GameConsoleLog log = new GameConsoleLog(logText, DateTime.Now, color, GameConsoleLog.LogType.Game, true);
+            Log(log);
+        }
 
         #region Log
         /// <param name="color">color name from the color settings</param>
@@ -24,8 +70,6 @@ namespace qASIC.Console
 
         public static void Log(GameConsoleLog log)
         {
-            if (logs.Count == 0 && TryGettingConfig(out GameConsoleConfig config) && config.showThankYouMessage)
-                logs.Add(new GameConsoleLog($"Thank you for using qASIC console v{qASIC.Tools.Info.Version}", System.DateTime.Now, "qasic", GameConsoleLog.LogType.Game));
             logs.Add(log);
             if (_config != null && _config.logToUnity && log.Type != GameConsoleLog.LogType.User && !log.UnityHidden) Debug.Log($"qASIC game console: {log.Message}");
             OnLog?.Invoke(log);
@@ -109,9 +153,12 @@ namespace qASIC.Console
 
         public static void AssignConfig(GameConsoleConfig newConfig)
         {
-            if (_config == newConfig) return;
+            if (newConfig == null || _config == newConfig) return;
             _config = newConfig;
-            if (_config.logConfigAssigment) Log("Assigned new config", "console");
+            if (_config.showThankYouMessage)
+                Log($"Thank you for using qASIC console v{qASIC.Tools.Info.Version}", "qasic");
+            if (_config.logConfigAssigment)
+                Log("Assigned new config", "console");
         }
         #endregion
 
@@ -167,7 +214,6 @@ namespace qASIC.Console
             }
             return log;
         }
-        #endregion
 
         public static void RunCommand(string cmd)
         {
@@ -185,5 +231,6 @@ namespace qASIC.Console
 
             command.Run(args);
         }
+        #endregion
     }
 }

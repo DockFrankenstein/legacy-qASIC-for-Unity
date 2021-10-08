@@ -11,7 +11,6 @@ namespace qASIC.Console.Tools
         {
             GameConsoleInterface script = (GameConsoleInterface)target;
             base.OnInspectorGUI();
-            if (GUILayout.Button("Reload config")) script.AssignConfig();
             if (GUILayout.Button("Refresh")) script.RefreshLogs();
         }
     }

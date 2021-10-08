@@ -25,6 +25,8 @@ namespace qASIC.Console
 
         private int _commandIndex = -1;
 
+        bool init = false;
+
         public bool IsScrollSnapped { get; private set; } = true;
 
         Toggler toggler;
@@ -38,13 +40,17 @@ namespace qASIC.Console
 
         public virtual void Awake()
         {
-            AssignConfig();
-            SetupConfig();
-            AddLogEvent();
-            RefreshLogs();
+            if (init) return;
+
+            init = true;
 
             toggler = GetComponent<Toggler>();
-            if (toggler != null) toggler.OnChangeState.AddListener(OnChangeState);
+            if (toggler != null)
+                toggler.OnChangeState.AddListener(OnChangeState);
+
+            GameConsoleController.AssignConfig(ConsoleConfig);
+            GameConsoleController.OnLog += _ => RefreshLogs();
+            RefreshLogs();
         }
 
         void OnChangeState(bool state)
@@ -57,71 +63,9 @@ namespace qASIC.Console
             StartCoroutine(Reselect());
         }
 
-        /// <summary>Enables features like logging messages to console, or logging the scene</summary>
-        public void SetupConfig()
-        {
-            if (ConsoleConfig == null) return;
-            if (ConsoleConfig.logScene) UnityEngine.SceneManagement.SceneManager.sceneLoaded += LogLoadedScene;
-            Application.logMessageReceived += HandleUnityLog;
-        }
-
-        private void HandleUnityLog(string logText, string trace, LogType type)
-        {
-            if (!GameConsoleController.TryGettingConfig(out GameConsoleConfig config)) return;
-
-            string color = "default";
-            switch (type)
-            {
-                case LogType.Exception:
-                    if (!config.logUnityExceptionsToConsole) return;
-                    color = "unity exception";
-                    break;
-                case LogType.Error:
-                    if (!config.logUnityErrorsToConsole) return;
-                    color = "unity error";
-                    break;
-                case LogType.Assert:
-                    if (!config.logUnityAssertsToConsole) return;
-                    color = "unity assert";
-                    break;
-                case LogType.Warning:
-                    if (!config.logUnityWarningsToConsole) return;
-                    color = "unity warning";
-                    break;
-                case LogType.Log:
-                    if (!config.logUnityMessagesToConsole) return;
-                    color = "unity message";
-                    break;
-            }
-
-            Logic.GameConsoleLog log = new Logic.GameConsoleLog(logText, System.DateTime.Now, color, Logic.GameConsoleLog.LogType.Game, true);
-            GameConsoleController.Log(log);
-        }
-
-        private void AddLogEvent()
-        {
-            UnityAction<Logic.GameConsoleLog> refreshLogs = _ => RefreshLogs();
-            if (GameConsoleController.OnLog == null)
-            {
-                GameConsoleController.OnLog = refreshLogs;
-                return;
-            }
-            GameConsoleController.OnLog += refreshLogs;
-        }
-
-        public void AssignConfig() =>
-            GameConsoleController.AssignConfig(ConsoleConfig);
-
         private void OnDestroy()
         {
             GameConsoleController.OnLog -= (Logic.GameConsoleLog log) => RefreshLogs();
-            Application.logMessageReceived -= (string log, string trace, LogType type) => HandleUnityLog(log, trace, type);
-        }
-
-        public virtual void LogLoadedScene(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
-        {
-            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= LogLoadedScene;
-            GameConsoleController.Log($"Loaded scene {scene.name}", "scene", Logic.GameConsoleLog.LogType.Game);
         }
 
         public virtual void Update()
@@ -139,7 +83,8 @@ namespace qASIC.Console
             if (UnityEngine.Input.GetKeyDown(KeyCode.DownArrow) && toggler.State) ReInsertCommand(true);
         }
 
-        public void DiscardPreviousCommand() => _commandIndex = -1;
+        public void DiscardPreviousCommand() =>
+            _commandIndex = -1;
 
         private void ReInsertCommand(bool reverse)
         {

@@ -8,9 +8,9 @@ namespace qASIC.Options.Menu
     {
         private Slider slider;
 
-        public bool round;
+        public bool round = true;
         [Tooltip("Round value multiplier")]
-        public double roundValue;
+        public double roundValue = 0.1;
 
         private void Awake()
         {
@@ -31,7 +31,7 @@ namespace qASIC.Options.Menu
                 SetValue(intResult, log);
                 return;
             }
-            SetValue(round ? Mathf.Round(value / (float)roundValue) * roundValue : value, log);
+            SetValue(round ? (float)(Mathf.Round(value / (float)roundValue) * roundValue) : value, log);
         }
 
         public override string GetLabel()

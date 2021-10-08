@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace qASIC.Toggling
 {
@@ -6,6 +7,7 @@ namespace qASIC.Toggling
     {
         public string togglerTag;
         public bool addToDontDestroy = true;
+        public bool removeDuplicates = true;
 
         #region Static
         public class TogglerState
@@ -46,7 +48,17 @@ namespace qASIC.Toggling
 
         private void AssignSingleton()
         {
-            if (!states.ContainsKey(togglerTag)) states.Add(togglerTag, new TogglerState(toggleObject.activeSelf));
+            if (!states.ContainsKey(togglerTag))
+            {
+                states.Add(togglerTag, new TogglerState(toggleObject.activeSelf, Toggle));
+                return;
+            }
+
+            if (removeDuplicates)
+            {
+                Destroy(gameObject);
+                return;
+            }
             states[togglerTag].OnChange += Toggle;
         }
 
@@ -67,12 +79,14 @@ namespace qASIC.Toggling
         public static void ChangeState(string tag, bool state)
         {
             ChangeStateSilent(tag, state);
-            if (states[tag].OnChange != null) states[tag].OnChange.Invoke(state);
+            if (states[tag].OnChange != null)
+                states[tag].OnChange.Invoke(state);
         }
 
         public static void ChangeStateSilent(string tag, bool state)
         {
-            if (!states.ContainsKey(tag)) states.Add(tag, new TogglerState());
+            if (!states.ContainsKey(tag))
+                states.Add(tag, new TogglerState());
             states[tag].state = state;
         }
         #endregion
