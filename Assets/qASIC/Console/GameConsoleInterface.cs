@@ -2,8 +2,11 @@
 using TMPro;
 using qASIC.Console.Tools;
 using System.Collections;
-using UnityEngine.Events;
 using qASIC.Toggling;
+
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 namespace qASIC.Console
 {
@@ -78,9 +81,17 @@ namespace qASIC.Console
 
         public virtual void HandleInput()
         {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Return) && toggler.State) RunCommand();
-            if (UnityEngine.Input.GetKeyDown(KeyCode.UpArrow) && toggler.State) ReInsertCommand(false);
-            if (UnityEngine.Input.GetKeyDown(KeyCode.DownArrow) && toggler.State) ReInsertCommand(true);
+            if (!toggler.State) return;
+
+#if ENABLE_INPUT_SYSTEM
+            if (Keyboard.current[Key.Enter].wasPressedThisFrame) RunCommand();
+            if (Keyboard.current[Key.UpArrow].wasPressedThisFrame) ReInsertCommand(false);
+            if (Keyboard.current[Key.DownArrow].wasPressedThisFrame) ReInsertCommand(true);
+#else
+            if (Input.GetKeyDown(KeyCode.Return)) RunCommand();
+            if (Input.GetKeyDown(KeyCode.UpArrow)) ReInsertCommand(false);
+            if (Input.GetKeyDown(KeyCode.DownArrow)) ReInsertCommand(true);
+#endif
         }
 
         public void DiscardPreviousCommand() =>

@@ -100,7 +100,13 @@ namespace qASIC.Tools
             fieldTrans.sizeDelta = new Vector2(fieldTrans.sizeDelta.x, 100f);
             fieldTrans.anchoredPosition = new Vector2(fieldTrans.anchoredPosition.x, 50);
 
-            CreateToggler(consoleObject, "console", canvasObject, KeyCode.BackQuote);
+            CreateToggler(consoleObject, "console", canvasObject).key =
+#if ENABLE_INPUT_SYSTEM
+                UnityEngine.InputSystem.Key.Backquote;
+#else
+                KeyCode.BackQuote;
+#endif
+
             GameConsoleInterface consoleScript = CreateInterface(consoleObject, text, field, scroll);
 
             field.onValueChanged.AddListener(_ => consoleScript.DiscardPreviousCommand());
@@ -125,7 +131,13 @@ namespace qASIC.Tools
             text.alignment = TextAlignmentOptions.Top;
             text.color = Color.white;
 
-            CreateToggler(displayerObject, "main displayer", canvasObject, KeyCode.F3);
+            CreateToggler(displayerObject, "main displayer", canvasObject).key =
+#if ENABLE_INPUT_SYSTEM
+                UnityEngine.InputSystem.Key.F3;
+#else
+                KeyCode.F3;
+#endif
+
             CreateDisplayer(displayerObject, text);
             displayerObject.AddComponent<BasicDisplayer>();
             displayerObject.AddComponent<VersionDisplayer>();
@@ -308,12 +320,11 @@ namespace qASIC.Tools
         #endregion
 
         #region qASIC Scripts
-        public static StaticTogglerBasic CreateToggler(GameObject target, string tag, GameObject toggleObject = null, KeyCode key = KeyCode.F2)
+        public static StaticTogglerBasic CreateToggler(GameObject target, string tag, GameObject toggleObject = null)
         {
             StaticTogglerBasic toggler = target.AddComponent<StaticTogglerBasic>();
             toggler.addToDontDestroy = true;
             toggler.togglerTag = tag;
-            toggler.key = key;
             toggler.toggleObject = toggleObject;
 
             return toggler;
