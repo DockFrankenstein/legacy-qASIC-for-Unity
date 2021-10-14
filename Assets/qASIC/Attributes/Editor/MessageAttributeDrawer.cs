@@ -28,7 +28,9 @@ namespace qASIC.Tools
             };
 
             style.normal.background = background;
-            height = Mathf.Clamp(style.CalcHeight(content, EditorGUIUtility.currentViewWidth) + 8, target.Icon ? 40f : 0f, float.MaxValue) + 8f;
+            height = style.CalcHeight(content, EditorGUIUtility.currentViewWidth);
+            if(target.Icon)
+                height = Mathf.Clamp(height + 8f, 40f, float.MaxValue) + 8f;
 
             if (target.Icon) GUI.DrawTexture(new Rect(position.position + new Vector2(4f, 4f), new Vector2(40f, 40f)), target.Icon);
             GUI.Label(new Rect(position.position, new Vector2(position.width, height)), target.Message, style);
