@@ -12,7 +12,7 @@ namespace qASIC.Options
 
         private static bool init = false;
 
-        private void Awake()
+        private void Start()
         {
             if(!init) OptionsController.LoadSettings();
             LoadPreferences();
