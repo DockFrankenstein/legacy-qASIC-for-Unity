@@ -39,8 +39,8 @@ namespace qASIC.InputManagement.Menu
         public string GetLabel()
         {
             string currentKey = "none";
-            if (InputManager.GlobalKeys.Presets.ContainsKey(keyName)) 
-                currentKey = InputManager.GlobalKeys.Presets[keyName].ToString();
+            //if (InputManager.GlobalKeys.Presets.ContainsKey(keyName)) 
+            //    currentKey = InputManager.GlobalKeys.Presets[keyName].ToString();
             return $"{optionLabelName}{currentKey}";
         }
 
@@ -58,7 +58,7 @@ namespace qASIC.InputManagement.Menu
 
         public void Assign(KeyCode key)
         {
-            InputManager.ChangeInput(keyName, key);
+            //InputManager.ChangeInput(keyName, key);
             OnAssign.Invoke();
 
             if (listener != null) listener.OnInputRecived.RemoveListener(listinerAction);

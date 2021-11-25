@@ -14,28 +14,28 @@ namespace qASIC.Console.Commands
 
         public override void Run(List<string> args)
         {
-            if (!CheckForArgumentCount(args, 1, 2)) return;
-            switch (args[1])
-            {
-                case "change":
-                    if (CheckForArgumentCount(args, 2))
-                        qASICObjectCreator.CreateInputWindow(args[2]);
-                    break;
-                case "print":
-                    Print();
-                    break;
-                default:
-                    NoOptionException(args[1]);
-                    break;
-            }
+            //if (!CheckForArgumentCount(args, 1, 2)) return;
+            //switch (args[1])
+            //{
+            //    case "change":
+            //        if (CheckForArgumentCount(args, 2))
+            //            qASICObjectCreator.CreateInputWindow(args[2]);
+            //        break;
+            //    case "print":
+            //        Print();
+            //        break;
+            //    default:
+            //        NoOptionException(args[1]);
+            //        break;
+            //}
         }
 
-        private static void Print()
-        {
-            string log = "<b>InputKeys.asset</b> has been loaded:";
-            List<string> keys = new List<string>(InputManager.GlobalKeys.Presets.Keys);
-            for (int i = 0; i < keys.Count; i++) log += $"\n{keys[i]}: {InputManager.GlobalKeys.Presets[keys[i]]}";
-            GameConsoleController.Log(log, "input");
-        }
+        //private static void Print()
+        //{
+        //    string log = "<b>InputKeys.asset</b> has been loaded:";
+        //    List<string> keys = new List<string>(InputManager.GlobalKeys.Presets.Keys);
+        //    for (int i = 0; i < keys.Count; i++) log += $"\n{keys[i]}: {InputManager.GlobalKeys.Presets[keys[i]]}";
+        //    GameConsoleController.Log(log, "input");
+        //}
     }
 }
