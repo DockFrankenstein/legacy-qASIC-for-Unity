@@ -43,7 +43,7 @@ namespace qASIC.InputManagement.Internal
             InputGroup group = map.Groups[i];
 
             GUILayout.BeginHorizontal(groupStyle);
-            if (GUILayout.Button(string.IsNullOrWhiteSpace(group.Name) ? "NULL" : group.Name))
+            if (GUILayout.Button(string.IsNullOrWhiteSpace(group.groupName) ? "NULL" : group.groupName))
                 map.currentEditorSelectedGroup = i;
 
             GUILayout.FlexibleSpace();

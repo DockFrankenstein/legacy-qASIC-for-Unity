@@ -48,7 +48,7 @@ namespace qASIC.InputManagement.Internal
             InputAction action = group.actions[i];
 
             GUILayout.BeginHorizontal(actionStyle);
-            if (GUILayout.Button(string.IsNullOrWhiteSpace(action.Name) ? "NULL" : action.Name))
+            if (GUILayout.Button(string.IsNullOrWhiteSpace(action.acionName) ? "NULL" : action.acionName))
                 group.currentEditorSelectedAction = i;
 
             GUILayout.FlexibleSpace();

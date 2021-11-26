@@ -63,6 +63,9 @@ namespace qASIC.InputManagement.Internal
             actionUI.group = isGroupSelected ? map.Groups[group] : null;
             keyUI.action = isActionSelected ? map.Groups[group].actions[action] : null;
 
+            if (isMapSelected)
+                map.defaultGroup = EditorGUILayout.TextField("Default group", map.defaultGroup);
+
             groupUI.OnGUI();
             actionUI.OnGUI();
             keyUI.OnGUI();

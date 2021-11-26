@@ -10,7 +10,7 @@ namespace qASIC.InputManagement
         public int currentEditorSelectedGroup = -1;
 #endif
 
-        public string defaultGroup;
+        public string defaultGroup = "Game";
 
         public List<InputGroup> Groups = new List<InputGroup>();
 
@@ -20,7 +20,7 @@ namespace qASIC.InputManagement
 
             for (int i = 0; i < Groups.Count; i++)
             {
-                if (Groups[i].Name != groupName) continue;
+                if (Groups[i].groupName != groupName) continue;
                 group = Groups[i];
                 return true;
             }
@@ -43,13 +43,13 @@ namespace qASIC.InputManagement
             List<string> names = new List<string>();
             for (int i = 0; i < Groups.Count; i++)
             {
-                if (names.Contains(Groups[i].Name))
+                if (names.Contains(Groups[i].groupName))
                 {
-                    qDebug.LogError($"There are multiple groups in the map, cannot index group <b>{Groups[i].Name}</b>");
+                    qDebug.LogError($"There are multiple groups in the map, cannot index group <b>{Groups[i].groupName}</b>");
                     continue;
                 }
 
-                names.Add(Groups[i].Name);
+                names.Add(Groups[i].groupName);
             }
         }
     }

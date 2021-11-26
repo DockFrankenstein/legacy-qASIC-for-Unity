@@ -4575,7 +4575,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f432c0fcf534b1a4aa392e8d9a7a9fc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preset: {fileID: 11400000, guid: d2d10382bfa4fd448a54ebc8ce629334, type: 2}
 --- !u!4 &520468626
 Transform:
   m_ObjectHideFlags: 0
@@ -9313,7 +9312,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayerName: main
   separator: ': '
-  exceptUnknown: 1
+  acceptUnknown: 1
   removeSeparatorText: 1
   removeSeparatorValue: 0
   defaultLines:
@@ -9387,6 +9386,7 @@ MonoBehaviour:
       m_Calls: []
   togglerTag: 
   addToDontDestroy: 1
+  removeDuplicates: 1
   key: 284
 --- !u!4 &1154105941
 Transform:
@@ -17291,6 +17291,7 @@ MonoBehaviour:
       m_Calls: []
   togglerTag: console
   addToDontDestroy: 1
+  removeDuplicates: 1
   keyName: Console
 --- !u!4 &2045916094
 Transform:

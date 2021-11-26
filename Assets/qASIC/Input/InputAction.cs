@@ -5,17 +5,17 @@ using System.Collections.Generic;
 namespace qASIC.InputManagement
 {
     [Serializable]
-    public class InputAction : INonRepeatable
+    public class InputAction
     {
-        public string Name { get; set; }
+        public string acionName;
 
-        public List<KeyCode> keys;
+        public List<KeyCode> keys = new List<KeyCode>();
 
         public InputAction() { }
         
         public InputAction(string name)
         {
-            Name = name;
+            acionName = name;
         }
 
         public bool GetInput() =>

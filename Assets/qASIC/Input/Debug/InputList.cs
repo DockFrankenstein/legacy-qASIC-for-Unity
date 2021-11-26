@@ -23,13 +23,13 @@ namespace qASIC.InputManagement.DebugTools
             foreach (InputGroup group in InputManager.Map.Groups)
             {
                 Debug.Log("asd");
-                AddLine(group.Name);
+                AddLine(group.groupName);
                 foreach(InputAction action in group.actions)
                 {
-                    AddLine($"{action.Name}: {action.GetInput()}", 1);
+                    AddLine($"{action.acionName}: {action.GetInput()}", 1);
                     for (int i = 0; i < action.keys.Count; i++)
                     {
-                        KeyCode key = InputManager.GetKeyCode(action.Name, i, group.Name);
+                        KeyCode key = InputManager.GetKeyCode(action.acionName, i, group.groupName);
                         AddLine($"{key}: {Input.GetKey(key)}", 2);
                     }
                 }

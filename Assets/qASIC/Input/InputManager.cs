@@ -94,7 +94,7 @@ namespace qASIC.InputManagement
             CreateUserKey(groupName, keyName, index);
             UserKeys[groupName][keyName][index] = newKey;
 
-            qDebug.Log($"Changed key {action.Name} to {newKey}", "input");
+            qDebug.Log($"Changed key {action.acionName} to {newKey}", "input");
         }
 
         static void CreateUserKey(string groupName, string keyName, int index)
