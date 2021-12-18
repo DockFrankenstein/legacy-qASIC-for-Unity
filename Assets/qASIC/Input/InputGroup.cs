@@ -61,5 +61,8 @@ namespace qASIC.InputManagement
 
         public override string ToString() =>
             groupName;
+
+        public bool NameEquals(string name) =>
+            groupName.ToLower() == name.ToLower();
     }
 }

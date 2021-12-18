@@ -1,9 +1,9 @@
-﻿using System;
+﻿/*using System;
 using UnityEngine;
 
 namespace qASIC.InputManagement
 {
-    public static class InputDeviceManager
+    public static class GamepadManager
     {
         public static bool GetGamepadButton(GamepadButton key, int gamepadIndex = 0) =>
             HandleGamepadButton(new Func<KeyCode, bool>((KeyCode keyCode) => { return Input.GetKey(keyCode); }), key, gamepadIndex);
@@ -61,4 +61,4 @@ namespace qASIC.InputManagement
             }
         }
     }
-}
+}*/

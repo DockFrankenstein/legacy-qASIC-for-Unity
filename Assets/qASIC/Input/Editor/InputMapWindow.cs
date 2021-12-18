@@ -64,11 +64,18 @@ namespace qASIC.InputManagement.Internal
             keyUI.action = isActionSelected ? map.Groups[group].actions[action] : null;
 
             if (isMapSelected)
-                map.defaultGroup = EditorGUILayout.TextField("Default group", map.defaultGroup);
+                map.defaultGroup = EditorGUILayout.Popup(map.defaultGroup, map.GetGroupNames());
 
             groupUI.OnGUI();
             actionUI.OnGUI();
             keyUI.OnGUI();
+
+            if (GUILayout.Button("Save"))
+            {
+                EditorUtility.SetDirty(map);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+            }
         }
 
         void HorizontalLine()

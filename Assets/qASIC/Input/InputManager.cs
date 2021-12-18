@@ -64,7 +64,7 @@ namespace qASIC.InputManagement
             HandleInput(new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKeyDown(key); }), actionName);
 
         public static bool HandleInput(Func<KeyCode, bool> statement, string actionName) =>
-            MapLoaded && HandleInput(statement, actionName, Map.defaultGroup);
+            MapLoaded && HandleInput(statement, actionName, Map.DefaultGroupName);
 
         public static bool HandleInput(Func<KeyCode, bool> statement, string actionName, string groupName)
         {
@@ -111,7 +111,7 @@ namespace qASIC.InputManagement
 
         #region Get KeyCode
         public static KeyCode GetKeyCode(string actionName, int index) =>
-            GetKeyCode(actionName, index, MapLoaded ? Map.defaultGroup : string.Empty);
+            GetKeyCode(actionName, index, MapLoaded ? Map.DefaultGroupName : string.Empty);
 
         public static KeyCode GetKeyCode(string actionName, int index, string groupName)
         {
@@ -120,7 +120,7 @@ namespace qASIC.InputManagement
         }
 
         public static bool TryGetKeyCode(string actionName, int index, out KeyCode key, bool logError) =>
-            TryGetKeyCode(actionName, index, MapLoaded ? Map.defaultGroup : string.Empty, out key, logError);
+            TryGetKeyCode(actionName, index, MapLoaded ? Map.DefaultGroupName : string.Empty, out key, logError);
 
         public static bool TryGetKeyCode(string actionName, int index, string groupName, out KeyCode key, bool logError = false)
         {

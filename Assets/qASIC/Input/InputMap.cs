@@ -10,9 +10,18 @@ namespace qASIC.InputManagement
         public int currentEditorSelectedGroup = -1;
 #endif
 
-        public string defaultGroup = "Game";
-
+        public int defaultGroup = 0;
         public List<InputGroup> Groups = new List<InputGroup>();
+
+        public string DefaultGroupName 
+        { 
+            get
+            {
+                if (defaultGroup >= 0 && defaultGroup < Groups.Count)
+                    return Groups[defaultGroup].groupName;
+                return string.Empty;
+            }
+        }
 
         public bool TryGetGroup(string groupName, out InputGroup group, bool logError = false)
         {
@@ -51,6 +60,23 @@ namespace qASIC.InputManagement
 
                 names.Add(Groups[i].groupName);
             }
+        }
+
+        public string[] GetGroupNames()
+        {
+            string[] names = new string[Groups.Count];
+            for (int i = 0; i < Groups.Count; i++)
+                names[i] = Groups[i].groupName;
+
+            return names;
+        }
+
+        public bool GroupExists(string groupName)
+        {
+            for (int i = 0; i < Groups.Count; i++)
+                if (Groups[i]?.NameEquals(groupName) == true)
+                    return true;
+            return false;
         }
     }
 }

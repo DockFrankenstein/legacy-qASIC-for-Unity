@@ -29,7 +29,7 @@ namespace qASIC.InputManagement.Internal
 
             newGroupName = EditorGUILayout.TextField(newGroupName);
 
-            if (GUILayout.Button("Add"))
+            if (GUILayout.Button("Add") && !map.GroupExists(newGroupName))
                 map.Groups.Add(new InputGroup(newGroupName));
 
             GUILayout.EndHorizontal();
