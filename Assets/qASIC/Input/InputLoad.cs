@@ -2,7 +2,7 @@
 
 namespace qASIC.InputManagement
 {
-    public class LoadInput : MonoBehaviour
+    public class InputLoad : MonoBehaviour
     {
         public InputMap map;
 
@@ -11,6 +11,13 @@ namespace qASIC.InputManagement
         private void Awake()
         {
             if (init) return;
+
+            if (!map)
+            {
+                qDebug.LogError("Cannot load Input Map: Input Map has not been assigned!");
+                return;
+            }
+
             init = true;
             InputManager.LoadMap(map);
         }

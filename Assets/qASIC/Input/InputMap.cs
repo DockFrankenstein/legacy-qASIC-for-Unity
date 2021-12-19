@@ -7,13 +7,14 @@ namespace qASIC.InputManagement
     public class InputMap : ScriptableObject
     {
 #if UNITY_EDITOR
+        [HideInInspector]
         public int currentEditorSelectedGroup = -1;
 #endif
 
         public int defaultGroup = 0;
         public List<InputGroup> Groups = new List<InputGroup>();
 
-        public string DefaultGroupName 
+        public string DefaultGroupName
         { 
             get
             {
@@ -47,20 +48,8 @@ namespace qASIC.InputManagement
         }
 
         /// <summary>Checks if there are no duplicate groups</summary>
-        public void CheckForRepeatingGroups()
-        {
-            List<string> names = new List<string>();
-            for (int i = 0; i < Groups.Count; i++)
-            {
-                if (names.Contains(Groups[i].groupName))
-                {
-                    qDebug.LogError($"There are multiple groups in the map, cannot index group <b>{Groups[i].groupName}</b>");
-                    continue;
-                }
-
-                names.Add(Groups[i].groupName);
-            }
-        }
+        public void CheckForRepeating() =>
+            NonRepeatableChecker<InputGroup>.LogContainsRepeatable(Groups);
 
         public string[] GetGroupNames()
         {

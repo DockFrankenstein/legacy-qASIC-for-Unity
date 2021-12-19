@@ -35,7 +35,7 @@ namespace qASIC.Demo
                 return;
             }
 
-            rb.velocity = new Vector2(InputManager.GetAxis("WalkRight", "WalkLeft"), InputManager.GetAxis("WalkUp", "WalkDown")) * speed * SpeedMultiplier;
+            rb.velocity = new Vector2(InputManager.GetMapAxisRaw("Horizontal"), InputManager.GetMapAxisRaw("Vertical")) * speed * SpeedMultiplier;
             InfoDisplayer.DisplayValue("pos", VectorText.ToText(new Vector2(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y))));
         }
 

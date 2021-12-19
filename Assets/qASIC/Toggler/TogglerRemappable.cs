@@ -7,12 +7,13 @@ namespace qASIC.Toggling
 #if ENABLE_INPUT_SYSTEM
         [Message("qASIC Input System only works with the Legacy Input System! Please, change the toggler or switch back to the old solution.", InspectorMessageIconType.error)]
 #endif
-        public string keyName;
+        public string groupName;
+        public string actionName;
 
 #if !ENABLE_INPUT_SYSTEM
         private void Update()
         {
-            if (InputManager.GetInputDown(keyName))
+            if (InputManager.GetInputDown(groupName, actionName))
                 KeyToggle();
         }
 #endif

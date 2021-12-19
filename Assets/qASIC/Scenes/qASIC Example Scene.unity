@@ -4538,8 +4538,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 520468626}
-  - component: {fileID: 520468625}
   - component: {fileID: 520468624}
+  - component: {fileID: 520468625}
   m_Layer: 0
   m_Name: Assign
   m_TagString: Untagged
@@ -4572,9 +4572,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 520468623}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f432c0fcf534b1a4aa392e8d9a7a9fc7, type: 3}
+  m_Script: {fileID: 11500000, guid: 3871b8cc3715476478a1eab75a7297db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  map: {fileID: 11400000, guid: ffcabac4cc9d9db4cabe73d1163f2a79, type: 2}
 --- !u!4 &520468626
 Transform:
   m_ObjectHideFlags: 0
@@ -17292,7 +17293,8 @@ MonoBehaviour:
   togglerTag: console
   addToDontDestroy: 1
   removeDuplicates: 1
-  keyName: Console
+  groupName: UI
+  actionName: Console
 --- !u!4 &2045916094
 Transform:
   m_ObjectHideFlags: 0

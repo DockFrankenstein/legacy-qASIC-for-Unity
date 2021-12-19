@@ -46,8 +46,8 @@ namespace qASIC.InputManagement.Internal
         private void OnEnable()
         {
             LoadMap();
-            actionUI = new InputMapEditorActionDisplayer();
             groupUI = new InputMapEditorGroupDisplayer();
+            actionUI = new InputMapEditorActionDisplayer();
             keyUI = new InputMapEditorKeysDisplayer();
             groupUI.map = map;
         }

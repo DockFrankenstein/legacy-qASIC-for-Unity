@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace qASIC.InputManagement
 {
     [Serializable]
-    public class InputGroup
+    public class InputGroup : INonRepeatable
     {
 #if UNITY_EDITOR
+        [HideInInspector]
         public int currentEditorSelectedAction = -1;
 #endif
 
         public string groupName;
 
         public List<InputAction> actions = new List<InputAction>();
+        public List<InputAxis> axes = new List<InputAxis>();
+
+        public string ItemName { get => groupName; }
 
         public InputGroup() { }
 
@@ -27,13 +32,13 @@ namespace qASIC.InputManagement
 
             for (int i = 0; i < actions.Count; i++)
             {
-                if (actions[i].acionName != actionName) continue;
+                if (actions[i].actionName != actionName) continue;
                 action = actions[i];
                 return true;
             }
 
             if (logError)
-                qDebug.LogError($"Group <b>{groupName}</b> does not contain group <b>{actionName}</b>");
+                qDebug.LogError($"Group <b>{groupName}</b> does not contain action <b>{actionName}</b>");
 
             return false;
         }
@@ -44,19 +49,33 @@ namespace qASIC.InputManagement
             return action;
         }
 
-        public void CheckForRepeatingActions()
+        public bool TryGetAxis(string axisName, out InputAxis axis, bool logError = false)
         {
-            List<string> names = new List<string>();
-            for (int i = 0; i < actions.Count; i++)
-            {
-                if (names.Contains(actions[i].acionName))
-                {
-                    qDebug.LogError($"There are multiple actions in the group, cannot index action <b>{actions[i].acionName}</b>");
-                    continue;
-                }
+            axis = null;
 
-                names.Add(actions[i].acionName);
+            for (int i = 0; i < axes.Count; i++)
+            {
+                if (axes[i].axisName != axisName) continue;
+                axis = axes[i];
+                return true;
             }
+
+            if (logError)
+                qDebug.Log($"Group <b>{groupName}</b> does not contain axis <b>{axisName}</b>");
+
+            return false;
+        }
+
+        public InputAxis GetAxis(string axisName)
+        {
+            TryGetAxis(axisName, out InputAxis axis, true);
+            return axis;
+        }
+
+        public void CheckForRepeating()
+        {
+            NonRepeatableChecker<InputAction>.LogContainsRepeatable(actions);
+            NonRepeatableChecker<InputAxis>.LogContainsRepeatable(axes);
         }
 
         public override string ToString() =>

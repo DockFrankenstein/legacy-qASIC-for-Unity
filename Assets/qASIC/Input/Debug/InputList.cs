@@ -26,10 +26,10 @@ namespace qASIC.InputManagement.DebugTools
                 AddLine(group.groupName);
                 foreach(InputAction action in group.actions)
                 {
-                    AddLine($"{action.acionName}: {action.GetInput()}", 1);
+                    AddLine($"{action.actionName}: {action.GetInput()}", 1);
                     for (int i = 0; i < action.keys.Count; i++)
                     {
-                        KeyCode key = InputManager.GetKeyCode(action.acionName, i, group.groupName);
+                        KeyCode key = InputManager.GetKeyCode(action.actionName, i, group.groupName);
                         AddLine($"{key}: {Input.GetKey(key)}", 2);
                     }
                 }
