@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using qASIC.Tools;
+using qASIC.Options;
 
 namespace qASIC.InputManagement
 {
@@ -11,6 +12,8 @@ namespace qASIC.InputManagement
         [HideInInspector]
         public int currentEditorSelectedGroup = -1;
 #endif
+
+        public SerializationType serializationType = SerializationType.config;
 
         public int defaultGroup = 0;
         public List<InputGroup> Groups = new List<InputGroup>();
