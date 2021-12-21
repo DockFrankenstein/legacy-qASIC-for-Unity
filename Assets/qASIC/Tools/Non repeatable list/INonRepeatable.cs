@@ -1,4 +1,4 @@
-﻿namespace qASIC
+﻿namespace qASIC.Tools
 {
     public interface INonRepeatable
     {

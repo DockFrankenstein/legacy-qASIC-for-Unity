@@ -1,4 +1,5 @@
 ﻿using System;
+using qASIC.Tools;
 
 namespace qASIC.InputManagement
 {

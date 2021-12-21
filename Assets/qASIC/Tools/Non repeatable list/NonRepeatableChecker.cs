@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace qASIC
+namespace qASIC.Tools
 {
     public static class NonRepeatableChecker<T>
     {

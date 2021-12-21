@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7fff99c208a6cb43b02e622f339150a, type: 3}
   m_Name: PedestalDemoInputMap
   m_EditorClassIdentifier: 
-  currentEditorSelectedGroup: 1
+  currentEditorSelectedGroup: 0
   defaultGroup: 0
   Groups:
   - currentEditorSelectedAction: 0

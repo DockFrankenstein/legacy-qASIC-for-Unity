@@ -97,13 +97,5 @@ namespace qASIC.InputManagement.Internal
 
             GUILayout.Box(GUIContent.none, style);
         }
-
-        Texture2D GenerateColorTexture(Color color)
-        {
-            Texture2D texture = new Texture2D(1, 1);
-            texture.SetPixel(0, 0, color);
-            texture.Apply();
-            return texture;
-        }
     }
 }
