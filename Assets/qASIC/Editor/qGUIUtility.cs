@@ -4,6 +4,8 @@ namespace qASIC.UnityEditor
 {
     public static class qGUIUtility
     {
+        public static Texture2D BackgroundTexture { get => GenerateColorTexture(new Color(0f, 0f, 0f, 0.2f)); }
+
         public static Texture2D GenerateColorTexture(Color color)
         {
             Texture2D texture = new Texture2D(1, 1);

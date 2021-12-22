@@ -111,18 +111,18 @@ namespace qASIC.InputManagement
 
         #region Get KeyCode
         public static KeyCode GetKeyCode(string actionName, int index) =>
-            GetKeyCode(actionName, index, MapLoaded ? Map.DefaultGroupName : string.Empty);
+            GetKeyCode(MapLoaded ? Map.DefaultGroupName : string.Empty, actionName, index);
 
-        public static KeyCode GetKeyCode(string actionName, int index, string groupName)
+        public static KeyCode GetKeyCode(string groupName, string actionName, int index)
         {
-            TryGetKeyCode(actionName, index, groupName, out KeyCode key, true);
+            TryGetKeyCode(groupName, actionName, index, out KeyCode key, true);
             return key;
         }
 
         public static bool TryGetKeyCode(string actionName, int index, out KeyCode key, bool logError) =>
-            TryGetKeyCode(actionName, index, MapLoaded ? Map.DefaultGroupName : string.Empty, out key, logError);
+            TryGetKeyCode(MapLoaded ? Map.DefaultGroupName : string.Empty, actionName, index, out key, logError);
 
-        public static bool TryGetKeyCode(string actionName, int index, string groupName, out KeyCode key, bool logError = false)
+        public static bool TryGetKeyCode(string groupName, string actionName, int index, out KeyCode key, bool logError = false)
         {
             key = KeyCode.None;
 

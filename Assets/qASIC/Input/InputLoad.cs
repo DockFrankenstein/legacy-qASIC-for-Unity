@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
+using qASIC.FileManagement;
 
 namespace qASIC.InputManagement
 {
     public class InputLoad : MonoBehaviour
     {
         public InputMap map;
+
+        public GenericFilePath filePath;
 
         bool init = false;
 

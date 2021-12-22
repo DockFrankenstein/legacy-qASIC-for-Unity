@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 
 namespace qASIC.InputManagement.DebugTools
@@ -26,22 +24,19 @@ namespace qASIC.InputManagement.DebugTools
                 AddLine(group.groupName);
                 foreach(InputAction action in group.actions)
                 {
-                    AddLine($"{action.actionName}: {action.GetInput()}", 1);
+                    AddLine($"├{action.actionName}: {action.GetInput()}");
                     for (int i = 0; i < action.keys.Count; i++)
                     {
-                        KeyCode key = InputManager.GetKeyCode(action.actionName, i, group.groupName);
-                        AddLine($"{key}: {Input.GetKey(key)}", 2);
+                        KeyCode key = InputManager.GetKeyCode(group.groupName, action.actionName, i);
+                        AddLine($"├─{key}: {Input.GetKey(key).ToStringFormated()}");
                     }
                 }
             }
         }
 
-        void AddLine(string line, int index = 0)
+        void AddLine(string line)
         {
             if (text.text == null) return;
-            for (int i = 0; i < index; i++)
-                text.text += " ";
-
             text.text += $"{line}\n";
         }
 

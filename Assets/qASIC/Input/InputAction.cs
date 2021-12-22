@@ -49,7 +49,7 @@ namespace qASIC.InputManagement
 
         public bool TryGetKey(int index, out KeyCode key, bool logError = false)
         {
-            if (index >= 0 && keys.Count < index)
+            if (index >= 0 && index < keys.Count)
             {
                 key = keys[index];
                 return true;
@@ -57,9 +57,12 @@ namespace qASIC.InputManagement
 
             key = KeyCode.None;
             if (logError)
-                qDebug.LogError($"Action does not contain key <b>{index}</b>");
+                qDebug.LogError($"Action does not contain key <b>{index}</b>: {keys.Count}");
 
             return false;
         }
+
+        public override string ToString() =>
+            actionName;
     }
 }
