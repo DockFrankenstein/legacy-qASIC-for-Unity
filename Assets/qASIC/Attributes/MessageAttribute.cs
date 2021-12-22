@@ -6,7 +6,7 @@ using UnityEditor;
 
 namespace qASIC
 {
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
     public class MessageAttribute : PropertyAttribute
     {
         public string Message { get; private set; }

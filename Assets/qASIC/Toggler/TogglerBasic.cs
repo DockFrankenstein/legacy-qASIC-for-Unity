@@ -7,6 +7,7 @@ namespace qASIC.Toggling
 #if ENABLE_INPUT_SYSTEM
         public UnityEngine.InputSystem.Key key = UnityEngine.InputSystem.Key.F2;
 #else
+        [KeyCodeListener]
         public KeyCode key = KeyCode.F2;
 #endif
 

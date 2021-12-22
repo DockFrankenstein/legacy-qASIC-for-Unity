@@ -2,7 +2,7 @@
 using UnityEngine;
 using static qASIC.UnityEditor.qGUIUtility;
 
-namespace qASIC.Tools
+namespace qASIC.Internal
 {
     [CustomPropertyDrawer(typeof(MessageAttribute))]
     public class MessageAttributeDrawer : DecoratorDrawer
