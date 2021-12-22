@@ -20,7 +20,7 @@ namespace qASIC.Internal
             position.height = singleLineHeight;
             Rect basePosition = position;
 
-            if (property.propertyType != SerializedPropertyType.Integer)
+            if (property.propertyType != SerializedPropertyType.Enum)
             {
                 LabelField(position, label.text, "Use KeyCodeListener with KeyCode.");
                 return;
