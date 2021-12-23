@@ -5,6 +5,7 @@ namespace qASIC.InputManagement.Menu
 {
     public class InputListener : MonoBehaviour
     {
+        [Message("Input Listener will no longer be updated.", InspectorMessageIconType.notification)]
         public UnityEventKeyCode OnInputRecived = new UnityEventKeyCode();
 
         bool isListening = false;
@@ -24,7 +25,7 @@ namespace qASIC.InputManagement.Menu
         private void Update()
         {
             if (!isListening) return;
-            foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
+            foreach (KeyCode key in KeyboardManager.AllKeyCodes)
             {
                 if (!Input.GetKeyDown(key)) continue;
                 if (_stopOnKeyPress) StopListening();

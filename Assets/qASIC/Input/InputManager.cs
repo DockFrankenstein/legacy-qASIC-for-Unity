@@ -355,6 +355,6 @@ namespace qASIC.InputManagement
             if (negative) value--;
             return value;
         }
-#endregion
+        #endregion
     }
 }

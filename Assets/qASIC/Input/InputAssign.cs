@@ -2,29 +2,29 @@
 using UnityEngine.Events;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 namespace qASIC.InputManagement.Menu
 {
     public class InputAssign : MonoBehaviour
     {
         [Header("Updating name")]
-        public TextMeshProUGUI nameText;
-        public string optionLabelName;
+        [SerializeField] TextMeshProUGUI nameText;
+        [SerializeField] string optionLabelName;
 
         [Header("Options")]
-        public string keyName;
+        [SerializeField] string groupName;
+        [SerializeField] string actionName;
+        [SerializeField] int keyIndex;
 
-        [Header("Listener")]
-        public InputListener listener;
-        public UnityEvent OnStartListening = new UnityEvent();
-        public UnityEvent OnAssign = new UnityEvent();
+        [Header("Events")]
+        [SerializeField] UnityEvent OnStartListening;
+        [SerializeField] UnityEvent OnAssign;
 
-        UnityAction<KeyCode> listinerAction;
+        bool isListening = false;
 
         private void Awake()
         {
-            listinerAction = Assign;
-
             Button button = GetComponent<Button>();
             if (button == null) return;
             button.onClick.AddListener(StartListening);
@@ -34,34 +34,41 @@ namespace qASIC.InputManagement.Menu
         {
             if (nameText != null)
                 nameText.text = GetLabel();
+
+            if (isListening)
+                ListenForKey();
+        }
+
+        public void ListenForKey()
+        {
+            if (!Input.anyKeyDown) return;
+            for (int i = 0; i < KeyboardManager.AllKeyCodes.Length; i++)
+            {
+                if (!Input.GetKeyDown(KeyboardManager.AllKeyCodes[i])) continue;
+                Assign(KeyboardManager.AllKeyCodes[i]);
+                return;
+            }
         }
 
         public string GetLabel()
         {
-            string currentKey = "none";
-            //if (InputManager.GlobalKeys.Presets.ContainsKey(keyName)) 
-            //    currentKey = InputManager.GlobalKeys.Presets[keyName].ToString();
+            string currentKey = "UNKNOWN";
+            if (InputManager.TryGetKeyCode(groupName, actionName, keyIndex, out KeyCode key, false))
+                currentKey = key.ToString();
             return $"{optionLabelName}{currentKey}";
         }
 
         public void StartListening()
         {
-            if (listener == null)
-            {
-                qDebug.LogError("Listiner is not assigned!");
-                return;
-            }
+            isListening = true;
             OnStartListening.Invoke();
-            listener.OnInputRecived.AddListener(listinerAction);
-            listener.StartListening(true, false);
         }
 
         public void Assign(KeyCode key)
         {
-            //InputManager.ChangeInput(keyName, key);
+            InputManager.ChangeInput(groupName, actionName, keyIndex, key);
+            isListening = false;
             OnAssign.Invoke();
-
-            if (listener != null) listener.OnInputRecived.RemoveListener(listinerAction);
         }
     }
 }

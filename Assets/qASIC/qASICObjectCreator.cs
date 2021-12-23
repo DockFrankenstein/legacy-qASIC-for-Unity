@@ -20,7 +20,7 @@ namespace qASIC.Tools
             Canvas canvas = CreateCanvas(null, "Input assign", 20, false);
 
             InputAssign assign = canvas.gameObject.AddComponent<InputAssign>();
-            assign.keyName = newKeyName;
+            //assign.keyName = newKeyName;
 
             InputListener listener = canvas.gameObject.AddComponent<InputListener>();
             listener.StartListening(true, true);
