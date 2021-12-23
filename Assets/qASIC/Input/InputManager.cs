@@ -15,6 +15,7 @@ namespace qASIC.InputManagement
         private static SerializationType SaveType { get; set; } = SerializationType.playerPrefs;
         private static Dictionary<string, Dictionary<string, Dictionary<int, KeyCode>>> UserKeys { get; set; } = new Dictionary<string, Dictionary<string, Dictionary<int, KeyCode>>>();
 
+        #region Saving
         public static void SaveKeys(SerializationType saveType)
         {
             SaveType = saveType;
@@ -55,7 +56,9 @@ namespace qASIC.InputManagement
                     break;
             }
         }
+        #endregion
 
+        #region Loading
         public static void LoadMap(InputMap map)
         {
             Map = map;
@@ -90,8 +93,10 @@ namespace qASIC.InputManagement
                 string key = keys[i].GetSaveKey();
                 if (!ConfigController.TryGettingSetting(content, key, out string setting)) continue;
                 if (!Enum.TryParse(setting, out KeyCode result)) continue;
-                ChangeInput(keys[i].group.groupName, keys[i].action.actionName, keys[i].index, result);
+                ChangeInput(keys[i].group.groupName, keys[i].action.actionName, keys[i].index, result, false, false);
             }
+
+            qDebug.Log("Input preferences loaded successfully.", "input");
         }
 
         /// <summary>Loads user key preferences using Player Prefs</summary>
@@ -111,10 +116,14 @@ namespace qASIC.InputManagement
             {
                 string key = keys[i].GetSaveKey();
                 if (!PlayerPrefs.HasKey(key)) continue;
-                ChangeInput(keys[i].group.groupName, keys[i].action.actionName, keys[i].index, (KeyCode)PlayerPrefs.GetInt(key));
+                ChangeInput(keys[i].group.groupName, keys[i].action.actionName, keys[i].index, (KeyCode)PlayerPrefs.GetInt(key), false, false);
             }
-        }
 
+            qDebug.Log("Input preferences loaded successfully.", "input");
+        }
+        #endregion
+
+        #region KeyData
         public struct KeyData
         {
             public InputGroup group;
@@ -162,6 +171,70 @@ namespace qASIC.InputManagement
 
             return keys;
         }
+        #endregion
+
+        #region Remapping
+        public static void ChangeInput(string actionName, int index, KeyCode newKey, bool save = true, bool log = true) =>
+            ChangeInput(MapLoaded ? Map.DefaultGroupName : string.Empty, actionName, index, newKey, save, log);
+
+        public static void ChangeInput(string groupName, string actionName, int index, KeyCode newKey, bool save = true, bool log = true)
+        {
+            if (!MapLoaded) return;
+            if (!TryGetInputAction(groupName, actionName, out InputAction action, true)) return;
+            if (!action.TryGetKey(index, out _, true)) return;
+
+            CreateUserKey(groupName, actionName, index);
+            UserKeys[groupName][actionName][index] = newKey;
+
+            if (save)
+                SaveKey(groupName, actionName, index, newKey);
+
+            if (log)
+                qDebug.Log($"Changed key {action.actionName} to {newKey}", "input");
+        }
+
+        static void CreateUserKey(string groupName, string keyName, int index)
+        {
+            if (!UserKeys.ContainsKey(groupName))
+                UserKeys.Add(groupName, new Dictionary<string, Dictionary<int, KeyCode>>());
+
+            if (!UserKeys[groupName].ContainsKey(keyName))
+                UserKeys[groupName].Add(keyName, new Dictionary<int, KeyCode>());
+
+            if (!UserKeys[groupName][keyName].ContainsKey(index))
+                UserKeys[groupName][keyName].Add(index, KeyCode.None);
+        }
+        #endregion
+
+        #region Get KeyCode
+        public static KeyCode GetKeyCode(string actionName, int index) =>
+            GetKeyCode(MapLoaded ? Map.DefaultGroupName : string.Empty, actionName, index);
+
+        public static KeyCode GetKeyCode(string groupName, string actionName, int index)
+        {
+            TryGetKeyCode(groupName, actionName, index, out KeyCode key, true);
+            return key;
+        }
+
+        public static bool TryGetKeyCode(string actionName, int index, out KeyCode key, bool logError) =>
+            TryGetKeyCode(MapLoaded ? Map.DefaultGroupName : string.Empty, actionName, index, out key, logError);
+
+        public static bool TryGetKeyCode(string groupName, string actionName, int index, out KeyCode key, bool logError = false)
+        {
+            key = KeyCode.None;
+
+            if (!MapLoaded)
+                return false;
+
+            if (!TryGetInputAction(groupName, actionName, out InputAction action, logError) || !action.TryGetKey(index, out key, true))
+                return false;
+
+            if (UserKeyExists(groupName, actionName, index))
+                key = UserKeys[groupName][actionName][index];
+
+            return true;
+        }
+        #endregion
 
         #region Input handling
         public static bool GetInputDown(string groupName, string actionName) =>
@@ -202,60 +275,6 @@ namespace qASIC.InputManagement
             }
 
             return false;
-        }
-        #endregion
-
-        public static void ChangeInput(string groupName, string actionName, int index, KeyCode newKey, bool save = true, bool log = true)
-        {
-            if (!MapLoaded) return;
-            if (!TryGetInputAction(groupName, actionName, out InputAction action, true)) return;
-
-            CreateUserKey(groupName, actionName, index);
-            UserKeys[groupName][actionName][index] = newKey;
-
-            if (log)
-                qDebug.Log($"Changed key {action.actionName} to {newKey}", "input");
-        }
-
-        static void CreateUserKey(string groupName, string keyName, int index)
-        {
-            if (!UserKeys.ContainsKey(groupName))
-                UserKeys.Add(groupName, new Dictionary<string, Dictionary<int, KeyCode>>());
-
-            if (!UserKeys[groupName].ContainsKey(keyName))
-                UserKeys[groupName].Add(keyName, new Dictionary<int, KeyCode>());
-
-            if (!UserKeys[groupName][keyName].ContainsKey(index))
-                UserKeys[groupName][keyName].Add(index, KeyCode.None);
-        }
-
-        #region Get KeyCode
-        public static KeyCode GetKeyCode(string actionName, int index) =>
-            GetKeyCode(MapLoaded ? Map.DefaultGroupName : string.Empty, actionName, index);
-
-        public static KeyCode GetKeyCode(string groupName, string actionName, int index)
-        {
-            TryGetKeyCode(groupName, actionName, index, out KeyCode key, true);
-            return key;
-        }
-
-        public static bool TryGetKeyCode(string actionName, int index, out KeyCode key, bool logError) =>
-            TryGetKeyCode(MapLoaded ? Map.DefaultGroupName : string.Empty, actionName, index, out key, logError);
-
-        public static bool TryGetKeyCode(string groupName, string actionName, int index, out KeyCode key, bool logError = false)
-        {
-            key = KeyCode.None;
-
-            if (!MapLoaded)
-                return false;
-
-            if (!TryGetInputAction(groupName, actionName, out InputAction action, logError) || !action.TryGetKey(index, out key, true))
-                return false;
-
-            if (UserKeyExists(groupName, actionName, index))
-                key = UserKeys[groupName][actionName][index];
-
-            return true;
         }
         #endregion
 

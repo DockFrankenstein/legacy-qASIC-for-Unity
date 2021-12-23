@@ -8,7 +8,7 @@ namespace qASIC.InputManagement
     {
         public InputMap map;
 
-        public SerializationType serializationType;
+        public SerializationType serializationType = SerializationType.playerPrefs;
         public GenericFilePath filePath = new GenericFilePath("input.txt");
 
         bool init = false;

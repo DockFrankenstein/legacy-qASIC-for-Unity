@@ -4560,8 +4560,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadOnce: 1
-  userSavePath: qASIC demo/Settings.txt
-  editorUserSavePath: qASIC demo/Setting-editor.txt
+  userSavePath: qASIC\Pedestal Demo\Settings.txt
+  editorUserSavePath: qASIC\Pedestal Demo\Setting-editor.txt
   saveFilePreset: {fileID: 4900000, guid: fd3d12d5bfd9947449045bf0a9273de6, type: 3}
 --- !u!114 &520468625
 MonoBehaviour:
@@ -4576,6 +4576,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 11400000, guid: ffcabac4cc9d9db4cabe73d1163f2a79, type: 2}
+  serializationType: 1
+  filePath:
+    specialFolder: 26
+    filePath: qASIC\Pedestal Demo\input.txt
 --- !u!4 &520468626
 Transform:
   m_ObjectHideFlags: 0
