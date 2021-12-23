@@ -7,6 +7,9 @@ namespace qASIC.InputManagement.DebugTools
     {
         [SerializeField] TMP_Text text;
 
+        public void SetupText(TMP_Text text) =>
+            this.text = text;
+
         private void Update()
         {
             if (text == null) return;
@@ -20,7 +23,6 @@ namespace qASIC.InputManagement.DebugTools
 
             foreach (InputGroup group in InputManager.Map.Groups)
             {
-                Debug.Log("asd");
                 AddLine(group.groupName);
                 foreach(InputAction action in group.actions)
                 {

@@ -7,12 +7,14 @@ using qASIC.Displayer.Displayers;
 using qASIC.Toggling;
 using qASIC.Console;
 using qASIC.InputManagement.Menu;
+using qASIC.InputManagement.DebugTools;
 
 namespace qASIC.Tools
 {
     public static class qASICObjectCreator
     {
         #region Menu Items
+        [System.Obsolete]
         public static GameObject CreateInputWindow(string newKeyName)
         {
             Canvas canvas = CreateCanvas(null, "Input assign", 20, false);
@@ -70,6 +72,13 @@ namespace qASIC.Tools
             toggler.togglerTag = "debug displayer";
             toggler.toggleObject = canvasObject;
             displayerObject.SetActive(true);
+        }
+
+        public static void CreateInputInfo()
+        {
+            GameObject canvasObject = CreateCanvas(null, "Input Info", 9, false).gameObject;
+            InputList list = canvasObject.AddComponent<InputList>();
+            list.SetupText(CreateTextObject(canvasObject.transform, "Text", 12));
         }
 
 #if UNITY_EDITOR

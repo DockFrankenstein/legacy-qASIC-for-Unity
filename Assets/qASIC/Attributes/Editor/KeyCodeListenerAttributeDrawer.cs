@@ -26,7 +26,7 @@ namespace qASIC.Internal
                 return;
             }
 
-            switch(isListening)
+            switch (isListening)
             {
                 case true:
                     position = PrefixLabel(position, label);
