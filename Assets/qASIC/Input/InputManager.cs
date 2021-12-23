@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
+using qASIC.Options;
+using qASIC.FileManagement;
 
 namespace qASIC.InputManagement
 {
@@ -8,13 +10,50 @@ namespace qASIC.InputManagement
     {
         public static InputMap Map { get; set; }
         public static bool MapLoaded { get => Map != null; }
+
+        private static string SavePath { get; set; }
+        private static SerializationType SaveType { get; set; } = SerializationType.playerPrefs;
         private static Dictionary<string, Dictionary<string, Dictionary<int, KeyCode>>> UserKeys { get; set; } = new Dictionary<string, Dictionary<string, Dictionary<int, KeyCode>>>();
+
+        public static void SaveKeys(SerializationType saveType)
+        {
+            SaveType = saveType;
+            SaveKeys();
+        }
 
         public static void SaveKeys()
         {
-            //string path = $"{Application.persistentDataPath}/{GlobalKeys.SavePath}";
-            //foreach (var entry in GlobalKeys.Presets)
-            //    FileManagement.ConfigController.SetSettingFromFile(path, entry.Key, entry.Value.ToString());
+            List<KeyData> keys = GenerateKeyList();
+
+            for (int i = 0; i < keys.Count; i++)
+                if (UserKeyExists(keys[i].group.groupName, keys[i].action.actionName, keys[i].index))
+                    SaveKey(keys[i].GroupName, keys[i].ActionName, keys[i].index, UserKeys[keys[i].GroupName][keys[i].ActionName][keys[i].index]);
+
+            qDebug.Log("Successfully saved user input preferences.", "input");
+        }
+
+        public static void SaveKey(string groupName, string actionName, int keyIndex, KeyCode key)
+        {
+            string saveKey = KeyData.GenerateSaveKey(groupName, actionName, keyIndex);
+
+            switch (SaveType)
+            {
+                case SerializationType.config:
+                    if (string.IsNullOrWhiteSpace(SavePath))
+                    {
+                        qDebug.LogError("Cannot save key preference, path is empty!");
+                        return;
+                    }
+
+                    ConfigController.SetSettingFromFile(SavePath, saveKey, key.ToString());
+                    break;
+                case SerializationType.playerPrefs:
+                    PlayerPrefs.SetInt(saveKey, (int)key);
+                    break;
+                default:
+                    qDebug.LogError("Serialization type '{SaveType}' is not supported by the input system!");
+                    break;
+            }
         }
 
         public static void LoadMap(InputMap map)
@@ -25,23 +64,103 @@ namespace qASIC.InputManagement
             for (int i = 0; i < Map.Groups.Count; i++)
                 Map.Groups[i].CheckForRepeating();
 
+            UserKeys.Clear();
+
             qDebug.Log("Input map has been assigned", "input");
         }
 
-        public static void LoadUserKeys()
+        /// <summary>Loads user key preferences using Config Controller</summary>
+        public static void LoadUserKeysConfig(string path)
         {
-            //string path = $"{Application.persistentDataPath}/{GlobalKeys.SavePath}";
-            //if (!FileManagement.FileManager.TryLoadFileWriter(path, out string content)) return;
+            SaveType = SerializationType.config;
+            SavePath = path;
 
-            //List<string> settings = FileManagement.ConfigController.CreateOptionList(content);
+            if (!MapLoaded)
+            {
+                qDebug.LogError("Cannot load user keys, Map has not been loaded!");
+                return;
+            }
 
-            //for (int i = 0; i < settings.Count; i++)
-            //{
-            //    if (settings[i].StartsWith("#")) continue;
-            //    string[] values = settings[i].Split(':');
-            //    if (values.Length != 2) continue;
-            //    if (GlobalKeys.Presets.ContainsKey(values[0]) && System.Enum.TryParse(values[1], out KeyCode result)) GlobalKeys.Presets[values[0]] = result;
-            //}
+            if (!FileManager.TryLoadFileWriter(path, out string content)) return;
+
+            List<KeyData> keys = GenerateKeyList();
+
+            for (int i = 0; i < keys.Count; i++)
+            {
+                string key = keys[i].GetSaveKey();
+                if (!ConfigController.TryGettingSetting(content, key, out string setting)) continue;
+                if (!Enum.TryParse(setting, out KeyCode result)) continue;
+                ChangeInput(keys[i].group.groupName, keys[i].action.actionName, keys[i].index, result);
+            }
+        }
+
+        /// <summary>Loads user key preferences using Player Prefs</summary>
+        public static void LoadUserKeysPrefs()
+        {
+            SaveType = SerializationType.playerPrefs;
+
+            if (!MapLoaded)
+            {
+                qDebug.LogError("Cannot load user keys, Map has not been loaded!");
+                return;
+            }
+
+            List<KeyData> keys = GenerateKeyList();
+
+            for (int i = 0; i < keys.Count; i++)
+            {
+                string key = keys[i].GetSaveKey();
+                if (!PlayerPrefs.HasKey(key)) continue;
+                ChangeInput(keys[i].group.groupName, keys[i].action.actionName, keys[i].index, (KeyCode)PlayerPrefs.GetInt(key));
+            }
+        }
+
+        public struct KeyData
+        {
+            public InputGroup group;
+            public InputAction action;
+            public int index;
+
+            public string GroupName { get => group.groupName; }
+            public string ActionName { get => action.actionName; }
+
+            /// <returns>Returns key used for saving and loading</returns>
+            public string GetSaveKey() =>
+                GenerateSaveKey(group.groupName, action.actionName, index);
+
+            public static string GenerateSaveKey(string groupName, string actionName, int index) =>
+                $"qASIC_Input_{groupName.ToLower()}_{actionName.ToLower()}_{index}";
+
+            public KeyData(InputGroup group, InputAction action, int index)
+            {
+                this.group = group;
+                this.action = action;
+                this.index = index;
+            }
+        }
+
+        public static List<KeyData> GenerateKeyList()
+        {
+            List<KeyData> keys = new List<KeyData>();
+
+            if (!MapLoaded)
+            {
+                qDebug.LogError("Cannot load user keys, Map has not been loaded!");
+                return keys;
+            }
+
+            for (int groupIndex = 0; groupIndex < Map.Groups.Count; groupIndex++)
+            {
+                InputGroup group = Map.Groups[groupIndex];
+                for (int actionIndex = 0; actionIndex < group.actions.Count; actionIndex++)
+                {
+                    InputAction action = group.actions[actionIndex];
+                    for (int i = 0; i < action.keys.Count; i++)
+                        keys.Add(new KeyData(group, action, i));
+                }
+            }
+
+            return keys;
         }
 
         #region Input handling
@@ -86,15 +205,16 @@ namespace qASIC.InputManagement
         }
         #endregion
 
-        public static void ChangeInput(string groupName, string keyName, int index, KeyCode newKey)
+        public static void ChangeInput(string groupName, string actionName, int index, KeyCode newKey, bool save = true, bool log = true)
         {
             if (!MapLoaded) return;
-            if (!TryGetInputAction(groupName, keyName, out InputAction action, true)) return;
+            if (!TryGetInputAction(groupName, actionName, out InputAction action, true)) return;
 
-            CreateUserKey(groupName, keyName, index);
-            UserKeys[groupName][keyName][index] = newKey;
+            CreateUserKey(groupName, actionName, index);
+            UserKeys[groupName][actionName][index] = newKey;
 
-            qDebug.Log($"Changed key {action.actionName} to {newKey}", "input");
+            if (log)
+                qDebug.Log($"Changed key {action.actionName} to {newKey}", "input");
         }
 
         static void CreateUserKey(string groupName, string keyName, int index)

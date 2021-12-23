@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using qASIC.FileManagement;
+using qASIC.Options;
 
 namespace qASIC.InputManagement
 {
@@ -7,7 +8,8 @@ namespace qASIC.InputManagement
     {
         public InputMap map;
 
-        public GenericFilePath filePath;
+        public SerializationType serializationType;
+        public GenericFilePath filePath = new GenericFilePath("input.txt");
 
         bool init = false;
 
@@ -21,8 +23,22 @@ namespace qASIC.InputManagement
                 return;
             }
 
-            init = true;
             InputManager.LoadMap(map);
+            
+            switch (serializationType)
+            {
+                case SerializationType.playerPrefs:
+                    InputManager.LoadUserKeysPrefs();
+                    break;
+                case SerializationType.config:
+                    InputManager.LoadUserKeysConfig(filePath.GetFullPath());
+                    break;
+                default:
+                    qDebug.LogError("Serialization type '{SaveType}' is not supported by the input system!");
+                    break;
+            }
+
+            init = true;
         }
     }
 }

@@ -26,5 +26,8 @@ namespace qASIC.FileManagement
 
         public static string GenerateFullPath(Environment.SpecialFolder specialFolder, string filePath) =>
             $@"{FileManager.GetCustomFolderPath(specialFolder)}\{filePath}";
+
+        public override string ToString() =>
+            GetFullPath();
     }
 }
