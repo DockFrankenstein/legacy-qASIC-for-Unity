@@ -2,7 +2,6 @@
 using UnityEngine.Events;
 using TMPro;
 using UnityEngine.UI;
-using System;
 
 namespace qASIC.InputManagement.Menu
 {

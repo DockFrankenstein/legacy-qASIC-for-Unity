@@ -18,7 +18,7 @@ namespace qASIC.InputManagement
         public List<InputAction> actions = new List<InputAction>();
         public List<InputAxis> axes = new List<InputAxis>();
 
-        public string ItemName { get => groupName; }
+        public string ItemName { get => groupName; set => groupName = value; }
 
         public InputGroup() { }
 

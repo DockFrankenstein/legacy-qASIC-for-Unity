@@ -1,5 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using qASIC.UnityEditor;
+using System.Linq;
+using UnityEditor.IMGUI.Controls;
 
 namespace qASIC.InputManagement.Internal
 {
@@ -9,9 +12,13 @@ namespace qASIC.InputManagement.Internal
 
         static InputMap map;
 
-        InputMapEditorGroupDisplayer groupUI = new InputMapEditorGroupDisplayer();
-        InputMapEditorActionDisplayer actionUI = new InputMapEditorActionDisplayer();
-        InputMapEditorKeysDisplayer keyUI = new InputMapEditorKeysDisplayer();
+        InputMapToolbar toolbar = new InputMapToolbar();
+        InputMapGroupBar groupBar = new InputMapGroupBar();
+        InputMapContentDisplayer content = new InputMapContentDisplayer();
+        InputMapInspectorDisplayer inspector = new InputMapInspectorDisplayer();
+
+        InputMapContentTree contentTree;
+        TreeViewState contentTreeState;
 
         const string mapPrefsKey = "qASIC_editor_input_map";
 
@@ -20,6 +27,8 @@ namespace qASIC.InputManagement.Internal
         {
             InputMapWindow window = GetEdtorWindow();
             window.titleContent.image = window.icon;
+            window.minSize = new Vector2(512f, 256f);
+            window.ResetEditor();
             window.Show();
         }
 
@@ -40,59 +49,109 @@ namespace qASIC.InputManagement.Internal
             OpenWindow();
         }
 
+        public static void CloseMap()
+        {
+            map = null;
+            EditorPrefs.DeleteKey(mapPrefsKey);
+            GetEdtorWindow().ResetEditor();
+        }
+
         public static InputMapWindow GetEdtorWindow() =>
             (InputMapWindow)GetWindow(typeof(InputMapWindow), false, "Input Map Editor");
 
         private void OnEnable()
         {
             LoadMap();
-            groupUI = new InputMapEditorGroupDisplayer();
-            actionUI = new InputMapEditorActionDisplayer();
-            keyUI = new InputMapEditorKeysDisplayer();
-            groupUI.map = map;
+            ResetEditor();
+        }
+
+        public void ResetEditor()
+        {
+            //Displayers
+            groupBar = new InputMapGroupBar();
+            content = new InputMapContentDisplayer();
+            inspector = new InputMapInspectorDisplayer();
+            toolbar = new InputMapToolbar();
+
+            //Trees
+            if (contentTreeState == null)
+                contentTreeState = new TreeViewState();
+
+            contentTree = new InputMapContentTree(contentTreeState);
+
+
+            toolbar.map = map;
+            groupBar.map = map;
+            inspector.map = map;
+
+            groupBar.OnItemSelect += inspector.SetObject;
+            content.OnItemSelect += inspector.SetObject;
+
+            inspector.OnDeleteGroup += (InputGroup group) =>
+            {
+                int index = map.Groups.IndexOf(group);
+                if (index == -1) return;
+
+                map.Groups.RemoveAt(index);
+                if (map.Groups.Count > 0)
+                    groupBar.Select(Mathf.Max(0, index - 1));
+
+                groupBar.ResetScroll();
+            };
+
+            inspector.OnDeleteAction += (InputMapInspectorDisplayer.InspectorInputAction action) =>
+            {
+                int index = action.group.actions.IndexOf(action.action);
+                if (index == -1) return;
+
+                action.group.actions.RemoveAt(index);
+                if (action.group.actions.Count > 0)
+                    content.Select(Mathf.Max(0, index - 1));
+            };
         }
 
         private void OnGUI()
         {
-            bool isMapSelected = map != null;
-            int group = isMapSelected ? map.currentEditorSelectedGroup : -1;
-            bool isGroupSelected = group >= 0 && group < map.Groups.Count;
-            int action = isGroupSelected ? map.Groups[group].currentEditorSelectedAction : -1;
-            bool isActionSelected = action >= 0 && action < map.Groups[group].actions.Count;
+            toolbar.OnGUI();
+            groupBar.OnGUI();
 
-            actionUI.group = isGroupSelected ? map.Groups[group] : null;
-            keyUI.action = isActionSelected ? map.Groups[group].actions[action] : null;
+            GUILayout.BeginHorizontal();
 
-            if (isMapSelected)
-                map.defaultGroup = EditorGUILayout.Popup(map.defaultGroup, map.GetGroupNames());
 
-            groupUI.OnGUI();
-            actionUI.OnGUI();
-            keyUI.OnGUI();
+            GUILayout.BeginVertical();
+            content.group = map ? map.Groups.ElementAtOrDefault(map.currentEditorSelectedGroup) : null;
+            content.OnGUI();
 
-            if (GUILayout.Button("Save"))
-            {
-                EditorUtility.SetDirty(map);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-            }
+            //This should also be uncomented for treeview
+            //GUILayout.FlexibleSpace();
+
+            GUILayout.EndVertical();
+
+            //@Kubikz do your magic
+            //Treeview solution, currently not finished
+            //Rect rect = GUILayoutUtility.GetLastRect();
+            //contentTree.Group = map ? map.Groups.ElementAtOrDefault(map.currentEditorSelectedGroup) : null;
+            //contentTree.OnGUI(rect);
+
+            HorizontalLine();
+
+            GUILayout.BeginVertical(GUILayout.Width(300f));
+            inspector.OnGUI();
+            GUILayout.EndVertical();
+
+            GUILayout.EndHorizontal();
         }
 
         void HorizontalLine()
         {
-            Texture2D texture = new Texture2D(1, 1);
-            texture.SetPixel(0, 0, Color.black);
-            texture.Apply();
-
             GUIStyle style = new GUIStyle()
             {
                 normal = new GUIStyleState()
                 {
-                    background = texture,
+                    background = qGUIUtility.GenerateColorTexture(new Color(0f, 0f, 0f)),
                 },
                 fixedWidth = 1f,
                 stretchHeight = true,
-                margin = new RectOffset(3, 3, 0, 0),
             };
 
             GUILayout.Box(GUIContent.none, style);

@@ -2,6 +2,6 @@
 {
     public interface INonRepeatable
     {
-        string ItemName { get; }
+        string ItemName { get; set; }
     }
 }

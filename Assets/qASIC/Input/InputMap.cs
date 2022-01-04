@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using qASIC.Tools;
-using qASIC.Options;
 
 namespace qASIC.InputManagement
 {
@@ -9,11 +8,9 @@ namespace qASIC.InputManagement
     public class InputMap : ScriptableObject
     {
 #if UNITY_EDITOR
-        [HideInInspector]
-        public int currentEditorSelectedGroup = -1;
+        [HideInInspector] public int currentEditorSelectedGroup = -1;
+        [HideInInspector] public bool autoSave = true;
 #endif
-
-        public SerializationType serializationType = SerializationType.config;
 
         public int defaultGroup = 0;
         public List<InputGroup> Groups = new List<InputGroup>();

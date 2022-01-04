@@ -10,9 +10,10 @@ namespace qASIC.InputManagement
     {
         public string actionName;
 
+        [KeyCodeListener]
         public List<KeyCode> keys = new List<KeyCode>();
 
-        public string ItemName { get => actionName; }
+        public string ItemName { get => actionName; set => actionName = value; }
 
         public InputAction() { }
         

@@ -15,29 +15,15 @@ MonoBehaviour:
   currentEditorSelectedGroup: 0
   defaultGroup: 0
   Groups:
-  - currentEditorSelectedAction: 0
+  - currentEditorSelectedAction: 1
     groupName: Game
     actions:
-    - actionName: Up
-      keys: 7700000011010000
-    - actionName: Down
-      keys: 7300000012010000
-    - actionName: Left
-      keys: 6100000014010000
-    - actionName: Right
-      keys: 6400000013010000
-    - actionName: Interact
-      keys: 65000000
-    axes:
-    - axisName: Horizontal
-      positiveAction: Right
-      negativeAction: Left
-    - axisName: Vertical
-      positiveAction: Up
-      negativeAction: Down
-  - currentEditorSelectedAction: 0
-    groupName: UI
-    actions:
-    - actionName: Console
-      keys: 600000007e000000
+    - actionName: oi
+      keys: 0401000020010000
+    - actionName: oin't
+      keys: 
+    axes: []
+  - currentEditorSelectedAction: -1
+    groupName: New group 0
+    actions: []
     axes: []
