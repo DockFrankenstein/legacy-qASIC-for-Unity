@@ -4,10 +4,11 @@ using qASIC.EditorTools;
 using System.Linq;
 using UnityEditor.IMGUI.Controls;
 using UnityEditor.Callbacks;
+using qASIC.EditorTools;
 
 namespace qASIC.InputManagement.Internal
 {
-    public class InputMapWindow : EditorWindow
+    public class InputMapWindow : EditorWindow, IHasCustomMenu
     {
         [SerializeField] Texture2D icon;
 
@@ -30,6 +31,11 @@ namespace qASIC.InputManagement.Internal
                 return false;
             OpenMap(map);
             return true;
+        }
+
+        void IHasCustomMenu.AddItemsToMenu(GenericMenu menu)
+        {
+            menu.AddItem("Reset editor", false, CloseMap);
         }
 
         [MenuItem("Window/qASIC/Input Map Editor")]
