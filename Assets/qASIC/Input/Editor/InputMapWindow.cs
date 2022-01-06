@@ -20,7 +20,7 @@ namespace qASIC.InputManagement.Internal
         InputMapContentTree contentTree;
         TreeViewState contentTreeState;
 
-        const string mapPrefsKey = "qASIC_editor_input_map";
+        const string mapPrefsKey = "qASIC_input_map_editor_map";
 
         [OnOpenAsset]
         public static bool OnOpenAsset(int instanceID, int line)
