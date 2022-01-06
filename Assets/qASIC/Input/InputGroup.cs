@@ -8,11 +8,6 @@ namespace qASIC.InputManagement
     [Serializable]
     public class InputGroup : INonRepeatable
     {
-#if UNITY_EDITOR
-        [HideInInspector]
-        public int currentEditorSelectedAction = -1;
-#endif
-
         public string groupName;
 
         public List<InputAction> actions = new List<InputAction>();
@@ -75,8 +70,8 @@ namespace qASIC.InputManagement
 
         public void CheckForRepeating()
         {
-            NonRepeatableChecker<InputAction>.LogContainsRepeatable(actions);
-            NonRepeatableChecker<InputAxis>.LogContainsRepeatable(axes);
+            NonRepeatableChecker.LogContainsRepeatable(actions);
+            NonRepeatableChecker.LogContainsRepeatable(axes);
         }
 
         public override string ToString() =>

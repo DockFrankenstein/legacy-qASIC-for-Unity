@@ -5,7 +5,7 @@ using System;
 using static UnityEditor.EditorGUIUtility;
 using static UnityEngine.GUI;
 using static UnityEditor.EditorGUI;
-using static qASIC.UnityEditor.qGUIUtility;
+using static qASIC.EditorTools.qGUIUtility;
 
 namespace qASIC.FileManagement.Internal
 {
@@ -27,7 +27,7 @@ namespace qASIC.FileManagement.Internal
                 padding = new RectOffset((int)Spacing, 0, 0, 0),
             };
 
-            labelStyle.normal.background = BackgroundTexture;
+            labelStyle.normal.background = qASICBackgroundTexture;
 
             Rect labelPosition = new Rect(position.x, position.y, position.width, singleLineHeight);
             Rect boxPosition = new Rect(position.x, position.y + singleLineHeight, position.width, position.height - singleLineHeight);
@@ -47,7 +47,7 @@ namespace qASIC.FileManagement.Internal
             Rect previewPosition = position;
 
             Label(labelPosition, label, labelStyle);
-            Box(boxPosition, BackgroundTexture);
+            Box(boxPosition, qASICBackgroundTexture);
 
             specialFolder.intValue = (int)(Environment.SpecialFolder)EnumPopup(folderPosition, GUIContent.none, (Environment.SpecialFolder)specialFolder.intValue);
             filePath.stringValue = TextField(filePathPosition, GUIContent.none, filePath.stringValue);

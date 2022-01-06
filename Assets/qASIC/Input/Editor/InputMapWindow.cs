@@ -1,8 +1,9 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using qASIC.UnityEditor;
+using qASIC.EditorTools;
 using System.Linq;
 using UnityEditor.IMGUI.Controls;
+using UnityEditor.Callbacks;
 
 namespace qASIC.InputManagement.Internal
 {
@@ -14,13 +15,22 @@ namespace qASIC.InputManagement.Internal
 
         InputMapToolbar toolbar = new InputMapToolbar();
         InputMapGroupBar groupBar = new InputMapGroupBar();
-        InputMapContentDisplayer content = new InputMapContentDisplayer();
         InputMapInspectorDisplayer inspector = new InputMapInspectorDisplayer();
 
         InputMapContentTree contentTree;
         TreeViewState contentTreeState;
 
         const string mapPrefsKey = "qASIC_editor_input_map";
+
+        [OnOpenAsset]
+        public static bool OnOpenAsset(int instanceID, int line)
+        {
+            object obj = EditorUtility.InstanceIDToObject(instanceID);
+            if (!(obj is InputMap map))
+                return false;
+            OpenMap(map);
+            return true;
+        }
 
         [MenuItem("Window/qASIC/Input Map Editor")]
         static void OpenWindow()
@@ -68,24 +78,34 @@ namespace qASIC.InputManagement.Internal
         public void ResetEditor()
         {
             //Displayers
-            groupBar = new InputMapGroupBar();
-            content = new InputMapContentDisplayer();
-            inspector = new InputMapInspectorDisplayer();
             toolbar = new InputMapToolbar();
+            groupBar = new InputMapGroupBar();
+            inspector = new InputMapInspectorDisplayer();
 
             //Trees
             if (contentTreeState == null)
                 contentTreeState = new TreeViewState();
 
-            contentTree = new InputMapContentTree(contentTreeState);
+            contentTree = new InputMapContentTree(contentTreeState, map ? map.Groups.ElementAtOrDefault(map.currentEditorSelectedGroup) : null);
 
-
+            //Assigning maps
             toolbar.map = map;
             groupBar.map = map;
             inspector.map = map;
 
-            groupBar.OnItemSelect += inspector.SetObject;
-            content.OnItemSelect += inspector.SetObject;
+            //Events
+            groupBar.OnItemSelect += (object o) =>
+            {
+                if (contentTree != null && o is InputGroup group)
+                {
+                    contentTree.Group = group;
+                    contentTree.Reload();
+                }
+
+                inspector.SetObject(o);
+            };
+
+            contentTree.OnItemSelect += inspector.SetObject;
 
             inspector.OnDeleteGroup += (InputGroup group) =>
             {
@@ -105,8 +125,7 @@ namespace qASIC.InputManagement.Internal
                 if (index == -1) return;
 
                 action.group.actions.RemoveAt(index);
-                if (action.group.actions.Count > 0)
-                    content.Select(Mathf.Max(0, index - 1));
+                contentTree.Reload();
             };
         }
 
@@ -117,21 +136,7 @@ namespace qASIC.InputManagement.Internal
 
             GUILayout.BeginHorizontal();
 
-
-            GUILayout.BeginVertical();
-            content.group = map ? map.Groups.ElementAtOrDefault(map.currentEditorSelectedGroup) : null;
-            content.OnGUI();
-
-            //This should also be uncomented for treeview
-            //GUILayout.FlexibleSpace();
-
-            GUILayout.EndVertical();
-
-            //@Kubikz do your magic
-            //Treeview solution, currently not finished
-            //Rect rect = GUILayoutUtility.GetLastRect();
-            //contentTree.Group = map ? map.Groups.ElementAtOrDefault(map.currentEditorSelectedGroup) : null;
-            //contentTree.OnGUI(rect);
+            DrawTreeView(contentTree);
 
             HorizontalLine();
 
@@ -142,18 +147,24 @@ namespace qASIC.InputManagement.Internal
             GUILayout.EndHorizontal();
         }
 
+        void DrawTreeView(TreeView tree)
+        {
+            GUILayout.BeginVertical();
+            GUILayout.FlexibleSpace();
+            GUILayout.EndVertical();
+            Rect rect = GUILayoutUtility.GetLastRect();
+            tree.OnGUI(rect);
+        }
+
         void HorizontalLine()
         {
             GUIStyle style = new GUIStyle()
             {
-                normal = new GUIStyleState()
-                {
-                    background = qGUIUtility.GenerateColorTexture(new Color(0f, 0f, 0f)),
-                },
                 fixedWidth = 1f,
                 stretchHeight = true,
             };
 
+            style.normal.background = qGUIUtility.BorderTexture;
             GUILayout.Box(GUIContent.none, style);
         }
     }

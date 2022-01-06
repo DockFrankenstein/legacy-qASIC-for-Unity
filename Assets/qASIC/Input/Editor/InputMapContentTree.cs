@@ -1,17 +1,38 @@
 ﻿using System.Collections.Generic;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using System;
+using UnityEditor;
+using qASIC.Tools;
+using qASIC.EditorTools;
+
+using WindowUtility = qASIC.InputManagement.Internal.InputMapEditorUtility;
 
 namespace qASIC.InputManagement.Internal
 {
     public class InputMapContentTree : TreeView
     {
-		public InputGroup Group { get; set; }
+		public InputMapTreeActionHeaderItem ActionsRoot { get; private set; }
+		public InputMapTreeAxisHeaderItem AxesRoot { get; private set; }
 
-		public InputMapContentTree(TreeViewState state)
+		private InputGroup group;
+		public InputGroup Group
+		{
+			get => group;
+			set => group = value;
+		}
+
+		//The context menu has to be shown on next repaint in order
+		//for the item to get selected
+		bool showContextOnNextRepaint;
+
+		Color HeaderBarColor => Color.clear;
+
+        #region Creating
+        public InputMapContentTree(TreeViewState state, InputGroup group)
 			: base(state)
 		{
+			this.group = group;
 			Reload();
 		}
 
@@ -24,51 +45,357 @@ namespace qASIC.InputManagement.Internal
 		{
 			var rows = GetRows() ?? new List<TreeViewItem>();
 
-			Scene scene = SceneManager.GetSceneAt(0);
-
-			// We use the GameObject instanceIDs as ids for items as we want to 
-			// select the game objects and not the transform components.
 			rows.Clear();
 
-			Debug.Log(Group == null);
-
-			if (Group != null)
-			{
-				for (int i = 0; i < Group.actions.Count; i++)
-				{
-					TreeViewItem item = new TreeViewItem(i + 1, -1, Group.actions[i].actionName);
-					root.AddChild(item);
-					rows.Add(item);
-				}
+            if (Group != null)
+            {
+				CreateActionItems(root, rows);
+				CreateAxisItems(root, rows);
 			}
 
             SetupDepthsFromParentsAndChildren(root);
 			return rows;
 		}
 
+		void CreateActionItems(TreeViewItem root, IList<TreeViewItem> rows)
+        {
+			ActionsRoot = new InputMapTreeActionHeaderItem(1, -1, "Actions", HeaderBarColor);
+			root.AddChild(ActionsRoot);
+			rows.Add(ActionsRoot);
+
+			if (IsExpanded(ActionsRoot.id))
+			{
+				for (int i = 0; i < Group.actions.Count; i++)
+				{
+                    TreeViewItem item = new InputMapContentActionTreeItem(Group.actions[i], i + 2);
+                    ActionsRoot.AddChild(item);
+					rows.Add(item);
+				}
+				return;
+			}
+
+			if(Group.actions.Count != 0)
+				ActionsRoot.children = CreateChildListForCollapsedParent();
+		}
+
+		void CreateAxisItems(TreeViewItem root, IList<TreeViewItem> rows)
+        {
+			AxesRoot = new InputMapTreeAxisHeaderItem(-1, -1, "Axes", HeaderBarColor);
+			root.AddChild(AxesRoot);
+			rows.Add(AxesRoot);
+
+			if (IsExpanded(AxesRoot.id))
+            {
+                for (int i = 0; i < Group.axes.Count; i++)
+                {
+					TreeViewItem item = new InputMapContentAxisTreeItem(Group.axes[i], i + 2 + Group.actions.Count);
+					AxesRoot.AddChild(item);
+					rows.Add(item);
+                }
+				return;
+            }
+
+			if (Group.axes.Count != 0)
+				AxesRoot.children = CreateChildListForCollapsedParent();
+        }
+		#endregion
+
+		#region Selecting
+		public event Action<object> OnItemSelect;
+
+		//TODO: Add multi select support. This will require rewriting how the
+		//context menu gets displayed and used.
+		protected override bool CanMultiSelect(TreeViewItem item) => false;
+
+		protected override void SelectionChanged(IList<int> selectedIds)
+		{
+			if (selectedIds.Count != 1)
+			{
+				OnItemSelect?.Invoke(null);
+				return;
+			}
+
+			switch (FindItem(selectedIds[0], rootItem))
+			{
+				case InputMapContentActionTreeItem item:
+					OnItemSelect?.Invoke(new InputMapInspectorDisplayer.InspectorInputAction(Group, item.Action));
+					break;
+				case InputMapContentAxisTreeItem item:
+					OnItemSelect?.Invoke(new InputMapInspectorDisplayer.InspectorInputAxis(Group, item.Axis));
+					break;
+				default:
+					OnItemSelect?.Invoke(null);
+					break;
+			}
+		}
+
+		public TreeViewItem GetSelectedContentItem()
+		{
+			IList<int> selection = GetSelection();
+
+			if (selection.Count != 1)
+				return null;
+
+			return FindItem(selection[0], rootItem);
+		}
+
+		protected override void DoubleClickedItem(int id)
+		{
+			BeginRename(FindItem(id, rootItem));
+		}
+
+		protected override void ContextClickedItem(int id)
+		{
+			showContextOnNextRepaint = true;
+			Repaint();
+		}
+        #endregion
+
+        #region Context menu
+        void ShowContextMenu()
+		{
+			TreeViewItem item = GetSelectedContentItem();
+
+			GenericMenu menu = new GenericMenu();
+
+			switch (item)
+			{
+				case InputMapContentActionTreeItem action:
+					AddActionGenericMenuItems(menu, action);
+					menu.AddSeparator("");
+					break;
+				case InputMapTreeActionHeaderItem _:
+					AddActionGenericMenuItems(menu, null);
+					menu.AddSeparator("");
+					break;
+				case InputMapContentAxisTreeItem axis:
+					AddAxisGenericMenuItems(menu, axis);
+					menu.AddSeparator("");
+					break;
+				case InputMapTreeAxisHeaderItem _:
+					AddAxisGenericMenuItems(menu, null);
+					menu.AddSeparator("");
+					break;
+			}
+
+			AddEditGenericMenuItems(menu, item);
+			menu.ShowAsContext();
+		}
+
+		void AddActionGenericMenuItems(GenericMenu menu, InputMapContentActionTreeItem action)
+        {
+			menu.AddItem("Add", false, () => AddActionItem(action));
+		}
+
+		void AddAxisGenericMenuItems(GenericMenu menu, InputMapContentAxisTreeItem axis)
+		{
+			menu.AddItem("Add", false, () => AddAxisItem(axis));
+		}
+
+		void AddEditGenericMenuItems(GenericMenu menu, TreeViewItem item)
+		{
+			InputMapContentEditableItemBase editableItem = item as InputMapContentEditableItemBase;
+			bool editable = !(editableItem is null);
+
+			menu.AddToggableItem("Delete", false, () => Delete(editableItem), editable);
+			menu.AddToggableItem("Rename", false, () => BeginRename(item), editable);
+
+			menu.AddSeparator("");
+
+			menu.AddItem("Expand all", false, ExpandAll);
+			menu.AddItem("Collapse all", false, CollapseAll);
+		}
+		#endregion
+
+		#region Adding
+		void AddActionItem(InputMapContentActionTreeItem action)
+        {
+			AddItem(Group.actions, action?.Action, new InputAction(WindowUtility.GenerateUniqueName("New action", (string s) =>
+			{
+				return NonRepeatableChecker.ContainsKey(Group.actions, s);
+			})));
+		}
+
+		void AddAxisItem(InputMapContentAxisTreeItem axis)
+        {
+			AddItem(Group.axes, axis?.Axis, new InputAxis(WindowUtility.GenerateUniqueName("New axis", (string s) =>
+			{
+				return NonRepeatableChecker.ContainsKey(Group.axes, s);
+			})));
+		}
+
+		void AddItem<t>(List<t> list, t selectedObject, t item)
+		{
+			int index = list.IndexOf(selectedObject);
+			if (index == -1)
+				index = list.Count - 1;
+			list.Insert(index + 1, item);
+			Reload();
+			InputMapContentEditableItemBase treeItem = GetItemByContent(item);
+			if(treeItem == null)
+            {
+				Debug.Log("Something ain't right chief");
+				return;
+            }
+			BeginRename(treeItem);
+		}
+        #endregion
+
+        #region Copy&Pase&Delete
+		void Delete(InputMapContentEditableItemBase item)
+        {
+			item.Delete(Group);
+			Reload();
+        }
+        #endregion
+
+        #region Finding
+        InputMapContentEditableItemBase GetItemByContent<t>(t item)
+        {
+			IList<int> items = GetDescendantsThatHaveChildren(rootItem.id);
+
+            for (int i = 0; i < items.Count; i++)
+				if (FindItem(items[i], rootItem) is InputMapContentEditableItemBase editable && editable.CompareContent(item))
+					return editable;
+
+			return null;
+        }
+		#endregion
+
+		#region Renaming
+		protected override bool CanRename(TreeViewItem item)
+		{
+			return item is InputMapContentEditableItemBase;
+		}
+
+		protected override void RenameEnded(RenameEndedArgs args)
+		{
+			if (!args.acceptedRename) return;
+
+			switch (FindItem(args.itemID, rootItem))
+			{
+				case InputMapContentActionTreeItem item:
+					if (NonRepeatableChecker.ContainsKey(Group.actions, args.newName)) return;
+					item.Rename(args.newName);
+					break;
+				case InputMapContentAxisTreeItem item:
+					if (NonRepeatableChecker.ContainsKey(Group.axes, args.newName)) return;
+					item.Rename(args.newName);
+					break;
+			}
+		}
+		#endregion
+
+		#region GUI
 		protected override void RowGUI(RowGUIArgs args)
 		{
-			//Event evt = Event.current;
-			//extraSpaceBeforeIconAndLabel = 18f;
+			bool repaint = Event.current.type == EventType.Repaint;
 
+			if (showContextOnNextRepaint && repaint)
+            {
+				ShowContextMenu();
+				showContextOnNextRepaint = false;
+            }
 
-			//var gameObject = GetGameObject(args.item.id);
-			//if (gameObject == null)
-			//	return;
+			//Button (either plus or minus)
+			Rect buttonRect = new Rect(args.rowRect).ResizeToRight(GetCustomRowHeight(args.row, args.item));
 
-			//Rect toggleRect = args.rowRect;
-			//toggleRect.x += GetContentIndent(args.item);
-			//toggleRect.width = 16f;
+			GUIContent buttonContent = new GUIContent();
 
-			//if (evt.type == EventType.MouseDown && toggleRect.Contains(evt.mousePosition))
-			//	SelectionClick(args.item, false);
+			switch(args.item)
+            {
+				case InputMapContentEditableItemBase _:
+					buttonContent.image = qGUIUtility.MinusIcon;
+					break;
+				case InputMapContentHeaderItemBase _:
+					buttonContent.image = qGUIUtility.PlusIcon;
+					break;
+            }
 
-			//EditorGUI.BeginChangeCheck();
-			//bool isStatic = EditorGUI.Toggle(toggleRect, gameObject.isStatic);
-			//if (EditorGUI.EndChangeCheck())
-			//	gameObject.isStatic = isStatic;
+			if (GUI.Button(buttonRect, buttonContent, Styles.Label))
+			{
+				switch (args.item)
+				{
+					case InputMapTreeActionHeaderItem _:
+						AddActionItem(null);
+						break;
+					case InputMapTreeAxisHeaderItem _:
+						AddAxisItem(null);
+						break;
+					case InputMapContentEditableItemBase item:
+						Delete(item);
+						break;
+				}
+			}
 
-			base.RowGUI(args);
+			if (repaint)
+				OnGUIRepaint(args);
 		}
-	}
+
+		void OnGUIRepaint(RowGUIArgs args)
+        {
+			InputMapContentItemBase item = args.item as InputMapContentItemBase;
+
+			//Label
+			Rect rowRect = new Rect(args.rowRect).MoveRight(GetContentIndent(args.item));
+			Styles.Label.Draw(rowRect, new GUIContent(args.label), false, false, args.selected, args.focused);
+
+			//Separator
+			Rect separatorRect = new Rect(rowRect).ResizeToBottom(1f);
+			Styles.Separator.Draw(separatorRect, GUIContent.none, false, false, false, false);
+
+			//Color bar
+			if (!(item is null) && item.BarColor != Color.clear)
+            {
+				Rect barRect = new Rect(rowRect).ResizeToBottom(2f);
+				Styles.ColorBar(item.BarColor).Draw(barRect, GUIContent.none, false, false, false, false);
+            }
+
+			CalcFoldoutOffset(rowRect.height);
+		}
+
+		//Centers foldout vertically
+		void CalcFoldoutOffset(float height) =>
+			customFoldoutYOffset = (height - 16f) / 2;
+
+		protected override float GetCustomRowHeight(int row, TreeViewItem item)
+		{
+			switch (item)
+			{
+				case InputMapContentHeaderItemBase _:
+					return 22f;
+				default:
+					return 18f;
+			}
+		}
+
+		protected override IList<int> GetDescendantsThatHaveChildren(int id)
+		{
+			Stack<TreeViewItem> stack = new Stack<TreeViewItem>();
+
+			var start = FindItem(id, rootItem);
+			stack.Push(start);
+
+			var parents = new List<int>();
+			while (stack.Count > 0)
+			{
+				TreeViewItem item = stack.Pop();
+				parents.Add(item.id);
+				if (item.hasChildren)
+					for (int i = 0; i < item.children.Count; i++)
+						if (item.children[i] != null)
+							stack.Push(item.children[i]);
+			}
+
+			return parents;
+		}
+        #endregion
+
+		static class Styles
+        {
+			public static GUIStyle Label = new GUIStyle("Label") { alignment = TextAnchor.MiddleLeft };
+			public static GUIStyle Separator = new GUIStyle().WithBackground(qGUIUtility.BorderTexture);
+			public static GUIStyle ColorBar(Color color) => new GUIStyle().WithBackgroundColor(color);
+        }
+    }
 }

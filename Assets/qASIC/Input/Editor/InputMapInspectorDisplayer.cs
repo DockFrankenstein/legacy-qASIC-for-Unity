@@ -2,8 +2,8 @@
 using UnityEngine;
 using System;
 
-using static qASIC.UnityEditor.qGUIUtility;
-using static UnityEngine.GUILayout;
+using static qASIC.EditorTools.qGUIUtility;
+using static UnityEditor.EditorGUILayout;
 
 namespace qASIC.InputManagement.Internal
 {
@@ -28,8 +28,21 @@ namespace qASIC.InputManagement.Internal
             }
         }
 
+        public struct InspectorInputAxis
+        {
+            public InputGroup group;
+            public InputAxis axis;
+
+            public InspectorInputAxis(InputGroup group, InputAxis axis)
+            {
+                this.group = group;
+                this.axis = axis;
+            }
+        }
+
         public event Action<InputGroup> OnDeleteGroup;
         public event Action<InspectorInputAction> OnDeleteAction;
+        public event Action<InspectorInputAxis> OnDeleteAxis;
 
         bool actionKeyFoldout = true;
 
@@ -40,30 +53,44 @@ namespace qASIC.InputManagement.Internal
             switch (inspectionObject)
             {
                 case InputGroup group:
-                    group.groupName = EditorGUILayout.TextField("Name", group.groupName);
+                    group.groupName = TextField("Name", group.groupName);
 
                     if (DeleteButton())
                     {
-                        SetObject(null);
+                        ResetInspector();
                         OnDeleteGroup.Invoke(group);
                     }
 
                     break;
                 case InspectorInputAction action:
-
-                    action.action.actionName = EditorGUILayout.TextField("Name", action.action.actionName);
+                    action.action.actionName = TextField("Name", action.action.actionName);
 
                     DisplayKeys(action.action);
-                    EditorGUILayout.Space();
+                    Space();
 
                     if (DeleteButton())
                     {
-                        SetObject(null);
+                        ResetInspector();
                         OnDeleteAction.Invoke(action);
+                    }
+                    break;
+                case InspectorInputAxis axis:
+                    axis.axis.axisName = TextField("Name", axis.axis.axisName);
+
+                    axis.axis.positiveAction = TextField("Positive", axis.axis.positiveAction);
+                    axis.axis.negativeAction = TextField("Negative", axis.axis.negativeAction);
+
+                    if (DeleteButton())
+                    {
+                        ResetInspector();
+                        OnDeleteAxis.Invoke(axis);
                     }
                     break;
                 case InputAction _:
                     DrawMessageBox($"Use '{nameof(InspectorInputAction)}' instead of '{nameof(InputAction)}'!");
+                    break;
+                case InputAxis _:
+                    DrawMessageBox($"Use '{nameof(InspectorInputAxis)}' instead of '{nameof(InputAxis)}'!");
                     break;
             }
 
@@ -74,6 +101,11 @@ namespace qASIC.InputManagement.Internal
         {
             inspectionObject = obj;
             displayDeletePrompt = false;
+        }
+
+        public void ResetInspector()
+        {
+            SetObject(null);
             GUI.FocusControl(null);
         }
 
@@ -82,7 +114,7 @@ namespace qASIC.InputManagement.Internal
 
         public void DisplayKeys(InputAction action)
         {
-            actionKeyFoldout = EditorGUILayout.Foldout(actionKeyFoldout, "Keys", true, EditorStyles.foldoutHeader);
+            actionKeyFoldout = Foldout(actionKeyFoldout, "Keys", true, EditorStyles.foldoutHeader);
             if (!actionKeyFoldout) return;
 
             BeginVertical(new GUIStyle() { margin = new RectOffset((int)EditorGUIUtility.singleLineHeight, 0, 0, 0) });
@@ -91,11 +123,11 @@ namespace qASIC.InputManagement.Internal
             {
                 BeginHorizontal();
                 action.keys[i] = KeyCodePopup(action.keys[i], $"Key {i}");
-                if (Button("Change", Width(60f))) { }
+                if (GUILayout.Button("Change", GUILayout.Width(60f))) { }
                 EndHorizontal();
             }
 
-            if (Button("+"))
+            if (GUILayout.Button("+"))
                 action.keys.Add(default);
 
             EndVertical();
@@ -108,15 +140,15 @@ namespace qASIC.InputManagement.Internal
             switch (displayDeletePrompt)
             {
                 case true:
-                    if (Button("Cancel"))
+                    if (GUILayout.Button("Cancel"))
                         displayDeletePrompt = false;
 
-                    state = Button("Confirm");
+                    state = GUILayout.Button("Confirm");
                     if (state)
                         displayDeletePrompt = false;
                     break;
                 case false:
-                    if (Button("Delete"))
+                    if (GUILayout.Button("Delete"))
                         displayDeletePrompt = true;
                     break;
             }

@@ -50,7 +50,7 @@ namespace qASIC.InputManagement
 
         /// <summary>Checks if there are no duplicate groups</summary>
         public void CheckForRepeating() =>
-            NonRepeatableChecker<InputGroup>.LogContainsRepeatable(Groups);
+            NonRepeatableChecker.LogContainsRepeatable(Groups);
 
         public string[] GetGroupNames()
         {

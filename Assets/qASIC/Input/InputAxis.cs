@@ -12,5 +12,11 @@ namespace qASIC.InputManagement
         public string negativeAction;
 
         public string ItemName { get => axisName; set => axisName = value; }
+
+        public InputAxis() { }
+        public InputAxis(string name)
+        {
+            axisName = name;
+        }
     }
 }

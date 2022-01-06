@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using static qASIC.UnityEditor.qGUIUtility;
+using static qASIC.EditorTools.qGUIUtility;
 using static UnityEngine.GUILayout;
 
 namespace qASIC.InputManagement.Tools

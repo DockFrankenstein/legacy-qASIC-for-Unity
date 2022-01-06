@@ -2,9 +2,9 @@
 
 namespace qASIC.Tools
 {
-    public static class NonRepeatableChecker<T>
+    public static class NonRepeatableChecker
     {
-        public static bool ContainsRepeatable(List<T> list)
+        public static bool ContainsRepeatable<T>(List<T> list)
         {
             List<string> usedNames = new List<string>();
 
@@ -17,7 +17,16 @@ namespace qASIC.Tools
             return false;
         }
 
-        public static bool LogContainsRepeatable(List<T> list)
+        public static bool ContainsKey<T>(List<T> list, string key)
+        {
+            for (int i = 0; i < list.Count; i++)
+                if (list[i] is INonRepeatable nonRepeatable && Compare(nonRepeatable.ItemName, key))
+                    return true;
+
+            return false;
+        }
+
+        public static bool LogContainsRepeatable<T>(List<T> list)
         {
             bool contains = ContainsRepeatable(list);
 
@@ -27,7 +36,7 @@ namespace qASIC.Tools
             return contains;
         }
 
-        public static void RemoveRepeatable(ref List<T> list)
+        public static void RemoveRepeatable<T>(ref List<T> list)
         {
             List<string> usedNames = new List<string>();
 
@@ -43,7 +52,7 @@ namespace qASIC.Tools
             }
         }
 
-        public static List<string> GetNameList(List<T> list)
+        public static List<string> GetNameList<T>(List<T> list)
         {
             List<string> names = new List<string>();
 
@@ -58,7 +67,7 @@ namespace qASIC.Tools
             return names;
         }
 
-        public static bool TryGetItem(List<T> list, string itemName, out T item, bool logError = false)
+        public static bool TryGetItem<T>(List<T> list, string itemName, out T item, bool logError = false)
         {
             itemName = itemName.ToLower();
             item = default;
@@ -78,10 +87,15 @@ namespace qASIC.Tools
             return false;
         }
 
-        public static T GetItem(List<T> list, string itemName)
+        public static T GetItem<T>(List<T> list, string itemName)
         {
             TryGetItem(list, itemName, out T item);
             return item;
         }
+
+        /// <summary>Compares two keys together</summary>
+        /// <returns>Returns true if the keys are equal</returns>
+        public static bool Compare(string key1, string key2) =>
+            key1.ToLower() == key2.ToLower();
     }
 }

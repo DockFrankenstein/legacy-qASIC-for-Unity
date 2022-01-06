@@ -1,11 +1,23 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace qASIC.UnityEditor
+namespace qASIC.EditorTools
 {
     public static class qGUIUtility
     {
-        public static Texture2D BackgroundTexture { get => GenerateColorTexture(new Color(0f, 0f, 0f, 0.2f)); }
+        public static Texture2D qASICBackgroundTexture => GenerateColorTexture(new Color(0f, 0f, 0f, 0.2f));
+        public static Color qASICColor => new Color(0f, 0.7019607843137255f, 1f);
+        public static Texture2D qASICColorTexture => GenerateColorTexture(qASICColor);
+
+        public static Color BorderColor => EditorGUIUtility.isProSkin ? new Color(0.1372549019607843f, 0.1372549019607843f, 0.1372549019607843f) : new Color(0.6f, 0.6f, 0.6f);
+        public static Texture2D BorderTexture => GenerateColorTexture(BorderColor);
+
+        //Editor icons
+        public static Texture ErrorIcon => EditorGUIUtility.IconContent("console.erroricon").image;
+        public static Texture WarningIcon => EditorGUIUtility.IconContent("console.warnicon").image;
+        public static Texture InfoIcon => EditorGUIUtility.IconContent("console.infoicon").image;
+        public static Texture PlusIcon => EditorGUIUtility.IconContent("Toolbar Plus").image;
+        public static Texture MinusIcon => EditorGUIUtility.IconContent("Toolbar Minus").image;
 
         public static Texture2D GenerateColorTexture(Color color)
         {

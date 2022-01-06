@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using System;
+using qASIC.EditorTools;
 
 using static UnityEngine.GUILayout;
 
@@ -46,11 +47,7 @@ namespace qASIC.InputManagement.Internal
         public void CreateGroup()
         {
             if (!map) return;
-
-            string name = "New group ";
-            int index;
-            for (index = 0; map.GroupExists($"{name}{index}"); index++) { }
-            map.Groups.Add(new InputGroup($"{name}{index}"));
+            map.Groups.Add(new InputGroup(InputMapEditorUtility.GenerateUniqueName("New group", map.GroupExists)));
             Select(map.Groups.Count - 1);
         }
 
@@ -60,8 +57,17 @@ namespace qASIC.InputManagement.Internal
 
             for (int i = scrollIndex; i < map.Groups.Count; i++)
             {
+                //calc width
                 EditorStyles.toolbarButton.CalcMinMaxWidth(new GUIContent(map.Groups[i].groupName), out float width, out _);
-                if (Toggle(map.currentEditorSelectedGroup == i, map.Groups[i].groupName, EditorStyles.toolbarButton, Width(width)) != (map.currentEditorSelectedGroup == i))
+
+                bool isSelected = map.currentEditorSelectedGroup == i;
+                bool pressed = Toggle(isSelected, map.Groups[i].groupName, EditorStyles.toolbarButton, Width(width)) != isSelected;
+
+                //Draw bar
+                if (Event.current.type == EventType.Repaint && map.defaultGroup == i)
+                    Styles.defaultGroupBar.Draw(GUILayoutUtility.GetLastRect().ResizeToBottom(2f), GUIContent.none, false, false, false, false);
+
+                if (pressed)
                     Select(i);
             }
         }
@@ -74,5 +80,10 @@ namespace qASIC.InputManagement.Internal
 
         public void ResetScroll() =>
             scrollIndex = 0;
+
+        static class Styles
+        {
+            public static GUIStyle defaultGroupBar = new GUIStyle().WithBackground(qGUIUtility.qASICColorTexture);
+        }
     }
 }
