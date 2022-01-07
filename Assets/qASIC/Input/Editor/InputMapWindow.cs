@@ -4,7 +4,6 @@ using qASIC.EditorTools;
 using System.Linq;
 using UnityEditor.IMGUI.Controls;
 using UnityEditor.Callbacks;
-using qASIC.EditorTools;
 
 namespace qASIC.InputManagement.Internal
 {

@@ -54,14 +54,14 @@ namespace qASIC.InputManagement.Internal
                 menu.AddItem("Close", false, InputMapWindow.GetEdtorWindow().Close);
             });
 
-            DisplayMenu("Debug", ref debugMenuRect, (GenericMenu menu) =>
-            {
-                menu.AddToggableItem("Close map", false, InputMapWindow.CloseMap, map);
-            });
-
             DisplayMenu("Help", ref helpMenuRect, (GenericMenu menu) =>
             {
                 menu.AddItem("Documentation", false, () => Application.OpenURL("https://docs.qasictools.com/input/getting-started"));
+            });
+
+            DisplayMenu("Debug", ref debugMenuRect, (GenericMenu menu) =>
+            {
+                menu.AddToggableItem("Close map", false, InputMapWindow.CloseMap, map);
             });
         }
 
