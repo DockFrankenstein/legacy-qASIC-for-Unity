@@ -127,7 +127,7 @@ namespace qASIC.InputManagement.Internal
             //Preferences
             _autoSave = EditorPrefs.GetBool(autoSavePrefsKey, true);
 
-            _isDirty = EditorUtility.GetDirtyCount(map.GetInstanceID()) != 0;
+            _isDirty = map ? EditorUtility.GetDirtyCount(map.GetInstanceID()) != 0 : false;
 
             //Title
             SetWindowTitle();

@@ -302,6 +302,7 @@ namespace qASIC.InputManagement.Internal
 			}
 
 			InputMapWindow.SetMapDirty();
+			Reload();
 		}
 		#endregion
 
@@ -364,11 +365,13 @@ namespace qASIC.InputManagement.Internal
 			Styles.Separator.Draw(separatorRect, GUIContent.none, false, false, false, false);
 
 			//Color bar
-			if (!(item is null) && item.BarColor != Color.clear)
-            {
-				Rect barRect = new Rect(rowRect).ResizeToBottom(2f);
-				Styles.ColorBar(item.BarColor).Draw(barRect, GUIContent.none, false, false, false, false);
-            }
+			//This feature is currently not being used, but it someimes
+			//causes the separator not to show up
+			//if (!(item is null) && item.BarColor != Color.clear)
+			//{
+			//	Rect barRect = new Rect(rowRect).ResizeToBottom(2f);
+			//	Styles.ColorBar(item.BarColor).Draw(barRect, GUIContent.none, false, false, false, false);
+			//}
 
 			CalcFoldoutOffset(rowRect.height);
 		}
