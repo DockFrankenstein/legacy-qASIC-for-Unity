@@ -8,10 +8,11 @@ namespace qASIC.InputManagement.Internal
     {
         public override void OnInspectorGUI()
         {
-            base.OnInspectorGUI();
+            if (InputMapWindow.DebugMode)
+                base.OnInspectorGUI();
 
             InputMap map = (InputMap)target;
-            if (GUILayout.Button("Open editor"))
+            if (GUILayout.Button("Open editor", GUILayout.Height(24f)))
                 InputMapWindow.OpenMap(map);
         }
     }

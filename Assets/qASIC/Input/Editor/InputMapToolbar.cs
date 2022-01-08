@@ -61,14 +61,19 @@ namespace qASIC.InputManagement.Internal
                 menu.AddItem("Documentation", false, () => Application.OpenURL("https://docs.qasictools.com/input/getting-started"));
             });
 
-            DisplayMenu("Debug", ref debugMenuRect, (GenericMenu menu) =>
+            if (InputMapWindow.DebugMode)
             {
-                InputMapWindow window = InputMapWindow.GetEditorWindow();
+                DisplayMenu("Debug", ref debugMenuRect, (GenericMenu menu) =>
+                {
+                    InputMapWindow window = InputMapWindow.GetEditorWindow();
 
-                menu.AddToggableItem("Close map", false, InputMapWindow.CloseMap, map);
-                menu.AddToggableItem("Set dirty", false, InputMapWindow.SetMapDirty, map);
-                menu.AddToggableItem("Update name", false, window.SetWindowTitle, map);
-            });
+                    menu.AddItem("Update name", false, window.SetWindowTitle);
+                    menu.AddItem("Reset editor", false, window.ResetEditor);
+                    menu.AddSeparator("");
+                    menu.AddToggableItem("Set dirty", false, InputMapWindow.SetMapDirty, map);
+                    menu.AddToggableItem("Close map", false, InputMapWindow.CloseMap, map);
+                });
+            }
         }
 
         void DisplayMenu(string buttonText, ref Rect rect, Action<GenericMenu> menuFunction)

@@ -22,9 +22,26 @@ namespace qASIC.InputManagement.Internal
 
         const string mapPrefsKey = "qASIC_input_map_editor_map";
         const string autoSavePrefsKey = "qASIC_input_map_editor_autosave";
+        const string debugPrefsKey = "qASIC_input_map_editor_debug";
 
         static bool _isDirty;
         public static bool IsDirty => map && _isDirty;
+
+        static bool? _debugMode = null;
+        public static bool DebugMode
+        {
+            get
+            {
+                if (_debugMode == null)
+                    _debugMode = EditorPrefs.GetBool(debugPrefsKey, false);
+                return _debugMode ?? false;
+            }
+            set
+            {
+                EditorPrefs.SetBool(debugPrefsKey, value);
+                _debugMode = value;
+            }
+        }
 
         static bool _autoSave;
         public static bool AutoSave {
@@ -49,7 +66,7 @@ namespace qASIC.InputManagement.Internal
 
         void IHasCustomMenu.AddItemsToMenu(GenericMenu menu)
         {
-            menu.AddItem("Reset editor", false, CloseMap);
+            menu.AddItem("Debug", DebugMode, () => DebugMode = !DebugMode);
         }
 
         [MenuItem("Window/qASIC/Input Map Editor")]
