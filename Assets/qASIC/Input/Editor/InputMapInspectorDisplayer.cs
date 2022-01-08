@@ -46,6 +46,8 @@ namespace qASIC.InputManagement.Internal
 
         bool actionKeyFoldout = true;
 
+        string nameFieldValue;
+
         public void OnGUI()
         {
             scroll = BeginScrollView(scroll);
@@ -53,7 +55,7 @@ namespace qASIC.InputManagement.Internal
             switch (inspectionObject)
             {
                 case InputGroup group:
-                    group.groupName = TextField("Name", group.groupName);
+                    group.groupName = NameField(group.groupName);
 
                     if (DeleteButton())
                     {
@@ -63,7 +65,7 @@ namespace qASIC.InputManagement.Internal
 
                     break;
                 case InspectorInputAction action:
-                    action.action.actionName = TextField("Name", action.action.actionName);
+                    action.action.actionName = NameField(action.action.actionName);
 
                     DisplayKeys(action.action);
                     Space();
@@ -75,7 +77,7 @@ namespace qASIC.InputManagement.Internal
                     }
                     break;
                 case InspectorInputAxis axis:
-                    axis.axis.axisName = TextField("Name", axis.axis.axisName);
+                    axis.axis.axisName = NameField(axis.axis.axisName);
 
                     axis.axis.positiveAction = TextField("Positive", axis.axis.positiveAction);
                     axis.axis.negativeAction = TextField("Negative", axis.axis.negativeAction);
@@ -109,10 +111,10 @@ namespace qASIC.InputManagement.Internal
             GUI.FocusControl(null);
         }
 
-        public string GetFoldoutPrefsKey(InspectorInputAction action) =>
+        string GetFoldoutPrefsKey(InspectorInputAction action) =>
             map ? $"qASIC_editor_input_{map.GetInstanceID()}_{action.group.groupName}_{action.action.actionName}" : string.Empty;
 
-        public void DisplayKeys(InputAction action)
+        void DisplayKeys(InputAction action)
         {
             actionKeyFoldout = Foldout(actionKeyFoldout, "Keys", true, EditorStyles.foldoutHeader);
             if (!actionKeyFoldout) return;
@@ -133,7 +135,22 @@ namespace qASIC.InputManagement.Internal
             EndVertical();
         }
 
-        public bool DeleteButton()
+        string NameField(string name)
+        {
+            if (!EditorGUIUtility.editingTextField)
+                nameFieldValue = name;
+
+            nameFieldValue = TextField("Name", nameFieldValue);
+            if (EditorGUIUtility.editingTextField)
+                return name;
+
+            if(nameFieldValue != name)
+                InputMapWindow.GetEdtorWindow().SetMapDirty();
+
+            return nameFieldValue;
+        }
+
+        bool DeleteButton()
         {
             bool state = false;
             BeginHorizontal();

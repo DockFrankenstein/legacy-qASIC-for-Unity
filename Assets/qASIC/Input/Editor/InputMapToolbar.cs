@@ -26,11 +26,11 @@ namespace qASIC.InputManagement.Internal
             if (Button("Show in folder", EditorStyles.toolbarButton))
                 ShowInFolder();
 
-            if (Toggle(map && map.autoSave, "Auto save", EditorStyles.toolbarButton) != (map && map.autoSave) && map)
-                map.autoSave = !map.autoSave;
+            if (Toggle(map && InputMapWindow.AutoSave, "Auto save", EditorStyles.toolbarButton) != InputMapWindow.AutoSave)
+                InputMapWindow.AutoSave = !InputMapWindow.AutoSave;
 
             if (Button("Save", EditorStyles.toolbarButton))
-                Save();
+                InputMapWindow.GetEdtorWindow().Save();
 
             EditorGUILayout.Space();
             EndHorizontal();
@@ -45,8 +45,10 @@ namespace qASIC.InputManagement.Internal
         {
             DisplayMenu("File", ref fileMenuRect, (GenericMenu menu) =>
             {
-                menu.AddToggableItem("Save", false, Save, map);
-                menu.AddToggableItem("Auto save", map && map.autoSave, () => { map.autoSave = !map.autoSave; }, map);
+                InputMapWindow window = InputMapWindow.GetEdtorWindow();
+
+                menu.AddToggableItem("Save", false, window.Save, map);
+                menu.AddToggableItem("Auto save", InputMapWindow.AutoSave, () => { InputMapWindow.AutoSave = !InputMapWindow.AutoSave; }, map);
                 menu.AddToggableItem("Show in folder", false, ShowInFolder, map);
                 menu.AddSeparator("");
                 menu.AddItem("Open", false, OpenAsset);
@@ -61,18 +63,22 @@ namespace qASIC.InputManagement.Internal
 
             DisplayMenu("Debug", ref debugMenuRect, (GenericMenu menu) =>
             {
+                InputMapWindow window = InputMapWindow.GetEdtorWindow();
+
                 menu.AddToggableItem("Close map", false, InputMapWindow.CloseMap, map);
+                menu.AddToggableItem("Set dirty", false, window.SetMapDirty, map);
+                menu.AddToggableItem("Update name", false, window.SetWindowTitle, map);
             });
         }
 
         void DisplayMenu(string buttonText, ref Rect rect, Action<GenericMenu> menuFunction)
         {
-            bool openMenu = Button(buttonText, EditorStyles.toolbarButton);
+            bool openMenu = Button(buttonText, EditorStyles.toolbarDropDown);
 
             //Calculating rect
             //This is a really janky solution, but sometimes GetLastRect returns 0 0
             //so in order to create the generic menu in the correct position, the rect
-            //gets saved if the x position is not equal 0
+            //needs to be saved if the x position is not equal 0
             Rect r = GUILayoutUtility.GetLastRect();
 
             if (rect == null)
@@ -90,14 +96,6 @@ namespace qASIC.InputManagement.Internal
         #endregion
 
         #region Save&Load
-        void Save()
-        {
-            if (map == null) return;
-            EditorUtility.SetDirty(map);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
-
         void ShowInFolder()
         {
             if (map == null) return;

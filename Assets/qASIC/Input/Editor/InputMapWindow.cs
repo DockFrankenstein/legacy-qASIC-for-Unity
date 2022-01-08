@@ -21,7 +21,22 @@ namespace qASIC.InputManagement.Internal
         TreeViewState contentTreeState;
 
         const string mapPrefsKey = "qASIC_input_map_editor_map";
+        const string autoSavePrefsKey = "qASIC_input_map_editor_autosave";
 
+        bool _isDirty;
+        public bool IsDirty => map && _isDirty;
+
+        static bool _autoSave;
+        public static bool AutoSave {
+            get => _autoSave;
+            set
+            {
+                EditorPrefs.SetBool(autoSavePrefsKey, value);
+                _autoSave = value;
+            }
+        }
+
+        #region Opening
         [OnOpenAsset]
         public static bool OnOpenAsset(int instanceID, int line)
         {
@@ -38,13 +53,20 @@ namespace qASIC.InputManagement.Internal
         }
 
         [MenuItem("Window/qASIC/Input Map Editor")]
-        static void OpenWindow()
+        public static InputMapWindow OpenWindow()
         {
-            InputMapWindow window = GetEdtorWindow();
-            window.titleContent.image = window.icon;
-            window.minSize = new Vector2(512f, 256f);
+            InputMapWindow window = SetupWindowForOpen();
             window.ResetEditor();
             window.Show();
+            return window;
+        }
+
+        static InputMapWindow SetupWindowForOpen()
+        {
+            InputMapWindow window = GetEdtorWindow();
+            window.minSize = new Vector2(512f, 256f);
+            window.SetWindowTitle();
+            return window;
         }
 
         static void LoadMap()
@@ -74,14 +96,42 @@ namespace qASIC.InputManagement.Internal
         public static InputMapWindow GetEdtorWindow() =>
             (InputMapWindow)GetWindow(typeof(InputMapWindow), false, "Input Map Editor");
 
+        public void SetWindowTitle()
+        {
+            titleContent = new GUIContent($"{(_isDirty ? "*" : "")}{(map ? map.name : "Input Map Editor")}", icon);
+        }
+        #endregion
+
+        #region Reset&Destroy
         private void OnEnable()
         {
+            EditorApplication.wantsToQuit += OnEditorWantsToQuit;
+
             LoadMap();
             ResetEditor();
         }
 
+        private bool OnEditorWantsToQuit()
+        {
+            return ConfirmSaveChangesIfNeeded();
+        }
+
+        private void OnDestroy()
+        {
+            EditorApplication.wantsToQuit -= OnEditorWantsToQuit;
+            ConfirmSaveChangesIfNeeded();
+        }
+
         public void ResetEditor()
         {
+            //Preferences
+            _autoSave = EditorPrefs.GetBool(autoSavePrefsKey, true);
+
+            _isDirty = EditorUtility.GetDirtyCount(map.GetInstanceID()) != 0;
+
+            //Title
+            SetWindowTitle();
+
             //Displayers
             toolbar = new InputMapToolbar();
             groupBar = new InputMapGroupBar();
@@ -133,7 +183,9 @@ namespace qASIC.InputManagement.Internal
                 contentTree.Reload();
             };
         }
+        #endregion
 
+        #region GUI
         private void OnGUI()
         {
             toolbar.OnGUI();
@@ -172,5 +224,53 @@ namespace qASIC.InputManagement.Internal
             style.normal.background = qGUIUtility.BorderTexture;
             GUILayout.Box(GUIContent.none, style);
         }
+        #endregion
+
+        #region Saving
+        public void SetMapDirty()
+        {
+            _isDirty = true;
+            EditorUtility.SetDirty(map);
+            SetWindowTitle();
+            
+            if (AutoSave)
+                Save();
+        }
+
+        public void Save()
+        {
+            _isDirty = false;
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            SetWindowTitle();
+        }
+
+        public bool ConfirmSaveChangesIfNeeded()
+        {
+            if (!map || !IsDirty) return true;
+            int result = EditorUtility.DisplayDialogComplex("Input Map has been modified",
+                $"Would you like to save changes you made to '{map.name}'",
+                "Save", "Discard changes (not working yet)", "Cancel");
+            switch(result)
+            {
+                case 0:
+                    //Save
+                    Save();
+                    break;
+                case 1:
+                    //Discard changes
+                    //This has not been added yet - in order to allow discarding,
+                    //the map needs to be copied and replaced. For some reason there
+                    //isn't a simple solution in Unity yet for this
+                    break;
+                default:
+                    //Cancel
+                    Instantiate(this).Show();
+                    break;
+            }
+
+            return false;
+        }
+        #endregion
     }
 }

@@ -9,7 +9,6 @@ namespace qASIC.InputManagement
     {
 #if UNITY_EDITOR
         [HideInInspector] public int currentEditorSelectedGroup = -1;
-        [HideInInspector] public bool autoSave = true;
 #endif
 
         public int defaultGroup = 0;

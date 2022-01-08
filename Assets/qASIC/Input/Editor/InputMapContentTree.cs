@@ -107,29 +107,18 @@ namespace qASIC.InputManagement.Internal
 		//context menu gets displayed and used.
 		protected override bool CanMultiSelect(TreeViewItem item) => false;
 
-		protected override void SelectionChanged(IList<int> selectedIds)
-		{
-			if (selectedIds.Count != 1)
-			{
+        protected override void SelectionChanged(IList<int> selectedIds)
+        {
+			if(selectedIds.Count != 1)
+            {
 				OnItemSelect?.Invoke(null);
 				return;
-			}
+            }
 
-			switch (FindItem(selectedIds[0], rootItem))
-			{
-				case InputMapContentActionTreeItem item:
-					OnItemSelect?.Invoke(new InputMapInspectorDisplayer.InspectorInputAction(Group, item.Action));
-					break;
-				case InputMapContentAxisTreeItem item:
-					OnItemSelect?.Invoke(new InputMapInspectorDisplayer.InspectorInputAxis(Group, item.Axis));
-					break;
-				default:
-					OnItemSelect?.Invoke(null);
-					break;
-			}
+			SelectItemInInspector(selectedIds[0]);
 		}
 
-		public TreeViewItem GetSelectedContentItem()
+        public TreeViewItem GetSelectedContentItem()
 		{
 			IList<int> selection = GetSelection();
 
@@ -139,15 +128,40 @@ namespace qASIC.InputManagement.Internal
 			return FindItem(selection[0], rootItem);
 		}
 
+        protected override void SingleClickedItem(int id)
+        {
+			SelectItemInInspector(id);
+		}
+
 		protected override void DoubleClickedItem(int id)
 		{
-			BeginRename(FindItem(id, rootItem));
+			TreeViewItem item = FindItem(id, rootItem);
+			BeginRename(item);
 		}
 
 		protected override void ContextClickedItem(int id)
 		{
 			showContextOnNextRepaint = true;
 			Repaint();
+		}
+
+		void SelectItemInInspector(int id) =>
+			SelectItemInInspector(FindItem(id, rootItem));
+
+		void SelectItemInInspector(TreeViewItem item)
+        {
+			switch (item)
+			{
+				case InputMapContentActionTreeItem action:
+					OnItemSelect?.Invoke(new InputMapInspectorDisplayer.InspectorInputAction(Group, action.Action));
+					break;
+				case InputMapContentAxisTreeItem axis:
+					OnItemSelect?.Invoke(new InputMapInspectorDisplayer.InspectorInputAxis(Group, axis.Axis));
+					break;
+				default:
+					OnItemSelect?.Invoke(null);
+					break;
+			}
 		}
         #endregion
 
@@ -282,7 +296,12 @@ namespace qASIC.InputManagement.Internal
 					if (NonRepeatableChecker.ContainsKey(Group.axes, args.newName)) return;
 					item.Rename(args.newName);
 					break;
+				default:
+					Debug.LogError("Cannot rename item!");
+					return;
 			}
+
+			InputMapWindow.GetEdtorWindow().SetMapDirty();
 		}
 		#endregion
 
