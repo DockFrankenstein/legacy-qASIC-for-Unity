@@ -48,6 +48,8 @@ namespace qASIC.InputManagement.Internal
 
         string nameFieldValue;
 
+        event Action OnNextRepaint;
+
         public void OnGUI()
         {
             scroll = BeginScrollView(scroll);
@@ -97,12 +99,24 @@ namespace qASIC.InputManagement.Internal
             }
 
             EndScrollView();
+
+            if (Event.current.type == EventType.Repaint)
+            {
+                OnNextRepaint?.Invoke();
+                OnNextRepaint = new Action(() => { });
+            }
         }
 
         public void SetObject(object obj)
         {
-            inspectionObject = obj;
-            displayDeletePrompt = false;
+            //If the object gets selected right now after the layout event
+            //there could be a problem with instance IDs so in order to avoid
+            //that we assign the object on next repaint
+            OnNextRepaint += () =>
+            {
+                inspectionObject = obj;
+                displayDeletePrompt = false;
+            };
         }
 
         public void ResetInspector()
