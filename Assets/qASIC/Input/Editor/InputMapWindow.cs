@@ -23,8 +23,8 @@ namespace qASIC.InputManagement.Internal
         const string mapPrefsKey = "qASIC_input_map_editor_map";
         const string autoSavePrefsKey = "qASIC_input_map_editor_autosave";
 
-        bool _isDirty;
-        public bool IsDirty => map && _isDirty;
+        static bool _isDirty;
+        public static bool IsDirty => map && _isDirty;
 
         static bool _autoSave;
         public static bool AutoSave {
@@ -63,7 +63,7 @@ namespace qASIC.InputManagement.Internal
 
         static InputMapWindow SetupWindowForOpen()
         {
-            InputMapWindow window = GetEdtorWindow();
+            InputMapWindow window = GetEditorWindow();
             window.minSize = new Vector2(512f, 256f);
             window.SetWindowTitle();
             return window;
@@ -90,10 +90,10 @@ namespace qASIC.InputManagement.Internal
         {
             map = null;
             EditorPrefs.DeleteKey(mapPrefsKey);
-            GetEdtorWindow().ResetEditor();
+            GetEditorWindow().ResetEditor();
         }
 
-        public static InputMapWindow GetEdtorWindow() =>
+        public static InputMapWindow GetEditorWindow() =>
             (InputMapWindow)GetWindow(typeof(InputMapWindow), false, "Input Map Editor");
 
         public void SetWindowTitle()
@@ -162,17 +162,7 @@ namespace qASIC.InputManagement.Internal
 
             contentTree.OnItemSelect += inspector.SetObject;
 
-            inspector.OnDeleteGroup += (InputGroup group) =>
-            {
-                int index = map.Groups.IndexOf(group);
-                if (index == -1) return;
-
-                map.Groups.RemoveAt(index);
-                if (map.Groups.Count > 0)
-                    groupBar.Select(Mathf.Max(0, index - 1));
-
-                groupBar.ResetScroll();
-            };
+            inspector.OnDeleteGroup += groupBar.DeleteGroup;
 
             inspector.OnDeleteAction += (InputMapInspectorDisplayer.InspectorInputAction action) =>
             {
@@ -227,22 +217,22 @@ namespace qASIC.InputManagement.Internal
         #endregion
 
         #region Saving
-        public void SetMapDirty()
+        public static void SetMapDirty()
         {
             _isDirty = true;
             EditorUtility.SetDirty(map);
-            SetWindowTitle();
+            GetEditorWindow().SetWindowTitle();
             
             if (AutoSave)
                 Save();
         }
 
-        public void Save()
+        public static void Save()
         {
             _isDirty = false;
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            SetWindowTitle();
+            GetEditorWindow().SetWindowTitle();
         }
 
         public bool ConfirmSaveChangesIfNeeded()

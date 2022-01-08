@@ -30,7 +30,7 @@ namespace qASIC.InputManagement.Internal
                 InputMapWindow.AutoSave = !InputMapWindow.AutoSave;
 
             if (Button("Save", EditorStyles.toolbarButton))
-                InputMapWindow.GetEdtorWindow().Save();
+                InputMapWindow.Save();
 
             EditorGUILayout.Space();
             EndHorizontal();
@@ -45,15 +45,15 @@ namespace qASIC.InputManagement.Internal
         {
             DisplayMenu("File", ref fileMenuRect, (GenericMenu menu) =>
             {
-                InputMapWindow window = InputMapWindow.GetEdtorWindow();
+                InputMapWindow window = InputMapWindow.GetEditorWindow();
 
-                menu.AddToggableItem("Save", false, window.Save, map);
+                menu.AddToggableItem("Save", false, InputMapWindow.Save, map);
                 menu.AddToggableItem("Auto save", InputMapWindow.AutoSave, () => { InputMapWindow.AutoSave = !InputMapWindow.AutoSave; }, map);
                 menu.AddToggableItem("Show in folder", false, ShowInFolder, map);
                 menu.AddSeparator("");
                 menu.AddItem("Open", false, OpenAsset);
                 menu.AddSeparator("");
-                menu.AddItem("Close", false, InputMapWindow.GetEdtorWindow().Close);
+                menu.AddItem("Close", false, InputMapWindow.GetEditorWindow().Close);
             });
 
             DisplayMenu("Help", ref helpMenuRect, (GenericMenu menu) =>
@@ -63,10 +63,10 @@ namespace qASIC.InputManagement.Internal
 
             DisplayMenu("Debug", ref debugMenuRect, (GenericMenu menu) =>
             {
-                InputMapWindow window = InputMapWindow.GetEdtorWindow();
+                InputMapWindow window = InputMapWindow.GetEditorWindow();
 
                 menu.AddToggableItem("Close map", false, InputMapWindow.CloseMap, map);
-                menu.AddToggableItem("Set dirty", false, window.SetMapDirty, map);
+                menu.AddToggableItem("Set dirty", false, InputMapWindow.SetMapDirty, map);
                 menu.AddToggableItem("Update name", false, window.SetWindowTitle, map);
             });
         }

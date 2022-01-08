@@ -27,7 +27,7 @@ namespace qASIC.InputManagement.Internal
             DisplayGroups();
 
             if (Button("+", EditorStyles.toolbarButton, Width(EditorGUIUtility.singleLineHeight)))
-                CreateGroup();
+                Add();
 
             EndHorizontal();
             EditorGUILayout.EndScrollView();
@@ -44,16 +44,15 @@ namespace qASIC.InputManagement.Internal
             EditorGUI.EndDisabledGroup();
         }
 
-        public void CreateGroup()
-        {
-            if (!map) return;
-            map.Groups.Add(new InputGroup(InputMapEditorUtility.GenerateUniqueName("New group", map.GroupExists)));
-            Select(map.Groups.Count - 1);
-        }
+        Rect[] _buttonRects = new Rect[0];
+        int _groupContextMenuToOpenOnRepaint = -1;
 
         public void DisplayGroups()
         {
             if (!map) return;
+
+            if (map.Groups.Count != _buttonRects.Length)
+                _buttonRects = new Rect[map.Groups.Count];
 
             for (int i = scrollIndex; i < map.Groups.Count; i++)
             {
@@ -62,20 +61,105 @@ namespace qASIC.InputManagement.Internal
 
                 bool isSelected = map.currentEditorSelectedGroup == i;
                 bool pressed = Toggle(isSelected, map.Groups[i].groupName, EditorStyles.toolbarButton, Width(width)) != isSelected;
+                
+                Event e = Event.current;
+                Rect buttonRect = GUILayoutUtility.GetLastRect();
+
+                //Once again I have to use this jank from the toolbar
+                //FIXME: fix this garbage
+                if (buttonRect.width > 1)
+                    _buttonRects[i] = buttonRect;
 
                 //Draw bar
-                if (Event.current.type == EventType.Repaint && map.defaultGroup == i)
-                    Styles.defaultGroupBar.Draw(GUILayoutUtility.GetLastRect().ResizeToBottom(2f), GUIContent.none, false, false, false, false);
+                if (e.type == EventType.Repaint && map.defaultGroup == i)
+                    Styles.defaultGroupBar.Draw(buttonRect.ResizeToBottom(2f), GUIContent.none, false, false, false, false);
 
+                //Context menu
+                //We have to wait for the next repaint before showing the menu as some items can
+                //still be selected
+                bool showContextMenu = e.type == EventType.Repaint && _groupContextMenuToOpenOnRepaint == i;
+                if (showContextMenu)
+                {
+                    pressed = true;
+                    GenericMenu menu = new GenericMenu();
+                    int index = i;
+                    menu.AddToggableItem("Set as default", false, () => SetAsDefault(index), map.defaultGroup != i);
+                    menu.AddItem("Add", false, () => Add(index));
+                    menu.AddItem("Delete", false, () => DeleteGroup(index));
+                    menu.ShowAsContext();
+                    _groupContextMenuToOpenOnRepaint = -1;
+                }
+
+                if (!showContextMenu && _buttonRects[i].Contains(e.mousePosition) && e.button == 1)
+                {
+                    _groupContextMenuToOpenOnRepaint = i;
+                    pressed = true;
+                }
+
+                //Handling group change
                 if (pressed)
-                    Select(i);
+                     Select(i);
             }
+        }
+
+        public void DeleteGroup(InputGroup group)
+        {
+            if (!map) return;
+            int index = map.Groups.IndexOf(group);
+            if (index == -1) return;
+
+            DeleteGroup(index);
+        }
+
+        public void DeleteGroup(int index)
+        {
+            if (!map) return;
+            Debug.Assert(index >= 0 && index < map.Groups.Count, $"Cannot delete group {index}, index is out of range!");
+            map.Groups.RemoveAt(index);
+            if (map.Groups.Count > 0)
+                Select(Mathf.Max(0, index - 1));
+
+            ResetScroll();
+            InputMapWindow.SetMapDirty();
+        }
+
+        public void SetAsDefault(int index)
+        {
+            if (!map) return;
+            Debug.Assert(index >= 0 && index < map.Groups.Count, $"Cannot set group {index} as default, index is out of range!");
+            map.defaultGroup = index;
         }
 
         public void Select(int i)
         {
+            if (!map) return;
             map.currentEditorSelectedGroup = i;
             OnItemSelect?.Invoke(map.Groups[i]);
+        }
+
+        public void Add() =>
+            Add(-1);
+
+        public void Add(int index) =>
+            Add(index, new InputGroup(InputMapEditorUtility.GenerateUniqueName("New group", map.GroupExists)));
+
+        public void Add(InputGroup group) =>
+            Add(-1, group);
+
+        public void Add(InputGroup selectedGroup, InputGroup group) =>
+            Add(map ? map.Groups.IndexOf(selectedGroup) : -1, group);
+
+        public void Add(int index, InputGroup group)
+        {
+            if (!map) return;
+
+            //If index is out of range, add the item at the end
+            if (index < 0 || index >= map.Groups.Count)
+                index = map.Groups.Count - 1;
+
+            map.Groups.Insert(index + 1, group);
+            Select(index + 1);
+            InputMapWindow.SetMapDirty();
         }
 
         public void ResetScroll() =>

@@ -145,7 +145,7 @@ namespace qASIC.InputManagement.Internal
                 return name;
 
             if(nameFieldValue != name)
-                InputMapWindow.GetEdtorWindow().SetMapDirty();
+                InputMapWindow.SetMapDirty();
 
             return nameFieldValue;
         }

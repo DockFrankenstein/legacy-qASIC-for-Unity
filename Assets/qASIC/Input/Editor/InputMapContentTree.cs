@@ -301,7 +301,7 @@ namespace qASIC.InputManagement.Internal
 					return;
 			}
 
-			InputMapWindow.GetEdtorWindow().SetMapDirty();
+			InputMapWindow.SetMapDirty();
 		}
 		#endregion
 
