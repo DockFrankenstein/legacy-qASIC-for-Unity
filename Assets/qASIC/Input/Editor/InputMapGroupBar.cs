@@ -128,6 +128,7 @@ namespace qASIC.InputManagement.Internal
             if (!map) return;
             Debug.Assert(index >= 0 && index < map.Groups.Count, $"Cannot set group {index} as default, index is out of range!");
             map.defaultGroup = index;
+            InputMapWindow.SetMapDirty();
         }
 
         public void Select(int i)

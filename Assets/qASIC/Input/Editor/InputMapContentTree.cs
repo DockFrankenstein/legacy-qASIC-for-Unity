@@ -244,13 +244,10 @@ namespace qASIC.InputManagement.Internal
 			if (index == -1)
 				index = list.Count - 1;
 			list.Insert(index + 1, item);
+			InputMapWindow.SetMapDirty();
 			Reload();
 			InputMapContentEditableItemBase treeItem = GetItemByContent(item);
-			if(treeItem == null)
-            {
-				Debug.Log("Something ain't right chief");
-				return;
-            }
+			Debug.Assert(treeItem != null, "Cannot get item!");
 			BeginRename(treeItem);
 		}
         #endregion
@@ -259,6 +256,7 @@ namespace qASIC.InputManagement.Internal
 		void Delete(InputMapContentEditableItemBase item)
         {
 			item.Delete(Group);
+			InputMapWindow.SetMapDirty();
 			Reload();
         }
         #endregion
