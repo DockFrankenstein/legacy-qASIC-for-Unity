@@ -4,6 +4,7 @@ using qASIC.EditorTools;
 using System.Linq;
 using UnityEditor.IMGUI.Controls;
 using UnityEditor.Callbacks;
+using qASIC.FileManagement;
 
 namespace qASIC.InputManagement.Internal
 {
@@ -11,7 +12,7 @@ namespace qASIC.InputManagement.Internal
     {
         [SerializeField] Texture2D icon;
 
-        static InputMap map;
+        static InputMap _map;
 
         InputMapToolbar toolbar = new InputMapToolbar();
         InputMapGroupBar groupBar = new InputMapGroupBar();
@@ -20,12 +21,16 @@ namespace qASIC.InputManagement.Internal
         InputMapContentTree contentTree;
         TreeViewState contentTreeState;
 
+        public static string GetUnmodifiedMapLocation() =>
+            $"{Application.persistentDataPath}/qASIC_inputmap-modified.txt";
+
+        static bool _isDirty;
+        public static bool IsDirty => _map && _isDirty;
+
+        #region Preferences
         const string mapPrefsKey = "qASIC_input_map_editor_map";
         const string autoSavePrefsKey = "qASIC_input_map_editor_autosave";
         const string debugPrefsKey = "qASIC_input_map_editor_debug";
-
-        static bool _isDirty;
-        public static bool IsDirty => map && _isDirty;
 
         static bool? _debugMode = null;
         public static bool DebugMode
@@ -43,15 +48,31 @@ namespace qASIC.InputManagement.Internal
             }
         }
 
-        static bool _autoSave;
+        static bool? _autoSave = null;
         public static bool AutoSave {
-            get => _autoSave;
+            get
+            {
+                if (_autoSave == null)
+                    _autoSave = EditorPrefs.GetBool(autoSavePrefsKey, true);
+
+                return _autoSave ?? false;
+            }
             set
             {
                 EditorPrefs.SetBool(autoSavePrefsKey, value);
                 _autoSave = value;
             }
         }
+
+        public static void ResetPreferences()
+        {
+            EditorPrefs.DeleteKey(autoSavePrefsKey);
+            EditorPrefs.DeleteKey(debugPrefsKey);
+
+            _autoSave = null;
+            _debugMode = null;
+        }
+        #endregion
 
         #region Opening
         [OnOpenAsset]
@@ -93,20 +114,21 @@ namespace qASIC.InputManagement.Internal
             string mapPath = EditorPrefs.GetString(mapPrefsKey);
             if (string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(mapPath))) return;
 
-            map = (InputMap)AssetDatabase.LoadAssetAtPath(mapPath, typeof(InputMap));
+            OpenMap((InputMap)AssetDatabase.LoadAssetAtPath(mapPath, typeof(InputMap)));
         }
 
         public static void OpenMap(InputMap newMap)
         {
-            map = newMap;
+            _map = newMap;
+            FileManager.SaveFileJSON(GetUnmodifiedMapLocation(), newMap);
             EditorPrefs.SetString(mapPrefsKey, AssetDatabase.GetAssetPath(newMap));
             OpenWindow();
         }
 
         public static void CloseMap()
         {
-            map = null;
             EditorPrefs.DeleteKey(mapPrefsKey);
+            Cleanup();
             GetEditorWindow().ResetEditor();
         }
 
@@ -115,7 +137,7 @@ namespace qASIC.InputManagement.Internal
 
         public void SetWindowTitle()
         {
-            titleContent = new GUIContent($"{(_isDirty ? "*" : "")}{(map ? map.name : "Input Map Editor")}", icon);
+            titleContent = new GUIContent($"{(_isDirty ? "*" : "")}{(_map ? _map.name : "Input Map Editor")}", icon);
         }
         #endregion
 
@@ -124,7 +146,9 @@ namespace qASIC.InputManagement.Internal
         {
             EditorApplication.wantsToQuit += OnEditorWantsToQuit;
 
-            LoadMap();
+            if(_map == null)
+                LoadMap();
+
             ResetEditor();
         }
 
@@ -136,15 +160,21 @@ namespace qASIC.InputManagement.Internal
         private void OnDestroy()
         {
             EditorApplication.wantsToQuit -= OnEditorWantsToQuit;
-            ConfirmSaveChangesIfNeeded();
+            if(ConfirmSaveChangesIfNeeded())
+            {
+                Cleanup();
+            }
+        }
+
+        public void ReloadTrees()
+        {
+            contentTree?.Reload();
         }
 
         public void ResetEditor()
         {
-            //Preferences
-            _autoSave = EditorPrefs.GetBool(autoSavePrefsKey, true);
-
-            _isDirty = map ? EditorUtility.GetDirtyCount(map.GetInstanceID()) != 0 : false;
+            //Map
+            _isDirty = _map && EditorUtility.GetDirtyCount(_map.GetInstanceID()) != 0;
 
             //Title
             SetWindowTitle();
@@ -158,12 +188,12 @@ namespace qASIC.InputManagement.Internal
             if (contentTreeState == null)
                 contentTreeState = new TreeViewState();
 
-            contentTree = new InputMapContentTree(contentTreeState, map ? map.Groups.ElementAtOrDefault(map.currentEditorSelectedGroup) : null);
+            contentTree = new InputMapContentTree(contentTreeState, _map ? _map.Groups.ElementAtOrDefault(_map.currentEditorSelectedGroup) : null);
 
             //Assigning maps
-            toolbar.map = map;
-            groupBar.map = map;
-            inspector.map = map;
+            toolbar.map = _map;
+            groupBar.map = _map;
+            inspector.map = _map;
 
             //Events
             groupBar.OnItemSelect += (object o) =>
@@ -189,6 +219,14 @@ namespace qASIC.InputManagement.Internal
                 action.group.actions.RemoveAt(index);
                 contentTree.Reload();
             };
+        }
+
+        public static void Cleanup()
+        {
+            _map = null;
+            _isDirty = false;
+            if(FileManager.FileExists(GetUnmodifiedMapLocation()))
+                FileManager.DeleteFile(GetUnmodifiedMapLocation());
         }
         #endregion
 
@@ -237,7 +275,7 @@ namespace qASIC.InputManagement.Internal
         public static void SetMapDirty()
         {
             _isDirty = true;
-            EditorUtility.SetDirty(map);
+            EditorUtility.SetDirty(_map);
             GetEditorWindow().SetWindowTitle();
             
             if (AutoSave)
@@ -250,33 +288,42 @@ namespace qASIC.InputManagement.Internal
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             GetEditorWindow().SetWindowTitle();
+            FileManager.SaveFileJSON(GetUnmodifiedMapLocation(), _map);
+        }
+
+        public static void DiscardChanges()
+        {
+            _isDirty = false;
+            FileManager.TryReadFileJSON(GetUnmodifiedMapLocation(), _map);
+            AssetDatabase.SaveAssets();
+            EditorUtility.ClearDirty(_map);
+            InputMapWindow window = GetEditorWindow();
+            window.SetWindowTitle();
+            window.ReloadTrees();
         }
 
         public bool ConfirmSaveChangesIfNeeded()
         {
-            if (!map || !IsDirty) return true;
+            if (!_map || !IsDirty) return true;
             int result = EditorUtility.DisplayDialogComplex("Input Map has been modified",
-                $"Would you like to save changes you made to '{map.name}'",
-                "Save", "Discard changes (not working yet)", "Cancel");
+                $"Would you like to save changes you made to '{_map.name}'",
+                "Save", "Discard changes", "Cancel");
             switch(result)
             {
                 case 0:
                     //Save
                     Save();
-                    break;
+                    return true;
                 case 1:
                     //Discard changes
-                    //This has not been added yet - in order to allow discarding,
-                    //the map needs to be copied and replaced. For some reason there
-                    //isn't a simple solution in Unity yet for this
-                    break;
+                    DiscardChanges();
+                    return true;
                 default:
                     //Cancel
+                    Debug.Log(_map == null);
                     Instantiate(this).Show();
-                    break;
+                    return false;
             }
-
-            return false;
         }
         #endregion
     }

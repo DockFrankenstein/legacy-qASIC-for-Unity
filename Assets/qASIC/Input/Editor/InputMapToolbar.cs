@@ -52,6 +52,7 @@ namespace qASIC.InputManagement.Internal
                 menu.AddToggableItem("Show in folder", false, ShowInFolder, map);
                 menu.AddSeparator("");
                 menu.AddItem("Open", false, OpenAsset);
+                menu.AddToggableItem("Discard changes", false, InputMapWindow.DiscardChanges, map);
                 menu.AddSeparator("");
                 menu.AddItem("Close", false, InputMapWindow.GetEditorWindow().Close);
             });
@@ -69,6 +70,7 @@ namespace qASIC.InputManagement.Internal
 
                     menu.AddItem("Update name", false, window.SetWindowTitle);
                     menu.AddItem("Reset editor", false, window.ResetEditor);
+                    menu.AddItem("Reset preferences", false, InputMapWindow.ResetPreferences);
                     menu.AddSeparator("");
                     menu.AddToggableItem("Set dirty", false, InputMapWindow.SetMapDirty, map);
                     menu.AddToggableItem("Close map", false, InputMapWindow.CloseMap, map);
