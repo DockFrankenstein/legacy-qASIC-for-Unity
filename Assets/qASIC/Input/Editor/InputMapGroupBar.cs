@@ -59,7 +59,7 @@ namespace qASIC.InputManagement.Internal
                 //calc width
                 EditorStyles.toolbarButton.CalcMinMaxWidth(new GUIContent(map.Groups[i].groupName), out float width, out _);
 
-                bool isSelected = map.currentEditorSelectedGroup == i;
+                bool isSelected = InputMapWindow.SelectedGroupIndex == i;
                 bool pressed = Toggle(isSelected, map.Groups[i].groupName, EditorStyles.toolbarButton, Width(width)) != isSelected;
                 
                 Event e = Event.current;
@@ -148,7 +148,7 @@ namespace qASIC.InputManagement.Internal
         public void Select(int i)
         {
             if (!map) return;
-            map.currentEditorSelectedGroup = i;
+            InputMapWindow.SelectedGroupIndex = i;
             OnItemSelect?.Invoke(map.Groups[i]);
         }
 
@@ -183,7 +183,7 @@ namespace qASIC.InputManagement.Internal
 
         static class Styles
         {
-            public static GUIStyle defaultGroupBar = new GUIStyle().WithBackground(qGUIUtility.qASICColorTexture);
+            public static GUIStyle defaultGroupBar => new GUIStyle().WithBackground(qGUIUtility.qASICColorTexture);
         }
     }
 }

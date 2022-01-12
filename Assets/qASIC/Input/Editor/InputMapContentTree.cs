@@ -28,6 +28,8 @@ namespace qASIC.InputManagement.Internal
 
 		Color HeaderBarColor => Color.clear;
 
+		event Action OnNextRepaint;
+
         #region Creating
         public InputMapContentTree(TreeViewState state, InputGroup group)
 			: base(state)
@@ -227,7 +229,12 @@ namespace qASIC.InputManagement.Internal
 			AddItem(Group.actions, action?.Action, new InputAction(WindowUtility.GenerateUniqueName("New action", (string s) =>
 			{
 				return NonRepeatableChecker.ContainsKey(Group.actions, s);
-			})));
+			})),
+			//Expand action
+			() =>
+            {
+				SetExpanded(ActionsRoot.id, true);
+			});
 		}
 
 		void AddAxisItem(InputMapContentAxisTreeItem axis)
@@ -235,10 +242,15 @@ namespace qASIC.InputManagement.Internal
 			AddItem(Group.axes, axis?.Axis, new InputAxis(WindowUtility.GenerateUniqueName("New axis", (string s) =>
 			{
 				return NonRepeatableChecker.ContainsKey(Group.axes, s);
-			})));
+			})),
+			//Expand action
+			() =>
+			{
+				SetExpanded(AxesRoot.id, true);
+			});
 		}
 
-		void AddItem<t>(List<t> list, t selectedObject, t item)
+		void AddItem<t>(List<t> list, t selectedObject, t item, Action ExpandAction = null)
 		{
 			int index = list.IndexOf(selectedObject);
 			if (index == -1)
@@ -246,9 +258,15 @@ namespace qASIC.InputManagement.Internal
 			list.Insert(index + 1, item);
 			InputMapWindow.SetMapDirty();
 			Reload();
-			InputMapContentEditableItemBase treeItem = GetItemByContent(item);
-			Debug.Assert(treeItem != null, "Cannot get item!");
-			BeginRename(treeItem);
+
+			ExpandAction?.Invoke();
+			Repaint();
+			OnNextRepaint += () =>
+			{
+				InputMapContentEditableItemBase treeItem = GetItemByContent(item);
+				if (treeItem != null)
+					BeginRename(treeItem);
+			};
 		}
         #endregion
 
@@ -272,15 +290,16 @@ namespace qASIC.InputManagement.Internal
 
 			return null;
         }
-		#endregion
+        #endregion
 
-		#region Renaming
-		protected override bool CanRename(TreeViewItem item)
-		{
-			return item is InputMapContentEditableItemBase;
-		}
+        #region Renaming
+        protected override bool CanRename(TreeViewItem item)
+        {
+			//For some reason even when returning false you can still rename every item
+            return item is InputMapContentEditableItemBase;
+        }
 
-		protected override void RenameEnded(RenameEndedArgs args)
+        protected override void RenameEnded(RenameEndedArgs args)
 		{
 			if (!args.acceptedRename) return;
 
@@ -295,7 +314,6 @@ namespace qASIC.InputManagement.Internal
 					item.Rename(args.newName);
 					break;
 				default:
-					Debug.LogError("Cannot rename item!");
 					return;
 			}
 
@@ -308,6 +326,12 @@ namespace qASIC.InputManagement.Internal
 		protected override void RowGUI(RowGUIArgs args)
 		{
 			bool repaint = Event.current.type == EventType.Repaint;
+
+			if (OnNextRepaint != null && repaint)
+            {
+				OnNextRepaint?.Invoke();
+				OnNextRepaint = null;
+            }
 
 			if (showContextOnNextRepaint && repaint)
             {
@@ -360,18 +384,16 @@ namespace qASIC.InputManagement.Internal
 
 			//Separator
 			Rect separatorRect = new Rect(rowRect).ResizeToBottom(1f);
-			Styles.Separator.Draw(separatorRect, GUIContent.none, false, false, false, false);
+			Styles.Separator.Draw(separatorRect, GUIContent.none, true, true, args.selected, args.focused);
 
-			//Color bar
-			//This feature is currently not being used, but it someimes
-			//causes the separator not to show up
-			//if (!(item is null) && item.BarColor != Color.clear)
-			//{
-			//	Rect barRect = new Rect(rowRect).ResizeToBottom(2f);
-			//	Styles.ColorBar(item.BarColor).Draw(barRect, GUIContent.none, false, false, false, false);
-			//}
+            //Color bar
+            if (!(item is null) && item.BarColor != Color.clear)
+            {
+                Rect barRect = new Rect(rowRect).ResizeToBottom(2f);
+                Styles.ColorBar(item.BarColor).Draw(barRect, GUIContent.none, false, false, false, false);
+            }
 
-			CalcFoldoutOffset(rowRect.height);
+            CalcFoldoutOffset(rowRect.height);
 		}
 
 		//Centers foldout vertically
@@ -413,9 +435,9 @@ namespace qASIC.InputManagement.Internal
 
 		static class Styles
         {
-			public static GUIStyle Label = new GUIStyle("Label") { alignment = TextAnchor.MiddleLeft };
-			public static GUIStyle Separator = new GUIStyle().WithBackground(qGUIUtility.BorderTexture);
-			public static GUIStyle ColorBar(Color color) => new GUIStyle().WithBackgroundColor(color);
+			public static GUIStyle Label => new GUIStyle("Label") { alignment = TextAnchor.MiddleLeft };
+			public static GUIStyle Separator => new GUIStyle("Label").WithBackground(qGUIUtility.BorderTexture);
+			public static GUIStyle ColorBar(Color color) => new GUIStyle("Label").WithBackgroundColor(color);
         }
     }
 }

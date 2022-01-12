@@ -7,12 +7,8 @@ namespace qASIC.InputManagement
     [CreateAssetMenu(fileName = "NewInputMap", menuName = "qASIC/Input/Input Map")]
     public class InputMap : ScriptableObject
     {
-#if UNITY_EDITOR
-        [HideInInspector] public int currentEditorSelectedGroup = -1;
-#endif
-
         public int defaultGroup = 0;
-        public List<InputGroup> Groups = new List<InputGroup>();
+        public List<InputGroup> Groups = new List<InputGroup>(new InputGroup[] { new InputGroup("Default") });
 
         public string DefaultGroupName
         { 

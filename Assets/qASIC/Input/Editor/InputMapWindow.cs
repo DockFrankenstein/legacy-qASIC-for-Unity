@@ -23,13 +23,26 @@ namespace qASIC.InputManagement.Internal
         TreeViewState contentTreeState;
 
         public static string GetUnmodifiedMapLocation() =>
-            $"{Application.persistentDataPath}/qASIC_inputmap-modified.txt";
+            $"{Application.persistentDataPath}/qASIC_inputmap-unmodified.txt";
 
-        static bool _isDirty;
-        public static bool IsDirty => _map && _isDirty;
+        private static bool? _isDirty = null;
+        public static bool IsDirty
+        {
+            get
+            {
+                if (!_map)
+                    return false;
+
+                if (_isDirty == null)
+                    _isDirty = EditorUtility.GetDirtyCount(_map) != 0;
+
+                return _isDirty ?? false;
+            }
+        }
 
         #region Preferences
         const string mapPrefsKey = "qASIC_input_map_editor_map";
+        const string selectedGroupPrefsKey = "qASIC_input_map_editor_group";
         const string autoSavePrefsKey = "qASIC_input_map_editor_autosave";
         const string debugPrefsKey = "qASIC_input_map_editor_debug";
 
@@ -66,6 +79,23 @@ namespace qASIC.InputManagement.Internal
                     Save();
 
                 _autoSave = value;
+            }
+        }
+
+        private static int? _selectedGroupIndex;
+        public static int SelectedGroupIndex
+        {
+            get
+            {
+                if (_selectedGroupIndex == null)
+                    _selectedGroupIndex = EditorPrefs.GetInt(selectedGroupPrefsKey, 0);
+
+                return _selectedGroupIndex ?? 0;
+            }
+            set
+            {
+                EditorPrefs.SetInt(selectedGroupPrefsKey, value);
+                _selectedGroupIndex = value;
             }
         }
 
@@ -147,7 +177,7 @@ namespace qASIC.InputManagement.Internal
 
         public void SetWindowTitle()
         {
-            titleContent = new GUIContent($"{(_isDirty ? "*" : "")}{(_map ? _map.name : "Input Map Editor")}", icon);
+            titleContent = new GUIContent($"{(IsDirty ? "*" : "")}{(_map ? _map.name : "Input Map Editor")}", icon);
         }
         #endregion
 
@@ -198,7 +228,7 @@ namespace qASIC.InputManagement.Internal
             if (contentTreeState == null)
                 contentTreeState = new TreeViewState();
 
-            contentTree = new InputMapContentTree(contentTreeState, _map ? _map.Groups.ElementAtOrDefault(_map.currentEditorSelectedGroup) : null);
+            contentTree = new InputMapContentTree(contentTreeState, _map ? _map.Groups.ElementAtOrDefault(SelectedGroupIndex) : null);
 
             //Assigning maps
             toolbar.map = _map;
