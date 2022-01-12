@@ -61,6 +61,10 @@ namespace qASIC.InputManagement.Internal
             set
             {
                 EditorPrefs.SetBool(autoSavePrefsKey, value);
+
+                if (IsDirty)
+                    Save();
+
                 _autoSave = value;
             }
         }

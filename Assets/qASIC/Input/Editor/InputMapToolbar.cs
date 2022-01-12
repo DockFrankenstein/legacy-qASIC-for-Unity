@@ -60,6 +60,9 @@ namespace qASIC.InputManagement.Internal
             DisplayMenu("Help", ref helpMenuRect, (GenericMenu menu) =>
             {
                 menu.AddItem("Documentation", false, () => Application.OpenURL("https://docs.qasictools.com/input/getting-started"));
+                menu.AddDisabledItem("Guides", false/*, () => Application.OpenURL("https://docs.qasictools.com/")*/);
+                menu.AddSeparator("");
+                menu.AddItem("Support", false, () => Application.OpenURL("https://qasictools.com/support"));
             });
 
             if (InputMapWindow.DebugMode)
@@ -70,6 +73,7 @@ namespace qASIC.InputManagement.Internal
 
                     menu.AddItem("Update name", false, window.SetWindowTitle);
                     menu.AddItem("Reset editor", false, window.ResetEditor);
+                    menu.AddItem("Reload trees", false, window.ReloadTrees);
                     menu.AddItem("Reset preferences", false, InputMapWindow.ResetPreferences);
                     menu.AddSeparator("");
                     menu.AddToggableItem("Set dirty", false, InputMapWindow.SetMapDirty, map);
