@@ -6,6 +6,7 @@ using UnityEditor.IMGUI.Controls;
 using UnityEditor.Callbacks;
 using qASIC.FileManagement;
 
+//FIXME: For some reason when recompiling Unity flashes when this window is oppened
 namespace qASIC.InputManagement.Internal
 {
     public class InputMapWindow : EditorWindow, IHasCustomMenu
@@ -87,7 +88,12 @@ namespace qASIC.InputManagement.Internal
 
         void IHasCustomMenu.AddItemsToMenu(GenericMenu menu)
         {
-            menu.AddItem("Debug", DebugMode, () => DebugMode = !DebugMode);
+            menu.AddItem("Debug", DebugMode, () =>
+            {
+                DebugMode = !DebugMode;
+                //Redraw inspector in case any map is selected
+                AssetDatabase.Refresh();
+            });
         }
 
         [MenuItem("Window/qASIC/Input Map Editor")]
@@ -160,7 +166,7 @@ namespace qASIC.InputManagement.Internal
         private void OnDestroy()
         {
             EditorApplication.wantsToQuit -= OnEditorWantsToQuit;
-            if(ConfirmSaveChangesIfNeeded())
+            if (ConfirmSaveChangesIfNeeded())
             {
                 Cleanup();
             }
@@ -207,7 +213,10 @@ namespace qASIC.InputManagement.Internal
                 inspector.SetObject(o);
             };
 
-            contentTree.OnItemSelect += inspector.SetObject;
+            contentTree.OnItemSelect += (object o) =>
+            {
+                inspector.SetObject(o); 
+            };
 
             inspector.OnDeleteGroup += groupBar.DeleteGroup;
 
@@ -225,7 +234,7 @@ namespace qASIC.InputManagement.Internal
         {
             _map = null;
             _isDirty = false;
-            if(FileManager.FileExists(GetUnmodifiedMapLocation()))
+            if (FileManager.FileExists(GetUnmodifiedMapLocation()))
                 FileManager.DeleteFile(GetUnmodifiedMapLocation());
         }
         #endregion

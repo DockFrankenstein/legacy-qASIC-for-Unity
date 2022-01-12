@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using System;
+using qASIC.EditorTools;
 
 using static qASIC.EditorTools.qGUIUtility;
 using static UnityEditor.EditorGUILayout;
@@ -11,10 +12,11 @@ namespace qASIC.InputManagement.Internal
     {
         public InputMap map;
 
-        object inspectionObject;
-        bool displayDeletePrompt;
+        object _inspectionObject;
+        bool _displayDeletePrompt;
 
-        Vector2 scroll;
+        Vector2 _scroll;
+        int _currentListeningKeyCode = -1;
 
         public struct InspectorInputAction
         {
@@ -52,9 +54,9 @@ namespace qASIC.InputManagement.Internal
 
         public void OnGUI()
         {
-            scroll = BeginScrollView(scroll);
+            _scroll = BeginScrollView(_scroll);
 
-            switch (inspectionObject)
+            switch (_inspectionObject)
             {
                 case InputGroup group:
                     group.groupName = NameField(group.groupName);
@@ -75,11 +77,10 @@ namespace qASIC.InputManagement.Internal
                 case InspectorInputAxis axis:
                     axis.axis.axisName = NameField(axis.axis.axisName);
 
-                    EditorGUI.BeginChangeCheck();
+                    EditorChangeChecker.BeginChangeCheck(InputMapWindow.SetMapDirty);
                     axis.axis.positiveAction = TextField("Positive", axis.axis.positiveAction);
                     axis.axis.negativeAction = TextField("Negative", axis.axis.negativeAction);
-                    if (EditorGUI.EndChangeCheck())
-                        InputMapWindow.SetMapDirty();
+                    EditorChangeChecker.EndChangeCheckAndCleanup();
 
                     if (DeleteButton())
                         OnDeleteAxis.Invoke(axis);
@@ -94,10 +95,11 @@ namespace qASIC.InputManagement.Internal
 
             EndScrollView();
 
-            if (Event.current.type == EventType.Repaint)
+            if (OnNextRepaint != null && Event.current.type == EventType.Repaint)
             {
                 OnNextRepaint?.Invoke();
-                OnNextRepaint = new Action(() => { });
+                OnNextRepaint = null;
+                InputMapWindow.GetEditorWindow().Repaint();
             }
         }
 
@@ -108,8 +110,9 @@ namespace qASIC.InputManagement.Internal
             //that we assign the object on next repaint
             OnNextRepaint += () =>
             {
-                inspectionObject = obj;
-                displayDeletePrompt = false;
+                _inspectionObject = obj;
+                _displayDeletePrompt = false;
+                _currentListeningKeyCode = -1;
             };
         }
 
@@ -124,23 +127,51 @@ namespace qASIC.InputManagement.Internal
             actionKeyFoldout = Foldout(actionKeyFoldout, "Keys", true, EditorStyles.foldoutHeader);
             if (!actionKeyFoldout) return;
 
-            EditorGUI.BeginChangeCheck();
             BeginVertical(new GUIStyle() { margin = new RectOffset((int)EditorGUIUtility.singleLineHeight, 0, 0, 0) });
+
+            //Checking for changes
+            EditorChangeChecker.BeginChangeCheck(InputMapWindow.SetMapDirty);
 
             for (int i = 0; i < action.keys.Count; i++)
             {
+                //Listening for key
+                if (_currentListeningKeyCode == i)
+                {
+                    if (Event.current.isKey)
+                    {
+                        action.keys[i] = Event.current.keyCode;
+                        _currentListeningKeyCode = -1;
+                        InputMapWindow.GetEditorWindow().Repaint();
+                    }
+
+                    if (EditorChangeChecker.IgnorableButton("Cancel") || Event.current.isMouse)
+                    {
+                        _currentListeningKeyCode = -1;
+                        InputMapWindow.GetEditorWindow().Repaint();
+                    }
+                    continue;
+                }
+
+                //Drawing normal line
                 BeginHorizontal();
-                action.keys[i] = KeyCodePopup(action.keys[i], $"Key {i}");
-                if (GUILayout.Button("Change", GUILayout.Width(60f))) { }
+                action.keys[i] = KeyCodePopup(action.keys[i]);
+
+                if (EditorChangeChecker.IgnorableButton("Change", GUILayout.Width(60f)))
+                {
+                    _currentListeningKeyCode = i;
+                    GUI.FocusControl(null);
+                }
+
+                if (GUILayout.Button("-", GUILayout.Width(EditorGUIUtility.singleLineHeight)))
+                    action.keys.RemoveAt(i);
+
                 EndHorizontal();
             }
 
             if (GUILayout.Button("+"))
                 action.keys.Add(default);
 
-            if (EditorGUI.EndChangeCheck())
-                InputMapWindow.SetMapDirty();
-
+            EditorChangeChecker.EndChangeCheckAndCleanup();
             EndVertical();
         }
 
@@ -163,22 +194,22 @@ namespace qASIC.InputManagement.Internal
         {
             bool state = false;
             BeginHorizontal();
-            switch (displayDeletePrompt)
+            switch (_displayDeletePrompt)
             {
                 case true:
                     if (GUILayout.Button("Cancel"))
-                        displayDeletePrompt = false;
+                        _displayDeletePrompt = false;
 
                     if (state = GUILayout.Button("Confirm"))
                     {
-                        displayDeletePrompt = false;
+                        _displayDeletePrompt = false;
                         ResetInspector();
                         InputMapWindow.SetMapDirty();
                     }
                     break;
                 case false:
                     if (GUILayout.Button("Delete"))
-                        displayDeletePrompt = true;
+                        _displayDeletePrompt = true;
                     break;
             }
             EndHorizontal();
