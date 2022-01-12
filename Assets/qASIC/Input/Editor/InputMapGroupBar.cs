@@ -116,11 +116,25 @@ namespace qASIC.InputManagement.Internal
             if (!map) return;
             Debug.Assert(index >= 0 && index < map.Groups.Count, $"Cannot delete group {index}, index is out of range!");
             map.Groups.RemoveAt(index);
-            if (map.Groups.Count > 0)
-                Select(Mathf.Max(0, index - 1));
+
+            HandleDeleteGroup(index);
 
             ResetScroll();
             InputMapWindow.SetMapDirty();
+        }
+
+        void HandleDeleteGroup(int index)
+        {
+            if (map.Groups.Count > 0)
+            {
+                int selectIndex = Mathf.Max(0, index - 1);
+                Select(selectIndex);
+                if (map.defaultGroup == index)
+                    SetAsDefault(selectIndex);
+                return;
+            }
+
+            OnItemSelect?.Invoke(null);
         }
 
         public void SetAsDefault(int index)
@@ -160,6 +174,7 @@ namespace qASIC.InputManagement.Internal
 
             map.Groups.Insert(index + 1, group);
             Select(index + 1);
+
             InputMapWindow.SetMapDirty();
         }
 

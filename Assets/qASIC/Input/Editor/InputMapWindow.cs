@@ -208,9 +208,9 @@ namespace qASIC.InputManagement.Internal
             //Events
             groupBar.OnItemSelect += (object o) =>
             {
-                if (contentTree != null && o is InputGroup group)
+                if (contentTree != null)
                 {
-                    contentTree.Group = group;
+                    contentTree.Group = o as InputGroup;
                     contentTree.Reload();
                 }
 
