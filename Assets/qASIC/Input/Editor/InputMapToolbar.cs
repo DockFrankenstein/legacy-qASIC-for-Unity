@@ -76,7 +76,7 @@ namespace qASIC.InputManagement.Internal
                     menu.AddItem("Reload trees", false, window.ReloadTrees);
                     menu.AddItem("Reset preferences", false, InputMapWindow.ResetPreferences);
                     menu.AddSeparator("");
-                    menu.AddToggableItem("Set dirty", false, InputMapWindow.SetMapDirty, map);
+                    menu.AddToggableItem("Set dirty", false, InputMapWindow.SetMapDirty, map && !InputMapWindow.AutoSave);
                     menu.AddToggableItem("Close map", false, InputMapWindow.CloseMap, map);
                 });
             }

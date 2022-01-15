@@ -116,7 +116,7 @@ namespace qASIC.InputManagement.Internal
             object obj = EditorUtility.InstanceIDToObject(instanceID);
             if (!(obj is InputMap map))
                 return false;
-            OpenMap(map);
+            OpenMapIfNotDirty(map);
             return true;
         }
 
@@ -157,11 +157,23 @@ namespace qASIC.InputManagement.Internal
             OpenMap((InputMap)AssetDatabase.LoadAssetAtPath(mapPath, typeof(InputMap)));
         }
 
+        public static void OpenMapIfNotDirty(InputMap newMap)
+        {
+            InputMapWindow window = GetEditorWindow();
+            if (_map && _map != newMap && !window.ConfirmSaveChangesIfNeeded(false))
+                return;
+
+            OpenMap(newMap);
+        }
+
         public static void OpenMap(InputMap newMap)
         {
+            if(_map && _map != newMap)
+                SelectedGroupIndex = 0;     
             _map = newMap;
             FileManager.SaveFileJSON(GetUnmodifiedMapLocation(), newMap);
             EditorPrefs.SetString(mapPrefsKey, AssetDatabase.GetAssetPath(newMap));
+
             OpenWindow();
         }
 
@@ -345,7 +357,7 @@ namespace qASIC.InputManagement.Internal
             window.ReloadTrees();
         }
 
-        public bool ConfirmSaveChangesIfNeeded()
+        public bool ConfirmSaveChangesIfNeeded(bool reoppenOnCancel = true)
         {
             if (!_map || !IsDirty) return true;
             int result = EditorUtility.DisplayDialogComplex("Input Map has been modified",
@@ -363,8 +375,8 @@ namespace qASIC.InputManagement.Internal
                     return true;
                 default:
                     //Cancel
-                    Debug.Log(_map == null);
-                    Instantiate(this).Show();
+                    if (reoppenOnCancel)
+                        Instantiate(this).Show();
                     return false;
             }
         }

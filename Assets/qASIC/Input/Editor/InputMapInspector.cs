@@ -13,7 +13,7 @@ namespace qASIC.InputManagement.Internal
 
             InputMap map = (InputMap)target;
             if (GUILayout.Button("Open editor", GUILayout.Height(24f)))
-                InputMapWindow.OpenMap(map);
+                InputMapWindow.OpenMapIfNotDirty(map);
         }
     }
 }
