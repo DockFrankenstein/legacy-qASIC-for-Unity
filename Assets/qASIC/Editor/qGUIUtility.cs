@@ -5,12 +5,32 @@ namespace qASIC.EditorTools
 {
     public static class qGUIUtility
     {
+        #region qASIC
         public static Texture2D qASICBackgroundTexture => GenerateColorTexture(new Color(0f, 0f, 0f, 0.2f));
         public static Color qASICColor => new Color(0f, 0.7019607843137255f, 1f);
         public static Texture2D qASICColorTexture => GenerateColorTexture(qASICColor);
 
         public static Color BorderColor => EditorGUIUtility.isProSkin ? new Color(0.1372549019607843f, 0.1372549019607843f, 0.1372549019607843f) : new Color(0.6f, 0.6f, 0.6f);
         public static Texture2D BorderTexture => GenerateColorTexture(BorderColor);
+
+        public static void DrawqASICBanner(string docs = "https://docs.qasictools.com")
+        {
+            switch (GUILayout.SelectionGrid(-1, new GUIContent[] { new GUIContent("Asset store"), new GUIContent("Docs"), new GUIContent("Support") }, 3))
+            {
+                case 0:
+                    Application.OpenURL("https://qasictools.com/store");
+                    break;
+                case 1:
+                    Application.OpenURL(docs);
+                    break;
+                case 2:
+                    Application.OpenURL("https://qasictools.com/support");
+                    break;
+            }
+
+            EditorGUILayout.Space();
+        }
+        #endregion
 
         //Editor icons
         public static Texture ErrorIcon => EditorGUIUtility.IconContent("console.erroricon").image;

@@ -6,10 +6,10 @@ namespace qASIC.InputManagement
 {
     public class InputLoad : MonoBehaviour
     {
-        public InputMap map;
+        [SerializeField] InputMap map;
 
-        public SerializationType serializationType = SerializationType.playerPrefs;
-        public GenericFilePath filePath = new GenericFilePath(GenericFolder.PersistentDataPath, "input.txt");
+        [SerializeField] SerializationType serializationType = SerializationType.playerPrefs;
+        [SerializeField] GenericFilePath filePath = new GenericFilePath(GenericFolder.PersistentDataPath, "input.txt");
 
         bool init = false;
 
@@ -34,7 +34,7 @@ namespace qASIC.InputManagement
                     InputManager.LoadUserKeysConfig(filePath.GetFullPath());
                     break;
                 default:
-                    qDebug.LogError("Serialization type '{SaveType}' is not supported by the input system!");
+                    qDebug.LogError($"Serialization type '{serializationType}' is not supported by the input system!");
                     break;
             }
 
