@@ -9,7 +9,7 @@ namespace qASIC.FileManagement
     {
         Desktop = 0,
         Programs = 2,
-        MyDocuments = 5,
+        MyDocuments = 4,
         Personal = 5,
         Favorites = 6,
         Startup = 7,
@@ -73,6 +73,16 @@ namespace qASIC.FileManagement
 
             switch (genericFolder)
             {
+                //Multiple items of Environment.SpecialFolder have the same
+                //IDs which makes it impossible to select Personal using
+                //EditorGUI Enum Popup. GenericFolder changes their IDs
+                //and instead we have to do this
+                case GenericFolder.MyDocuments:
+                    return GetCustomFolderPath(Environment.SpecialFolder.MyDocuments);
+                case GenericFolder.Personal:
+                    return GetCustomFolderPath(Environment.SpecialFolder.Personal);
+                
+                //Unity application paths
                 case GenericFolder.ConsoleLogPath:
                     return Application.consoleLogPath;
                 case GenericFolder.PersistentDataPath:
@@ -84,7 +94,7 @@ namespace qASIC.FileManagement
                 case GenericFolder.TemporaryCachePath:
                     return Application.temporaryCachePath;
                 default:
-                    throw new ArgumentException($"{genericFolder} cannot be recognized");
+                    return GetCustomFolderPath((Environment.SpecialFolder)genericFolder);
             }
         }
         #endregion

@@ -4548,7 +4548,7 @@ MonoBehaviour:
   map: {fileID: 11400000, guid: ffcabac4cc9d9db4cabe73d1163f2a79, type: 2}
   serializationType: 1
   filePath:
-    specialFolder: 26
+    genericFolder: 62
     filePath: qASIC\Pedestal Demo\input.txt
 --- !u!4 &520468626
 Transform:
