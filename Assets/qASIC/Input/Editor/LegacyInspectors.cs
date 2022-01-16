@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using static qASIC.EditorTools.qGUIUtility;
 using static UnityEngine.GUILayout;
 
 namespace qASIC.InputManagement.Tools
@@ -10,7 +9,7 @@ namespace qASIC.InputManagement.Tools
     {
         public override void OnInspectorGUI()
         {
-            DrawMessageBox("Input Preset has been replaced with Input Map. For more details click the button bellow", InspectorMessageIconType.warning);
+            EditorGUILayout.HelpBox("Input Preset has been replaced with Input Map. For more details click the button bellow.", MessageType.Warning);
             if (Button("More details"))
                 Application.OpenURL(@"https://docs.qasictools.com/");
         }
@@ -21,7 +20,7 @@ namespace qASIC.InputManagement.Tools
     {
         public override void OnInspectorGUI()
         {
-            DrawMessageBox("Set Global Input Keys has been replaced with Input Load. For more details click the button bellow", InspectorMessageIconType.warning);
+            EditorGUILayout.HelpBox("Set Global Input Keys has been replaced with Input Load. For more details click the button bellow.", MessageType.Warning);
             if (Button("More details"))
                 Application.OpenURL(@"https://docs.qasictools.com/");
         }
