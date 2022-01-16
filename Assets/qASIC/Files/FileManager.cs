@@ -5,9 +5,89 @@ using System;
 
 namespace qASIC.FileManagement
 {
+    public enum GenericFolder
+    {
+        Desktop = 0,
+        Programs = 2,
+        MyDocuments = 5,
+        Personal = 5,
+        Favorites = 6,
+        Startup = 7,
+        Recent = 8,
+        SendTo = 9,
+        StartMenu = 11,
+        MyMusic = 13,
+        MyVideos = 14,
+        DesktopDirectory = 16,
+        MyComputer = 17,
+        NetworkShortcuts = 19,
+        Fonts = 20,
+        Templates = 21,
+        CommonStartMenu = 22,
+        CommonPrograms = 23,
+        CommonStartup = 24,
+        CommonDesktopDirectory = 25,
+        ApplicationData = 26,
+        PrinterShortcuts = 27,
+        LocalApplicationData = 28,
+        InternetCache = 32,
+        Cookies = 33,
+        History = 34,
+        CommonApplicationData = 35,
+        Windows = 36,
+        System = 37,
+        ProgramFiles = 38,
+        MyPictures = 39,
+        UserProfile = 40,
+        SystemX86 = 41,
+        ProgramFilesX86 = 42,
+        CommonProgramFiles = 43,
+        CommonProgramFilesX86 = 44,
+        CommonTemplates = 45,
+        CommonDocuments = 46,
+        CommonAdminTools = 47,
+        AdminTools = 48,
+        CommonMusic = 53,
+        CommonPictures = 54,
+        CommonVideos = 55,
+        Resources = 56,
+        LocalizedResources = 57,
+        CommonOemLinks = 58,
+        CDBurning = 59,
+        ConsoleLogPath = 60,
+        DataPath = 61,
+        PersistentDataPath = 62,
+        SteamingAssetsPath = 63,
+        TemporaryCachePath = 64,
+    }
+
     public static class FileManager
     {
+        #region Folder Path
         public static string GetCustomFolderPath(Environment.SpecialFolder type) { return Environment.GetFolderPath(type); }
+
+        public static string GetGenericFolderPath(GenericFolder genericFolder)
+        {
+            if ((int)genericFolder <= 59 && (int)genericFolder >= 0)
+                return GetCustomFolderPath((Environment.SpecialFolder)genericFolder);
+
+            switch (genericFolder)
+            {
+                case GenericFolder.ConsoleLogPath:
+                    return Application.consoleLogPath;
+                case GenericFolder.PersistentDataPath:
+                    return Application.persistentDataPath;
+                case GenericFolder.DataPath:
+                    return Application.dataPath;
+                case GenericFolder.SteamingAssetsPath:
+                    return Application.streamingAssetsPath;
+                case GenericFolder.TemporaryCachePath:
+                    return Application.temporaryCachePath;
+                default:
+                    throw new ArgumentException($"{genericFolder} cannot be recognized");
+            }
+        }
+        #endregion
 
         #region Trim
         /// <summary>Trims paths end by specified amount of folders</summary>

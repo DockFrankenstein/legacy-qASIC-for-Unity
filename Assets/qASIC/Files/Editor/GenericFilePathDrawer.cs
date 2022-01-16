@@ -20,7 +20,7 @@ namespace qASIC.FileManagement.Internal
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             SerializedProperty filePath = property.FindPropertyRelative("filePath");
-            SerializedProperty specialFolder = property.FindPropertyRelative("specialFolder");
+            SerializedProperty genericFolder = property.FindPropertyRelative("genericFolder");
 
             GUIStyle labelStyle = new GUIStyle("Label")
             {
@@ -49,10 +49,10 @@ namespace qASIC.FileManagement.Internal
             Label(labelPosition, label, labelStyle);
             Box(boxPosition, qASICBackgroundTexture);
 
-            specialFolder.intValue = (int)(Environment.SpecialFolder)EnumPopup(folderPosition, GUIContent.none, (Environment.SpecialFolder)specialFolder.intValue);
+            genericFolder.intValue = (int)(GenericFolder)EnumPopup(folderPosition, GUIContent.none, (GenericFolder)genericFolder.intValue);
             filePath.stringValue = TextField(filePathPosition, GUIContent.none, filePath.stringValue);
 
-            Label(previewPosition, $"Example: {GenericFilePath.GenerateFullPath((Environment.SpecialFolder)specialFolder.intValue, filePath.stringValue)}");
+            Label(previewPosition, $"Example: {GenericFilePath.GenerateFullPath((GenericFolder)genericFolder.intValue, filePath.stringValue)}");
         }
     }
 }

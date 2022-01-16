@@ -5,7 +5,7 @@ namespace qASIC.FileManagement
     [Serializable]
     public class GenericFilePath
     {
-        public Environment.SpecialFolder specialFolder = Environment.SpecialFolder.ApplicationData;
+        public GenericFolder genericFolder = GenericFolder.ApplicationData;
         public string filePath;
 
         public GenericFilePath() { }
@@ -15,17 +15,17 @@ namespace qASIC.FileManagement
             this.filePath = filePath;
         }
 
-        public GenericFilePath(Environment.SpecialFolder specialFolder, string filePath)
+        public GenericFilePath(GenericFolder genericFolder, string filePath)
         {
-            this.specialFolder = specialFolder;
+            this.genericFolder = genericFolder;
             this.filePath = filePath;
         }
 
         public string GetFullPath() =>
-            GenerateFullPath(specialFolder, filePath);
+            GenerateFullPath(genericFolder, filePath);
 
-        public static string GenerateFullPath(Environment.SpecialFolder specialFolder, string filePath) =>
-            $@"{FileManager.GetCustomFolderPath(specialFolder)}\{filePath}";
+        public static string GenerateFullPath(GenericFolder genericFolder, string filePath) =>
+            $@"{FileManager.GetGenericFolderPath(genericFolder)}\{filePath}".Replace('/', '\\');
 
         public override string ToString() =>
             GetFullPath();

@@ -9,7 +9,7 @@ namespace qASIC.InputManagement
         public InputMap map;
 
         public SerializationType serializationType = SerializationType.playerPrefs;
-        public GenericFilePath filePath = new GenericFilePath("input.txt");
+        public GenericFilePath filePath = new GenericFilePath(GenericFolder.PersistentDataPath, "input.txt");
 
         bool init = false;
 
