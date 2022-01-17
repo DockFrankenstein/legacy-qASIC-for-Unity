@@ -5450,7 +5450,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: {fileID: 1464753235}
   optionLabelName: 'Console: '
-  groupName: Game
+  groupName: UI
   actionName: Console
   keyIndex: 0
   OnStartListening:

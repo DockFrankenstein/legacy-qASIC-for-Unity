@@ -12,18 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7fff99c208a6cb43b02e622f339150a, type: 3}
   m_Name: PedestalDemoInputMap
   m_EditorClassIdentifier: 
-  currentEditorSelectedGroup: 0
   defaultGroup: 0
   Groups:
-  - currentEditorSelectedAction: 1
-    groupName: Game
+  - groupName: Game
     actions:
-    - actionName: oi
-      keys: 0401000020010000
-    - actionName: oin't
-      keys: 
-    axes: []
-  - currentEditorSelectedAction: -1
-    groupName: New group 0
-    actions: []
+    - actionName: Up
+      keys: 7700000011010000
+    - actionName: Down
+      keys: 7300000012010000
+    - actionName: Left
+      keys: 6100000014010000
+    - actionName: Right
+      keys: 6400000013010000
+    - actionName: Interact
+      keys: 65000000
+    axes:
+    - axisName: Horizontal
+      positiveAction: Right
+      negativeAction: Left
+    - axisName: Vertical
+      positiveAction: Up
+      negativeAction: Down
+  - groupName: UI
+    actions:
+    - actionName: Console
+      keys: 6000000009000000
     axes: []
