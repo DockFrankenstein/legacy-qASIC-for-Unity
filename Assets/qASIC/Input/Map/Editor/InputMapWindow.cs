@@ -7,13 +7,13 @@ using UnityEditor.Callbacks;
 using qASIC.FileManagement;
 
 //FIXME: For some reason when recompiling Unity flashes when this window is oppened
-namespace qASIC.InputManagement.Internal
+namespace qASIC.InputManagement.Map.Internal
 {
     public class InputMapWindow : EditorWindow, IHasCustomMenu
     {
         [SerializeField] Texture2D icon;
 
-        static InputMap _map;
+        static InputMap Map;
 
         InputMapToolbar toolbar = new InputMapToolbar();
         InputMapGroupBar groupBar = new InputMapGroupBar();
@@ -30,11 +30,11 @@ namespace qASIC.InputManagement.Internal
         {
             get
             {
-                if (!_map)
+                if (!Map)
                     return false;
 
                 if (_isDirty == null)
-                    _isDirty = EditorUtility.GetDirtyCount(_map) != 0;
+                    _isDirty = EditorUtility.GetDirtyCount(Map) != 0;
 
                 return _isDirty ?? false;
             }
@@ -160,7 +160,7 @@ namespace qASIC.InputManagement.Internal
         public static void OpenMapIfNotDirty(InputMap newMap)
         {
             InputMapWindow window = GetEditorWindow();
-            if (_map && _map != newMap && !window.ConfirmSaveChangesIfNeeded(false))
+            if (Map && Map != newMap && !window.ConfirmSaveChangesIfNeeded(false))
                 return;
 
             OpenMap(newMap);
@@ -168,9 +168,9 @@ namespace qASIC.InputManagement.Internal
 
         public static void OpenMap(InputMap newMap)
         {
-            if(_map && _map != newMap)
+            if(Map && Map != newMap)
                 SelectedGroupIndex = 0;     
-            _map = newMap;
+            Map = newMap;
             FileManager.SaveFileJSON(GetUnmodifiedMapLocation(), newMap);
             EditorPrefs.SetString(mapPrefsKey, AssetDatabase.GetAssetPath(newMap));
 
@@ -189,7 +189,7 @@ namespace qASIC.InputManagement.Internal
 
         public void SetWindowTitle()
         {
-            titleContent = new GUIContent($"{(IsDirty ? "*" : "")}{(_map ? _map.name : "Input Map Editor")}", icon);
+            titleContent = new GUIContent($"{(IsDirty ? "*" : "")}{(Map ? Map.name : "Input Map Editor")}", icon);
         }
         #endregion
 
@@ -198,7 +198,7 @@ namespace qASIC.InputManagement.Internal
         {
             EditorApplication.wantsToQuit += OnEditorWantsToQuit;
 
-            if(_map == null)
+            if(Map == null)
                 LoadMap();
 
             ResetEditor();
@@ -226,7 +226,7 @@ namespace qASIC.InputManagement.Internal
         public void ResetEditor()
         {
             //Map
-            _isDirty = _map && EditorUtility.GetDirtyCount(_map.GetInstanceID()) != 0;
+            _isDirty = Map && EditorUtility.GetDirtyCount(Map.GetInstanceID()) != 0;
 
             //Title
             SetWindowTitle();
@@ -240,12 +240,12 @@ namespace qASIC.InputManagement.Internal
             if (contentTreeState == null)
                 contentTreeState = new TreeViewState();
 
-            contentTree = new InputMapContentTree(contentTreeState, _map ? _map.Groups.ElementAtOrDefault(SelectedGroupIndex) : null);
+            contentTree = new InputMapContentTree(contentTreeState, Map ? Map.Groups.ElementAtOrDefault(SelectedGroupIndex) : null);
 
             //Assigning maps
-            toolbar.map = _map;
-            groupBar.map = _map;
-            inspector.map = _map;
+            toolbar.map = Map;
+            groupBar.map = Map;
+            inspector.map = Map;
 
             //Events
             groupBar.OnItemSelect += (object o) =>
@@ -278,7 +278,7 @@ namespace qASIC.InputManagement.Internal
 
         public static void Cleanup()
         {
-            _map = null;
+            Map = null;
             _isDirty = false;
             if (FileManager.FileExists(GetUnmodifiedMapLocation()))
                 FileManager.DeleteFile(GetUnmodifiedMapLocation());
@@ -330,7 +330,7 @@ namespace qASIC.InputManagement.Internal
         public static void SetMapDirty()
         {
             _isDirty = true;
-            EditorUtility.SetDirty(_map);
+            EditorUtility.SetDirty(Map);
             GetEditorWindow().SetWindowTitle();
             
             if (AutoSave)
@@ -343,15 +343,15 @@ namespace qASIC.InputManagement.Internal
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             GetEditorWindow().SetWindowTitle();
-            FileManager.SaveFileJSON(GetUnmodifiedMapLocation(), _map);
+            FileManager.SaveFileJSON(GetUnmodifiedMapLocation(), Map);
         }
 
         public static void DiscardChanges()
         {
             _isDirty = false;
-            FileManager.TryReadFileJSON(GetUnmodifiedMapLocation(), _map);
+            FileManager.TryReadFileJSON(GetUnmodifiedMapLocation(), Map);
             AssetDatabase.SaveAssets();
-            EditorUtility.ClearDirty(_map);
+            EditorUtility.ClearDirty(Map);
             InputMapWindow window = GetEditorWindow();
             window.SetWindowTitle();
             window.ReloadTrees();
@@ -359,9 +359,9 @@ namespace qASIC.InputManagement.Internal
 
         public bool ConfirmSaveChangesIfNeeded(bool reoppenOnCancel = true)
         {
-            if (!_map || !IsDirty) return true;
+            if (!Map || !IsDirty) return true;
             int result = EditorUtility.DisplayDialogComplex("Input Map has been modified",
-                $"Would you like to save changes you made to '{_map.name}'",
+                $"Would you like to save changes you made to '{Map.name}'",
                 "Save", "Discard changes", "Cancel");
             switch(result)
             {

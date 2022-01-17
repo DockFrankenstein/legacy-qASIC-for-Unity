@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor.IMGUI.Controls;
 
-namespace qASIC.InputManagement.Internal
+namespace qASIC.InputManagement.Map.Internal
 {
     public abstract class InputMapContentItemBase : TreeViewItem
     {

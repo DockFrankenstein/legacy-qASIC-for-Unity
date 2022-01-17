@@ -2052,8 +2052,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: {fileID: 1728625461}
   optionLabelName: 'Up: '
-  groupName: Game
-  actionName: Up
+  inputAction:
+    groupName: Game
+    actionName: Up
   keyIndex: 0
   OnStartListening:
     m_PersistentCalls:
@@ -3296,8 +3297,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: {fileID: 2022365670}
   optionLabelName: 'Interact: '
-  groupName: Game
-  actionName: Interact
+  inputAction:
+    groupName: Game
+    actionName: Interact
   keyIndex: 0
   OnStartListening:
     m_PersistentCalls:
@@ -5450,8 +5452,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: {fileID: 1464753235}
   optionLabelName: 'Console: '
-  groupName: UI
-  actionName: Console
+  inputAction:
+    groupName: UI
+    actionName: Console
   keyIndex: 0
   OnStartListening:
     m_PersistentCalls:
@@ -11657,8 +11660,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: {fileID: 683230934}
   optionLabelName: 'Right: '
-  groupName: Game
-  actionName: Right
+  inputAction:
+    groupName: Game
+    actionName: Right
   keyIndex: 0
   OnStartListening:
     m_PersistentCalls:
@@ -11934,8 +11938,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: {fileID: 1291388893}
   optionLabelName: 'Down: '
-  groupName: Game
-  actionName: Down
+  inputAction:
+    groupName: Game
+    actionName: Down
   keyIndex: 0
   OnStartListening:
     m_PersistentCalls:
@@ -14844,9 +14849,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 1705672479}
-  optionLabelName: Left
-  groupName: Game
-  actionName: Left
+  optionLabelName: 'Left: '
+  inputAction:
+    groupName: Game
+    actionName: Left
   keyIndex: 0
   OnStartListening:
     m_PersistentCalls:

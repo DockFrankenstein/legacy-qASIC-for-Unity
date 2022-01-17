@@ -1,7 +1,7 @@
 ﻿using System;
 using qASIC.Tools;
 
-namespace qASIC.InputManagement
+namespace qASIC.InputManagement.Map
 {
     [Serializable]
     public class InputAxis : INonRepeatable

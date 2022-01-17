@@ -6,7 +6,7 @@ using qASIC.EditorTools;
 using static qASIC.EditorTools.qGUIUtility;
 using static UnityEditor.EditorGUILayout;
 
-namespace qASIC.InputManagement.Internal
+namespace qASIC.InputManagement.Map.Internal
 {
     public class InputMapInspectorDisplayer
     {

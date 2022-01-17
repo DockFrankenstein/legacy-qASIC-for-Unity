@@ -7,7 +7,7 @@ using UnityObject = UnityEngine.Object;
 
 using static UnityEngine.GUILayout;
 
-namespace qASIC.InputManagement.Internal
+namespace qASIC.InputManagement.Map.Internal
 {
     public class InputMapToolbar
     {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using qASIC.Tools;
 
-namespace qASIC.InputManagement
+namespace qASIC.InputManagement.Map
 {
     [Serializable]
     public class InputAction : INonRepeatable

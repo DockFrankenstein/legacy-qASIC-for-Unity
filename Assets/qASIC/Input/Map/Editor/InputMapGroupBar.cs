@@ -5,7 +5,7 @@ using qASIC.EditorTools;
 
 using static UnityEngine.GUILayout;
 
-namespace qASIC.InputManagement.Internal
+namespace qASIC.InputManagement.Map.Internal
 {
     public class InputMapGroupBar
     {

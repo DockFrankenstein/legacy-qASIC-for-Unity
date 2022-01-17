@@ -69,5 +69,24 @@ namespace qASIC.EditorTools
             r.width -= amount;
             return r;
         }
+
+        //Resizing
+        public static Rect BorderRect(this Rect rect, float border) =>
+            BorderRect(rect, border, border, border, border);
+
+        public static Rect BorderRect(this Rect rect, float x, float y) =>
+            BorderRect(rect, x, x, y, y);
+
+        public static Rect BorderRect(this Rect rect, Vector2 size) =>
+            BorderRect(rect, size.x, size.x, size.y, size.y);
+
+        public static Rect BorderRect(this Rect rect, float left, float right, float top, float bottom)
+        {
+            rect.x += left;
+            rect.width -= left + right;
+            rect.y += top;
+            rect.height -= top + bottom;
+            return rect;
+        }
     }
 }

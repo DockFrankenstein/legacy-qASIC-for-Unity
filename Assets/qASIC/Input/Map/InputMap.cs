@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using qASIC.Tools;
 
-namespace qASIC.InputManagement
+namespace qASIC.InputManagement.Map
 {
     [CreateAssetMenu(fileName = "NewInputMap", menuName = "qASIC/Input/Input Map")]
     public class InputMap : ScriptableObject

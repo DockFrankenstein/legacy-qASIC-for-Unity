@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace qASIC.InputManagement.Internal
+namespace qASIC.InputManagement.Map.Internal
 {
     public static class InputMapEditorUtility
     {

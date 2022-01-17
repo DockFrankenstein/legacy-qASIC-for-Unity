@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using qASIC.Tools;
 
-namespace qASIC.InputManagement
+namespace qASIC.InputManagement.Map
 {
     [Serializable]
     public class InputGroup : INonRepeatable

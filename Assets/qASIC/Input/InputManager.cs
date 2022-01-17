@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 using qASIC.Options;
 using qASIC.FileManagement;
+using qASIC.InputManagement.Map;
 
 namespace qASIC.InputManagement
 {

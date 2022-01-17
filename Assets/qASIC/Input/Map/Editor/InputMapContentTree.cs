@@ -6,9 +6,9 @@ using UnityEditor;
 using qASIC.Tools;
 using qASIC.EditorTools;
 
-using WindowUtility = qASIC.InputManagement.Internal.InputMapEditorUtility;
+using WindowUtility = qASIC.InputManagement.Map.Internal.InputMapEditorUtility;
 
-namespace qASIC.InputManagement.Internal
+namespace qASIC.InputManagement.Map.Internal
 {
     public class InputMapContentTree : TreeView
     {

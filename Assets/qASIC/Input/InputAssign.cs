@@ -12,8 +12,7 @@ namespace qASIC.InputManagement.Menu
         [SerializeField] string optionLabelName;
 
         [Header("Options")]
-        [SerializeField] string groupName;
-        [SerializeField] string actionName;
+        [SerializeField] InputActionReference inputAction;
         [SerializeField] int keyIndex;
 
         [Header("Events")]
@@ -52,7 +51,7 @@ namespace qASIC.InputManagement.Menu
         public string GetLabel()
         {
             string currentKey = "UNKNOWN";
-            if (InputManager.TryGetKeyCode(groupName, actionName, keyIndex, out KeyCode key, false))
+            if (InputManager.TryGetKeyCode(inputAction.GroupName, inputAction.ActionName, keyIndex, out KeyCode key, false))
                 currentKey = key.ToString();
             return $"{optionLabelName}{currentKey}";
         }
@@ -65,7 +64,7 @@ namespace qASIC.InputManagement.Menu
 
         public void Assign(KeyCode key)
         {
-            InputManager.ChangeInput(groupName, actionName, keyIndex, key);
+            InputManager.ChangeInput(inputAction.GroupName, inputAction.ActionName, keyIndex, key);
             isListening = false;
             OnAssign.Invoke();
         }
