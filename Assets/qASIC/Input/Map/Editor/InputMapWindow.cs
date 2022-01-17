@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEditor.IMGUI.Controls;
 using UnityEditor.Callbacks;
 using qASIC.FileManagement;
+using qASIC.InputManagement.Internal;
 
 //FIXME: For some reason when recompiling Unity flashes when this window is oppened
 namespace qASIC.InputManagement.Map.Internal
@@ -13,13 +14,13 @@ namespace qASIC.InputManagement.Map.Internal
     {
         [SerializeField] Texture2D icon;
 
-        static InputMap Map;
+        static InputMap Map { get => EditorInputManager.Map; set => EditorInputManager.SetMap(value); }
 
-        InputMapToolbar toolbar = new InputMapToolbar();
-        InputMapGroupBar groupBar = new InputMapGroupBar();
-        InputMapInspectorDisplayer inspector = new InputMapInspectorDisplayer();
+        InputMapWindowToolbar toolbar = new InputMapWindowToolbar();
+        InputMapWindowGroupBar groupBar = new InputMapWindowGroupBar();
+        InputMapWindowInspector inspector = new InputMapWindowInspector();
 
-        InputMapContentTree contentTree;
+        InputMapWindowContentTree contentTree;
         TreeViewState contentTreeState;
 
         public static string GetUnmodifiedMapLocation() =>
@@ -41,8 +42,6 @@ namespace qASIC.InputManagement.Map.Internal
         }
 
         #region Preferences
-        const string mapPrefsKey = "qASIC_input_map_editor_map";
-        const string selectedGroupPrefsKey = "qASIC_input_map_editor_group";
         const string autoSavePrefsKey = "qASIC_input_map_editor_autosave";
         const string debugPrefsKey = "qASIC_input_map_editor_debug";
 
@@ -79,23 +78,6 @@ namespace qASIC.InputManagement.Map.Internal
                     Save();
 
                 _autoSave = value;
-            }
-        }
-
-        private static int? _selectedGroupIndex;
-        public static int SelectedGroupIndex
-        {
-            get
-            {
-                if (_selectedGroupIndex == null)
-                    _selectedGroupIndex = EditorPrefs.GetInt(selectedGroupPrefsKey, 0);
-
-                return _selectedGroupIndex ?? 0;
-            }
-            set
-            {
-                EditorPrefs.SetInt(selectedGroupPrefsKey, value);
-                _selectedGroupIndex = value;
             }
         }
 
@@ -147,16 +129,6 @@ namespace qASIC.InputManagement.Map.Internal
             return window;
         }
 
-        static void LoadMap()
-        {
-            if (!EditorPrefs.HasKey(mapPrefsKey)) return;
-
-            string mapPath = EditorPrefs.GetString(mapPrefsKey);
-            if (string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(mapPath))) return;
-
-            OpenMap((InputMap)AssetDatabase.LoadAssetAtPath(mapPath, typeof(InputMap)));
-        }
-
         public static void OpenMapIfNotDirty(InputMap newMap)
         {
             InputMapWindow window = GetEditorWindow();
@@ -168,18 +140,16 @@ namespace qASIC.InputManagement.Map.Internal
 
         public static void OpenMap(InputMap newMap)
         {
-            if(Map && Map != newMap)
-                SelectedGroupIndex = 0;     
-            Map = newMap;
-            FileManager.SaveFileJSON(GetUnmodifiedMapLocation(), newMap);
-            EditorPrefs.SetString(mapPrefsKey, AssetDatabase.GetAssetPath(newMap));
+            if (Map && Map != newMap)
+                GetEditorWindow().groupBar.SelectedGroupIndex = 0;
 
+            EditorInputManager.SetMap(newMap);
             OpenWindow();
         }
 
         public static void CloseMap()
         {
-            EditorPrefs.DeleteKey(mapPrefsKey);
+            EditorInputManager.RemoveMap();
             Cleanup();
             GetEditorWindow().ResetEditor();
         }
@@ -197,9 +167,6 @@ namespace qASIC.InputManagement.Map.Internal
         private void OnEnable()
         {
             EditorApplication.wantsToQuit += OnEditorWantsToQuit;
-
-            if(Map == null)
-                LoadMap();
 
             ResetEditor();
         }
@@ -232,19 +199,18 @@ namespace qASIC.InputManagement.Map.Internal
             SetWindowTitle();
 
             //Displayers
-            toolbar = new InputMapToolbar();
-            groupBar = new InputMapGroupBar();
-            inspector = new InputMapInspectorDisplayer();
+            toolbar = new InputMapWindowToolbar();
+            groupBar = new InputMapWindowGroupBar();
+            inspector = new InputMapWindowInspector();
 
             //Trees
             if (contentTreeState == null)
                 contentTreeState = new TreeViewState();
 
-            contentTree = new InputMapContentTree(contentTreeState, Map ? Map.Groups.ElementAtOrDefault(SelectedGroupIndex) : null);
+            contentTree = new InputMapWindowContentTree(contentTreeState, Map ? Map.Groups.ElementAtOrDefault(groupBar.SelectedGroupIndex) : null);
 
             //Assigning maps
             toolbar.map = Map;
-            groupBar.map = Map;
             inspector.map = Map;
 
             //Events
@@ -266,7 +232,7 @@ namespace qASIC.InputManagement.Map.Internal
 
             inspector.OnDeleteGroup += groupBar.DeleteGroup;
 
-            inspector.OnDeleteAction += (InputMapInspectorDisplayer.InspectorInputAction action) =>
+            inspector.OnDeleteAction += (InputMapWindowInspector.InspectorInputAction action) =>
             {
                 int index = action.group.actions.IndexOf(action.action);
                 if (index == -1) return;

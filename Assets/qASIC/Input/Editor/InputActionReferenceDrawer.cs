@@ -1,6 +1,9 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using qASIC.EditorTools;
+using qASIC.InputManagement.Internal.ReferenceExplorers;
+
+using Manager = qASIC.InputManagement.Internal.EditorInputManager;
 
 using static UnityEditor.EditorGUIUtility;
 
@@ -19,6 +22,7 @@ namespace qASIC.InputManagement.Internal
         {
             //Properties
             SerializedProperty groupProperty = property.FindPropertyRelative("groupName");
+            SerializedProperty useDefaultProperty = property.FindPropertyRelative("useDefaultGroup");
             SerializedProperty actionProperty = property.FindPropertyRelative("actionName");
 
             //Rects
@@ -57,13 +61,32 @@ namespace qASIC.InputManagement.Internal
             GUI.Label(groupLabelRect, "Group");
             GUI.Label(actionLabelRect, "Action");
 
-            groupProperty.stringValue = EditorGUI.TextField(groupRect, groupProperty.stringValue);
+            DrawGroupProperty(groupRect, groupProperty, useDefaultProperty.boolValue);
+
             actionProperty.stringValue = EditorGUI.TextField(actionRect, actionProperty.stringValue);
 
             if (GUI.Button(buttonRect, "Change"))
             {
-                InputReferenceExplorerWindow.OpenProperty(property);
+                InputActionReferenceExplorerWindow.OpenProperty(property);
             }
+        }
+
+        void DrawGroupProperty(Rect rect, SerializedProperty property, bool useDefault)
+        {
+            if (!useDefault)
+            {
+                property.stringValue = EditorGUI.TextField(rect, property.stringValue);
+                return;
+            }
+
+            EditorGUI.BeginDisabledGroup(true);
+            EditorGUI.TextField(rect, Manager.Map ? Manager.Map.DefaultGroupName : "Default", Styles.DefaultGroupField);
+            EditorGUI.EndDisabledGroup();
+        }
+
+        class Styles
+        {
+            public static GUIStyle DefaultGroupField => new GUIStyle(EditorStyles.textField) { fontStyle = FontStyle.Italic };
         }
     }
 }

@@ -9,7 +9,7 @@ using static UnityEngine.GUILayout;
 
 namespace qASIC.InputManagement.Map.Internal
 {
-    public class InputMapToolbar
+    public class InputMapWindowToolbar
     {
         public InputMap map;
 

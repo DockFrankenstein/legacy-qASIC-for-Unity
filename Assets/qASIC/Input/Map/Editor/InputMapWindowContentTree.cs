@@ -6,11 +6,11 @@ using UnityEditor;
 using qASIC.Tools;
 using qASIC.EditorTools;
 
-using WindowUtility = qASIC.InputManagement.Map.Internal.InputMapEditorUtility;
+using WindowUtility = qASIC.InputManagement.Map.Internal.InputMapWindowEditorUtility;
 
 namespace qASIC.InputManagement.Map.Internal
 {
-    public class InputMapContentTree : TreeView
+    public class InputMapWindowContentTree : TreeView
     {
 		public InputMapTreeActionHeaderItem ActionsRoot { get; private set; }
 		public InputMapTreeAxisHeaderItem AxesRoot { get; private set; }
@@ -31,7 +31,7 @@ namespace qASIC.InputManagement.Map.Internal
 		event Action OnNextRepaint;
 
         #region Creating
-        public InputMapContentTree(TreeViewState state, InputGroup group)
+        public InputMapWindowContentTree(TreeViewState state, InputGroup group)
 			: base(state)
 		{
 			this.group = group;
@@ -155,10 +155,10 @@ namespace qASIC.InputManagement.Map.Internal
 			switch (item)
 			{
 				case InputMapContentActionTreeItem action:
-					OnItemSelect?.Invoke(new InputMapInspectorDisplayer.InspectorInputAction(Group, action.Action));
+					OnItemSelect?.Invoke(new InputMapWindowInspector.InspectorInputAction(Group, action.Action));
 					break;
 				case InputMapContentAxisTreeItem axis:
-					OnItemSelect?.Invoke(new InputMapInspectorDisplayer.InspectorInputAxis(Group, axis.Axis));
+					OnItemSelect?.Invoke(new InputMapWindowInspector.InspectorInputAxis(Group, axis.Axis));
 					break;
 				default:
 					OnItemSelect?.Invoke(null);

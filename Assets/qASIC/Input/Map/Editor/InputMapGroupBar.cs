@@ -2,6 +2,7 @@
 using UnityEngine;
 using System;
 using qASIC.EditorTools;
+using qASIC.InputManagement.Internal;
 
 using static UnityEngine.GUILayout;
 
@@ -9,15 +10,24 @@ namespace qASIC.InputManagement.Map.Internal
 {
     public class InputMapGroupBar
     {
-        public InputMap map;
+        public InputMap Map { get => EditorInputManager.Map; }
+
+        public virtual int SelectedGroupIndex { get; set; }
+        public virtual bool EnableContextMenus => false;
 
         int scrollIndex;
 
         public event Action<object> OnItemSelect;
 
+        public bool drawToolbarBackground = true;
+
+        public InputGroup GetSelectedGroup() =>
+            Map && SelectedGroupIndex >= 0 && SelectedGroupIndex < Map.Groups.Count ? Map.Groups[SelectedGroupIndex] : null;
+
+        #region GUI
         public void OnGUI()
         {
-            BeginHorizontal(EditorStyles.toolbar, Height(EditorGUIUtility.singleLineHeight));
+            BeginHorizontal(drawToolbarBackground ? EditorStyles.toolbar : GUIStyle.none, Height(EditorGUIUtility.singleLineHeight));
 
             MoveButton('<', -1, scrollIndex - 1 >= 0);
 
@@ -31,17 +41,31 @@ namespace qASIC.InputManagement.Map.Internal
 
             EndHorizontal();
             EditorGUILayout.EndScrollView();
-            MoveButton('>', 1, map && scrollIndex + 1 < map.Groups.Count);
+            MoveButton('>', 1, Map && scrollIndex + 1 < Map.Groups.Count);
 
             EndHorizontal();
         }
 
         void MoveButton(char character, int value, bool canScroll)
         {
-            EditorGUI.BeginDisabledGroup(!map || !canScroll);
+            EditorGUI.BeginDisabledGroup(!Map || !canScroll);
             if (Button(character.ToString(), EditorStyles.toolbarButton, Width(EditorGUIUtility.singleLineHeight)))
                 scrollIndex += value;
             EditorGUI.EndDisabledGroup();
+        }
+
+        public void SelectPrevious()
+        {
+            int newValue = SelectedGroupIndex - 1;
+            if (newValue < 0) return;
+            Select(newValue);
+        }
+
+        public void SelectNext()
+        {
+            int newValue = SelectedGroupIndex + 1;
+            if (newValue >= Map.Groups.Count) return;
+            Select(newValue);
         }
 
         Rect[] _buttonRects = new Rect[0];
@@ -49,19 +73,19 @@ namespace qASIC.InputManagement.Map.Internal
 
         public void DisplayGroups()
         {
-            if (!map) return;
+            if (!Map) return;
 
-            if (map.Groups.Count != _buttonRects.Length)
-                _buttonRects = new Rect[map.Groups.Count];
+            if (Map.Groups.Count != _buttonRects.Length)
+                _buttonRects = new Rect[Map.Groups.Count];
 
-            for (int i = scrollIndex; i < map.Groups.Count; i++)
+            for (int i = scrollIndex; i < Map.Groups.Count; i++)
             {
                 //calc width
-                EditorStyles.toolbarButton.CalcMinMaxWidth(new GUIContent(map.Groups[i].groupName), out float width, out _);
+                EditorStyles.toolbarButton.CalcMinMaxWidth(new GUIContent(Map.Groups[i].groupName), out float width, out _);
 
-                bool isSelected = InputMapWindow.SelectedGroupIndex == i;
-                bool pressed = Toggle(isSelected, map.Groups[i].groupName, EditorStyles.toolbarButton, Width(width)) != isSelected;
-                
+                bool isSelected = SelectedGroupIndex == i;
+                bool pressed = Toggle(isSelected, Map.Groups[i].groupName, EditorStyles.toolbarButton, Width(width)) != isSelected;
+
                 Event e = Event.current;
                 Rect buttonRect = GUILayoutUtility.GetLastRect();
 
@@ -71,8 +95,8 @@ namespace qASIC.InputManagement.Map.Internal
                     _buttonRects[i] = buttonRect;
 
                 //Draw bar
-                if (e.type == EventType.Repaint && map.defaultGroup == i)
-                    Styles.defaultGroupBar.Draw(buttonRect.ResizeToBottom(2f), GUIContent.none, false, false, false, false);
+                if (e.type == EventType.Repaint && Map.defaultGroup == i)
+                    Styles.DefaultGroupBar.Draw(buttonRect.ResizeToBottom(2f), GUIContent.none, false, false, false, false);
 
                 //Context menu
                 //We have to wait for the next repaint before showing the menu as some items can
@@ -81,16 +105,11 @@ namespace qASIC.InputManagement.Map.Internal
                 if (showContextMenu)
                 {
                     pressed = true;
-                    GenericMenu menu = new GenericMenu();
-                    int index = i;
-                    menu.AddToggableItem("Set as default", false, () => SetAsDefault(index), map.defaultGroup != i);
-                    menu.AddItem("Add", false, () => Add(index));
-                    menu.AddItem("Delete", false, () => DeleteGroup(index));
-                    menu.ShowAsContext();
+                    OpenContextMenu(i);
                     _groupContextMenuToOpenOnRepaint = -1;
                 }
 
-                if (!showContextMenu && _buttonRects[i].Contains(e.mousePosition) && e.button == 1)
+                if (EnableContextMenus && !showContextMenu && _buttonRects[i].Contains(e.mousePosition) && e.button == 1)
                 {
                     _groupContextMenuToOpenOnRepaint = i;
                     pressed = true;
@@ -98,92 +117,96 @@ namespace qASIC.InputManagement.Map.Internal
 
                 //Handling group change
                 if (pressed)
-                     Select(i);
+                    Select(i);
             }
         }
+        #endregion
 
+        public virtual void OpenContextMenu(int groupIndex) { }
+
+        #region Deletion
         public void DeleteGroup(InputGroup group)
         {
-            if (!map) return;
-            int index = map.Groups.IndexOf(group);
+            if (!Map) return;
+            int index = Map.Groups.IndexOf(group);
             if (index == -1) return;
 
             DeleteGroup(index);
         }
 
-        public void DeleteGroup(int index)
+        public virtual void DeleteGroup(int index)
         {
-            if (!map) return;
-            Debug.Assert(index >= 0 && index < map.Groups.Count, $"Cannot delete group {index}, index is out of range!");
-            map.Groups.RemoveAt(index);
+            if (!Map) return;
+            Debug.Assert(index >= 0 && index < Map.Groups.Count, $"Cannot delete group {index}, index is out of range!");
+            Map.Groups.RemoveAt(index);
 
             HandleDeleteGroup(index);
 
             ResetScroll();
-            InputMapWindow.SetMapDirty();
         }
 
         void HandleDeleteGroup(int index)
         {
-            if (map.Groups.Count > 0)
+            if (Map.Groups.Count > 0)
             {
                 int selectIndex = Mathf.Max(0, index - 1);
                 Select(selectIndex);
-                if (map.defaultGroup == index)
+                if (Map.defaultGroup == index)
                     SetAsDefault(selectIndex);
                 return;
             }
 
             OnItemSelect?.Invoke(null);
         }
+        #endregion
 
-        public void SetAsDefault(int index)
+        public virtual void SetAsDefault(int index)
         {
-            if (!map) return;
-            Debug.Assert(index >= 0 && index < map.Groups.Count, $"Cannot set group {index} as default, index is out of range!");
-            map.defaultGroup = index;
-            InputMapWindow.SetMapDirty();
+            if (!Map) return;
+            Debug.Assert(index >= 0 && index < Map.Groups.Count, $"Cannot set group {index} as default, index is out of range!");
+            Map.defaultGroup = index;
         }
 
-        public void Select(int i)
+        public virtual void Select(int i)
         {
-            if (!map) return;
-            InputMapWindow.SelectedGroupIndex = i;
-            OnItemSelect?.Invoke(map.Groups[i]);
+            if (!Map) return;
+            SelectedGroupIndex = i;
+            OnItemSelect?.Invoke(Map.Groups[i]);
         }
 
+        #region Adding
         public void Add() =>
             Add(-1);
 
         public void Add(int index) =>
-            Add(index, new InputGroup(InputMapEditorUtility.GenerateUniqueName("New group", map.GroupExists)));
+            Add(index, new InputGroup(InputMapWindowEditorUtility.GenerateUniqueName("New group", Map.GroupExists)));
 
         public void Add(InputGroup group) =>
             Add(-1, group);
 
         public void Add(InputGroup selectedGroup, InputGroup group) =>
-            Add(map ? map.Groups.IndexOf(selectedGroup) : -1, group);
+            Add(Map ? Map.Groups.IndexOf(selectedGroup) : -1, group);
 
-        public void Add(int index, InputGroup group)
+        public virtual void Add(int index, InputGroup group)
         {
-            if (!map) return;
+            if (!Map) return;
 
             //If index is out of range, add the item at the end
-            if (index < 0 || index >= map.Groups.Count)
-                index = map.Groups.Count - 1;
+            if (index < 0 || index >= Map.Groups.Count)
+                index = Map.Groups.Count - 1;
 
-            map.Groups.Insert(index + 1, group);
+            Map.Groups.Insert(index + 1, group);
             Select(index + 1);
-
-            InputMapWindow.SetMapDirty();
         }
+        #endregion
 
         public void ResetScroll() =>
             scrollIndex = 0;
 
         static class Styles
         {
-            public static GUIStyle defaultGroupBar => new GUIStyle().WithBackground(qGUIUtility.qASICColorTexture);
+            public static GUIStyle DefaultGroupBar => new GUIStyle().WithBackground(qGUIUtility.qASICColorTexture);
         }
+
     }
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using qASIC.InputManagement.Map;
 
-namespace qASIC.InputManagement.EditorTools
+namespace qASIC.InputManagement.Internal
 {
     public static class EditorInputManager
     {

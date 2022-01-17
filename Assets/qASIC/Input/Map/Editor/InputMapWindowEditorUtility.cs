@@ -2,7 +2,7 @@
 
 namespace qASIC.InputManagement.Map.Internal
 {
-    public static class InputMapEditorUtility
+    public static class InputMapWindowEditorUtility
     {
         public static string GenerateUniqueName(string name, Func<string, bool> condition)
         {

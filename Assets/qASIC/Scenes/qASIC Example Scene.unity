@@ -2054,6 +2054,7 @@ MonoBehaviour:
   optionLabelName: 'Up: '
   inputAction:
     groupName: Game
+    useDefaultGroup: 1
     actionName: Up
   keyIndex: 0
   OnStartListening:
@@ -3299,6 +3300,7 @@ MonoBehaviour:
   optionLabelName: 'Interact: '
   inputAction:
     groupName: Game
+    useDefaultGroup: 1
     actionName: Interact
   keyIndex: 0
   OnStartListening:
@@ -5454,6 +5456,7 @@ MonoBehaviour:
   optionLabelName: 'Console: '
   inputAction:
     groupName: UI
+    useDefaultGroup: 0
     actionName: Console
   keyIndex: 0
   OnStartListening:
@@ -11662,6 +11665,7 @@ MonoBehaviour:
   optionLabelName: 'Right: '
   inputAction:
     groupName: Game
+    useDefaultGroup: 1
     actionName: Right
   keyIndex: 0
   OnStartListening:
@@ -11940,6 +11944,7 @@ MonoBehaviour:
   optionLabelName: 'Down: '
   inputAction:
     groupName: Game
+    useDefaultGroup: 1
     actionName: Down
   keyIndex: 0
   OnStartListening:
@@ -14852,6 +14857,7 @@ MonoBehaviour:
   optionLabelName: 'Left: '
   inputAction:
     groupName: Game
+    useDefaultGroup: 1
     actionName: Left
   keyIndex: 0
   OnStartListening:

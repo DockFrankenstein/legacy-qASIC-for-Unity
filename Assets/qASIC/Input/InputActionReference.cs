@@ -6,10 +6,13 @@ namespace qASIC.InputManagement
     public class InputActionReference
     {
         [SerializeField] string groupName;
+        [SerializeField] bool useDefaultGroup = true;
         [SerializeField] string actionName;
 
-        public string GroupName => groupName;
-        public string ActionName => actionName;
+        public string GroupName =>
+            useDefaultGroup ? (InputManager.Map ? InputManager.Map.DefaultGroupName : string.Empty) : groupName;
+        public string ActionName =>
+            actionName;
 
         public InputActionReference() { }
 

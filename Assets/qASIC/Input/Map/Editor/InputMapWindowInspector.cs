@@ -8,7 +8,7 @@ using static UnityEditor.EditorGUILayout;
 
 namespace qASIC.InputManagement.Map.Internal
 {
-    public class InputMapInspectorDisplayer
+    public class InputMapWindowInspector
     {
         public InputMap map;
 

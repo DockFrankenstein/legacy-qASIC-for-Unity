@@ -96,6 +96,30 @@ namespace qASIC.Tools
         /// <summary>Compares two keys together</summary>
         /// <returns>Returns true if the keys are equal</returns>
         public static bool Compare(string key1, string key2) =>
-            key1.ToLower() == key2.ToLower();
+            GetFormatedName(key1) == GetFormatedName(key2);
+
+        public static string GetFormatedName(string name) =>
+            name.ToLower();
+
+        public static List<INonRepeatable> GenerateNonRepeatableList<T>(List<T> list)
+        {
+            List<INonRepeatable> nonRepeatableList = new List<INonRepeatable>();
+
+            for (int i = 0; i < list.Count; i++)
+                if (list[i] is INonRepeatable nonRepeatable)
+                    nonRepeatableList.Add(nonRepeatable);
+
+            return nonRepeatableList;
+        }
+
+        public static int IndexOf<T>(List<T> list, string itemName)
+        {
+            for (int i = 0; i < list.Count; i++)
+                if (list[i] is INonRepeatable nonRepeatable)
+                    if (Compare(nonRepeatable.ItemName, itemName))
+                        return i;
+
+            return -1;
+        }
     }
 }
