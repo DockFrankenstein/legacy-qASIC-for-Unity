@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using System;
+using qASIC.EditorTools;
 
 using static UnityEditor.EditorGUIUtility;
 using static UnityEngine.GUI;
@@ -22,15 +22,15 @@ namespace qASIC.FileManagement.Internal
             SerializedProperty filePath = property.FindPropertyRelative("filePath");
             SerializedProperty genericFolder = property.FindPropertyRelative("genericFolder");
 
-            GUIStyle labelStyle = new GUIStyle("Label")
+            GUIStyle labelStyle = new GUIStyle("Tab onlyOne")
             {
                 padding = new RectOffset((int)Spacing, 0, 0, 0),
+                fontStyle = FontStyle.Normal,
+                alignment = TextAnchor.MiddleLeft,
             };
 
-            labelStyle.normal.background = qASICBackgroundTexture;
-
             Rect labelPosition = new Rect(position.x, position.y, position.width, singleLineHeight);
-            Rect boxPosition = new Rect(position.x, position.y + singleLineHeight, position.width, position.height - singleLineHeight);
+            Rect boxPosition = new Rect(position).MoveTop(singleLineHeight);
 
             position.y += singleLineHeight + standardVerticalSpacing;
 
@@ -47,12 +47,17 @@ namespace qASIC.FileManagement.Internal
             Rect previewPosition = position;
 
             Label(labelPosition, label, labelStyle);
-            Box(boxPosition, qASICBackgroundTexture);
+            Box(boxPosition, GUIContent.none, Styles.Background);
 
             genericFolder.intValue = (int)(GenericFolder)EnumPopup(folderPosition, GUIContent.none, (GenericFolder)genericFolder.intValue);
             filePath.stringValue = TextField(filePathPosition, GUIContent.none, filePath.stringValue);
 
             Label(previewPosition, $"Example: {GenericFilePath.GenerateFullPath((GenericFolder)genericFolder.intValue, filePath.stringValue)}");
+        }
+
+        class Styles
+        {
+            public static GUIStyle Background => new GUIStyle("HelpBox");
         }
     }
 }

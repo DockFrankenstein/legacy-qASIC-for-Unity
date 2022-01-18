@@ -13,10 +13,10 @@ namespace qASIC.InputManagement.Internal
     public class InputActionReferenceDrawer : PropertyDrawer
     {
         int ButtonWidth => 60;
-        float LeftSpacing => 8f;
+        float Spacing => 4f;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) =>
-            singleLineHeight * 3f + standardVerticalSpacing * 3f;
+            singleLineHeight * 4f + standardVerticalSpacing * 4f;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -28,42 +28,42 @@ namespace qASIC.InputManagement.Internal
             //Rects
             Rect baseRect = new Rect(position);
 
-            position = position.BorderRect(standardVerticalSpacing + LeftSpacing, standardVerticalSpacing, 0f, 0f);
-            position.height = singleLineHeight;
+            position = position.Border(standardVerticalSpacing + Spacing, 0f);
+            position.height = singleLineHeight + standardVerticalSpacing;
 
-            Rect backgroundRect = new Rect(baseRect.x, baseRect.y + singleLineHeight, baseRect.width, baseRect.height - singleLineHeight);
+            Rect backgroundRect = new Rect(baseRect.x, baseRect.y + singleLineHeight - 1f, baseRect.width, baseRect.height - singleLineHeight + 1f);
             Rect labelRect = new Rect(baseRect.position, new Vector2(baseRect.width, singleLineHeight));
 
-            position.y += singleLineHeight + standardVerticalSpacing;
+            position.y += singleLineHeight;
 
             Rect groupLabelRect = new Rect(position.x, position.y, (position.width - ButtonWidth) / 2, position.height);
             Rect actionLabelRect = new Rect(position.x + (position.width - ButtonWidth) / 2 + standardVerticalSpacing, position.y, (position.width - ButtonWidth) / 2 - standardVerticalSpacing * 2, position.height);
 
-            Rect groupRect = new Rect(groupLabelRect);
-            Rect actionRect = new Rect(actionLabelRect);
+            Rect groupRect = new Rect(groupLabelRect).MoveY(singleLineHeight);
+            Rect actionRect = new Rect(actionLabelRect).MoveY(singleLineHeight);
             Rect buttonRect = new Rect(position.x + position.width - ButtonWidth, position.y + singleLineHeight, ButtonWidth, position.height);
 
-            groupRect.y += singleLineHeight;
-            actionRect.y += singleLineHeight;
+            Rect defaultToggleRect = new Rect(groupRect).MoveY(singleLineHeight + standardVerticalSpacing).SetWidth(position.width);
 
             //Style
-            GUIStyle labelStyle = new GUIStyle("Label")
+            GUIStyle labelStyle = new GUIStyle("Tab onlyOne")
             {
-                padding = new RectOffset((int)LeftSpacing, 0, 0, 0),
+                padding = new RectOffset((int)Spacing * 2, (int)Spacing * 2, 0, 0),
+                fontStyle = FontStyle.Normal,
+                alignment = TextAnchor.MiddleLeft,
             };
-            labelStyle.normal.background = qGUIUtility.qASICBackgroundTexture;
 
             //Drawing
-            GUI.Box(backgroundRect, GUIContent.none);
-
+            GUI.Box(backgroundRect, GUIContent.none, Styles.Background);
             GUI.Label(labelRect, label, labelStyle);
 
             GUI.Label(groupLabelRect, "Group");
             GUI.Label(actionLabelRect, "Action");
 
             DrawGroupProperty(groupRect, groupProperty, useDefaultProperty.boolValue);
-
             actionProperty.stringValue = EditorGUI.TextField(actionRect, actionProperty.stringValue);
+
+            useDefaultProperty.boolValue = EditorGUI.ToggleLeft(defaultToggleRect, "Default group", useDefaultProperty.boolValue);
 
             if (GUI.Button(buttonRect, "Change"))
             {
@@ -87,6 +87,7 @@ namespace qASIC.InputManagement.Internal
         class Styles
         {
             public static GUIStyle DefaultGroupField => new GUIStyle(EditorStyles.textField) { fontStyle = FontStyle.Italic };
+            public static GUIStyle Background => new GUIStyle("HelpBox");
         }
     }
 }

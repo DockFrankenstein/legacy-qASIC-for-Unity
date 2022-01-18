@@ -71,21 +71,70 @@ namespace qASIC.EditorTools
         }
 
         //Resizing
-        public static Rect BorderRect(this Rect rect, float border) =>
-            BorderRect(rect, border, border, border, border);
+        public static Rect Border(this Rect rect, float border) =>
+            Border(rect, border, border, border, border);
 
-        public static Rect BorderRect(this Rect rect, float x, float y) =>
-            BorderRect(rect, x, x, y, y);
+        public static Rect Border(this Rect rect, float x, float y) =>
+            Border(rect, x, x, y, y);
 
-        public static Rect BorderRect(this Rect rect, Vector2 size) =>
-            BorderRect(rect, size.x, size.x, size.y, size.y);
+        public static Rect Border(this Rect rect, Vector2 size) =>
+            Border(rect, size.x, size.x, size.y, size.y);
 
-        public static Rect BorderRect(this Rect rect, float left, float right, float top, float bottom)
+        public static Rect Border(this Rect rect, float left, float right, float top, float bottom)
         {
             rect.x += left;
             rect.width -= left + right;
             rect.y += top;
             rect.height -= top + bottom;
+            return rect;
+        }
+
+        public static Rect BorderTop(this Rect rect, float amount) =>
+            Border(rect, 0f, 0f, amount, 0f);
+
+        public static Rect BorderBottom(this Rect rect, float amount) =>
+            Border(rect, 0f, 0f, 0f, amount);
+
+        public static Rect BorderLeft(this Rect rect, float amount) =>
+            Border(rect, amount, 0f, 0f, 0f);
+
+        public static Rect BorderRight(this Rect rect, float amount) =>
+            Border(rect, 0f, amount, 0f, 0f);
+
+        //Simple actions
+        public static Rect MoveX(this Rect rect, float amount)
+        {
+            rect.x += amount;
+            return rect;
+        }
+
+        public static Rect MoveY(this Rect rect, float amount)
+        {
+            rect.y += amount;
+            return rect;
+        }
+
+        public static Rect SetWidth(this Rect rect, float amount)
+        {
+            rect.width = amount;
+            return rect;
+        }
+
+        public static Rect SetHeight(this Rect rect, float amount)
+        {
+            rect.height = amount;
+            return rect;
+        }
+
+        public static Rect ScaleX(this Rect rect, float size)
+        {
+            rect.width *= size;
+            return rect;
+        }
+
+        public static Rect ScaleY(this Rect rect, float size)
+        {
+            rect.height *= size;
             return rect;
         }
     }
