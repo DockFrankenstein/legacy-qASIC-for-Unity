@@ -268,6 +268,13 @@ namespace qASIC.InputManagement.Map.Internal
             GUILayout.EndVertical();
 
             GUILayout.EndHorizontal();
+
+#if !ENABLE_LEGACY_INPUT_MANAGER
+            EditorGUILayout.HelpBox("qASIC input doesn't support the New Input System. Please go to Edit/Project Settings/Player and change Active Input Handling to Input Manager or Both.", MessageType.Warning);
+            if (GUILayout.Button("Open Project Settings"))
+                SettingsService.OpenProjectSettings("Project/Player");
+            EditorGUILayout.Space(16f);
+#endif
         }
 
         void DrawTreeView(TreeView tree)
