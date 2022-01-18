@@ -1,7 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using qASIC.EditorTools;
-using qASIC.InputManagement.Internal.ReferenceExplorers;
 
 using Manager = qASIC.InputManagement.Internal.EditorInputManager;
 
@@ -9,11 +8,15 @@ using static UnityEditor.EditorGUIUtility;
 
 namespace qASIC.InputManagement.Internal
 {
-    [CustomPropertyDrawer(typeof(InputActionReference))]
-    public class InputActionReferenceDrawer : PropertyDrawer
+    public abstract class InputReferenceDrawerBase : PropertyDrawer
     {
         int ButtonWidth => 60;
         float Spacing => 4f;
+
+        protected abstract string ItemPropertyName { get; }
+        protected virtual string ItemLabelName { get => "Target"; }
+
+        public abstract void OnChangePressed(SerializedProperty property);
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) =>
             singleLineHeight * 4f + standardVerticalSpacing * 4f;
@@ -23,7 +26,7 @@ namespace qASIC.InputManagement.Internal
             //Properties
             SerializedProperty groupProperty = property.FindPropertyRelative("groupName");
             SerializedProperty useDefaultProperty = property.FindPropertyRelative("useDefaultGroup");
-            SerializedProperty actionProperty = property.FindPropertyRelative("actionName");
+            SerializedProperty targetProperty = property.FindPropertyRelative(ItemPropertyName);
 
             //Rects
             Rect baseRect = new Rect(position);
@@ -58,17 +61,15 @@ namespace qASIC.InputManagement.Internal
             GUI.Label(labelRect, label, labelStyle);
 
             GUI.Label(groupLabelRect, "Group");
-            GUI.Label(actionLabelRect, "Action");
+            GUI.Label(actionLabelRect, ItemLabelName);
 
             DrawGroupProperty(groupRect, groupProperty, useDefaultProperty.boolValue);
-            actionProperty.stringValue = EditorGUI.TextField(actionRect, actionProperty.stringValue);
+            targetProperty.stringValue = EditorGUI.TextField(actionRect, targetProperty.stringValue);
 
             useDefaultProperty.boolValue = EditorGUI.ToggleLeft(defaultToggleRect, "Default group", useDefaultProperty.boolValue);
 
             if (GUI.Button(buttonRect, "Change"))
-            {
-                InputActionReferenceExplorerWindow.OpenProperty(property);
-            }
+                OnChangePressed(property);
         }
 
         void DrawGroupProperty(Rect rect, SerializedProperty property, bool useDefault)

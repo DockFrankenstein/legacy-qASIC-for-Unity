@@ -24,7 +24,7 @@ namespace qASIC.InputManagement.Internal.ReferenceExplorers
         Vector2 contentScroll;
         protected int selectedItem = -1;
 
-        protected static void OpenWindow(InputActionReferenceExplorerWindow window)
+        protected static void OpenWindow(EditorWindow window)
         {
             window.minSize = new Vector2(300f, 400f);
             window.titleContent = new GUIContent("Input Reference Explorer");
@@ -109,7 +109,7 @@ namespace qASIC.InputManagement.Internal.ReferenceExplorers
 
             if (apply)
             {
-                contentProperty.stringValue = Manager.Map.Groups[groupBar.SelectedGroupIndex].actions[selectedItem].actionName;
+                contentProperty.stringValue = GetContentList(groupBar.SelectedGroupIndex)[selectedItem].ItemName;
                 Property.serializedObject.ApplyModifiedProperties();
                 Close();
             }
