@@ -237,7 +237,7 @@ namespace qASIC.InputManagement
         }
         #endregion
 
-        #region Input handling
+        #region Getting Input
         public static bool GetInputDown(string groupName, string actionName) =>
             HandleInput(new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKeyDown(key); }), groupName, actionName);
 
@@ -277,6 +277,15 @@ namespace qASIC.InputManagement
 
             return false;
         }
+
+        public static bool GetInputUp(InputActionReference action) =>
+            action != null && GetInputUp(action.GroupName, action.ActionName);
+
+        public static bool GetInput(InputActionReference action) =>
+            action != null && GetInput(action.GroupName, action.ActionName);
+
+        public static bool GetInputDown(InputActionReference action) =>
+            action != null && GetInputDown(action.GroupName, action.ActionName);
         #endregion
 
         #region UserKeys Exist
@@ -332,14 +341,24 @@ namespace qASIC.InputManagement
         public static float GetMapAxis(string axisName) =>
             MapLoaded ? GetMapAxis(Map.DefaultGroupName, axisName) : 0f;
 
-        public static float GetMapAxisRaw(string groupName, string axisName) =>
-            GetMapAxis(groupName, axisName);
+        public static float GetMapAxisRaw(string groupName, string axisName)
+        {
+            float value = GetMapAxis(groupName, axisName);
+            //TODO: this is stupid
+            return Mathf.Round(Mathf.Abs(value)) * (value < 0 ? -1f : 1f);
+        }
 
         public static float GetMapAxisRaw(string axisName) =>
-            GetMapAxis(axisName);
+            MapLoaded ? GetMapAxisRaw(Map.DefaultGroupName, axisName) : 0f;
+
+        public static float GetMapAxis(InputAxisReference axis) =>
+            axis == null ? 0f : GetMapAxis(axis.GroupName, axis.AxisName);
+
+        public static float GetMapAxisRaw(InputAxisReference axis) =>
+            axis == null ? 0f : GetMapAxisRaw(axis.GroupName, axis.AxisName);
 
 
-        [Obsolete("GetAxis is outdated. If you would like to get an Input Map axis use GetMapAxis instead and if not, use CreateAxis")]
+        [Obsolete("GetAxis is outdated. Use GetMapAxis or CreateAxis instead.")]
         public static float GetAxis(string positive, string negative) =>
             CreateAxis(positive, negative);
 
