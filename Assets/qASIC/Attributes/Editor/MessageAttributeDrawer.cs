@@ -29,8 +29,8 @@ namespace qASIC.Internal
             if(target.Icon)
                 height = Mathf.Clamp(height + 8f, 40f, float.MaxValue) + 8f;
 
-            if (target.Icon) GUI.DrawTexture(new Rect(position.position + new Vector2(4f, 4f), new Vector2(40f, 40f)), target.Icon);
             GUI.Label(new Rect(position.position, new Vector2(position.width, height)), target.Message, style);
+            if (target.Icon) GUI.DrawTexture(new Rect(position.position + new Vector2(4f, 4f), new Vector2(40f, 40f)), target.Icon);
         }
 
         public override float GetHeight() =>
