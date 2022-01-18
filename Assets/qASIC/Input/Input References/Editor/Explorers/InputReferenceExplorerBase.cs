@@ -97,19 +97,24 @@ namespace qASIC.InputManagement.Internal.ReferenceExplorers
             bool apply = GUILayout.Button("Apply");
             EditorGUI.EndDisabledGroup();
 
+            List<INonRepeatable> content = GetContentList(groupBar.SelectedGroupIndex);
+
             Event e = Event.current;
 
             if (e.isKey && e.keyCode == KeyCode.Return && selectedItem != -1)
                 apply = true;
 
             KeyEvent(KeyCode.UpArrow, selectedItem -1 >= 0, () => { selectedItem--; });
-            KeyEvent(KeyCode.DownArrow, selectedItem + 1 < GetContentList(groupBar.SelectedGroupIndex).Count, () => { selectedItem++; });
+            KeyEvent(KeyCode.DownArrow, selectedItem + 1 < content.Count, () => { selectedItem++; });
             KeyEvent(KeyCode.LeftArrow, true, groupBar.SelectPrevious);
             KeyEvent(KeyCode.RightArrow, true, groupBar.SelectNext);
 
             if (apply)
             {
-                contentProperty.stringValue = GetContentList(groupBar.SelectedGroupIndex)[selectedItem].ItemName;
+                if(groupBar.SelectedGroupIndex != -1)
+                    groupProperty.stringValue = Manager.Map.Groups[groupBar.SelectedGroupIndex].groupName;
+
+                contentProperty.stringValue = content[selectedItem].ItemName;
                 Property.serializedObject.ApplyModifiedProperties();
                 Close();
             }

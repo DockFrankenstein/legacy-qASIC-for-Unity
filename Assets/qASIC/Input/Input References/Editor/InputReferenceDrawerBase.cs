@@ -57,6 +57,9 @@ namespace qASIC.InputManagement.Internal
             };
 
             //Drawing
+            int indent = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0;
+
             GUI.Box(backgroundRect, GUIContent.none, Styles.Background);
             GUI.Label(labelRect, label, labelStyle);
 
@@ -70,6 +73,8 @@ namespace qASIC.InputManagement.Internal
 
             if (GUI.Button(buttonRect, "Change"))
                 OnChangePressed(property);
+
+            EditorGUI.indentLevel = indent;
         }
 
         void DrawGroupProperty(Rect rect, SerializedProperty property, bool useDefault)
