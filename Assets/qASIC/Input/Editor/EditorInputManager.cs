@@ -21,6 +21,7 @@ namespace qASIC.InputManagement.Internal
 
         public static void SetMap(InputMap map)
         {
+            if (map == null) return;
             Map = map;
             EditorPrefs.SetString(mapPrefsKey, AssetDatabase.GetAssetPath(Map));
         }
