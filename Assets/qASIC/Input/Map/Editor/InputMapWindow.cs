@@ -14,7 +14,7 @@ namespace qASIC.InputManagement.Map.Internal
     {
         [SerializeField] Texture2D icon;
 
-        static InputMap Map { get => EditorInputManager.Map; set => EditorInputManager.SetMap(value); }
+        static InputMap Map { get; set; }
 
         InputMapWindowToolbar toolbar = new InputMapWindowToolbar();
         InputMapWindowGroupBar groupBar = new InputMapWindowGroupBar();
@@ -92,6 +92,8 @@ namespace qASIC.InputManagement.Map.Internal
         #endregion
 
         #region Opening
+        static string MapPrefsKey => $"{Application.productName}_qASIC_input_map_editor_map";
+
         [OnOpenAsset]
         public static bool OnOpenAsset(int instanceID, int line)
         {
@@ -143,13 +145,24 @@ namespace qASIC.InputManagement.Map.Internal
             if (Map && Map != newMap)
                 GetEditorWindow().groupBar.SelectedGroupIndex = 0;
 
-            EditorInputManager.SetMap(newMap);
+            Map = newMap;
+            EditorPrefs.SetString(MapPrefsKey, AssetDatabase.GetAssetPath(Map));
             OpenWindow();
+        }
+
+        void LoadMap()
+        {
+            if (!EditorPrefs.HasKey(MapPrefsKey)) return;
+
+            string mapPath = EditorPrefs.GetString(MapPrefsKey);
+            if (string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(mapPath))) return;
+            Map = (InputMap)AssetDatabase.LoadAssetAtPath(mapPath, typeof(InputMap));
         }
 
         public static void CloseMap()
         {
-            EditorInputManager.RemoveMap();
+            Map = null;
+            EditorPrefs.DeleteKey(MapPrefsKey);
             Cleanup();
             GetEditorWindow().ResetEditor();
         }
@@ -168,12 +181,20 @@ namespace qASIC.InputManagement.Map.Internal
         {
             EditorApplication.wantsToQuit += OnEditorWantsToQuit;
 
+            if (Map == null)
+                LoadMap();
+
             ResetEditor();
         }
 
         private bool OnEditorWantsToQuit()
         {
-            return ConfirmSaveChangesIfNeeded();
+            bool canQuit = ConfirmSaveChangesIfNeeded();
+
+            if (canQuit)
+                Cleanup();
+
+            return canQuit;
         }
 
         private void OnDestroy()
@@ -248,12 +269,16 @@ namespace qASIC.InputManagement.Map.Internal
             _isDirty = false;
             if (FileManager.FileExists(GetUnmodifiedMapLocation()))
                 FileManager.DeleteFile(GetUnmodifiedMapLocation());
+
+            EditorPrefs.DeleteKey(MapPrefsKey);
         }
         #endregion
 
         #region GUI
         private void OnGUI()
         {
+            groupBar.SetMap(Map);
+
             toolbar.OnGUI();
             groupBar.OnGUI();
 

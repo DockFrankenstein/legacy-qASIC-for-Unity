@@ -4,6 +4,7 @@ using System;
 using qASIC.Options;
 using qASIC.FileManagement;
 using qASIC.InputManagement.Map;
+using qASIC.ProjectSettings;
 
 namespace qASIC.InputManagement
 {
@@ -60,6 +61,29 @@ namespace qASIC.InputManagement
         #endregion
 
         #region Loading
+        [RuntimeInitializeOnLoadMethod]
+        static void Initialize()
+        {
+            InputProjectSettings settings = InputProjectSettings.Instance;
+
+            if (settings.map == null) return;
+
+            LoadMap(settings.map);
+
+            switch (settings.serializationType)
+            {
+                case SerializationType.playerPrefs:
+                    LoadUserKeysPrefs();
+                    break;
+                case SerializationType.config:
+                    LoadUserKeysConfig(settings.filePath.GetFullPath());
+                    break;
+                default:
+                    qDebug.LogError($"Serialization type '{settings.serializationType}' is not supported by the input system!");
+                    break;
+            }
+        }
+
         public static void LoadMap(InputMap map)
         {
             Map = map;

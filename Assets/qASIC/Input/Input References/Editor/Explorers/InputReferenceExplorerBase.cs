@@ -19,7 +19,7 @@ namespace qASIC.InputManagement.Internal.ReferenceExplorers
         protected SerializedProperty useDefaultProperty;
         protected SerializedProperty contentProperty;
 
-        protected InputMapGroupBar groupBar = new InputMapGroupBar() {  };
+        protected InputMapGroupBar groupBar = new InputMapGroupBar();
 
         Vector2 contentScroll;
         protected int selectedItem = -1;
@@ -76,9 +76,13 @@ namespace qASIC.InputManagement.Internal.ReferenceExplorers
 
             if (!Manager.Map)
             {
-                HelpBox("Input Map not loaded - Please open your Input Map in the Input Map Editor", MessageType.Warning);
+                HelpBox("Input Map not loaded - Please select an Input Map in project settings.", MessageType.Warning);
+                if (GUILayout.Button("Open project settings"))
+                    SettingsService.OpenProjectSettings("Project/qASIC/Input Management");
                 return;
             }
+
+            groupBar.SetMap(Manager.Map);
 
             BeginHorizontal(EditorStyles.toolbar);
             GUILayout.FlexibleSpace();

@@ -2,7 +2,6 @@
 using UnityEngine;
 using System;
 using qASIC.EditorTools;
-using qASIC.InputManagement.Internal;
 
 using static UnityEngine.GUILayout;
 
@@ -10,7 +9,7 @@ namespace qASIC.InputManagement.Map.Internal
 {
     public class InputMapGroupBar
     {
-        public InputMap Map { get => EditorInputManager.Map; }
+        public InputMap Map { get; private set; }
 
         public virtual int SelectedGroupIndex { get; set; }
         public virtual bool EnableContextMenus => false;
@@ -23,6 +22,9 @@ namespace qASIC.InputManagement.Map.Internal
 
         public InputGroup GetSelectedGroup() =>
             Map && SelectedGroupIndex >= 0 && SelectedGroupIndex < Map.Groups.Count ? Map.Groups[SelectedGroupIndex] : null;
+
+        public void SetMap(InputMap map) =>
+            Map = map;
 
         #region GUI
         public void OnGUI()
