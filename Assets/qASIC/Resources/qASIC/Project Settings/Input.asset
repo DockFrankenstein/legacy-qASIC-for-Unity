@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3fc99746403c2a49b24c6f02e13952a, type: 3}
   m_Name: Input
   m_EditorClassIdentifier: 
-  map: {fileID: 11400000, guid: ffcabac4cc9d9db4cabe73d1163f2a79, type: 2}
+  map: {fileID: 0}
   serializationType: 0
   filePath:
     genericFolder: 62

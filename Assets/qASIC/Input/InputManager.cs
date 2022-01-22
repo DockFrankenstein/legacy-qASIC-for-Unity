@@ -61,7 +61,7 @@ namespace qASIC.InputManagement
         #endregion
 
         #region Loading
-        [RuntimeInitializeOnLoadMethod]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Initialize()
         {
             InputProjectSettings settings = InputProjectSettings.Instance;
