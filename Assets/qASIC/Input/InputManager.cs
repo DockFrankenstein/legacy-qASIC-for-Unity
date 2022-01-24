@@ -20,12 +20,16 @@ namespace qASIC.InputManagement
         #region Saving
         public static void SaveKeys(SerializationType saveType)
         {
+            if (DisableSaving) return;
+
             SaveType = saveType;
             SaveKeys();
         }
 
         public static void SaveKeys()
         {
+            if (DisableSaving) return;
+
             List<KeyData> keys = GenerateKeyList();
 
             for (int i = 0; i < keys.Count; i++)
@@ -37,6 +41,8 @@ namespace qASIC.InputManagement
 
         public static void SaveKey(string groupName, string actionName, int keyIndex, KeyCode key)
         {
+            if (DisableSaving) return;
+
             string saveKey = KeyData.GenerateSaveKey(groupName, actionName, keyIndex);
 
             switch (SaveType)
@@ -60,10 +66,25 @@ namespace qASIC.InputManagement
         }
         #endregion
 
+        #region Starting arguments
+        public static bool DisableLoading { get; private set; }
+        public static bool DisableSaving { get; private set; }
+
+        static void LoadStartingArguments()
+        {
+            string[] args = Environment.GetCommandLineArgs();
+
+            DisableLoading = Array.IndexOf(args, "-qASIC-input-disable-load") != -1;
+            DisableSaving = Array.IndexOf(args, "-qASIC-input-disable-save") != -1;
+        }
+        #endregion
+
         #region Loading
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Initialize()
         {
+            LoadStartingArguments();
+
             InputProjectSettings settings = InputProjectSettings.Instance;
 
             if (settings.map == null) return;
@@ -100,6 +121,8 @@ namespace qASIC.InputManagement
         /// <summary>Loads user key preferences using Config Controller</summary>
         public static void LoadUserKeysConfig(string path)
         {
+            if (DisableLoading) return;
+
             SaveType = SerializationType.config;
             SavePath = path;
 
@@ -127,6 +150,8 @@ namespace qASIC.InputManagement
         /// <summary>Loads user key preferences using Player Prefs</summary>
         public static void LoadUserKeysPrefs()
         {
+            if (DisableLoading) return;
+
             SaveType = SerializationType.playerPrefs;
 
             if (!MapLoaded)

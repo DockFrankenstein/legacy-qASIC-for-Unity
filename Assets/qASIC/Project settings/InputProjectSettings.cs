@@ -50,5 +50,8 @@ namespace qASIC.ProjectSettings
         public InputMap map;
         public SerializationType serializationType = SerializationType.playerPrefs;
         public GenericFilePath filePath = new GenericFilePath(GenericFolder.PersistentDataPath, "input.txt");
+
+        public bool startArgsDisableLoad = true;
+        public bool startArgsDisableSave = true;
     }
 }

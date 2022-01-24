@@ -52,7 +52,7 @@ namespace qASIC.InputManagement.Map.Internal
                 menu.AddToggableItem("Show in folder", false, ShowInFolder, map);
                 menu.AddSeparator("");
                 menu.AddItem("Open", false, OpenAsset);
-                menu.AddToggableItem("Discard changes", false, InputMapWindow.DiscardChanges, map);
+                menu.AddToggableItem("Discard changes", false, window.DiscardChanges, map);
                 menu.AddSeparator("");
                 menu.AddItem("Close", false, InputMapWindow.GetEditorWindow().Close);
             });

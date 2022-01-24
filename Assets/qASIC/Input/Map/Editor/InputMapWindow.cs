@@ -14,7 +14,16 @@ namespace qASIC.InputManagement.Map.Internal
     {
         [SerializeField] Texture2D icon;
 
-        static InputMap Map { get; set; }
+        static InputMap _map;
+        static InputMap Map
+        {
+            get => _map;
+            set
+            {
+                FileManager.SaveFileJSON(GetUnmodifiedMapLocation(), value);
+                _map = value;
+            }
+        }
 
         InputMapWindowToolbar toolbar = new InputMapWindowToolbar();
         InputMapWindowGroupBar groupBar = new InputMapWindowGroupBar();
@@ -189,21 +198,13 @@ namespace qASIC.InputManagement.Map.Internal
 
         private bool OnEditorWantsToQuit()
         {
-            bool canQuit = ConfirmSaveChangesIfNeeded();
-
-            if (canQuit)
-                Cleanup();
-
-            return canQuit;
+            return ConfirmSaveChangesIfNeeded();
         }
 
         private void OnDestroy()
         {
             EditorApplication.wantsToQuit -= OnEditorWantsToQuit;
-            if (ConfirmSaveChangesIfNeeded())
-            {
-                Cleanup();
-            }
+            ConfirmSaveChangesIfNeeded();
         }
 
         public void ReloadTrees()
@@ -341,18 +342,20 @@ namespace qASIC.InputManagement.Map.Internal
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             GetEditorWindow().SetWindowTitle();
-            FileManager.SaveFileJSON(GetUnmodifiedMapLocation(), Map);
         }
 
-        public static void DiscardChanges()
+        public void DiscardChanges()
         {
             _isDirty = false;
-            FileManager.TryReadFileJSON(GetUnmodifiedMapLocation(), Map);
-            AssetDatabase.SaveAssets();
-            EditorUtility.ClearDirty(Map);
-            InputMapWindow window = GetEditorWindow();
-            window.SetWindowTitle();
-            window.ReloadTrees();
+            if (FileManager.TryReadFileJSON(GetUnmodifiedMapLocation(), Map))
+            {
+                AssetDatabase.SaveAssets();
+                EditorUtility.ClearDirty(Map);
+            }
+
+            SetWindowTitle();
+            ReloadTrees();
+            Cleanup();
         }
 
         public bool ConfirmSaveChangesIfNeeded(bool reoppenOnCancel = true)

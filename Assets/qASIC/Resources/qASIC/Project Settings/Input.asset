@@ -17,3 +17,5 @@ MonoBehaviour:
   filePath:
     genericFolder: 62
     filePath: input.txt
+  startArgsDisableLoad: 1
+  startArgsDisableSave: 1
