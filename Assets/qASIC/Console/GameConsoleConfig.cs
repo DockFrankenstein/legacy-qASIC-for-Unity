@@ -10,7 +10,7 @@ namespace qASIC.Console.Tools
         public bool logConfigAssigment = true;
         public bool logScene = true;
 
-        [Header("Built in commands")]
+        //Built in commands
         public bool clearCommand = true;
         public bool echoCommand = true;
         public bool exitCommand = true;
@@ -27,7 +27,7 @@ namespace qASIC.Console.Tools
         public bool timeScaleCommand = true;
         public bool fovCommand = true;
 
-        [Header("Unity")]
+        //Unity
         public bool logToUnity = false;
         [Space]
         public bool logUnityErrorsToConsole = true;
@@ -36,22 +36,25 @@ namespace qASIC.Console.Tools
         public bool logUnityWarningsToConsole = false;
         public bool logUnityMessagesToConsole = false;
 
-        [Header("Version command")]
+        //Version command
         public bool displayGameVersion = true;
         public bool displayUnityVerion = true;
         public bool displayQasicVersion = true;
 
-        [Header("Specs command")]
+        //Specs command
         public bool displayCpu = true;
         public bool displayCpuThreads = true;
         public bool displayGpu = true;
         public bool displayMemory = true;
         public bool displaySystem = true;
 
-        [Header("Help command")]
+        //Help command
         public bool showDetailedHelp = true;
         public bool usePageCommandLimit = true;
         [Min(1)]
         public int pageCommandLimit = 5;
+
+        public bool IsReadOnly => readOnly;
+        [HideInInspector] [SerializeField] bool readOnly;
     }
 }

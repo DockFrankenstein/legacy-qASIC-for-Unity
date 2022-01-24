@@ -101,6 +101,14 @@ namespace qASIC.EditorTools
         public static Rect BorderRight(this Rect rect, float amount) =>
             Border(rect, 0f, amount, 0f, 0f);
 
+        /// <summary>Create horizontal border while preserving rect's aspect ratio</summary>
+        public static Rect BorderAspectRatioHorizontal(this Rect rect, float amount) =>
+            Border(rect, amount, rect.height / rect.width * amount);
+
+        /// <summary>Create vertical border while preserving rect's aspect ratio</summary>
+        public static Rect BorderAspectRatioVertical(this Rect rect, float amount) =>
+            Border(rect, rect.width / rect.height * amount, amount);
+
         //Simple actions
         public static Rect MoveX(this Rect rect, float amount)
         {

@@ -33,23 +33,20 @@ namespace qASIC.ProjectSettings.Internal
             EditorGUI.BeginDisabledGroup(false);
 #endif
             //Map
-            GUILayout.BeginVertical(EditorStyles.helpBox);
-            GUILayout.Label("Map", EditorStyles.whiteLargeLabel);
+            qGUIInternalUtility.BeginGroup("Map");
 
             EditorGUILayout.PropertyField(serializedSettings.FindProperty("map"));
 
             if (settings.map && GUILayout.Button("Edit map", qGUIInternalUtility.Styles.OpenButton))
                 InputManagement.Map.Internal.InputMapWindow.OpenMapIfNotDirty(settings.map);
 
-            EditorGUILayout.Space();
-            GUILayout.EndVertical();
+            qGUIInternalUtility.EndGroup();
 
             //Disable rest if there is no map assigned
             EditorGUI.BeginDisabledGroup(!settings.map);
 
             //Saving
-            GUILayout.BeginVertical(EditorStyles.helpBox);
-            GUILayout.Label("Saving", EditorStyles.whiteLargeLabel);
+            qGUIInternalUtility.BeginGroup("Saving");
 
             SerializedProperty serializationTypeProperty = serializedSettings.FindProperty("serializationType");
 
@@ -58,18 +55,15 @@ namespace qASIC.ProjectSettings.Internal
             if ((SerializationType)serializationTypeProperty.intValue != SerializationType.playerPrefs)
                 EditorGUILayout.PropertyField(serializedSettings.FindProperty("filePath"));
 
-            EditorGUILayout.Space();
-            GUILayout.EndVertical();
+            qGUIInternalUtility.EndGroup();
 
             //Starting arguments
-            GUILayout.BeginVertical(EditorStyles.helpBox);
-            GUILayout.Label("Starting arguments", EditorStyles.whiteLargeLabel);
+            qGUIInternalUtility.BeginGroup("Starting arguments");
 
             settings.startArgsDisableLoad = GUILayout.Toggle(settings.startArgsDisableLoad, new GUIContent("Allow Disabling Loading"));
             settings.startArgsDisableSave = GUILayout.Toggle(settings.startArgsDisableSave, new GUIContent("Allow Disabling Saving"));
 
-            EditorGUILayout.Space();
-            GUILayout.EndVertical();
+            qGUIInternalUtility.EndGroup();
 
             //End no map assigned disabled group
             EditorGUI.EndDisabledGroup();

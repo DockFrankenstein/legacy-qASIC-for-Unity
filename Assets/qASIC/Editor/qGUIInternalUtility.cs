@@ -14,7 +14,7 @@ namespace qASIC.EditorTools.Internal
         public static void DrawqASICBanner(string bannerLocation = "qASIC/Sprites/qASIC banner", string docs = "https://docs.qasictools.com")
         {
             Texture2D banner = Resources.Load(bannerLocation) as Texture2D;
-            Rect bannerRect = GUILayoutUtility.GetAspectRect((float)banner.width / banner.height).Border(4f);
+            Rect bannerRect = GUILayoutUtility.GetAspectRect((float)banner.width / banner.height).BorderAspectRatioHorizontal(4f);
             GUI.DrawTexture(bannerRect, banner);
 
             switch (GUILayout.SelectionGrid(-1, new GUIContent[] { new GUIContent("Asset store"), new GUIContent("Docs"), new GUIContent("Support") }, 3))
@@ -31,6 +31,28 @@ namespace qASIC.EditorTools.Internal
             }
 
             EditorGUILayout.Space();
+        }
+
+        public static void BeginGroup(string label)
+        {
+            GUILayout.BeginVertical(EditorStyles.helpBox);
+            GUILayout.Label(label, EditorStyles.whiteLargeLabel);
+        }
+
+        public static void EndGroup()
+        {
+            EditorGUILayout.Space();
+            GUILayout.EndVertical();
+        }
+
+        public static void DrawPropertyGroup(SerializedObject serializedObject, string label, string[] properties)
+        {
+            BeginGroup(label);
+
+            for (int i = 0; i < properties.Length; i++)
+                EditorGUILayout.PropertyField(serializedObject.FindProperty(properties[i]));
+
+            EndGroup();
         }
 
         public static class Styles

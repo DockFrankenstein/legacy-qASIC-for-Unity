@@ -5,6 +5,7 @@ using qASIC.Console.Logic;
 using qASIC.Console.Tools;
 using System;
 using UnityEngine.SceneManagement;
+using qASIC.ProjectSettings;
 
 namespace qASIC.Console
 {
@@ -15,13 +16,26 @@ namespace qASIC.Console
 
         public static Action<GameConsoleLog> OnLog;
 
-        [RuntimeInitializeOnLoadMethod]
+        #region Loading
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
         static void Initialize()
         {
             SceneManager.sceneLoaded += HandleSceneLoad;
             Application.logMessageReceived += HandleUnityLog;
+
+            LoadProjectSettings();
         }
 
+        static void LoadProjectSettings()
+        {
+            ConsoleProjectSettings settings = ConsoleProjectSettings.Instance;
+
+            if (settings.config)
+                _config = settings.config;
+        }
+        #endregion
+
+        #region Handling
         static void HandleSceneLoad(Scene scene, LoadSceneMode mode)
         {
             if (_config?.logScene != true) return;
@@ -59,6 +73,7 @@ namespace qASIC.Console
             GameConsoleLog log = new GameConsoleLog(logText, DateTime.Now, color, GameConsoleLog.LogType.Game, true);
             Log(log);
         }
+        #endregion
 
         #region Log
         /// <param name="color">color name from the color settings</param>
