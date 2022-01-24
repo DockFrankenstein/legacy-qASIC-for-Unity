@@ -4,7 +4,6 @@ using UnityEngine;
 using System;
 using UnityEditor;
 using qASIC.Tools;
-using qASIC.EditorTools.Internal;
 using qASIC.EditorTools;
 
 using WindowUtility = qASIC.InputManagement.Map.Internal.InputMapWindowEditorUtility;
@@ -437,7 +436,7 @@ namespace qASIC.InputManagement.Map.Internal
 		static class Styles
         {
 			public static GUIStyle Label => new GUIStyle("Label") { alignment = TextAnchor.MiddleLeft };
-			public static GUIStyle Separator => new GUIStyle("Label").WithBackground(qGUIInternalUtility.BorderTexture);
+			public static GUIStyle Separator => new GUIStyle("Label").WithBackground(qGUIUtility.BorderTexture);
 			public static GUIStyle ColorBar(Color color) => new GUIStyle("Label").WithBackgroundColor(color);
         }
     }

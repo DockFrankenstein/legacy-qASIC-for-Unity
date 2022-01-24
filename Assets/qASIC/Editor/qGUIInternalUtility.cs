@@ -11,9 +11,6 @@ namespace qASIC.EditorTools.Internal
         public static Color qASICColor => new Color(0f, 0.7019607843137255f, 1f);
         public static Texture2D qASICColorTexture => GenerateColorTexture(qASICColor);
 
-        public static Color BorderColor => EditorGUIUtility.isProSkin ? new Color(0.1372549019607843f, 0.1372549019607843f, 0.1372549019607843f) : new Color(0.6f, 0.6f, 0.6f);
-        public static Texture2D BorderTexture => GenerateColorTexture(BorderColor);
-
         public static void DrawqASICBanner(string bannerLocation = "qASIC/Sprites/qASIC banner", string docs = "https://docs.qasictools.com")
         {
             Texture2D banner = Resources.Load(bannerLocation) as Texture2D;

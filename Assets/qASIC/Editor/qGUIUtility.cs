@@ -50,5 +50,8 @@ namespace qASIC.EditorTools
 
         public static KeyCode KeyCodePopup(KeyCode selectedKey, string label) =>
             (KeyCode)EditorGUILayout.EnumPopup(label, selectedKey);
+
+        public static Color BorderColor => EditorGUIUtility.isProSkin ? new Color(0.1372549019607843f, 0.1372549019607843f, 0.1372549019607843f) : new Color(0.6f, 0.6f, 0.6f);
+        public static Texture2D BorderTexture => GenerateColorTexture(BorderColor);
     }
 }
