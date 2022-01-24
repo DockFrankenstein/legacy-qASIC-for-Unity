@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using qASIC.EditorTools.Internal;
 
 namespace qASIC.InputManagement.Map.Internal
 {
@@ -12,7 +13,7 @@ namespace qASIC.InputManagement.Map.Internal
                 base.OnInspectorGUI();
 
             InputMap map = (InputMap)target;
-            if (GUILayout.Button("Open editor", GUILayout.Height(24f)))
+            if (GUILayout.Button("Open editor", qGUIInternalUtility.Styles.OpenButton))
                 InputMapWindow.OpenMapIfNotDirty(map);
         }
     }

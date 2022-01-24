@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEditor.IMGUI.Controls;
 using UnityEditor.Callbacks;
 using qASIC.FileManagement;
-using qASIC.InputManagement.Internal;
+using qASIC.EditorTools.Internal;
 
 //FIXME: For some reason when recompiling Unity flashes when this window is oppened
 namespace qASIC.InputManagement.Map.Internal
@@ -320,7 +320,7 @@ namespace qASIC.InputManagement.Map.Internal
                 stretchHeight = true,
             };
 
-            style.normal.background = qGUIUtility.BorderTexture;
+            style.normal.background = qGUIInternalUtility.BorderTexture;
             GUILayout.Box(GUIContent.none, style);
         }
         #endregion

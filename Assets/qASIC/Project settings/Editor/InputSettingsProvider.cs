@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using qASIC.EditorTools;
+using qASIC.EditorTools.Internal;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 using qASIC.Options;
@@ -22,7 +22,7 @@ namespace qASIC.ProjectSettings.Internal
 
         public override void OnGUI(string searchContext)
         {
-            qGUIUtility.DrawqASICBanner();
+            qGUIInternalUtility.DrawqASICBanner();
 
 #if !ENABLE_LEGACY_INPUT_MANAGER
             EditorGUILayout.HelpBox("qASIC input doesn't support the New Input System. Please go to Project Settings/Player and change Active Input Handling to Input Manager or Both.", MessageType.Warning);
@@ -38,11 +38,14 @@ namespace qASIC.ProjectSettings.Internal
 
             EditorGUILayout.PropertyField(serializedSettings.FindProperty("map"));
 
-            if (settings.map && GUILayout.Button("Edit map"))
+            if (settings.map && GUILayout.Button("Edit map", qGUIInternalUtility.Styles.OpenButton))
                 InputManagement.Map.Internal.InputMapWindow.OpenMapIfNotDirty(settings.map);
 
             EditorGUILayout.Space();
             GUILayout.EndVertical();
+
+            //Disable rest if there is no map assigned
+            EditorGUI.BeginDisabledGroup(!settings.map);
 
             //Saving
             GUILayout.BeginVertical(EditorStyles.helpBox);
@@ -67,6 +70,9 @@ namespace qASIC.ProjectSettings.Internal
 
             EditorGUILayout.Space();
             GUILayout.EndVertical();
+
+            //End no map assigned disabled group
+            EditorGUI.EndDisabledGroup();
 
             EditorGUI.EndDisabledGroup();
             serializedSettings.ApplyModifiedProperties();

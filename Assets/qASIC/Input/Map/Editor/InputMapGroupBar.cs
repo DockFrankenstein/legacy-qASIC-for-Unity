@@ -2,6 +2,7 @@
 using UnityEngine;
 using System;
 using qASIC.EditorTools;
+using qASIC.EditorTools.Internal;
 
 using static UnityEngine.GUILayout;
 
@@ -207,7 +208,7 @@ namespace qASIC.InputManagement.Map.Internal
 
         static class Styles
         {
-            public static GUIStyle DefaultGroupBar => new GUIStyle().WithBackground(qGUIUtility.qASICColorTexture);
+            public static GUIStyle DefaultGroupBar => new GUIStyle().WithBackground(qGUIInternalUtility.qASICColorTexture);
         }
 
     }

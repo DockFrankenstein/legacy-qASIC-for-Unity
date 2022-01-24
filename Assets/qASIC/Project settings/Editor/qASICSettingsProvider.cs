@@ -1,8 +1,7 @@
 ﻿using UnityEditor;
-using qASIC.EditorTools;
+using qASIC.EditorTools.Internal;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
-using qASIC.Options;
 
 namespace qASIC.ProjectSettings.Internal
 {
@@ -17,7 +16,7 @@ namespace qASIC.ProjectSettings.Internal
 
         public override void OnGUI(string searchContext)
         {
-            qGUIUtility.DrawqASICBanner();
+            qGUIInternalUtility.DrawqASICBanner();
         }
 
         [SettingsProvider]

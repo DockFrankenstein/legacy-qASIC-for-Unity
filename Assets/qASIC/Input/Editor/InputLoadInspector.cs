@@ -1,7 +1,6 @@
 ﻿using UnityEditor;
-using UnityEngine;
 using qASIC.Options;
-using qASIC.EditorTools;
+using qASIC.EditorTools.Internal;
 
 using static UnityEditor.EditorGUILayout;
 
@@ -24,7 +23,7 @@ namespace qASIC.InputManagement.Internal
         public override void OnInspectorGUI()
         {
             //TODO: change docs link to point to input system
-            qGUIUtility.DrawqASICBanner();
+            qGUIInternalUtility.DrawqASICBanner();
 
             PropertyField(mapProperty);
             PropertyField(serializationTypeProperty);
