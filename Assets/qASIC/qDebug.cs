@@ -25,7 +25,7 @@ namespace qASIC
         public static void DisplayValue(string tag, object value)
         {
 #if UNITY_EDITOR
-            if (!InfoDisplayer.DisplayerExists("debug"))
+            if (!InfoDisplayer.DisplayerExists("debug displayer"))
             {
                 Tools.qASICObjectCreator.CreateDebugDisplyer();
                 GameConsoleController.Log("Generated debug displayer. This only happens in the editor!", "warning");
