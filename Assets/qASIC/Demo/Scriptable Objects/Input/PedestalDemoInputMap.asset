@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fff99c208a6cb43b02e622f339150a, type: 3}
+  m_Name: PedestalDemoInputMap
+  m_EditorClassIdentifier: 
+  defaultGroup: 0
+  Groups:
+  - groupName: Game
+    actions:
+    - actionName: Up
+      keys: 7700000011010000
+    - actionName: Down
+      keys: 7300000012010000
+    - actionName: Left
+      keys: 6100000014010000
+    - actionName: Right
+      keys: 6400000013010000
+    - actionName: Interact
+      keys: 65000000
+    axes:
+    - axisName: Horizontal
+      positiveAction: Right
+      negativeAction: Left
+    - axisName: Vertical
+      positiveAction: Up
+      negativeAction: Down
+  - groupName: UI
+    actions:
+    - actionName: Console
+      keys: 6000000009000000
+    axes: []

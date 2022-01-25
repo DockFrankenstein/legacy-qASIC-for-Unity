@@ -18,9 +18,6 @@ namespace qASIC.Console.Tools
 
             position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Keyboard), label);
 
-            int indent = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 0;
-
             Vector2 colorName = new Vector2(0, position.width * 0.5f - 2);
             Vector2 color = new Vector2(position.width * 0.5f + 2, position.width * 0.5f);
 

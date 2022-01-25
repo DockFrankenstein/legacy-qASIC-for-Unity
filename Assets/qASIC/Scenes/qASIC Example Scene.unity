@@ -2009,7 +2009,6 @@ GameObject:
   - component: {fileID: 280564068}
   - component: {fileID: 280564067}
   - component: {fileID: 280564066}
-  - component: {fileID: 280564065}
   - component: {fileID: 280564069}
   m_Layer: 0
   m_Name: Up
@@ -2039,21 +2038,6 @@ RectTransform:
   m_AnchoredPosition: {x: 599.8987, y: -500}
   m_SizeDelta: {x: 1179.7974, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &280564065
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 280564063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a32eecd15f72ab44b9f4802d2d31a2c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnInputRecived:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &280564066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2068,8 +2052,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: {fileID: 1728625461}
   optionLabelName: 'Up: '
-  keyName: Up
-  listener: {fileID: 280564065}
+  inputAction:
+    groupName: Game
+    useDefaultGroup: 1
+    actionName: Up
+  keyIndex: 0
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -3225,7 +3212,6 @@ GameObject:
   - component: {fileID: 375491673}
   - component: {fileID: 375491672}
   - component: {fileID: 375491671}
-  - component: {fileID: 375491670}
   - component: {fileID: 375491669}
   m_Layer: 0
   m_Name: Interact
@@ -3298,21 +3284,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &375491670
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 375491667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a32eecd15f72ab44b9f4802d2d31a2c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnInputRecived:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &375491671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3327,8 +3298,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: {fileID: 2022365670}
   optionLabelName: 'Interact: '
-  keyName: Interact
-  listener: {fileID: 375491670}
+  inputAction:
+    groupName: Game
+    useDefaultGroup: 1
+    actionName: Interact
+  keyIndex: 0
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -4538,8 +4512,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 520468626}
-  - component: {fileID: 520468625}
   - component: {fileID: 520468624}
+  - component: {fileID: 520468625}
   m_Layer: 0
   m_Name: Assign
   m_TagString: Untagged
@@ -4560,8 +4534,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadOnce: 1
-  userSavePath: qASIC demo/Settings.txt
-  editorUserSavePath: qASIC demo/Setting-editor.txt
+  userSavePath: qASIC\Pedestal Demo\Settings.txt
+  editorUserSavePath: qASIC\Pedestal Demo\Setting-editor.txt
   saveFilePreset: {fileID: 4900000, guid: fd3d12d5bfd9947449045bf0a9273de6, type: 3}
 --- !u!114 &520468625
 MonoBehaviour:
@@ -4572,10 +4546,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 520468623}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f432c0fcf534b1a4aa392e8d9a7a9fc7, type: 3}
+  m_Script: {fileID: 11500000, guid: 3871b8cc3715476478a1eab75a7297db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preset: {fileID: 11400000, guid: d2d10382bfa4fd448a54ebc8ce629334, type: 2}
+  map: {fileID: 11400000, guid: ffcabac4cc9d9db4cabe73d1163f2a79, type: 2}
+  serializationType: 0
+  filePath:
+    genericFolder: 62
+    filePath: input.txt
 --- !u!4 &520468626
 Transform:
   m_ObjectHideFlags: 0
@@ -5390,7 +5368,6 @@ GameObject:
   - component: {fileID: 591809751}
   - component: {fileID: 591809750}
   - component: {fileID: 591809749}
-  - component: {fileID: 591809748}
   - component: {fileID: 591809747}
   m_Layer: 0
   m_Name: Console
@@ -5463,21 +5440,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &591809748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 591809745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a32eecd15f72ab44b9f4802d2d31a2c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnInputRecived:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &591809749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5492,8 +5454,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: {fileID: 1464753235}
   optionLabelName: 'Console: '
-  keyName: Console
-  listener: {fileID: 591809748}
+  inputAction:
+    groupName: UI
+    useDefaultGroup: 0
+    actionName: Console
+  keyIndex: 0
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -6601,7 +6566,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f769db349d6b1bb4c8d44f6fba744575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  toggleObject: {fileID: 0}
+  toggleObject: {fileID: 230947810}
   keyMode: 0
   OnChangeState:
     m_PersistentCalls:
@@ -9313,7 +9278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayerName: main
   separator: ': '
-  exceptUnknown: 1
+  acceptUnknown: 1
   removeSeparatorText: 1
   removeSeparatorValue: 0
   defaultLines:
@@ -9387,6 +9352,7 @@ MonoBehaviour:
       m_Calls: []
   togglerTag: 
   addToDontDestroy: 1
+  removeDuplicates: 1
   key: 284
 --- !u!4 &1154105941
 Transform:
@@ -11611,7 +11577,6 @@ GameObject:
   - component: {fileID: 1533533152}
   - component: {fileID: 1533533151}
   - component: {fileID: 1533533150}
-  - component: {fileID: 1533533149}
   - component: {fileID: 1533533148}
   m_Layer: 0
   m_Name: Right
@@ -11684,21 +11649,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1533533149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1533533146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a32eecd15f72ab44b9f4802d2d31a2c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnInputRecived:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1533533150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11713,8 +11663,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: {fileID: 683230934}
   optionLabelName: 'Right: '
-  keyName: Right
-  listener: {fileID: 1533533149}
+  inputAction:
+    groupName: Game
+    useDefaultGroup: 1
+    actionName: Right
+  keyIndex: 0
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -11903,7 +11856,6 @@ GameObject:
   - component: {fileID: 1560003292}
   - component: {fileID: 1560003291}
   - component: {fileID: 1560003290}
-  - component: {fileID: 1560003289}
   - component: {fileID: 1560003288}
   m_Layer: 0
   m_Name: Down
@@ -11976,21 +11928,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1560003289
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1560003286}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a32eecd15f72ab44b9f4802d2d31a2c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnInputRecived:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1560003290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12005,8 +11942,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: {fileID: 1291388893}
   optionLabelName: 'Down: '
-  keyName: Down
-  listener: {fileID: 1560003289}
+  inputAction:
+    groupName: Game
+    useDefaultGroup: 1
+    actionName: Down
+  keyIndex: 0
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -14829,7 +14769,6 @@ GameObject:
   - component: {fileID: 1819052092}
   - component: {fileID: 1819052091}
   - component: {fileID: 1819052090}
-  - component: {fileID: 1819052089}
   - component: {fileID: 1819052088}
   m_Layer: 0
   m_Name: Left
@@ -14902,21 +14841,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1819052089
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1819052086}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a32eecd15f72ab44b9f4802d2d31a2c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnInputRecived:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1819052090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14930,9 +14854,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 1705672479}
-  optionLabelName: Left
-  keyName: Left
-  listener: {fileID: 1819052089}
+  optionLabelName: 'Left: '
+  inputAction:
+    groupName: Game
+    useDefaultGroup: 1
+    actionName: Left
+  keyIndex: 0
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -17291,7 +17218,9 @@ MonoBehaviour:
       m_Calls: []
   togglerTag: console
   addToDontDestroy: 1
-  keyName: Console
+  removeDuplicates: 1
+  groupName: UI
+  actionName: Console
 --- !u!4 &2045916094
 Transform:
   m_ObjectHideFlags: 0

@@ -8,6 +8,8 @@ using UnityEngine;
 
 namespace qASIC.Options
 {
+    public enum SerializationType { playerPrefs, config }
+
     public static class OptionsController
     {
         private static string config = string.Empty;

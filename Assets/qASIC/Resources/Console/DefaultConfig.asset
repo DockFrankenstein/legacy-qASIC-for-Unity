@@ -22,9 +22,15 @@ MonoBehaviour:
   helpCommand: 1
   inputCommand: 1
   optionCommand: 1
+  audioCommand: 1
   sceneCommand: 1
+  sceneListCommand: 1
   versionCommand: 1
-  specsCommand: 0
+  specsCommand: 1
+  debugDisplayerCommand: 1
+  clearDebugDisplayerCommand: 1
+  timeScaleCommand: 1
+  fovCommand: 1
   logToUnity: 0
   logUnityErrorsToConsole: 1
   logUnityAssertsToConsole: 1
@@ -42,3 +48,4 @@ MonoBehaviour:
   showDetailedHelp: 1
   usePageCommandLimit: 1
   pageCommandLimit: 5
+  readOnly: 1

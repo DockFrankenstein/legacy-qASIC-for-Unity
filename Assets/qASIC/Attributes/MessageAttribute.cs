@@ -6,7 +6,7 @@ using UnityEditor;
 
 namespace qASIC
 {
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
     public class MessageAttribute : PropertyAttribute
     {
         public string Message { get; private set; }
@@ -21,19 +21,23 @@ namespace qASIC
         {
             Message = message;
 #if UNITY_EDITOR
-            switch(icon)
-            {           
-                case InspectorMessageIconType.notification:
-                    Icon = EditorGUIUtility.IconContent("console.infoicon").image;
-                    break;
-                case InspectorMessageIconType.warning:
-                    Icon = EditorGUIUtility.IconContent("console.warnicon").image;
-                    break;
-                case InspectorMessageIconType.error:
-                    Icon = EditorGUIUtility.IconContent("console.erroricon").image;
-                    break;
-            }
+            Icon = ConvertIconTypeToTexture(icon);
 #endif
+        }
+
+        public static Texture ConvertIconTypeToTexture(InspectorMessageIconType icon)
+        {
+            switch (icon)
+            {
+                case InspectorMessageIconType.notification:
+                    return EditorGUIUtility.IconContent("console.infoicon").image;
+                case InspectorMessageIconType.warning:
+                    return EditorGUIUtility.IconContent("console.warnicon").image;
+                case InspectorMessageIconType.error:
+                    return EditorGUIUtility.IconContent("console.erroricon").image;
+                default:
+                    return null;
+            }
         }
 
         public MessageAttribute(string message, Texture icon)

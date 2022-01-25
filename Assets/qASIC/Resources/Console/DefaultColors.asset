@@ -15,15 +15,17 @@ MonoBehaviour:
   DefaultColor: {r: 1, g: 1, b: 1, a: 1}
   WarningColor: {r: 1, g: 1, b: 0, a: 1}
   ErrorColor: {r: 1, g: 0, b: 0, a: 1}
+  InfoColor: {r: 1, g: 1, b: 1, a: 1}
   qASICColor: {r: 0, g: 0.7, b: 1, a: 1}
   SettingsColor: {r: 0, g: 0.301, b: 1, a: 1}
   InputColor: {r: 0.878, g: 0.129, b: 0, a: 1}
+  AudioColor: {r: 1, g: 0, b: 0.5, a: 1}
   ConsoleColor: {r: 0, g: 0.518, b: 0.663, a: 1}
   SceneColor: {r: 0.7019608, g: 0, b: 1, a: 1}
-  InfoColor: {r: 1, g: 1, b: 1, a: 1}
   UnityAssertColor: {r: 1, g: 0, b: 0, a: 1}
   UnityExceptionColor: {r: 1, g: 0, b: 0, a: 1}
   UnityErrorColor: {r: 1, g: 0, b: 0, a: 1}
   UnityWarningColor: {r: 1, g: 1, b: 0, a: 1}
   UnityMessageColor: {r: 1, g: 1, b: 1, a: 1}
   Colors: []
+  isReadOnly: 1

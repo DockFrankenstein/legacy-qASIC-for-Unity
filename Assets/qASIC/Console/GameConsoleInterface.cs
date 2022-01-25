@@ -15,8 +15,6 @@ namespace qASIC.Console
         [Header("Settings")]
         [Tooltip("Limit of logs that will be displayed. By default it is set to 64, for professional use 512 or 1024 is recomended")]
         public int logLimit = 64;
-        [Tooltip("Console configuration asset that will be sent to the controller on awake")]
-        public GameConsoleConfig ConsoleConfig;
 
         [Header("Objects")]
         [Tooltip("TextMesh Pro text that will display logs")]
@@ -36,10 +34,13 @@ namespace qASIC.Console
 
         [Tooltip("Platforms on which the input field won't be reselected after running a command or enabling the console")]
         public RuntimePlatform[] ignoreReselectPlatforms = new RuntimePlatform[]
-            {
-                RuntimePlatform.IPhonePlayer,
-                RuntimePlatform.Android,
-            };
+        {
+            RuntimePlatform.IPhonePlayer,
+            RuntimePlatform.Android,
+        };
+
+        [Tooltip("Console configuration asset that will be sent to the controller on awake")]
+        public GameConsoleConfig ConsoleConfig;
 
         public virtual void Awake()
         {

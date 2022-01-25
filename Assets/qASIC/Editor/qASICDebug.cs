@@ -3,6 +3,8 @@ using qASIC.Console;
 using UnityEngine;
 using UnityEditor;
 
+using static UnityEngine.GUILayout;
+
 namespace qASIC.Tools.Debug
 {
     public class qASICDebug : EditorWindow
@@ -67,18 +69,18 @@ namespace qASIC.Tools.Debug
                 padding = new RectOffset(10, 10, 10, 10),
             };
 
-            GUILayout.BeginHorizontal();
+            BeginHorizontal();
 
-            GUILayout.BeginVertical(menuStyle, GUILayout.Width(100), GUILayout.Height(Screen.height));
-            if (GUILayout.Button("Info", window == DebugWindow.Info ? menuSelectedButtonStyle : menuButtonStyle)) window = DebugWindow.Info;
-            if (GUILayout.Button("Audio", window == DebugWindow.Audio ? menuSelectedButtonStyle : menuButtonStyle)) window = DebugWindow.Audio;
-            if (GUILayout.Button("Console", window == DebugWindow.Console ? menuSelectedButtonStyle : menuButtonStyle)) window = DebugWindow.Console;
-            if (GUILayout.Button("Other", window == DebugWindow.Other ? menuSelectedButtonStyle : menuButtonStyle)) window = DebugWindow.Other;
-            GUILayout.EndVertical();
+            BeginVertical(menuStyle, Width(100), Height(Screen.height));
+            if (Button("Info", window == DebugWindow.Info ? menuSelectedButtonStyle : menuButtonStyle)) window = DebugWindow.Info;
+            if (Button("Audio", window == DebugWindow.Audio ? menuSelectedButtonStyle : menuButtonStyle)) window = DebugWindow.Audio;
+            if (Button("Console", window == DebugWindow.Console ? menuSelectedButtonStyle : menuButtonStyle)) window = DebugWindow.Console;
+            if (Button("Other", window == DebugWindow.Other ? menuSelectedButtonStyle : menuButtonStyle)) window = DebugWindow.Other;
+            EndVertical();
 
             //Content
-            GUILayout.BeginVertical(contentStyle);
-            scroll = GUILayout.BeginScrollView(scroll);
+            BeginVertical(contentStyle);
+            scroll = BeginScrollView(scroll);
 
             //Menus
             switch(window)
@@ -97,11 +99,11 @@ namespace qASIC.Tools.Debug
                     break;
             }
 
-            GUILayout.EndScrollView();
-            GUILayout.EndVertical();
+            EndScrollView();
+            EndVertical();
 
 
-            GUILayout.EndHorizontal();
+            EndHorizontal();
         }
 
         void DisplayInfo(GUIStyle headerStyle)
@@ -134,48 +136,48 @@ namespace qASIC.Tools.Debug
             };
             linkStyle.hover = linkStyle.normal;
 
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            GUILayout.BeginVertical(tintedBox);
+            BeginHorizontal();
+            FlexibleSpace();
+            BeginVertical(tintedBox);
 
-            GUILayout.BeginHorizontal(logoStyle);
-            GUILayout.Label(icon, GUILayout.Height(100), GUILayout.Width(100));
-            GUILayout.Label($"qASIC v{Info.Version}", tittleStyle, GUILayout.Height(100));
-            GUILayout.EndHorizontal();
+            BeginHorizontal(logoStyle);
+            Label(icon, Height(100), Width(100));
+            Label($"qASIC v{Info.Version}", tittleStyle, Height(100));
+            EndHorizontal();
 
-            GUILayout.BeginHorizontal(tintedBox);
-            if (GUILayout.Button("Website", linkStyle)) Application.OpenURL("https://qasictools.com");
-            if (GUILayout.Button("Docs", linkStyle)) Application.OpenURL("https://docs.qasictools.com");
-            if (GUILayout.Button("Github", linkStyle)) Application.OpenURL("https://github.com/DockFrankenstein/qASIC");
-            GUILayout.EndHorizontal();
+            BeginHorizontal(tintedBox);
+            if (Button("Website", linkStyle)) Application.OpenURL("https://qasictools.com");
+            if (Button("Docs", linkStyle)) Application.OpenURL("https://docs.qasictools.com");
+            if (Button("Github", linkStyle)) Application.OpenURL("https://github.com/DockFrankenstein/qASIC");
+            EndHorizontal();
 
-            GUILayout.EndVertical();
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
+            EndVertical();
+            FlexibleSpace();
+            EndHorizontal();
 
-            GUILayout.Label("Versions", headerStyle);
+            Label("Versions", headerStyle);
 
-            GUILayout.BeginVertical(tintedBox);
-            GUILayout.Label($"qASIC: {Info.Version}");
-            GUILayout.Label($"Game Console: {Info.Version}");
-            GUILayout.Label($"Info Displayer: {Info.Version}");
-            GUILayout.Label($"Options System: {Info.Version}");
-            GUILayout.Label($"Input Management: {Info.Version}");
-            GUILayout.Label($"Audio Management: {Info.Version}");
-            GUILayout.Label($"File Management: {Info.Version}");
-            GUILayout.EndVertical();
+            BeginVertical(tintedBox);
+            Label($"qASIC: {Info.Version}");
+            Label($"Game Console: {Info.Version}");
+            Label($"Info Displayer: {Info.Version}");
+            Label($"Options System: {Info.Version}");
+            Label($"Input Management: {Info.Version}");
+            Label($"Audio Management: {Info.Version}");
+            Label($"File Management: {Info.Version}");
+            EndVertical();
 
 
-            GUILayout.Label("Specs", headerStyle);
+            Label("Specs", headerStyle);
 
-            GUILayout.BeginVertical(tintedBox);
-            GUILayout.Label($"CPU: {SystemInfo.processorType}");
-            GUILayout.Label($"CPU Threads: {SystemInfo.processorCount}");
-            GUILayout.Label($"GPU: {SystemInfo.graphicsDeviceName}");
-            GUILayout.Label($"RAM: {SystemInfo.systemMemorySize}MB");
-            GUILayout.Label($"OS: {SystemInfo.operatingSystem}");
-            GUILayout.Label($"Unity Engine: {Application.unityVersion}");
-            GUILayout.EndVertical();
+            BeginVertical(tintedBox);
+            Label($"CPU: {SystemInfo.processorType}");
+            Label($"CPU Threads: {SystemInfo.processorCount}");
+            Label($"GPU: {SystemInfo.graphicsDeviceName}");
+            Label($"RAM: {SystemInfo.systemMemorySize}MB");
+            Label($"OS: {SystemInfo.operatingSystem}");
+            Label($"Unity Engine: {Application.unityVersion}");
+            EndVertical();
         }
 
         void DisplayAudio(GUIStyle headerStyle)
@@ -192,18 +194,18 @@ namespace qASIC.Tools.Debug
                 alignment = TextAnchor.MiddleCenter,
             };
             
-            GUILayout.Label("Audio", headerStyle);
+            Label("Audio", headerStyle);
             if (AudioManagment.AudioManager.singleton == null)
             {
-                GUILayout.Label(EditorApplication.isPlaying ? "There is no Audio Manager in the scene" : "Offline", centeredLabelStyle);
-                if (EditorApplication.isPlaying && GUILayout.Button("Generate Audio Manager")) new GameObject("Audio Manager").AddComponent<AudioManagment.AudioManager>();
+                Label(EditorApplication.isPlaying ? "There is no Audio Manager in the scene" : "Offline", centeredLabelStyle);
+                if (EditorApplication.isPlaying && Button("Generate Audio Manager")) new GameObject("Audio Manager").AddComponent<AudioManagment.AudioManager>();
                 return;
             }
 
-            GUILayout.Label($"Paused: {AudioManagment.AudioManager.Paused}");
-            GUILayout.Label($"Channel count: {AudioManagment.AudioManager.ChannelCount}");
+            Label($"Paused: {AudioManagment.AudioManager.Paused}");
+            Label($"Channel count: {AudioManagment.AudioManager.ChannelCount}");
 
-            audioScroll = GUILayout.BeginScrollView(audioScroll, scrollStyle, GUILayout.Height(128));
+            audioScroll = BeginScrollView(audioScroll, scrollStyle, Height(128));
             switch (Application.isPlaying && AudioManagment.AudioManager.singleton != null)
             {
                 default:
@@ -212,18 +214,18 @@ namespace qASIC.Tools.Debug
                     int i = 0;
                     foreach (var channel in AudioManagment.AudioManager.singleton.channels)
                     {
-                        GUILayout.Label(channel.Key, i % 2 == 0 ? secondListItemStyle : listItemStyle, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+                        Label(channel.Key, i % 2 == 0 ? secondListItemStyle : listItemStyle, Height(EditorGUIUtility.singleLineHeight));
                         i++;
                     }
                     break;
             }
-            GUILayout.EndScrollView();
+            EndScrollView();
 
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Pause All") && AudioManagment.AudioManager.singleton != null) AudioManagment.AudioManager.PauseAll();
-            if (GUILayout.Button("Un Pause All") && AudioManagment.AudioManager.singleton != null) AudioManagment.AudioManager.UnPauseAll();
-            if (GUILayout.Button("Stop All") && AudioManagment.AudioManager.singleton != null) AudioManagment.AudioManager.StopAll();
-            GUILayout.EndHorizontal();
+            BeginHorizontal();
+            if (Button("Pause All") && AudioManagment.AudioManager.singleton != null) AudioManagment.AudioManager.PauseAll();
+            if (Button("Un Pause All") && AudioManagment.AudioManager.singleton != null) AudioManagment.AudioManager.UnPauseAll();
+            if (Button("Stop All") && AudioManagment.AudioManager.singleton != null) AudioManagment.AudioManager.StopAll();
+            EndHorizontal();
         }
 
         void DisplayConsole(GUIStyle headerStyle)
@@ -239,44 +241,44 @@ namespace qASIC.Tools.Debug
                 clipping = TextClipping.Clip,
             };
 
-            GUILayout.Label("Console", headerStyle);
-            GUILayout.Label(Application.isPlaying ? GameConsoleController.LogsToString(9) : "Console is offline", consoleStyle, GUILayout.Height(128));
-            GUILayout.BeginHorizontal();
-            consoleInput = GUILayout.TextField(consoleInput);
-            if (GUILayout.Button("Run", GUILayout.Width(32)) && Application.isPlaying)
+            Label("Console", headerStyle);
+            Label(Application.isPlaying ? GameConsoleController.LogsToString(9) : "Console is offline", consoleStyle, Height(128));
+            BeginHorizontal();
+            consoleInput = TextField(consoleInput);
+            if (Button("Run", Width(32)) && Application.isPlaying)
             {
                 GameConsoleController.RunCommand(consoleInput);
                 consoleInput = string.Empty;
             }
-            GUILayout.EndHorizontal();
+            EndHorizontal();
         }
 
         void DisplayOther(GUIStyle headerStyle)
         {
-            GUILayout.Label("Other", headerStyle);
+            Label("Other", headerStyle);
 
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Unlock cursor")) Cursor.lockState = CursorLockMode.None;
-            if (GUILayout.Button("Lock cursor")) Cursor.lockState = CursorLockMode.Locked;
-            if (GUILayout.Button("Confine")) Cursor.lockState = CursorLockMode.Confined;
-            GUILayout.EndHorizontal();
+            BeginHorizontal();
+            if (Button("Unlock cursor")) Cursor.lockState = CursorLockMode.None;
+            if (Button("Lock cursor")) Cursor.lockState = CursorLockMode.Locked;
+            if (Button("Confine")) Cursor.lockState = CursorLockMode.Confined;
+            EndHorizontal();
 
-            GUILayout.BeginHorizontal();
+            BeginHorizontal();
             switch (resetPrefsWindow)
             {
                 default:
-                    if (GUILayout.Button("Reset Player Prefs")) resetPrefsWindow = true;
+                    if (Button("Reset Player Prefs")) resetPrefsWindow = true;
                     break;
                 case true:
-                    if (GUILayout.Button("Cancel")) resetPrefsWindow = false;
-                    if (GUILayout.Button("Confirm"))
+                    if (Button("Cancel")) resetPrefsWindow = false;
+                    if (Button("Confirm"))
                     {
                         PlayerPrefs.DeleteAll();
                         resetPrefsWindow = false;
                     }
                     break;
             }
-            GUILayout.EndHorizontal();
+            EndHorizontal();
         }
     }
 }
