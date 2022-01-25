@@ -21,16 +21,24 @@ namespace qASIC.ProjectSettings.Internal
 
         public override void OnGUI(string searchContext)
         {
+            bool isConfigReadOnly = settings.config && settings.config.IsReadOnly;
+
+            if (isConfigReadOnly)
+            {
+                EditorGUILayout.HelpBox("This is a read only configuration. If you want to modify values, please create a new one.", MessageType.Warning);
+                EditorGUILayout.Space();
+            }
+
+            EditorGUI.BeginDisabledGroup(isConfigReadOnly);
             qGUIInternalUtility.BeginGroup("Theme");
 
             ColorThemeField();
 
             qGUIInternalUtility.EndGroup();
+            EditorGUI.EndDisabledGroup();
 
-            if (!settings.config?.colorTheme) return;
-
-            EditorGUILayout.Space();
-            qGUIUtility.DrawObjectsInspector(settings.config.colorTheme);
+            if (!isConfigReadOnly && settings.config?.colorTheme)
+                qGUIUtility.DrawObjectsInspector(settings.config.colorTheme);
         }
 
         void ColorThemeField()
