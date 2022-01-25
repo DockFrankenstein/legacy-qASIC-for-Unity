@@ -1,22 +1,23 @@
 ﻿using UnityEditor;
-using qASIC.EditorTools.Internal;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 using qASIC.Console;
 using UnityEngine;
 using qASIC.EditorTools;
 
+using Settings = qASIC.ProjectSettings.ConsoleProjectSettings;
+
 namespace qASIC.ProjectSettings.Internal
 {
     class ConsoleColorSettingsProvider : SettingsProvider
     {
-        ConsoleProjectSettings settings;
+        Settings settings;
 
         public ConsoleColorSettingsProvider(string path, SettingsScope scopes) : base(path, scopes) { }
 
         public override void OnActivate(string searchContext, VisualElement rootElement)
         {
-            settings = ConsoleProjectSettings.Instance;
+            settings = Settings.Instance;
         }
 
         public override void OnGUI(string searchContext)
@@ -30,11 +31,7 @@ namespace qASIC.ProjectSettings.Internal
             }
 
             EditorGUI.BeginDisabledGroup(isConfigReadOnly);
-            qGUIInternalUtility.BeginGroup("Theme");
-
             ColorThemeField();
-
-            qGUIInternalUtility.EndGroup();
             EditorGUI.EndDisabledGroup();
 
             if (!isConfigReadOnly && settings.config?.colorTheme)

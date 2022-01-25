@@ -5,7 +5,7 @@ namespace qASIC.ProjectSettings
 {
     [System.Serializable]
     [ExcludeFromPreset]
-    [CreateAssetMenu(fileName = "NewConsoleProjectSettings", menuName = "qASIC/Project Setting Files/Console")]
+    //[CreateAssetMenu(fileName = "NewConsoleProjectSettings", menuName = "qASIC/Project Setting Files/Console")]
     public class ConsoleProjectSettings : ProjectSettingsBase
     {
         private static ConsoleProjectSettings _instance;

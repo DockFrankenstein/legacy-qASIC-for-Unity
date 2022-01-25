@@ -37,6 +37,10 @@ namespace qASIC.EditorTools.Internal
         {
             GUILayout.BeginVertical(EditorStyles.helpBox);
             GUILayout.Label(label, EditorStyles.whiteLargeLabel);
+
+            //Alternative, with no background (you have to remove everything from end group)
+            //EditorGUILayout.Space();
+            //EditorGUILayout.LabelField(label, EditorStyles.boldLabel);
         }
 
         public static void EndGroup()

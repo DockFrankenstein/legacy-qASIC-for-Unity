@@ -8,6 +8,7 @@ using qASIC.Toggling;
 using qASIC.Console;
 using qASIC.InputManagement.Menu;
 using qASIC.InputManagement.DebugTools;
+using qASIC.ProjectSettings;
 
 namespace qASIC.Tools
 {
@@ -54,7 +55,9 @@ namespace qASIC.Tools
 
         public static void CreateDebugDisplyer()
         {
-            GameObject displayerObject = new GameObject("Debug displayer - auto generated editor");
+            DisplayerProjectSettings settings = DisplayerProjectSettings.Instance;
+
+            GameObject displayerObject = new GameObject(settings.debugObjectName);
             displayerObject.SetActive(false);
             GameObject canvasObject = CreateCanvas(displayerObject.transform, "Canvas", 20, false).gameObject;
 
@@ -68,8 +71,9 @@ namespace qASIC.Tools
             displayer.defaultLines = new DisplayerLine[0];
             displayer.acceptUnknown = true;
 
-            StaticToggler toggler = displayer.gameObject.AddComponent<StaticToggler>();
-            toggler.togglerTag = "debug displayer";
+            StaticTogglerBasic toggler = displayer.gameObject.AddComponent<StaticTogglerBasic>();
+            toggler.togglerTag = settings.debugTogglerName;
+            toggler.key = settings.debugTogglerKey;
             toggler.toggleObject = canvasObject;
             displayerObject.SetActive(true);
         }

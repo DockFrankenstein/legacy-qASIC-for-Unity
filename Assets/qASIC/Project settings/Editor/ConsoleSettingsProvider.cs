@@ -4,18 +4,20 @@ using System.Collections.Generic;
 using UnityEngine.UIElements;
 using qASIC.EditorTools;
 
+using Settings = qASIC.ProjectSettings.ConsoleProjectSettings;
+
 namespace qASIC.ProjectSettings.Internal
 {
     class ConsoleSettingsProvider : SettingsProvider
     {
-        ConsoleProjectSettings settings;
+        Settings settings;
         SerializedObject serializedSettings;
 
         public ConsoleSettingsProvider(string path, SettingsScope scopes) : base(path, scopes) { }
 
         public override void OnActivate(string searchContext, VisualElement rootElement)
         {
-            settings = ConsoleProjectSettings.Instance;
+            settings = Settings.Instance;
             serializedSettings = new SerializedObject(settings);
         }
 
@@ -23,10 +25,7 @@ namespace qASIC.ProjectSettings.Internal
         {
             qGUIInternalUtility.DrawqASICBanner();
 
-            qGUIInternalUtility.BeginGroup("Config");
-            EditorGUILayout.PropertyField(serializedSettings.FindProperty("config"));
-            qGUIInternalUtility.EndGroup();
-
+            DrawProperty(nameof(Settings.config));
             EditorGUILayout.Space();
 
             if (settings.config)
@@ -34,6 +33,9 @@ namespace qASIC.ProjectSettings.Internal
 
             serializedSettings.ApplyModifiedProperties();
         }
+
+        void DrawProperty(string propertyName) =>
+            EditorGUILayout.PropertyField(serializedSettings.FindProperty(propertyName));
 
         [SettingsProvider]
         public static SettingsProvider CreateProvider()

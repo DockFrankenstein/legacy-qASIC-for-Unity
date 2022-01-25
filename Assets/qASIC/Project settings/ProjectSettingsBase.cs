@@ -31,7 +31,7 @@ namespace qASIC.ProjectSettings
         {
 #if UNITY_EDITOR
             t asset = CreateInstance<t>();
-            AssetDatabase.CreateAsset(asset, $"{instanceLocation}/{assetName}.asset");
+            AssetDatabase.CreateAsset(asset, $"Assets/qASIC/Resources/{instanceLocation}/{assetName}.asset");
             AssetDatabase.SaveAssets();
             return asset;
 #else

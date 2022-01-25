@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using qASIC.Console;
 using qASIC.Displayer;
+using qASIC.ProjectSettings;
 
 namespace qASIC
 {
@@ -24,13 +25,13 @@ namespace qASIC
 
         public static void DisplayValue(string tag, object value)
         {
-#if UNITY_EDITOR
-            if (!InfoDisplayer.DisplayerExists("debug displayer"))
+            DisplayerProjectSettings settings = DisplayerProjectSettings.Instance;
+            if (settings.CreateDebugDisplayer && !InfoDisplayer.DisplayerExists(settings.debugTogglerName))
             {
                 Tools.qASICObjectCreator.CreateDebugDisplyer();
-                GameConsoleController.Log("Generated debug displayer. This only happens in the editor!", "warning");
+                if (settings.displayDebugGenerationMessage)
+                    GameConsoleController.Log(settings.debugGenerationMessage, settings.debugGenerationMessageColor);
             }
-#endif
 
             InfoDisplayer.DisplayValue(tag, value == null ? "null" : value.ToString(), "debug");
         }

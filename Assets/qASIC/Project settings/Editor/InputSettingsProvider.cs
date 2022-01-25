@@ -5,18 +5,20 @@ using System.Collections.Generic;
 using UnityEngine.UIElements;
 using qASIC.Options;
 
+using Settings = qASIC.ProjectSettings.InputProjectSettings;
+
 namespace qASIC.ProjectSettings.Internal
 {
     class InputSettingsProvider : SettingsProvider
     {
         SerializedObject serializedSettings;
-        InputProjectSettings settings;
+        Settings settings;
 
         public InputSettingsProvider(string path, SettingsScope scopes) : base(path, scopes) { }
 
         public override void OnActivate(string searchContext, VisualElement rootElement)
         {
-            settings = InputProjectSettings.Instance;
+            settings = Settings.Instance;
             serializedSettings = new SerializedObject(settings);
         }
 
@@ -34,12 +36,9 @@ namespace qASIC.ProjectSettings.Internal
 #endif
             //Map
             qGUIInternalUtility.BeginGroup("Map");
-
-            EditorGUILayout.PropertyField(serializedSettings.FindProperty("map"));
-
+            DrawProperty(nameof(Settings.map));
             if (settings.map && GUILayout.Button("Edit map", qGUIInternalUtility.Styles.OpenButton))
                 InputManagement.Map.Internal.InputMapWindow.OpenMapIfNotDirty(settings.map);
-
             qGUIInternalUtility.EndGroup();
 
             //Disable rest if there is no map assigned
@@ -47,30 +46,29 @@ namespace qASIC.ProjectSettings.Internal
 
             //Saving
             qGUIInternalUtility.BeginGroup("Saving");
-
-            SerializedProperty serializationTypeProperty = serializedSettings.FindProperty("serializationType");
-
+            SerializedProperty serializationTypeProperty = serializedSettings.FindProperty(nameof(Settings.serializationType));
             EditorGUILayout.PropertyField(serializationTypeProperty);
-
             if ((SerializationType)serializationTypeProperty.intValue != SerializationType.playerPrefs)
-                EditorGUILayout.PropertyField(serializedSettings.FindProperty("filePath"));
-
+                DrawProperty(nameof(Settings.filePath));
             qGUIInternalUtility.EndGroup();
 
             //Starting arguments
             qGUIInternalUtility.BeginGroup("Starting arguments");
-
             settings.startArgsDisableLoad = GUILayout.Toggle(settings.startArgsDisableLoad, new GUIContent("Allow Disabling Loading"));
             settings.startArgsDisableSave = GUILayout.Toggle(settings.startArgsDisableSave, new GUIContent("Allow Disabling Saving"));
-
             qGUIInternalUtility.EndGroup();
 
             //End no map assigned disabled group
             EditorGUI.EndDisabledGroup();
 
+            //End not supported input handler disabled group
             EditorGUI.EndDisabledGroup();
+
             serializedSettings.ApplyModifiedProperties();
         }
+
+        void DrawProperty(string property) =>
+            EditorGUILayout.PropertyField(serializedSettings.FindProperty(property));
 
         [SettingsProvider]
         public static SettingsProvider CreateProvider()
