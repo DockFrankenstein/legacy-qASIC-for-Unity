@@ -3,6 +3,7 @@ using qASIC.EditorTools.Internal;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 using UnityEngine;
+using qASIC.EditorTools;
 
 using Settings = qASIC.ProjectSettings.DisplayerProjectSettings;
 
@@ -24,26 +25,11 @@ namespace qASIC.ProjectSettings.Internal
         public override void OnGUI(string searchContext)
         {
             qGUIInternalUtility.BeginGroup("Debug Displayer");
-            DrawProperty(nameof(Settings.debugObjectName), "Object Name");
-            DrawProperty(nameof(Settings.debugDisplayerName), "Displayer Name");
-
-            DrawProperty(nameof(Settings.debugTogglerName), "Toggler Name");
-            DrawProperty(nameof(Settings.debugTogglerKey), "Toggler Key");
-
-            DrawProperty(nameof(Settings.displayDebugGenerationMessage), "Display Message");
-            DrawProperty(nameof(Settings.debugGenerationMessage), "Message");
-            DrawProperty(nameof(Settings.debugGenerationMessageColor), "Message Color");
-
-            DrawProperty(nameof(Settings.createDebugInEditor), "Create In Editor");
-            DrawProperty(nameof(Settings.createDebugInDeveloperBuild), "Create In Dev Build");
-            DrawProperty(nameof(Settings.createDebugInBuild), "Create In Build");
+            qGUIUtility.DrawObjectsProperties(serializedSettings);
             qGUIInternalUtility.EndGroup();
 
             serializedSettings.ApplyModifiedProperties();
         }
-
-        void DrawProperty(string property, string label) =>
-            EditorGUILayout.PropertyField(serializedSettings.FindProperty(property), new GUIContent(label));
 
         [SettingsProvider]
         public static SettingsProvider CreateProvider()
