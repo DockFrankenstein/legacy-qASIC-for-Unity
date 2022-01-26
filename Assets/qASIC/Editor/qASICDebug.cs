@@ -2,6 +2,7 @@
 using qASIC.Console;
 using UnityEngine;
 using UnityEditor;
+using qASIC.Internal;
 
 using static UnityEngine.GUILayout;
 

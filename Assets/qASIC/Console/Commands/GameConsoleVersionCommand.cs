@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using qASIC.Console.Tools;
-using qASIC.Tools;
+using qASIC.Internal;
 
 namespace qASIC.Console.Commands
 {

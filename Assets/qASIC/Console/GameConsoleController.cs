@@ -171,7 +171,7 @@ namespace qASIC.Console
             if (newConfig == null || _config == newConfig) return;
             _config = newConfig;
             if (_config.showThankYouMessage)
-                Log($"Thank you for using qASIC console v{qASIC.Tools.Info.Version}", "qasic");
+                Log($"Thank you for using qASIC v{Internal.Info.Version} console", "qasic");
             if (_config.logConfigAssigment)
                 Log("Assigned new config", "console");
         }

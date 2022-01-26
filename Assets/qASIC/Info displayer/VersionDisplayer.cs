@@ -15,7 +15,7 @@ namespace qASIC.Displayer.Displayers
         {
             project.DisplayValue(Application.version, displayerName);
             unity.DisplayValue(Application.unityVersion, displayerName);
-            qASIC.DisplayValue(Tools.Info.Version, displayerName);
+            qASIC.DisplayValue(Internal.Info.Version, displayerName);
         }
 
         private void Reset()
