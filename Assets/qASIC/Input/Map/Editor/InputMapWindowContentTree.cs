@@ -138,7 +138,8 @@ namespace qASIC.InputManagement.Map.Internal
 		protected override void DoubleClickedItem(int id)
 		{
 			TreeViewItem item = FindItem(id, rootItem);
-			BeginRename(item);
+			if (CanRename(item))
+				BeginRename(item);
 		}
 
 		protected override void ContextClickedItem(int id)
@@ -295,7 +296,6 @@ namespace qASIC.InputManagement.Map.Internal
         #region Renaming
         protected override bool CanRename(TreeViewItem item)
         {
-			//For some reason even when returning false you can still rename every item
             return item is InputMapContentEditableItemBase;
         }
 
