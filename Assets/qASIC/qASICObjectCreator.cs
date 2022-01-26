@@ -59,15 +59,15 @@ namespace qASIC.Tools
 
             GameObject displayerObject = new GameObject(settings.debugObjectName);
             displayerObject.SetActive(false);
-            GameObject canvasObject = CreateCanvas(displayerObject.transform, "Canvas", 20, false).gameObject;
+            GameObject canvasObject = CreateCanvas(displayerObject.transform, "Canvas", settings.debugCanvasOrder, false).gameObject;
 
-            TextMeshProUGUI text = CreateTextObject(canvasObject.transform, "Text", 24);
+            TextMeshProUGUI text = CreateTextObject(canvasObject.transform, "Text", settings.debugFontSize);
             text.alignment = TextAlignmentOptions.TopLeft;
             text.color = Color.white;
             text.margin = new Vector4(10f, 10f, 10f, 10f);
 
             InfoDisplayer displayer = CreateDisplayer(displayerObject, text);
-            displayer.displayerName = "debug";
+            displayer.displayerName = settings.debugDisplayerName;
             displayer.defaultLines = new DisplayerLine[0];
             displayer.acceptUnknown = true;
 
@@ -225,6 +225,7 @@ namespace qASIC.Tools
             RectTransform trans = go.AddComponent<RectTransform>();
             TextMeshProUGUI text = go.AddComponent<TextMeshProUGUI>();
             text.color = Color.black;
+            text.fontSize = fontSize;
             SetAnchors(trans, Vector2.zero, Vector2.one);
             StretchToAnchors(trans);
             return text;

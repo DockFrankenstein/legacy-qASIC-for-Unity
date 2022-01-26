@@ -26,14 +26,14 @@ namespace qASIC
         public static void DisplayValue(string tag, object value)
         {
             DisplayerProjectSettings settings = DisplayerProjectSettings.Instance;
-            if (settings.CreateDebugDisplayer && !InfoDisplayer.DisplayerExists(settings.debugTogglerName))
+            if (settings.CreateDebugDisplayer && !InfoDisplayer.DisplayerExists(settings.debugDisplayerName))
             {
                 Tools.qASICObjectCreator.CreateDebugDisplyer();
                 if (settings.displayDebugGenerationMessage)
                     GameConsoleController.Log(settings.debugGenerationMessage, settings.debugGenerationMessageColor);
             }
 
-            InfoDisplayer.DisplayValue(tag, value == null ? "null" : value.ToString(), "debug");
+            InfoDisplayer.DisplayValue(tag, value == null ? "null" : value.ToString(), settings.debugDisplayerName);
         }
     }
 }
