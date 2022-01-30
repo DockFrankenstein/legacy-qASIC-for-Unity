@@ -19,6 +19,7 @@ namespace qASIC.Options
             init = true;
         }
 
+#pragma warning disable
         public void LoadPreferences()
         {
             if (init && loadOnce) return;
@@ -29,5 +30,6 @@ namespace qASIC.Options
             if(saveFilePreset != null) ConfigController.Repair($"{Application.persistentDataPath}/{path}", saveFilePreset.text);
             OptionsController.Load($"{Application.persistentDataPath}/{path}");
         }
+#pragma warning restore
     }
 }

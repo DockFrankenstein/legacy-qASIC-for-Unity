@@ -5,6 +5,7 @@ using System;
 using UnityEditor;
 using qASIC.Tools;
 using qASIC.EditorTools;
+using qASIC;
 
 using WindowUtility = qASIC.InputManagement.Map.Internal.InputMapWindowEditorUtility;
 
@@ -347,10 +348,10 @@ namespace qASIC.InputManagement.Map.Internal
 			switch(args.item)
             {
 				case InputMapContentEditableItemBase _:
-					buttonContent.image = qGUIUtility.MinusIcon;
+					buttonContent.image = qGUIEditorUtility.MinusIcon;
 					break;
 				case InputMapContentHeaderItemBase _:
-					buttonContent.image = qGUIUtility.PlusIcon;
+					buttonContent.image = qGUIEditorUtility.PlusIcon;
 					break;
             }
 
@@ -436,7 +437,7 @@ namespace qASIC.InputManagement.Map.Internal
 		static class Styles
         {
 			public static GUIStyle Label => new GUIStyle("Label") { alignment = TextAnchor.MiddleLeft };
-			public static GUIStyle Separator => new GUIStyle("Label").WithBackground(qGUIUtility.BorderTexture);
+			public static GUIStyle Separator => new GUIStyle("Label").WithBackground(qGUIEditorUtility.BorderTexture);
 			public static GUIStyle ColorBar(Color color) => new GUIStyle("Label").WithBackgroundColor(color);
         }
     }

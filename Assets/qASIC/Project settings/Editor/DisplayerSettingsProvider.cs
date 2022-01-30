@@ -2,7 +2,6 @@
 using qASIC.EditorTools.Internal;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
-using UnityEngine;
 using qASIC.EditorTools;
 
 using Settings = qASIC.ProjectSettings.DisplayerProjectSettings;
@@ -25,7 +24,7 @@ namespace qASIC.ProjectSettings.Internal
         public override void OnGUI(string searchContext)
         {
             qGUIInternalUtility.BeginGroup("Debug Displayer");
-            qGUIUtility.DrawObjectsProperties(serializedSettings);
+            qGUIEditorUtility.DrawObjectsProperties(serializedSettings);
             qGUIInternalUtility.EndGroup();
 
             serializedSettings.ApplyModifiedProperties();

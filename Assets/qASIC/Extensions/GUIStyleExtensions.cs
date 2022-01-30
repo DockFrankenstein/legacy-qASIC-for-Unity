@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace qASIC.EditorTools
+namespace qASIC
 {
-    static class GUIStyleExtensions
+    public static class GUIStyleExtensions
     {
         public static GUIStyle WithBackgroundColor(this GUIStyle style, Color color) =>
             WithBackground(style, qGUIUtility.GenerateColorTexture(color));

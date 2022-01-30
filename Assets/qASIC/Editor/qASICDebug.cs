@@ -196,7 +196,7 @@ namespace qASIC.Tools.Debug
             };
             
             Label("Audio", headerStyle);
-            if (AudioManagment.AudioManager.singleton == null)
+            if (AudioManagment.AudioManager.Singleton == null)
             {
                 Label(EditorApplication.isPlaying ? "There is no Audio Manager in the scene" : "Offline", centeredLabelStyle);
                 if (EditorApplication.isPlaying && Button("Generate Audio Manager")) new GameObject("Audio Manager").AddComponent<AudioManagment.AudioManager>();
@@ -207,13 +207,13 @@ namespace qASIC.Tools.Debug
             Label($"Channel count: {AudioManagment.AudioManager.ChannelCount}");
 
             audioScroll = BeginScrollView(audioScroll, scrollStyle, Height(128));
-            switch (Application.isPlaying && AudioManagment.AudioManager.singleton != null)
+            switch (Application.isPlaying && AudioManagment.AudioManager.Singleton != null)
             {
                 default:
                     break;
                 case true:
                     int i = 0;
-                    foreach (var channel in AudioManagment.AudioManager.singleton.channels)
+                    foreach (var channel in AudioManagment.AudioManager.Singleton.channels)
                     {
                         Label(channel.Key, i % 2 == 0 ? secondListItemStyle : listItemStyle, Height(EditorGUIUtility.singleLineHeight));
                         i++;
@@ -223,9 +223,9 @@ namespace qASIC.Tools.Debug
             EndScrollView();
 
             BeginHorizontal();
-            if (Button("Pause All") && AudioManagment.AudioManager.singleton != null) AudioManagment.AudioManager.PauseAll();
-            if (Button("Un Pause All") && AudioManagment.AudioManager.singleton != null) AudioManagment.AudioManager.UnPauseAll();
-            if (Button("Stop All") && AudioManagment.AudioManager.singleton != null) AudioManagment.AudioManager.StopAll();
+            if (Button("Pause All") && AudioManagment.AudioManager.Singleton != null) AudioManagment.AudioManager.PauseAll();
+            if (Button("Un Pause All") && AudioManagment.AudioManager.Singleton != null) AudioManagment.AudioManager.UnPauseAll();
+            if (Button("Stop All") && AudioManagment.AudioManager.Singleton != null) AudioManagment.AudioManager.StopAll();
             EndHorizontal();
         }
 

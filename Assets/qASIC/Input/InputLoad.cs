@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using qASIC.FileManagement;
-using qASIC.Options;
 using qASIC.InputManagement.Map;
 
 namespace qASIC.InputManagement

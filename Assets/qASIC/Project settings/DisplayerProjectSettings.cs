@@ -22,7 +22,7 @@ namespace qASIC.ProjectSettings
         [InspectorLabel("Toggler Key")] [KeyCodeListener] public KeyCode debugTogglerKey = KeyCode.None;
 
         [Header("Auto generation console message")]
-        [InspectorLabel("Display Message")] public bool displayDebugGenerationMessage = true;
+        [InspectorLabel("Log")] public bool displayDebugGenerationMessage = true;
         [InspectorLabel("Message")] [TextArea(3, 5)] public string debugGenerationMessage = "Generated debug displayer. This only happens in the editor and dev build!";
         [InspectorLabel("Message Color")] public string debugGenerationMessageColor = "warning";
 

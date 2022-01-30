@@ -3,7 +3,7 @@ using UnityEngine;
 using System;
 using qASIC.EditorTools;
 
-using static qASIC.EditorTools.qGUIUtility;
+using static qASIC.EditorTools.qGUIEditorUtility;
 using static UnityEditor.EditorGUILayout;
 
 namespace qASIC.InputManagement.Map.Internal
@@ -86,10 +86,10 @@ namespace qASIC.InputManagement.Map.Internal
                         OnDeleteAxis.Invoke(axis);
                     break;
                 case InputAction _:
-                    DrawMessageBox($"Use '{nameof(InspectorInputAction)}' instead of '{nameof(InputAction)}'!");
+                    HelpBox(new GUIContent($"Use '{nameof(InspectorInputAction)}' instead of '{nameof(InputAction)}'!"));
                     break;
                 case InputAxis _:
-                    DrawMessageBox($"Use '{nameof(InspectorInputAxis)}' instead of '{nameof(InputAxis)}'!");
+                    HelpBox(new GUIContent($"Use '{nameof(InspectorInputAxis)}' instead of '{nameof(InputAxis)}'!"));
                     break;
             }
 

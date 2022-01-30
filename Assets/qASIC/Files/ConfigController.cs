@@ -7,20 +7,25 @@ namespace qASIC.FileManagement
         #region GetSetting
         public static string GetSettingFromFile(string path, string key)
         {
-            if (TryGettingSettingFromFile(path, key, out string setting)) throw new System.Exception("Couldn't get setting from file: setting or file doesn't exist!");
+            if (TryGettingSettingFromFile(path, key, out string setting))
+                throw new System.Exception("Couldn't get setting from file: setting or file does not exist!");
+
             return setting;
         }
 
         public static string GetSetting(string content, string key)
         {
-            if(TryGettingSetting(content, key, out string setting)) throw new System.Exception("Couldn't get setting: setting doesn't exist!");
+            if (TryGettingSetting(content, key, out string setting))
+                throw new System.Exception("Couldn't get setting: setting does not exist!");
+
             return setting;
         }
 
         public static bool TryGettingSettingFromFile(string path, string key, out string setting)
         {
             setting = string.Empty;
-            return FileManager.TryLoadFileWriter(path, out string content) && TryGettingSetting(content, key, out setting);
+            return FileManager.TryLoadFileWriter(path, out string content)
+                && TryGettingSetting(content, key, out setting);
         }
 
         public static bool TryGettingSetting(string content, string key, out string setting)
@@ -75,6 +80,7 @@ namespace qASIC.FileManagement
         #endregion
 
         /// <summary>Creates a file according to the template</summary>
+        [System.Obsolete]
         public static void Repair(string path, string template)
         {
             if (!FileManager.TryLoadFileWriter(path, out string content)) return;
@@ -90,18 +96,80 @@ namespace qASIC.FileManagement
             FileManager.SaveFileWriter(path, string.Join("\n", settings));
         }
 
+        [System.Obsolete]
         public static List<string> CreateOptionList(string content)
         {
-            List<string> optionsList = new List<string>();
-            string[] settings = content.Split(new string[] { "\n", "\r" }, System.StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < settings.Length; i++)
+            List<string> stringList = new List<string>();
+            List<KeyValuePair<string, string>> list = CreateList(content);
+
+            for (int i = 0; i < list.Count; i++)
+                stringList.Add($"{list[i].Key}:{list[i].Value}");
+
+            return stringList;
+        }
+
+        public static List<KeyValuePair<string, string>> CreateList(string content)
+        {
+            List<KeyValuePair<string, string>> list = new List<KeyValuePair<string, string>>();
+            string[] lines = content.Split(new string[] { "\n", "\r" }, System.StringSplitOptions.RemoveEmptyEntries);
+
+            for (int i = 0; i < lines.Length; i++)
             {
-                if (settings[i].StartsWith("#")) continue;
-                string[] values = settings[i].Split(new string[] { ": " }, System.StringSplitOptions.RemoveEmptyEntries);
+                if (lines[i].StartsWith("#")) continue;
+                string[] values = lines[i].Split(new string[] { ": " }, System.StringSplitOptions.RemoveEmptyEntries);
                 if (values.Length != 2) continue;
-                optionsList.Add($"{values[0]}:{values[1]}");
+                list.Add(new KeyValuePair<string, string>(values[0], values[1]));
             }
-            return optionsList;
+
+            return list;
+        }
+
+        public static bool TryCreateListFromFile(string path, out List<KeyValuePair<string, string>> list)
+        {
+            list = null;
+
+            if (!FileManager.TryLoadFileWriter(path, out string content))
+                return false;
+
+            list = CreateList(content);
+            return true;
+        }
+
+        public static List<KeyValuePair<string, string>> CreateListFromFile(string path)
+        {
+            if (!FileManager.TryLoadFileWriter(path, out string content))
+                throw new System.Exception("Couldn't generate config list from file: file does not exist!");
+
+            return CreateList(content);
+        }
+
+        public static Dictionary<string, string> CreateDictionary(string content)
+        {
+            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+            List<KeyValuePair<string, string>> list = CreateList(content);
+
+            for (int i = 0; i < list.Count; i++)
+                if (!dictionary.ContainsKey(list[i].Key))
+                    dictionary.Add(list[i].Key, list[i].Value);
+
+            return dictionary;
+        }
+
+        public static bool TryCreateDictionaryFromFile(string path, out Dictionary<string, string> dictionary)
+        {
+            dictionary = null;
+
+            if (!FileManager.TryLoadFileWriter(path, out string content)) return false;
+            dictionary = CreateDictionary(content);
+            return true;
+        }
+
+        public static Dictionary<string, string> CreateDictionaryFromFile(string path)
+        {
+            if (!TryCreateDictionaryFromFile(path, out Dictionary<string, string> dictionary))
+                throw new System.Exception("Couldn't generate config dictionary from file: file does not exist!");
+
+            return dictionary;
         }
     }
 }

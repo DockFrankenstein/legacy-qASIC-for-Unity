@@ -1,0 +1,52 @@
+﻿using UnityEngine;
+using UnityEngine.Audio;
+using qASIC.FileManagement;
+
+namespace qASIC.ProjectSettings
+{
+    [System.Serializable]
+    [ExcludeFromPreset]
+    //[CreateAssetMenu(fileName = "NewAudioProjectSettings", menuName = "qASIC/Project Setting Files/Audio")]
+    public class AudioProjectSettings : ProjectSettingsBase
+    {
+        private static AudioProjectSettings _instance;
+        public static AudioProjectSettings Instance { get => CheckInstance("Audio", _instance); }
+
+        public string managerName = "Audio Manager";
+        public AudioMixer mixer;
+
+        [Space]
+        public bool createOnStart = true;
+        public bool createOnUse = true;
+
+        //Logging creation
+        [InspectorLabel("Log")] public bool logCreation = true;
+        [InspectorLabel("Message")] [TextArea(3, 5)] public string creationLogMessage = "Audio Manager successfully created!";
+        [InspectorLabel("Message Color")] public string creationLogColor = "audio";
+        [Space]
+        [InspectorLabel("Log Error")] public bool logCreationError = true;
+        [InspectorLabel("Error message")] [TextArea(3, 5)] public string creationErrorMessage = "Couldn't create Audio Manager: ";
+        [InspectorLabel("Error color")] public string creationErrorColor = "error";
+
+        //Saving
+        public GenericFilePath userSavePath = new GenericFilePath(GenericFolder.PersistentDataPath, "audio.txt");
+        [Space]
+        public bool separateEditorPath = true;
+        public GenericFilePath editorSavePath = new GenericFilePath(GenericFolder.PersistentDataPath, "audio-editor.txt");
+
+        //Other
+        [Tooltip("Determines if parameters should have rounded values")] public bool roundValues = true;
+
+        public string SavePath 
+        { 
+            get
+            {
+#if UNITY_EDITOR
+                return separateEditorPath ? editorSavePath.GetFullPath() : userSavePath.GetFullPath();
+#else
+                return userSavePath.GetFullPath();
+#endif
+            }
+        }
+    }
+}

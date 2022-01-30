@@ -8,8 +8,6 @@ using UnityEngine;
 
 namespace qASIC.Options
 {
-    public enum SerializationType { playerPrefs, config }
-
     public static class OptionsController
     {
         private static string config = string.Empty;
@@ -28,6 +26,9 @@ namespace qASIC.Options
 
         static GameObject tempGameObject;
 
+        //This is too much for just one update, default values will have to be set in attributes
+        //TODO: replace create option list and add serialization type
+#pragma warning disable
         public static void Load(string path)
         {
             OptionsController.path = path;
@@ -41,6 +42,7 @@ namespace qASIC.Options
             }
             Console.GameConsoleController.Log("Loaded user settings", "settings");
         }
+#pragma warning restore
 
         public static bool TryGetUserSetting(string key, out string value) => ConfigController.TryGettingSetting(config, key, out value);
         public static void Save() => FileManager.SaveFileWriter(path, config);

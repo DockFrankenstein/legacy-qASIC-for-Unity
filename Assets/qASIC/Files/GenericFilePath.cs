@@ -3,16 +3,15 @@
 namespace qASIC.FileManagement
 {
     [Serializable]
-    public class GenericFilePath
+    public struct GenericFilePath
     {
-        public GenericFolder genericFolder = GenericFolder.ApplicationData;
+        public GenericFolder genericFolder;
         public string filePath;
-
-        public GenericFilePath() { }
 
         public GenericFilePath(string filePath)
         {
             this.filePath = filePath;
+            genericFolder = GenericFolder.PersistentDataPath;
         }
 
         public GenericFilePath(GenericFolder genericFolder, string filePath)

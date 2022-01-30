@@ -3,7 +3,7 @@ using UnityEngine;
 using qASIC.EditorTools.Internal;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
-using qASIC.Options;
+using qASIC.FileManagement;
 
 using Settings = qASIC.ProjectSettings.InputProjectSettings;
 
@@ -24,8 +24,6 @@ namespace qASIC.ProjectSettings.Internal
 
         public override void OnGUI(string searchContext)
         {
-            qGUIInternalUtility.DrawqASICBanner();
-
 #if !ENABLE_LEGACY_INPUT_MANAGER
             EditorGUILayout.HelpBox("qASIC input doesn't support the New Input System. Please go to Project Settings/Player and change Active Input Handling to Input Manager or Both.", MessageType.Warning);
             if (GUILayout.Button("Open Project Settings"))

@@ -174,18 +174,13 @@ namespace qASIC.Tools
             FinishObject(obj);
         }
 
-        [MenuItem("GameObject/qASIC/Audio manager", false, 3)]
-        static void CreateAudioManager()
-        {
-            GameObject obj = new GameObject("Audio Manager", typeof(AudioManagment.AudioManager));
-            FinishObject(obj);
-        }
-
-        [MenuItem("GameObject/qASIC/Controlled Audio Source", false, 3)]
+        [MenuItem("GameObject/Audio/Controlled Audio Source", false, 3)]
         static void CreateAudioSource(MenuCommand command)
         {
             GameObject obj = new GameObject("Audio Source", typeof(AudioSource), typeof(AudioManagment.AudioSourceController));
-            if(command?.context != null & !(command.context is GameObject)) obj.transform.SetParent((command.context as GameObject).transform);
+            if (command?.context is GameObject)
+                obj.transform.SetParent((command.context as GameObject).transform);
+
             FinishObject(obj);
         }
 #endif

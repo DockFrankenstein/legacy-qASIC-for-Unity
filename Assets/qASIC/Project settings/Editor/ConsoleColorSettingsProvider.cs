@@ -35,7 +35,7 @@ namespace qASIC.ProjectSettings.Internal
             EditorGUI.EndDisabledGroup();
 
             if (!isConfigReadOnly && settings.config?.colorTheme)
-                qGUIUtility.DrawObjectsInspector(settings.config.colorTheme);
+                qGUIEditorUtility.DrawObjectsInspector(settings.config.colorTheme);
         }
 
         void ColorThemeField()

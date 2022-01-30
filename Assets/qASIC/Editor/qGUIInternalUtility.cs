@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-using static qASIC.EditorTools.qGUIUtility;
+using static qASIC.qGUIUtility;
 
 namespace qASIC.EditorTools.Internal
 {

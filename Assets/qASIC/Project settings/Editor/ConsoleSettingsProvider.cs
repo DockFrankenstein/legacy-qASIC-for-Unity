@@ -23,13 +23,11 @@ namespace qASIC.ProjectSettings.Internal
 
         public override void OnGUI(string searchContext)
         {
-            qGUIInternalUtility.DrawqASICBanner();
-
             DrawProperty(nameof(Settings.config));
             EditorGUILayout.Space();
 
             if (settings.config)
-                qGUIUtility.DrawObjectsInspector(settings.config);
+                qGUIEditorUtility.DrawObjectsInspector(settings.config);
 
             serializedSettings.ApplyModifiedProperties();
         }

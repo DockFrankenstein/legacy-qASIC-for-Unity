@@ -10,40 +10,18 @@ namespace qASIC
     public class MessageAttribute : PropertyAttribute
     {
         public string Message { get; private set; }
-        public Texture Icon { get; set; }
+        public InspectorMessageIconType IconType { get; private set; }
 
         public MessageAttribute(string message)
         {
             Message = message;
+            IconType = InspectorMessageIconType.none;
         }
 
-        public MessageAttribute(string message, InspectorMessageIconType icon)
+        public MessageAttribute(string message, InspectorMessageIconType iconType)
         {
             Message = message;
-#if UNITY_EDITOR
-            Icon = ConvertIconTypeToTexture(icon);
-#endif
-        }
-
-        public static Texture ConvertIconTypeToTexture(InspectorMessageIconType icon)
-        {
-            switch (icon)
-            {
-                case InspectorMessageIconType.notification:
-                    return EditorGUIUtility.IconContent("console.infoicon").image;
-                case InspectorMessageIconType.warning:
-                    return EditorGUIUtility.IconContent("console.warnicon").image;
-                case InspectorMessageIconType.error:
-                    return EditorGUIUtility.IconContent("console.erroricon").image;
-                default:
-                    return null;
-            }
-        }
-
-        public MessageAttribute(string message, Texture icon)
-        {
-            Message = message;
-            Icon = icon;
+            IconType = iconType;
         }
     }
 

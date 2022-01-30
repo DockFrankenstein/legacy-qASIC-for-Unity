@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
-using qASIC.Options;
 using qASIC.FileManagement;
 using qASIC.InputManagement.Map;
 using qASIC.ProjectSettings;

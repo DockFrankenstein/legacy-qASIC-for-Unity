@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace qASIC.EditorTools
+namespace qASIC
 {
-    static class RectExtensions
+    public static class RectExtensions
     {
         //Resizing to side
         //Changes rect's size while snapping to the specified side

@@ -319,7 +319,7 @@ namespace qASIC.InputManagement.Map.Internal
                 stretchHeight = true,
             };
 
-            style.normal.background = qGUIUtility.BorderTexture;
+            style.normal.background = qGUIEditorUtility.BorderTexture;
             GUILayout.Box(GUIContent.none, style);
         }
         #endregion

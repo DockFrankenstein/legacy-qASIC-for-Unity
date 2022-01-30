@@ -26,7 +26,7 @@ namespace qASIC.Console.Tools
         {
             SerializedProperty consoleConfigProperty = serializedObject.FindProperty("ConsoleConfig");
 
-            qGUIUtility.DrawPropertiesFromStart(serializedObject, "ignoreReselectPlatforms");
+            qGUIEditorUtility.DrawPropertiesFromStart(serializedObject, "ignoreReselectPlatforms");
             EditorGUILayout.Space();
 
             EditorGUILayout.LabelField("Manual assign", EditorStyles.boldLabel);
