@@ -21,7 +21,7 @@ namespace qASIC.Options.Menu
         public override void LoadOption()
         {
             if (dropdown == null) return;
-            if (!OptionsController.TryGetUserSetting(optionName, out string optionValue) ||
+            if (!OptionsController.TryGetOptionValue(optionName, out string optionValue) ||
                 !int.TryParse(optionValue, out int result)) return;
 
             if (result >= dropdown.options.Count) return;

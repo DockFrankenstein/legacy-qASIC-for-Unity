@@ -5,31 +5,29 @@ namespace qASIC.Options
 {
     public class OptionsLoad : MonoBehaviour
     {
-        public bool loadOnce = true;
-        public string userSavePath = "qASIC/Settings.txt";
-        public string editorUserSavePath = "qASIC/Setting-editor.txt";
-        public TextAsset saveFilePreset;
+        [SerializeField] SerializationType serializationType = SerializationType.playerPrefs;
+        [SerializeField] AdvancedGenericFilePath filePath = new AdvancedGenericFilePath(GenericFolder.PersistentDataPath, "settings.txt", "settings-editor.txt");
 
         private static bool init = false;
 
         private void Start()
         {
-            if(!init) OptionsController.LoadSettings();
-            LoadPreferences();
+            if (init) return;
+
+            switch (serializationType)
+            {
+                case SerializationType.playerPrefs:
+                    OptionsController.LoadPrefs();
+                    break;
+                case SerializationType.config:
+                    OptionsController.LoadConfig(filePath.ToString());
+                    break;
+                default:
+                    qDebug.LogError($"Serialization type '{serializationType}' is not supported by the options system!");
+                    break;
+            }
+
             init = true;
         }
-
-#pragma warning disable
-        public void LoadPreferences()
-        {
-            if (init && loadOnce) return;
-            string path = userSavePath;
-#if UNITY_EDITOR
-            path = editorUserSavePath;
-#endif
-            if(saveFilePreset != null) ConfigController.Repair($"{Application.persistentDataPath}/{path}", saveFilePreset.text);
-            OptionsController.Load($"{Application.persistentDataPath}/{path}");
-        }
-#pragma warning restore
     }
 }

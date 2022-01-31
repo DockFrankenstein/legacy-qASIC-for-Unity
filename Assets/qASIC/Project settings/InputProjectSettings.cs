@@ -1,6 +1,5 @@
 ﻿using qASIC.InputManagement.Map;
 using qASIC.FileManagement;
-using qASIC.Options;
 
 namespace qASIC.ProjectSettings
 {
@@ -8,11 +7,11 @@ namespace qASIC.ProjectSettings
     public class InputProjectSettings : ProjectSettingsBase
     {
         public static InputProjectSettings _instance;
-        public static InputProjectSettings Instance { get => CheckInstance("Input", _instance); }
+        public static InputProjectSettings Instance => CheckInstance("Input", _instance);
 
         public InputMap map;
         public SerializationType serializationType = SerializationType.playerPrefs;
-        public GenericFilePath filePath = new GenericFilePath(GenericFolder.PersistentDataPath, "input.txt");
+        public AdvancedGenericFilePath filePath = new AdvancedGenericFilePath(GenericFolder.PersistentDataPath, "input.txt", "input-editor.txt");
 
         public bool startArgsDisableLoad = true;
         public bool startArgsDisableSave = true;

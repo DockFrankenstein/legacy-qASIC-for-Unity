@@ -9,7 +9,7 @@ namespace qASIC.ProjectSettings
     public class ConsoleProjectSettings : ProjectSettingsBase
     {
         private static ConsoleProjectSettings _instance;
-        public static ConsoleProjectSettings Instance { get => CheckInstance("Console", _instance); }
+        public static ConsoleProjectSettings Instance => CheckInstance("Console", _instance);
 
         public GameConsoleConfig config;
     }

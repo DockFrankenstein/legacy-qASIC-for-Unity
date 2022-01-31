@@ -2,16 +2,28 @@
 
 namespace qASIC.Options
 {
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class OptionsSetting : Attribute
     {
-        public string name;
-        public Type type;
+        public string Name { get; }
+        public object DefaultValue { get; } = string.Empty;
+        public string defaultValueMethodName;
 
+        [Obsolete]
         public OptionsSetting(string name, Type type)
         {
-            this.name = name;
-            this.type = type;
+            Name = name;
+        }
+
+        public OptionsSetting(string name, object defaultValue)
+        {
+            Name = name;
+            DefaultValue = defaultValue;
+        }
+
+        public OptionsSetting(string name)
+        {
+            Name = name;
         }
     }
 }

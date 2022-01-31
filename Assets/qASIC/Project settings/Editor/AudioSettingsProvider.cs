@@ -36,10 +36,7 @@ namespace qASIC.ProjectSettings.Internal
             qGUIInternalUtility.EndGroup();
 
             qGUIInternalUtility.BeginGroup("Saving");
-            DrawProperty(nameof(Settings.userSavePath));
-
-            DrawProperty(nameof(Settings.separateEditorPath));
-            DrawProperty(nameof(Settings.editorSavePath), !settings.separateEditorPath);
+            DrawProperty(nameof(Settings.savePath));
             qGUIInternalUtility.EndGroup();
 
             qGUIInternalUtility.BeginGroup("Other");

@@ -11,13 +11,19 @@ namespace qASIC.FileManagement.Internal
     [CustomPropertyDrawer(typeof(GenericFilePath))]
     public class GenericFilePathDrawer : PropertyDrawer
     {
-        float Spacing { get => 8f; }
+        static float Spacing { get => 8f; }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) =>
+            GetHeight();
+
+        public static float GetHeight() =>
             singleLineHeight * 3f + standardVerticalSpacing * 2f + Spacing;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            int indent = indentLevel;
+            indentLevel = 0;
+
             SerializedProperty filePath = property.FindPropertyRelative("filePath");
             SerializedProperty genericFolder = property.FindPropertyRelative("genericFolder");
 
@@ -45,13 +51,15 @@ namespace qASIC.FileManagement.Internal
 
             Rect previewPosition = position;
 
-            Label(labelPosition, label, labelStyle);
             Box(boxPosition, GUIContent.none, Styles.Background);
+            Label(labelPosition, label, labelStyle);
 
             genericFolder.intValue = (int)(GenericFolder)EnumPopup(folderPosition, GUIContent.none, (GenericFolder)genericFolder.intValue);
             filePath.stringValue = TextField(filePathPosition, GUIContent.none, filePath.stringValue);
 
             Label(previewPosition, $"Example: {GenericFilePath.GenerateFullPath((GenericFolder)genericFolder.intValue, filePath.stringValue)}");
+
+            indentLevel = indent;
         }
 
         class Styles

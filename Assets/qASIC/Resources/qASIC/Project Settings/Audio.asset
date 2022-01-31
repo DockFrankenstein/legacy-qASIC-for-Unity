@@ -22,11 +22,12 @@ MonoBehaviour:
   logCreationError: 1
   creationErrorMessage: 'Couldn''t create Audio Manager: '
   creationErrorColor: error
-  userSavePath:
-    genericFolder: 62
-    filePath: audio.txt
-  separateEditorPath: 1
-  editorSavePath:
-    genericFolder: 62
-    filePath: audio-editor.txt
+  savePath:
+    buildPath:
+      genericFolder: 62
+      filePath: audio.txt
+    separateEditorPath: 1
+    editorPath:
+      genericFolder: 62
+      filePath: audio-editor.txt
   roundValues: 1

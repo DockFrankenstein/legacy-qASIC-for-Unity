@@ -4533,10 +4533,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aed4f971ec8a92443a265e4f3d0ae9c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadOnce: 1
-  userSavePath: qASIC\Pedestal Demo\Settings.txt
-  editorUserSavePath: qASIC\Pedestal Demo\Setting-editor.txt
-  saveFilePreset: {fileID: 4900000, guid: fd3d12d5bfd9947449045bf0a9273de6, type: 3}
+  serializationType: 1
+  filePath:
+    buildPath:
+      genericFolder: 62
+      filePath: qASIC demo/pedestal/settings.txt
+    separateEditorPath: 1
+    editorPath:
+      genericFolder: 62
+      filePath: qASIC demo/pedestal/settings-editor.txt
 --- !u!114 &520468625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4550,10 +4555,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 11400000, guid: ffcabac4cc9d9db4cabe73d1163f2a79, type: 2}
-  serializationType: 0
+  serializationType: 1
   filePath:
-    genericFolder: 62
-    filePath: input.txt
+    buildPath:
+      genericFolder: 62
+      filePath: qASIC demo/pedestal/input.txt
+    separateEditorPath: 1
+    editorPath:
+      genericFolder: 62
+      filePath: qASIC demo/pedestal/input-editor.txt
 --- !u!4 &520468626
 Transform:
   m_ObjectHideFlags: 0
@@ -17194,11 +17204,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logLimit: 64
-  ConsoleConfig: {fileID: 11400000, guid: 67849b547219c6544b513c8321bd7756, type: 2}
   logText: {fileID: 1903444012}
   inputField: {fileID: 1642712388}
   scrollRect: {fileID: 548043582}
   ignoreReselectPlatforms: 080000000b000000
+  ConsoleConfig: {fileID: 11400000, guid: 67849b547219c6544b513c8321bd7756, type: 2}
 --- !u!114 &2045916093
 MonoBehaviour:
   m_ObjectHideFlags: 0

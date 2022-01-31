@@ -45,7 +45,7 @@ namespace qASIC.Options.Menu
         public override void LoadOption()
         {
             if (dropdown == null) return;
-            if (!OptionsController.TryGetUserSetting(optionName, out string optionValue) ||
+            if (!OptionsController.TryGetOptionValue(optionName, out string optionValue) ||
                 !VectorText.TryToVector2Int(optionValue, out Vector2Int result)) return;
             dropdown.SetValueWithoutNotify(properties.IndexOf(result));
         }

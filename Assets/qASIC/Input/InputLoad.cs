@@ -9,11 +9,11 @@ namespace qASIC.InputManagement
         [SerializeField] InputMap map;
 
         [SerializeField] SerializationType serializationType = SerializationType.playerPrefs;
-        [SerializeField] GenericFilePath filePath = new GenericFilePath(GenericFolder.PersistentDataPath, "input.txt");
+        [SerializeField] AdvancedGenericFilePath filePath = new AdvancedGenericFilePath(GenericFolder.PersistentDataPath, "input.txt", "input-editor.txt");
 
-        bool init = false;
+        private static bool init = false;
 
-        private void Awake()
+        private void Start()
         {
             if (init) return;
 

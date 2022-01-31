@@ -43,7 +43,7 @@ namespace qASIC.Options.Menu
         public override void LoadOption()
         {
             if (slider == null) return;
-            if (!OptionsController.TryGetUserSetting(optionName, out string optionValue) || 
+            if (!OptionsController.TryGetOptionValue(optionName, out string optionValue) || 
                 !float.TryParse(optionValue, out float value)) return;
             slider.SetValueWithoutNotify(value);
         }

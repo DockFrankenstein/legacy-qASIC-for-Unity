@@ -10,7 +10,7 @@ namespace qASIC.ProjectSettings
     public class AudioProjectSettings : ProjectSettingsBase
     {
         private static AudioProjectSettings _instance;
-        public static AudioProjectSettings Instance { get => CheckInstance("Audio", _instance); }
+        public static AudioProjectSettings Instance => CheckInstance("Audio", _instance);
 
         public string managerName = "Audio Manager";
         public AudioMixer mixer;
@@ -29,24 +29,9 @@ namespace qASIC.ProjectSettings
         [InspectorLabel("Error color")] public string creationErrorColor = "error";
 
         //Saving
-        public GenericFilePath userSavePath = new GenericFilePath(GenericFolder.PersistentDataPath, "audio.txt");
-        [Space]
-        public bool separateEditorPath = true;
-        public GenericFilePath editorSavePath = new GenericFilePath(GenericFolder.PersistentDataPath, "audio-editor.txt");
+        public AdvancedGenericFilePath savePath = new AdvancedGenericFilePath(GenericFolder.PersistentDataPath, "audio.txt", "audio-editor.txt");
 
         //Other
         [Tooltip("Determines if parameters should have rounded values")] public bool roundValues = true;
-
-        public string SavePath 
-        { 
-            get
-            {
-#if UNITY_EDITOR
-                return separateEditorPath ? editorSavePath.GetFullPath() : userSavePath.GetFullPath();
-#else
-                return userSavePath.GetFullPath();
-#endif
-            }
-        }
     }
 }

@@ -93,7 +93,7 @@ namespace qASIC.AudioManagment
         public static void LoadSettingsConfig()
         {
             AudioProjectSettings settings = AudioProjectSettings.Instance;
-            if (!ConfigController.TryCreateListFromFile(settings.SavePath, out List<KeyValuePair<string, string>> list)) return;
+            if (!ConfigController.TryCreateListFromFile(settings.savePath.ToString(), out List<KeyValuePair<string, string>> list)) return;
 
             for (int i = 0; i < list.Count; i++)
             {
@@ -129,7 +129,7 @@ namespace qASIC.AudioManagment
 
             if (preview) return;
             qDebug.Log($"Changed parameter '{name}' to '{value}'", "settings");
-            ConfigController.SetSettingFromFile(settings.SavePath, name, value.ToString());
+            ConfigController.SetSettingFromFile(settings.savePath.ToString(), name, value.ToString());
         }
         #endregion
 

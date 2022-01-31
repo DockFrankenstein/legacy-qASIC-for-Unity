@@ -35,7 +35,7 @@ namespace qASIC.Options.Menu
 
         public override void LoadOption()
         {
-            if (!OptionsController.TryGetUserSetting(optionName, out string optionValue) || dropdown == null ||
+            if (!OptionsController.TryGetOptionValue(optionName, out string optionValue) || dropdown == null ||
                 !int.TryParse(optionValue, out int result)) return;
 
             int index = properties.IndexOf(result);

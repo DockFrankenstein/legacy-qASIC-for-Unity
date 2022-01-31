@@ -4,6 +4,7 @@ using qASIC.EditorTools.Internal;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 using qASIC.FileManagement;
+using qASIC.EditorTools;
 
 using Settings = qASIC.ProjectSettings.InputProjectSettings;
 
@@ -44,16 +45,16 @@ namespace qASIC.ProjectSettings.Internal
 
             //Saving
             qGUIInternalUtility.BeginGroup("Saving");
-            SerializedProperty serializationTypeProperty = serializedSettings.FindProperty(nameof(Settings.serializationType));
-            EditorGUILayout.PropertyField(serializationTypeProperty);
-            if ((SerializationType)serializationTypeProperty.intValue != SerializationType.playerPrefs)
+            DrawProperty(nameof(Settings.serializationType));
+            if (settings.serializationType != SerializationType.playerPrefs)
                 DrawProperty(nameof(Settings.filePath));
             qGUIInternalUtility.EndGroup();
 
             //Starting arguments
             qGUIInternalUtility.BeginGroup("Starting arguments");
-            settings.startArgsDisableLoad = GUILayout.Toggle(settings.startArgsDisableLoad, new GUIContent("Allow Disabling Loading"));
-            settings.startArgsDisableSave = GUILayout.Toggle(settings.startArgsDisableSave, new GUIContent("Allow Disabling Saving"));
+            qGUIEditorUtility.DrawPropertiesInRange(serializedSettings,
+                nameof(Settings.startArgsDisableLoad),
+                nameof(Settings.startArgsDisableSave));
             qGUIInternalUtility.EndGroup();
 
             //End no map assigned disabled group
@@ -73,7 +74,7 @@ namespace qASIC.ProjectSettings.Internal
         {
             SettingsProvider provider = new InputSettingsProvider("Project/qASIC/Input", SettingsScope.Project)
             {
-                label = "Input Management",
+                label = "Input",
                 keywords = new HashSet<string>(new[] { "qASIC", "Input", "Input Management", "Input System" })
             };
 

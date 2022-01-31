@@ -27,7 +27,7 @@
 
         public override void LoadOption()
         {
-            if (!OptionsController.TryGetUserSetting(optionName, out string optionValue) ||
+            if (!OptionsController.TryGetOptionValue(optionName, out string optionValue) ||
                 !bool.TryParse(optionValue, out bool value) || toggle == null) return;
             toggle.SetIsOnWithoutNotify(value);
         }

@@ -4,34 +4,49 @@ namespace qASIC.Options
 {
     public class BasicOptions
     {
-        [OptionsSetting("resolution", typeof(string))]
+        [OptionsSetting("resolution", defaultValueMethodName = nameof(GetDefaultResolution))]
         public static void ChangeResolution(string resolution)
         {
             Vector2Int res = VectorText.ToVector2Int(resolution);
             Screen.SetResolution(res.x, res.y, Screen.fullScreen);
         }
 
-        [OptionsSetting("fullscreen", typeof(FullScreenMode))]
+        public static string GetDefaultResolution() =>
+            VectorText.ToText(new Vector2(Screen.width, Screen.height));
+
+
+        [OptionsSetting("fullscreen", defaultValueMethodName = nameof(GetDefaultFullScreenMode))]
         public static void ChangeFullScreenMode(FullScreenMode state) =>
             Screen.fullScreenMode = state;
 
-        [OptionsSetting("fullscreen", typeof(bool))]
+        [OptionsSetting("fullscreen", defaultValueMethodName = nameof(GetDefaultFullScreenMode))]
         public static void ChangeFullScreenMode(bool state) =>
             Screen.fullScreen = state;
 
-        [OptionsSetting("framelimit", typeof(int))]
+        public static FullScreenMode GetDefaultFullScreenMode() =>
+            Screen.fullScreenMode;
+
+
+        [OptionsSetting("framelimit", defaultValueMethodName = nameof(GetDefaultFrameLimit))]
         public static void ChangeFramerateLimit(int value) =>
             Application.targetFrameRate = value;
 
-        [OptionsSetting("vsync", typeof(bool))]
+        public static int GetDefaultFrameLimit() =>
+            Application.targetFrameRate;
+
+
+        [OptionsSetting("vsync", defaultValueMethodName = nameof(GetDefaultVSync))]
         public static void ChangeVSync(bool value)
         {
             int intValue = value ? 1 : 0;
             QualitySettings.vSyncCount = intValue;
         }
 
-        [OptionsSetting("vsync", typeof(int))]
+        [OptionsSetting("vsync", defaultValueMethodName = nameof(GetDefaultVSync))]
         public static void ChangeVSync(int value) =>
             QualitySettings.vSyncCount = value;
+
+        public static int GetDefaultVSync() =>
+            QualitySettings.vSyncCount;
     }
 }
