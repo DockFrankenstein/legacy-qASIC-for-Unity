@@ -17,9 +17,11 @@ namespace qASIC.Options
             switch (serializationType)
             {
                 case SerializationType.playerPrefs:
+                    OptionsController.OverrideEnabled(true);
                     OptionsController.LoadPrefs();
                     break;
                 case SerializationType.config:
+                    OptionsController.OverrideEnabled(true);
                     OptionsController.LoadConfig(filePath.ToString());
                     break;
                 default:

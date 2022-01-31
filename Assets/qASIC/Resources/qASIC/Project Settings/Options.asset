@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85a87615d30808a4d9e015bd5b85bd6c, type: 3}
   m_Name: Options
   m_EditorClassIdentifier: 
+  enableOptionsSystem: 1
   serializationType: 0
   savePath:
     buildPath:

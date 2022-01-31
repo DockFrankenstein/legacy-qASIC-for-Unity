@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Audio;
 using qASIC.FileManagement;
 
 namespace qASIC.ProjectSettings
@@ -11,6 +10,8 @@ namespace qASIC.ProjectSettings
     {
         private static OptionsProjectSettings _instance;
         public static OptionsProjectSettings Instance => CheckInstance("Options", _instance);
+
+        public bool enableOptionsSystem = true;
 
         public SerializationType serializationType = SerializationType.playerPrefs;
         public AdvancedGenericFilePath savePath = new AdvancedGenericFilePath(GenericFolder.PersistentDataPath, "settings.txt", "settings-editor.txt");

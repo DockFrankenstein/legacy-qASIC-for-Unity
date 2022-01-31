@@ -15,7 +15,7 @@ namespace qASIC.Options
     {
         public static Dictionary<string, string> UserPreferences { get; private set; } = new Dictionary<string, string>();
 
-        private static List<MethodInfo> _settings;
+        private static List<MethodInfo> _settings = new List<MethodInfo>();
         public static List<MethodInfo> Settings => _settings;
 
         static GameObject tempGameObject;
@@ -23,94 +23,45 @@ namespace qASIC.Options
         public static string Path { get; private set; }
         public static SerializationType SaveType { get; private set; }
 
+        #region Enable
+        private static bool? _enabledOverride = null;
+        public static bool Enabled => _enabledOverride ?? OptionsProjectSettings.Instance.enableOptionsSystem;
+
+        public static void OverrideEnabled(bool enabled)
+        {
+            if (enabled == _enabledOverride) return;
+            _enabledOverride = enabled;
+            switch (enabled)
+            {
+                case true:
+                    CreateSettingsList();
+                    break;
+                case false:
+                    UserPreferences.Clear();
+                    _settings.Clear();
+                    DisposeTemp();
+                    break;
+            }
+        }
+        #endregion
+
+        #region Initializing
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
         static void Initialize()
         {
-            LoadSettings();
+            if (!Enabled) return;
+            CreateSettingsList();
             LoadUserPreferences();
         }
 
-        static void LoadUserPreferences()
-        {
-            OptionsProjectSettings settings = OptionsProjectSettings.Instance;
-
-            switch (settings.serializationType)
-            {
-                case SerializationType.playerPrefs:
-                    LoadPrefs();
-                    break;
-                case SerializationType.config:
-                    LoadConfig(settings.savePath.ToString());
-                    break;
-                default:
-                    qDebug.LogError($"Serialization type '{settings.serializationType}' is not supported by the options system!");
-                    break;
-            }
-        }
-
-        public static void LoadPrefs()
-        {
-            SaveType = SerializationType.playerPrefs;
-            Path = string.Empty;
-
-            foreach (KeyValuePair<string, string> preference in UserPreferences)
-                if (PlayerPrefs.HasKey(preference.Key))
-                    ChangeOption(preference.Key, PlayerPrefs.GetString(preference.Key), false, false);
-
-            qDebug.Log("Loaded user settings", "settings");
-        }
-
-        public static void LoadConfig(string path)
-        {
-            SaveType = SerializationType.config;
-            Path = path;
-
-            if (!ConfigController.TryCreateListFromFile(Path, out List<KeyValuePair<string, string>> settings)) return;
-
-            for (int i = 0; i < settings.Count; i++)
-                ChangeOption(settings[i].Key, settings[i].Value, false, false);
-
-            qDebug.Log("Loaded user settings", "settings");
-        }
-
-        public static void Save()
-        {
-            try
-            {
-                foreach (KeyValuePair<string, string> setting in UserPreferences)
-                    SaveSetting(setting.Key, setting.Value);
-            }
-            catch (Exception e)
-            {
-                qDebug.LogError($"There was an error while saving user settings: {e}");
-                return;
-            }
-            qDebug.Log("User settings successfully saved!", "settings");
-        }
-
-        static void SaveSetting(string optionName, string value)
-        {
-            switch (SaveType)
-            {
-                case SerializationType.playerPrefs:
-                    PlayerPrefs.SetString(optionName, value);
-                    break;
-                case SerializationType.config:
-                    ConfigController.SetSettingFromFile(Path, optionName, value);
-                    break;
-                default:
-                    qDebug.LogError($"Serialization type '{SaveType}' is not supported by the options system!");
-                    break;
-            }
-        }
-
-        private static void LoadSettings()
+        private static void CreateSettingsList()
         {
             IEnumerable<MethodInfo> methodInfos = TypeFinder.FindAllAttributes<OptionsSetting>();
             _settings = methodInfos.ToList();
 
             UserPreferences.Clear();
-            foreach(MethodInfo setting in _settings)
+            foreach (MethodInfo setting in _settings)
             {
                 try
                 {
@@ -133,9 +84,95 @@ namespace qASIC.Options
                 catch { }
             }
         }
+        #endregion
 
-        public static void ChangeOption(string optionName, object parameter, bool log = true, bool save = true)
+        #region Loading
+        static void LoadUserPreferences()
         {
+            OptionsProjectSettings settings = OptionsProjectSettings.Instance;
+
+            switch (settings.serializationType)
+            {
+                case SerializationType.playerPrefs:
+                    LoadPrefs();
+                    break;
+                case SerializationType.config:
+                    LoadConfig(settings.savePath.ToString());
+                    break;
+                default:
+                    qDebug.LogError($"Serialization type '{settings.serializationType}' is not supported by the options system!");
+                    break;
+            }
+        }
+
+        public static void LoadPrefs()
+        {
+            if (!Enabled) return;
+            SaveType = SerializationType.playerPrefs;
+            Path = string.Empty;
+
+            Dictionary<string, string> prefs = new Dictionary<string, string>(UserPreferences);
+            foreach (KeyValuePair<string, string> preference in prefs)
+                if (PlayerPrefs.HasKey(preference.Key))
+                    ChangeOption(preference.Key, PlayerPrefs.GetString(preference.Key), false, false);
+
+            qDebug.Log("Loaded user settings", "settings");
+        }
+
+        public static void LoadConfig(string path)
+        {
+            if (!Enabled) return;
+            SaveType = SerializationType.config;
+            Path = path;
+
+            if (!ConfigController.TryCreateListFromFile(Path, out List<KeyValuePair<string, string>> settings)) return;
+
+            for (int i = 0; i < settings.Count; i++)
+                ChangeOption(settings[i].Key, settings[i].Value, false, false);
+
+            qDebug.Log("Loaded user settings", "settings");
+        }
+        #endregion
+
+        #region Saving
+        public static void Save()
+        {
+            if (!Enabled) return;
+            try
+            {
+                foreach (KeyValuePair<string, string> setting in UserPreferences)
+                    SaveSetting(setting.Key, setting.Value);
+            }
+            catch (Exception e)
+            {
+                qDebug.LogError($"There was an error while saving user settings: {e}");
+                return;
+            }
+            qDebug.Log("User settings successfully saved!", "settings");
+        }
+
+        static void SaveSetting(string optionName, string value)
+        {
+            if (!Enabled) return;
+            switch (SaveType)
+            {
+                case SerializationType.playerPrefs:
+                    PlayerPrefs.SetString(optionName, value);
+                    break;
+                case SerializationType.config:
+                    ConfigController.SetSettingFromFile(Path, optionName, value);
+                    break;
+                default:
+                    qDebug.LogError($"Serialization type '{SaveType}' is not supported by the options system!");
+                    break;
+            }
+        }
+        #endregion
+
+        #region Get and set
+        public static void ChangeOption(string optionName, object value, bool log = true, bool save = true)
+        {
+            if (!Enabled) return;
             optionName = optionName.ToLower();
 
             int targetsCount = 0;
@@ -149,18 +186,18 @@ namespace qASIC.Options
                     if (!TryGetAttribute(setting, out OptionsSetting attr)) continue;
                     if (!TryGetSettingValueType(setting, out Type valueType)) continue;
 
-                    object param = parameter;
-                    if (parameter is string) param = Convert.ChangeType(parameter, valueType);
+                    object val = value;
+                    if (value is string) val = Convert.ChangeType(value, valueType);
 
-                    if ((optionName != attr.Name.ToLower() || param.GetType() != valueType) &&
-                        (param.GetType() == typeof(int) || !valueType.IsEnum)) continue;
+                    if ((optionName != attr.Name.ToLower() || val.GetType() != valueType) &&
+                        (val.GetType() == typeof(int) || !valueType.IsEnum)) continue;
 
                     var obj = CreateClass(setting.DeclaringType);
-                    setting.Invoke(obj, new object[] { param });
+                    setting.Invoke(obj, new object[] { val });
 
                     targetsCount++;
 
-                    string saveSetting = param.ToString();
+                    string saveSetting = val.ToString();
 
                     if (!UserPreferences.ContainsKey(optionName))
                         UserPreferences.Add(optionName, string.Empty);
@@ -173,13 +210,10 @@ namespace qASIC.Options
             DisposeTemp();
 
             if (log)
-            {
-                qDebug.Log(targetsCount != 0 ? $"Changed '{optionName}' to '{parameter}'" : $"Couldn't find setting '{optionName}'!",
-                    targetsCount != 0 ? "settings" : "error");
-            }
+                LogChangeOption(optionName, value.ToString(), targetsCount);
 
             if (save)
-                SaveSetting(optionName, parameter.ToString());
+                SaveSetting(optionName, value.ToString());
         }
 
         public static bool TryGetOptionValue(string optionName, out string value)
@@ -189,16 +223,18 @@ namespace qASIC.Options
             value = exists ? UserPreferences[optionName] : string.Empty;
             return exists;
         }
+        #endregion
 
-        static object CreateClass(Type type)
+        #region Utility
+        static void LogChangeOption(string optionName, string value, int targetsCount)
         {
-            if (type.IsSubclassOf(typeof(MonoBehaviour)))
+            if (targetsCount == 0)
             {
-                tempGameObject = new GameObject("Options Setting temp script");
-                tempGameObject.SetActive(false);
-                return tempGameObject.AddComponent(type);
+                qDebug.LogError($"Couldn't find setting '{optionName}'!");
+                return;
             }
-            return Activator.CreateInstance(type);
+
+            qDebug.Log($"Changed '{optionName}' to '{value}'", "settings");
         }
 
         static bool TryGetAttribute(MethodInfo method, out OptionsSetting setting)
@@ -220,11 +256,25 @@ namespace qASIC.Options
             type = args[0].ParameterType;
             return true;
         }
+        #endregion
+
+        #region Temp object
+        static object CreateClass(Type type)
+        {
+            if (type.IsSubclassOf(typeof(MonoBehaviour)))
+            {
+                tempGameObject = new GameObject("Options Setting temp script");
+                tempGameObject.SetActive(false);
+                return tempGameObject.AddComponent(type);
+            }
+            return Activator.CreateInstance(type);
+        }
 
         static void DisposeTemp()
         {
             if (tempGameObject)
                 UnityObject.Destroy(tempGameObject);
         }
+        #endregion
     }
 }

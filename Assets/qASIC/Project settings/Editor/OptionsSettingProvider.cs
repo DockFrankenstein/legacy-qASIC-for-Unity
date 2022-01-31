@@ -2,7 +2,6 @@
 using qASIC.EditorTools.Internal;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
-using qASIC.EditorTools;
 
 using Settings = qASIC.ProjectSettings.OptionsProjectSettings;
 
@@ -23,13 +22,19 @@ namespace qASIC.ProjectSettings.Internal
 
         public override void OnGUI(string searchContext)
         {
+            qGUIInternalUtility.BeginGroup("General");
+            DrawProperty(nameof(Settings.enableOptionsSystem));
+            qGUIInternalUtility.EndGroup();
+
+            EditorGUI.BeginDisabledGroup(!settings.enableOptionsSystem);
+
             qGUIInternalUtility.BeginGroup("Saving");
             DrawProperty(nameof(Settings.serializationType));
             if (settings.serializationType != FileManagement.SerializationType.playerPrefs)
                 DrawProperty(nameof(Settings.savePath));
-
             qGUIInternalUtility.EndGroup();
 
+            EditorGUI.EndDisabledGroup();
             serializedSettings.ApplyModifiedProperties();
         }
 
