@@ -178,12 +178,14 @@ namespace qASIC.Console
 
         #region Logic
         /// <returns>Returns arguments</returns>
-        private static List<string> SortCommand(string cmd)
+        public static List<string> SortCommand(string cmd)
         {
             List<string> args = new List<string>();
 
             bool isAdvanced = false;
             string currentString = "";
+
+            cmd = cmd.Trim();
 
             for (int i = 0; i < cmd.Length; i++)
             {
@@ -243,7 +245,15 @@ namespace qASIC.Console
                 return;
             }
 
-            command.Run(args);
+            try
+            { 
+                command.Run(args);
+            }
+            catch (Exception e)
+            {
+                Log($"Command execution failed: {e.Message}!", "error");
+                throw e;
+            }
         }
         #endregion
     }

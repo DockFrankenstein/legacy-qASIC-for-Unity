@@ -13,7 +13,7 @@ namespace qASIC.Console.Commands
 
         public abstract void Run(List<string> args);
 
-        public bool CheckForArgumentCount(List<string>args, int min, int max)
+        public virtual bool CheckForArgumentCount(List<string>args, int min, int max)
         {
             if (args.Count - 1 < min)
             {
@@ -28,10 +28,10 @@ namespace qASIC.Console.Commands
             return true;
         }
 
-        public bool CheckForArgumentCount(List<string> args, int amount) =>
+        public virtual bool CheckForArgumentCount(List<string> args, int amount) =>
             CheckForArgumentCount(args, amount, amount);
 
-        public bool CheckForArgumentCountMin(List<string> args, int min)
+        public virtual bool CheckForArgumentCountMin(List<string> args, int min)
         {
             if (args.Count - 1 < min)
             {
@@ -41,19 +41,22 @@ namespace qASIC.Console.Commands
             return true;
         }
 
-        public void Log(string text, string color) =>
-            GameConsoleController.Log(text, color, GameConsoleLog.LogType.Game);
+        protected virtual void Log(string text) =>
+            GameConsoleController.Log(text, "default");
 
-        public void Log(string text, Color color) =>
-            GameConsoleController.Log(text, color, GameConsoleLog.LogType.Game);
+        protected virtual void Log(string text, string color) =>
+            GameConsoleController.Log(text, color);
 
-        public void LogError(string text) =>
-            GameConsoleController.Log(text, "error", GameConsoleLog.LogType.Game);
+        protected virtual void Log(string text, Color color) =>
+            GameConsoleController.Log(text, color);
 
-        public void NoOptionException(string option) =>
-            GameConsoleController.Log($"Option <b>{option}</b> does not exist!", "error", GameConsoleLog.LogType.Game);
+        protected virtual void LogError(string text) =>
+            GameConsoleController.Log(text, "error");
 
-        public void ParseException(string text, string type) =>
-            GameConsoleController.Log($"Couldn't parse <b>{text}</b> to {type}!", "error", GameConsoleLog.LogType.Game);
+        protected virtual void NoOptionException(string option) =>
+            GameConsoleController.Log($"Option <b>{option}</b> does not exist!", "error");
+
+        protected virtual void ParseException(string text, string type) =>
+            GameConsoleController.Log($"Couldn't parse <b>{text}</b> to {type}!", "error");
     }
 }

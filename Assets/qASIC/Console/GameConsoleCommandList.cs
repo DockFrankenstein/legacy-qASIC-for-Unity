@@ -12,7 +12,7 @@ namespace qASIC.Console.Commands
             command = null;
             for (int i = 0; i < Commands.Count; i++)
             {
-                if (!AliasExists(Commands[i], commandName) || !Commands[i].Active) continue;
+                if (!CompareName(Commands[i], commandName) || !Commands[i].Active) continue;
 
                 command = Commands[i];
                 return true;
@@ -20,13 +20,15 @@ namespace qASIC.Console.Commands
             return false;
         }
 
-        private static bool AliasExists(GameConsoleCommand command, string targetName)
+        private static bool CompareName(GameConsoleCommand command, string targetName)
         {
-            if (command.CommandName == targetName) return true;
+            if (command.CommandName.Trim().ToLower() == targetName) return true;
+
             if (command.Aliases == null) return false;
             for (int i = 0; i < command.Aliases.Length; i++)
-                if (command.Aliases[i] == targetName) 
+                if (command.Aliases[i].Trim().ToLower() == targetName) 
                     return true;
+
             return false;
         }
 
@@ -37,6 +39,7 @@ namespace qASIC.Console.Commands
             for (int i = 0; i < types.Count; i++)
             {
                 ConstructorInfo constructor = types[i].GetConstructor(Type.EmptyTypes);
+                if (constructor == null || constructor.IsAbstract) continue;
                 GameConsoleCommand command = (GameConsoleCommand)constructor.Invoke(null);
                 if(command.Active)
                     _commands.Add(command);
@@ -49,7 +52,9 @@ namespace qASIC.Console.Commands
         {
             get
             {
-                if (_commands.Count == 0) UpdateList();
+                if (_commands.Count == 0)
+                    UpdateList();
+
                 return _commands;
             }
         }

@@ -122,15 +122,18 @@ namespace qASIC.Console
             StartCoroutine(Reselect());
             if (inputField == null) return;
 
-            if (string.IsNullOrWhiteSpace(inputField.text))
+            string cmd = inputField.text;
+
+            if (string.IsNullOrWhiteSpace(cmd))
             {
                 ResetScroll();
                 return;
             }
 
-            GameConsoleController.Log(inputField.text, "default", GameConsoleLog.LogType.User);
-            GameConsoleController.RunCommand(inputField.text);
             inputField.SetTextWithoutNotify(string.Empty);
+
+            GameConsoleController.Log(cmd, "default", GameConsoleLog.LogType.User);
+            GameConsoleController.RunCommand(cmd);
             RefreshLogs();
             ResetScroll();
         }
