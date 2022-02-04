@@ -4,7 +4,7 @@ using UnityEditor;
 using qASIC.EditorTools.Internal;
 using qASIC.EditorTools;
 
-namespace qASIC.Console.Tools
+namespace qASIC.Console.Internal
 {
     [CustomEditor(typeof(GameConsoleInterface))]
     public class GameConsoleInterfaceCI : Editor

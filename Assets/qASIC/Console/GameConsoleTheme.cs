@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace qASIC.Console
+namespace qASIC.Console.Internal
 {
     [CreateAssetMenu(fileName = "NewConsoleTheme", menuName = "qASIC/Console/Console Theme")]
     public class GameConsoleTheme : ScriptableObject

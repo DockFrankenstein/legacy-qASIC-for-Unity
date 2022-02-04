@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using qASIC.Console.Commands;
-using qASIC.Console.Logic;
-using qASIC.Console.Tools;
+using qASIC.Console.Internal;
 using System;
 using UnityEngine.SceneManagement;
 using qASIC.ProjectSettings;
@@ -171,7 +170,7 @@ namespace qASIC.Console
             if (newConfig == null || _config == newConfig) return;
             _config = newConfig;
             if (_config.showThankYouMessage)
-                Log($"Thank you for using qASIC v{Internal.Info.Version} console", "qasic");
+                Log($"Thank you for using qASIC v{qASIC.Internal.Info.Version} console", "qasic");
             if (_config.logConfigAssigment)
                 Log("Assigned new config", "console");
         }

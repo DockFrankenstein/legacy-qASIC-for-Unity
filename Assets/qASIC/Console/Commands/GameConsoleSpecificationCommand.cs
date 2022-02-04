@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using qASIC.Console.Tools;
 using UnityEngine;
+using qASIC.Console.Internal;
 
 namespace qASIC.Console.Commands
 {

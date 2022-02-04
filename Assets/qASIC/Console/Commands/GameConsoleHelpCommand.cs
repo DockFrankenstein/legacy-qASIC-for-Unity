@@ -19,7 +19,7 @@ namespace qASIC.Console.Commands
         {
             if (!CheckForArgumentCount(args, 0, 1)) return;
 
-            if (GameConsoleController.TryGettingConfig(out Tools.GameConsoleConfig config))
+            if (GameConsoleController.TryGettingConfig(out Internal.GameConsoleConfig config))
             {
                 onePageCommandLimit = config.pageCommandLimit;
                 useLimit = config.usePageCommandLimit;

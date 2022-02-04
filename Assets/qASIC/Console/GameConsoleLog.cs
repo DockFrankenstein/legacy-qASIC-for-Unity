@@ -2,7 +2,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace qASIC.Console.Logic
+namespace qASIC.Console
 {
     public class GameConsoleLog
     {

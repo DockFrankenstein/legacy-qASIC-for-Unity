@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
-using qASIC.Console;
+using qASIC.Console.Internal;
 using UnityEngine;
 using qASIC.EditorTools;
 

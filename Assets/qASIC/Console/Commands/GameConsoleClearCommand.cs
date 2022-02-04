@@ -13,7 +13,7 @@ namespace qASIC.Console.Commands
         public override void Run(List<string> args)
         {
             if (!CheckForArgumentCount(args, 0)) return;
-            GameConsoleController.Log(string.Empty, "default", Logic.GameConsoleLog.LogType.Clear);
+            GameConsoleController.Log(string.Empty, "default", GameConsoleLog.LogType.Clear);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using TMPro;
-using qASIC.Console.Tools;
 using System.Collections;
 using qASIC.Toggling;
+using qASIC.Console.Internal;
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -69,7 +69,7 @@ namespace qASIC.Console
 
         private void OnDestroy()
         {
-            GameConsoleController.OnLog -= (Logic.GameConsoleLog log) => RefreshLogs();
+            GameConsoleController.OnLog -= (GameConsoleLog log) => RefreshLogs();
         }
 
         public virtual void Update()
@@ -128,7 +128,7 @@ namespace qASIC.Console
                 return;
             }
 
-            GameConsoleController.Log(inputField.text, "default", Logic.GameConsoleLog.LogType.User);
+            GameConsoleController.Log(inputField.text, "default", GameConsoleLog.LogType.User);
             GameConsoleController.RunCommand(inputField.text);
             inputField.SetTextWithoutNotify(string.Empty);
             RefreshLogs();

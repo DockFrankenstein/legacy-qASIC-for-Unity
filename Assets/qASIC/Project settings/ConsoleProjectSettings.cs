@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using qASIC.Console.Tools;
+using qASIC.Console.Internal;
 
 namespace qASIC.ProjectSettings
 {

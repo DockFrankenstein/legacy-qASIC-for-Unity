@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace qASIC.Console.Tools
+namespace qASIC.Console.Internal
 {
     [CustomPropertyDrawer(typeof(GameConsoleColor))]
     public class GameConsoleColorDrawer : PropertyDrawer

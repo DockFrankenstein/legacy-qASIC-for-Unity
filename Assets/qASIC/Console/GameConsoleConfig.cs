@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace qASIC.Console.Tools
+namespace qASIC.Console.Internal
 {
     [CreateAssetMenu(fileName = "NewConsoleConfig", menuName = "qASIC/Console/Console Config")]
     public class GameConsoleConfig : ScriptableObject
