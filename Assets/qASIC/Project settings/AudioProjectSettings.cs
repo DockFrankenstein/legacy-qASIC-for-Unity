@@ -12,6 +12,7 @@ namespace qASIC.ProjectSettings
         private static AudioProjectSettings _instance;
         public static AudioProjectSettings Instance => CheckInstance("Audio", _instance);
 
+        public bool enableAudioManager = false;
         public string managerName = "Audio Manager";
         public AudioMixer mixer;
 

@@ -15,10 +15,14 @@ namespace qASIC.AudioManagment
         public static string Path { get; private set; }
         public static SerializationType SaveType { get; private set; }
 
+        public static bool Enabled { get => AudioProjectSettings.Instance.enableAudioManager; }
+
         #region Initialization
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Initialize()
         {
+            if (!Enabled) return;
+
             AudioProjectSettings settings = AudioProjectSettings.Instance;
             LoadSettings();
 
@@ -33,6 +37,9 @@ namespace qASIC.AudioManagment
         { 
             get
             {
+                if (!Enabled)
+                    throw new System.Exception("Audio Manager has been disabled!");
+
                 if (_instance == null)
                 {
                     if (!AudioProjectSettings.Instance.createOnUse)
@@ -69,7 +76,11 @@ namespace qASIC.AudioManagment
             return true;
         }
 
-        private void Awake() => AssignSingleton();
+        private void Awake()
+        {
+            if (!Enabled) return;
+            AssignSingleton();
+        }
 
         public static bool Paused = false;
 
@@ -88,8 +99,9 @@ namespace qASIC.AudioManagment
         #endregion
 
         #region Saving
-        public static void LoadSettings()
+        private static void LoadSettings()
         {
+            if (!Enabled) return;
             AudioProjectSettings settings = AudioProjectSettings.Instance;
 
             switch (settings.serializationType)
@@ -107,6 +119,7 @@ namespace qASIC.AudioManagment
 
         public static void LoadSettingsConfig(string path)
         {
+            if (!Enabled) return;
             SaveType = SerializationType.config;
             Path = path;
 
@@ -130,6 +143,8 @@ namespace qASIC.AudioManagment
 
         public static void SetFloat(string name, float value, bool preview = true)
         {
+            if (!Enabled) return;
+
             AudioProjectSettings settings = AudioProjectSettings.Instance;
 
             if (Mixer == null || !Mixer.GetFloat(name, out _))
@@ -161,6 +176,7 @@ namespace qASIC.AudioManagment
 
         public static AudioChannel GetChannel(string name)
         {
+            if (!Enabled) return null;
             if (Singleton.channels.ContainsKey(name))
             {
                 if(Singleton.channels[name].Source == null)
@@ -175,6 +191,7 @@ namespace qASIC.AudioManagment
 
         public static void SetChannel(string name, AudioChannel channel)
         {
+            if (!Enabled) return;
             if (Singleton.channels.ContainsKey(name))
             {
                 Singleton.channels[name] = channel;
@@ -207,6 +224,7 @@ namespace qASIC.AudioManagment
         #region Play
         public static void Play(string channelName, AudioData data)
         {
+            if (!Enabled) return;
             AudioChannel channel = GetChannel(channelName);
             if (!data.replace && channel.Source.isPlaying) return;
 
@@ -225,6 +243,7 @@ namespace qASIC.AudioManagment
 
         public static void Stop(string channelName)
         {
+            if (!Enabled) return;
             if (!Singleton.channels.ContainsKey(channelName)) return;
             AudioChannel channel = Singleton.channels[channelName];
 
@@ -237,6 +256,7 @@ namespace qASIC.AudioManagment
 
         public static void StopAll()
         {
+            if (!Enabled) return;
             AudioSourceController.OnStopAll.Invoke();
 
             Dictionary<string, AudioChannel> temp = new Dictionary<string, AudioChannel>(Singleton.channels);
@@ -250,6 +270,7 @@ namespace qASIC.AudioManagment
 
         public static void Pause(string channelName)
         {
+            if (!Enabled) return;
             if (!Singleton.channels.ContainsKey(channelName)) return;
             AudioChannel channel = Singleton.channels[channelName];
 
@@ -264,6 +285,7 @@ namespace qASIC.AudioManagment
 
         public static void PauseAll()
         {
+            if (!Enabled) return;
             AudioSourceController.OnPauseAll.Invoke();
 
             Paused = true;
@@ -282,6 +304,7 @@ namespace qASIC.AudioManagment
 
         public static void UnPause(string channelName)
         {
+            if (!Enabled) return;
             if (!Singleton.channels.ContainsKey(channelName)) return;
             AudioChannel channel = Singleton.channels[channelName];
 
@@ -296,6 +319,7 @@ namespace qASIC.AudioManagment
 
         public static void UnPauseAll()
         {
+            if (!Enabled) return;
             AudioSourceController.OnUnPauseAll.Invoke();
 
             Paused = false;

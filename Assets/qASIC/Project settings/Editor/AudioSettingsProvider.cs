@@ -24,33 +24,40 @@ namespace qASIC.ProjectSettings.Internal
 
         public override void OnGUI(string searchContext)
         {
-            qGUIInternalUtility.BeginGroup("Creating");
-            DrawInRange(nameof(Settings.managerName), nameof(Settings.createOnUse));
+            qGUIInternalUtility.BeginGroup("General");
+            DrawProperty(nameof(Settings.enableAudioManager));
             qGUIInternalUtility.EndGroup();
 
-
-            qGUIInternalUtility.BeginGroup("Logging creation");
-            DrawProperty(nameof(Settings.logCreation));
-            DrawInRange(nameof(Settings.creationLogMessage), nameof(Settings.creationLogColor), !settings.logCreation);
-
-            DrawProperty(nameof(Settings.logCreationError));
-            DrawInRange(nameof(Settings.creationErrorMessage), nameof(Settings.creationErrorColor), !settings.logCreationError);
-            qGUIInternalUtility.EndGroup();
+            using (new EditorGUI.DisabledScope(!settings.enableAudioManager))
+            {
+                qGUIInternalUtility.BeginGroup("Creating");
+                DrawInRange(nameof(Settings.managerName), nameof(Settings.createOnUse));
+                qGUIInternalUtility.EndGroup();
 
 
-            qGUIInternalUtility.BeginGroup("Saving");
-            if (settings.serializationType == SerializationType.playerPrefs)
-                EditorGUILayout.HelpBox("The Audio Manager does not support player prefs!", MessageType.Error);
+                qGUIInternalUtility.BeginGroup("Logging creation");
+                DrawProperty(nameof(Settings.logCreation));
+                DrawInRange(nameof(Settings.creationLogMessage), nameof(Settings.creationLogColor), !settings.logCreation);
 
-            DrawProperty(nameof(Settings.serializationType));
-            if (settings.serializationType == SerializationType.config)
-                DrawProperty(nameof(Settings.savePath));
-            qGUIInternalUtility.EndGroup();
+                DrawProperty(nameof(Settings.logCreationError));
+                DrawInRange(nameof(Settings.creationErrorMessage), nameof(Settings.creationErrorColor), !settings.logCreationError);
+                qGUIInternalUtility.EndGroup();
 
 
-            qGUIInternalUtility.BeginGroup("Other");
-            DrawInRange(nameof(Settings.roundValues), nameof(Settings.roundValues));
-            qGUIInternalUtility.EndGroup();
+                qGUIInternalUtility.BeginGroup("Saving");
+                if (settings.serializationType == SerializationType.playerPrefs)
+                    EditorGUILayout.HelpBox("The Audio Manager does not support player prefs!", MessageType.Error);
+
+                DrawProperty(nameof(Settings.serializationType));
+                if (settings.serializationType == SerializationType.config)
+                    DrawProperty(nameof(Settings.savePath));
+                qGUIInternalUtility.EndGroup();
+
+
+                qGUIInternalUtility.BeginGroup("Other");
+                DrawInRange(nameof(Settings.roundValues), nameof(Settings.roundValues));
+                qGUIInternalUtility.EndGroup();
+            }
 
             serializedSettings.ApplyModifiedProperties();
         }

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0849bbe62afa70f46b8b100aac20e86b, type: 3}
   m_Name: Audio
   m_EditorClassIdentifier: 
+  enableAudioManager: 0
   managerName: Audio Manager
   mixer: {fileID: 0}
   createOnStart: 1
