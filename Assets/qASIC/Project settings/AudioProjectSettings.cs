@@ -29,7 +29,7 @@ namespace qASIC.ProjectSettings
         [InspectorLabel("Error color")] public string creationErrorColor = "error";
 
         //Saving
-        public SerializationType serializationType = SerializationType.playerPrefs;
+        public SerializationType serializationType = SerializationType.config;
         public AdvancedGenericFilePath savePath = new AdvancedGenericFilePath(GenericFolder.PersistentDataPath, "audio.txt", "audio-editor.txt");
 
         //Other
