@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Input
   m_EditorClassIdentifier: 
   map: {fileID: 0}
-  serializationType: 0
+  serializationType: 1
   filePath:
     buildPath:
       genericFolder: 62

@@ -22,6 +22,7 @@ MonoBehaviour:
   logCreationError: 1
   creationErrorMessage: 'Couldn''t create Audio Manager: '
   creationErrorColor: error
+  serializationType: 1
   savePath:
     buildPath:
       genericFolder: 62

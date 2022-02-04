@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Options
   m_EditorClassIdentifier: 
   enableOptionsSystem: 1
-  serializationType: 0
+  serializationType: 1
   savePath:
     buildPath:
       genericFolder: 62

@@ -30,7 +30,7 @@ namespace qASIC.ProjectSettings.Internal
 
             qGUIInternalUtility.BeginGroup("Saving");
             DrawProperty(nameof(Settings.serializationType));
-            if (settings.serializationType != FileManagement.SerializationType.playerPrefs)
+            if (settings.serializationType == FileManagement.SerializationType.config)
                 DrawProperty(nameof(Settings.savePath));
             qGUIInternalUtility.EndGroup();
 

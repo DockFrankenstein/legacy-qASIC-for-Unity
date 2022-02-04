@@ -24,6 +24,8 @@ namespace qASIC.Options
                     OptionsController.OverrideEnabled(true);
                     OptionsController.LoadConfig(filePath.ToString());
                     break;
+                case SerializationType.none:
+                    break;
                 default:
                     qDebug.LogError($"Serialization type '{serializationType}' is not supported by the options system!");
                     break;

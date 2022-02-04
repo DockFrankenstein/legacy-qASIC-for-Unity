@@ -61,7 +61,7 @@ namespace qASIC.FileManagement
         TemporaryCachePath = 64,
     }
 
-    public enum SerializationType { playerPrefs, config }
+    public enum SerializationType { none, playerPrefs, config }
 
     public static class FileManager
     {

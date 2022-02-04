@@ -99,6 +99,8 @@ namespace qASIC.Options
                 case SerializationType.config:
                     LoadConfig(settings.savePath.ToString());
                     break;
+                case SerializationType.none:
+                    break;
                 default:
                     qDebug.LogError($"Serialization type '{settings.serializationType}' is not supported by the options system!");
                     break;

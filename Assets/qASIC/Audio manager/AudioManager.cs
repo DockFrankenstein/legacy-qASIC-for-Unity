@@ -12,6 +12,9 @@ namespace qASIC.AudioManagment
 
         public static int ChannelCount { get => Singleton.channels.Count; }
 
+        public static string Path { get; private set; }
+        public static SerializationType SaveType { get; private set; }
+
         #region Initialization
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Initialize()
@@ -87,13 +90,27 @@ namespace qASIC.AudioManagment
         #region Saving
         public static void LoadSettings()
         {
-            LoadSettingsConfig();
+            AudioProjectSettings settings = AudioProjectSettings.Instance;
+
+            switch (settings.serializationType)
+            {
+                case SerializationType.config:
+                    LoadSettingsConfig(settings.savePath.ToString());
+                    break;
+                case SerializationType.none:
+                    break;
+                default:
+                    qDebug.LogError($"Serialization type '{settings.serializationType}' is not supported by the Audio Manager!");
+                    break;
+            }
         }
 
-        public static void LoadSettingsConfig()
+        public static void LoadSettingsConfig(string path)
         {
-            AudioProjectSettings settings = AudioProjectSettings.Instance;
-            if (!ConfigController.TryCreateListFromFile(settings.savePath.ToString(), out List<KeyValuePair<string, string>> list)) return;
+            SaveType = SerializationType.config;
+            Path = path;
+
+            if (!ConfigController.TryCreateListFromFile(Path, out List<KeyValuePair<string, string>> list)) return;
 
             for (int i = 0; i < list.Count; i++)
             {
@@ -129,7 +146,13 @@ namespace qASIC.AudioManagment
 
             if (preview) return;
             qDebug.Log($"Changed parameter '{name}' to '{value}'", "settings");
-            ConfigController.SetSettingFromFile(settings.savePath.ToString(), name, value.ToString());
+
+            switch (SaveType)
+            {
+                case SerializationType.config:
+                    ConfigController.SetSettingFromFile(settings.savePath.ToString(), name, value.ToString());
+                    break;
+            }
         }
         #endregion
 

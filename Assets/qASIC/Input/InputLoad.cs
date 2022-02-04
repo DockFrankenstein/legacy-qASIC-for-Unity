@@ -33,6 +33,8 @@ namespace qASIC.InputManagement
                 case SerializationType.config:
                     InputManager.LoadUserKeysConfig(filePath.GetFullPath());
                     break;
+                case SerializationType.none:
+                    break;
                 default:
                     qDebug.LogError($"Serialization type '{serializationType}' is not supported by the input system!");
                     break;

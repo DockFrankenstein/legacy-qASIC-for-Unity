@@ -58,6 +58,8 @@ namespace qASIC.InputManagement
                 case SerializationType.playerPrefs:
                     PlayerPrefs.SetInt(saveKey, (int)key);
                     break;
+                case SerializationType.none:
+                    break;
                 default:
                     qDebug.LogError($"Serialization type '{SaveType}' is not supported by the input system!");
                     break;

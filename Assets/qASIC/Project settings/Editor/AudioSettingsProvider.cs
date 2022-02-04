@@ -3,6 +3,7 @@ using UnityEngine.UIElements;
 using qASIC.EditorTools;
 using qASIC.EditorTools.Internal;
 using System.Collections.Generic;
+using qASIC.FileManagement;
 
 using Settings = qASIC.ProjectSettings.AudioProjectSettings;
 
@@ -27,6 +28,7 @@ namespace qASIC.ProjectSettings.Internal
             DrawInRange(nameof(Settings.managerName), nameof(Settings.createOnUse));
             qGUIInternalUtility.EndGroup();
 
+
             qGUIInternalUtility.BeginGroup("Logging creation");
             DrawProperty(nameof(Settings.logCreation));
             DrawInRange(nameof(Settings.creationLogMessage), nameof(Settings.creationLogColor), !settings.logCreation);
@@ -35,9 +37,16 @@ namespace qASIC.ProjectSettings.Internal
             DrawInRange(nameof(Settings.creationErrorMessage), nameof(Settings.creationErrorColor), !settings.logCreationError);
             qGUIInternalUtility.EndGroup();
 
+
             qGUIInternalUtility.BeginGroup("Saving");
-            DrawProperty(nameof(Settings.savePath));
+            if (settings.serializationType == SerializationType.playerPrefs)
+                EditorGUILayout.HelpBox("The Audio Manager does not support player prefs!", MessageType.Error);
+
+            DrawProperty(nameof(Settings.serializationType));
+            if (settings.serializationType == SerializationType.config)
+                DrawProperty(nameof(Settings.savePath));
             qGUIInternalUtility.EndGroup();
+
 
             qGUIInternalUtility.BeginGroup("Other");
             DrawInRange(nameof(Settings.roundValues), nameof(Settings.roundValues));
