@@ -19,12 +19,15 @@ namespace qASIC.Options
         public static void ChangeFullScreenMode(FullScreenMode state) =>
             Screen.fullScreenMode = state;
 
-        [OptionsSetting("fullscreen", defaultValueMethodName = nameof(GetDefaultFullScreenMode))]
-        public static void ChangeFullScreenMode(bool state) =>
+        [OptionsSetting("fullscreen", defaultValueMethodName = nameof(GetDefaultFullScreenState))]
+        public static void ChangeFullScreen(bool state) =>
             Screen.fullScreen = state;
 
         public static FullScreenMode GetDefaultFullScreenMode() =>
             Screen.fullScreenMode;
+
+        public static bool GetDefaultFullScreenState() =>
+            Screen.fullScreen;
 
 
         [OptionsSetting("framelimit", defaultValueMethodName = nameof(GetDefaultFrameLimit))]
