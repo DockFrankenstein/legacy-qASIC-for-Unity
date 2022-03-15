@@ -23,7 +23,16 @@ namespace qASIC.ProjectSettings.Internal
 
         public override void OnGUI(string searchContext)
         {
-            DrawProperty(nameof(Settings.config));
+            qGUIInternalUtility.DrawPropertyGroup(serializedSettings, "Starting arguments", new string[]
+            {
+                nameof(Settings.startArgsDisableCommandInitialization),
+            });
+
+            qGUIInternalUtility.DrawPropertyGroup(serializedSettings, "Configuration", new string[]
+            {
+                nameof(Settings.config),
+            });
+            
             EditorGUILayout.Space();
 
             if (settings.config)

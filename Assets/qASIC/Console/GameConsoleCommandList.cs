@@ -2,11 +2,24 @@
 using System;
 using System.Reflection;
 using qASIC.Tools;
+using UnityEngine;
 
 namespace qASIC.Console.Commands
 {
     public class GameConsoleCommandList
     {
+        private static bool _disableInitialization;
+        public static bool DisableInitialization => _disableInitialization;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
+        static void Initialize()
+        {
+            _disableInitialization = ProjectSettings.ConsoleProjectSettings.Instance.startArgsDisableCommandInitialization
+                && Array.IndexOf(Environment.GetCommandLineArgs(), "-qASIC-console-disable-commandlistinitialization") != -1;
+
+            UpdateList();
+        }
+
         public static bool TryGettingCommandByName(string commandName, out GameConsoleCommand command)
         {
             command = null;
@@ -32,27 +45,32 @@ namespace qASIC.Console.Commands
             return false;
         }
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
         public static List<GameConsoleCommand> UpdateList()
         {
+            _commands = new List<GameConsoleCommand>();
+
+            if (DisableInitialization)
+                return _commands;
+
             List<Type> types = TypeFinder.FindAllTypes<GameConsoleCommand>();
-            _commands.Clear();
             for (int i = 0; i < types.Count; i++)
             {
                 ConstructorInfo constructor = types[i].GetConstructor(Type.EmptyTypes);
                 if (constructor == null || constructor.IsAbstract) continue;
                 GameConsoleCommand command = (GameConsoleCommand)constructor.Invoke(null);
-                if(command.Active)
+                if (command.Active)
                     _commands.Add(command);
             }
             return _commands;
         }
 
-        private static List<GameConsoleCommand> _commands = new List<GameConsoleCommand>();
+        private static List<GameConsoleCommand> _commands;
         public static List<GameConsoleCommand> Commands 
         {
             get
             {
-                if (_commands.Count == 0)
+                if (_commands == null)
                     UpdateList();
 
                 return _commands;
