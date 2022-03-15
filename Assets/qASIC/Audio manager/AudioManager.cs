@@ -4,7 +4,7 @@ using UnityEngine.Audio;
 using qASIC.FileManagement;
 using qASIC.ProjectSettings;
 
-namespace qASIC.AudioManagment
+namespace qASIC.AudioManagement
 {
     public class AudioManager : MonoBehaviour
     {

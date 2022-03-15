@@ -177,7 +177,7 @@ namespace qASIC.Tools
         [MenuItem("GameObject/Audio/Controlled Audio Source", false, 3)]
         static void CreateAudioSource(MenuCommand command)
         {
-            GameObject obj = new GameObject("Audio Source", typeof(AudioSource), typeof(AudioManagment.AudioSourceController));
+            GameObject obj = new GameObject("Audio Source", typeof(AudioSource), typeof(AudioManagement.AudioSourceController));
             if (command?.context is GameObject)
                 obj.transform.SetParent((command.context as GameObject).transform);
 

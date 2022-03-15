@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using qASIC.AudioManagment;
+using qASIC.AudioManagement;
 
 namespace qASIC.Console.Commands
 {

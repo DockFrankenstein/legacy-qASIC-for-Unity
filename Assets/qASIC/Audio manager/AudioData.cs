@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Audio;
 
-namespace qASIC.AudioManagment
+namespace qASIC.AudioManagement
 {
     [System.Serializable]
     public struct AudioData

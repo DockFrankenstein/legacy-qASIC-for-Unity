@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace qASIC.AudioManagment
+namespace qASIC.AudioManagement
 {
     [System.Serializable]
     public class AudioChannel

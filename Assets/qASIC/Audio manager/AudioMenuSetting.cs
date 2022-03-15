@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
-namespace qASIC.AudioManagment.Menu
+namespace qASIC.AudioManagement.Menu
 {
     [RequireComponent(typeof(Slider))]
     public class AudioMenuSetting : MonoBehaviour, IPointerUpHandler

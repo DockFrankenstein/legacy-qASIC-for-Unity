@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace qASIC.AudioManagment.Internal
+namespace qASIC.AudioManagement.Internal
 {
     [CustomEditor(typeof(AudioManager))]
     public class AudioManagerInspector : Editor

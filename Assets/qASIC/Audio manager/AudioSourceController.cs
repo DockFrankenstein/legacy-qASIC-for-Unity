@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-namespace qASIC.AudioManagment
+namespace qASIC.AudioManagement
 {
     [RequireComponent(typeof(AudioSource))]
     public class AudioSourceController : MonoBehaviour

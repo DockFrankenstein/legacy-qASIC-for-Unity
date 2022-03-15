@@ -29,10 +29,10 @@ namespace qASIC
                 switch(state)
                 {
                     case true:
-                        AudioManagment.AudioManager.PauseAll();
+                        AudioManagement.AudioManager.PauseAll();
                         break;
                     default:
-                        AudioManagment.AudioManager.UnPauseAll();
+                        AudioManagement.AudioManager.UnPauseAll();
                         break;
                 }
             }
