@@ -196,6 +196,9 @@ namespace qASIC.Tools.Debug
             };
             
             Label("Audio", headerStyle);
+
+            if (!AudioManagment.AudioManager.Enabled) return;
+
             if (AudioManagment.AudioManager.Singleton == null)
             {
                 Label(EditorApplication.isPlaying ? "There is no Audio Manager in the scene" : "Offline", centeredLabelStyle);

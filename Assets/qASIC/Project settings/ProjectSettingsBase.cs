@@ -11,6 +11,7 @@ namespace qASIC.ProjectSettings
     public abstract class ProjectSettingsBase : ScriptableObject
     {
         const string instanceLocation = "qASIC/Project Settings";
+        const string defaultInstanceLocation = "qASIC/Project Settings/Default";
 
         protected static t CheckInstance<t>(string assetName, t instance) where t : ProjectSettingsBase
         {
@@ -27,16 +28,40 @@ namespace qASIC.ProjectSettings
             return instance;
         }
 
+        private static t GetDefaultInstance<t>(string assetName) where t : ProjectSettingsBase
+        {
+            t asset = Resources.Load<t>($"{defaultInstanceLocation}/{assetName}");
+
+            if (asset == null)
+            {
+#if qASIC_DEV
+                asset = CreateNewDefaultInstance<t>(assetName);
+#else
+                throw new System.Exception("Cannot load qASIC project settings. Package has been modified or corrupted. Please reinstall or update!");        
+#endif
+            }
+
+            return asset;
+        }
+
         private static t CreateNewInstance<t>(string assetName) where t : ProjectSettingsBase
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR && !qASIC_DEV
             t asset = CreateInstance<t>();
             AssetDatabase.CreateAsset(asset, $"Assets/qASIC/Resources/{instanceLocation}/{assetName}.asset");
             AssetDatabase.SaveAssets();
             return asset;
 #else
-            throw new System.Exception("Cannot load qASIC project settings. Package has been modified or corrupted. Please reinstall or update!");
+            return GetDefaultInstance<t>(assetName);
 #endif
+        }
+
+        private static t CreateNewDefaultInstance<t>(string assetName) where t : ProjectSettingsBase
+        {
+            t asset = CreateInstance<t>();
+            AssetDatabase.CreateAsset(asset, $"Assets/qASIC/Resources/{defaultInstanceLocation}/{assetName}.asset");
+            AssetDatabase.SaveAssets();
+            return asset;
         }
     }
 }

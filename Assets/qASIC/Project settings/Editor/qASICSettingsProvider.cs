@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using UnityEngine;
+using UnityEditor;
 using qASIC.EditorTools.Internal;
 using System.Collections.Generic;
 using qASIC.Internal;
@@ -24,6 +25,10 @@ namespace qASIC.ProjectSettings.Internal
             EditorGUILayout.LabelField($"File Management: {Info.FileVersion}");
 
             qGUIInternalUtility.EndGroup();
+
+            EditorGUILayout.Space();
+            if (GUILayout.Button("Re-import project settings", GUILayout.Height(24f)))
+                ProjectSettingsImporter.Import();
         }
 
         [SettingsProvider]
