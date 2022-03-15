@@ -58,7 +58,7 @@ namespace qASIC.InputManagement.Map
 
             key = KeyCode.None;
             if (logError)
-                qDebug.LogError($"Action does not contain key <b>{index}</b>: {keys.Count}");
+                qDebug.LogError($"Action does not contain key '{index}': {keys.Count}");
 
             return false;
         }

@@ -34,7 +34,7 @@ namespace qASIC.InputManagement.Map
             }
 
             if (logError)
-                qDebug.LogError($"Group <b>{groupName}</b> does not contain action <b>{actionName}</b>");
+                qDebug.LogError($"Group '{groupName}' does not contain action '{actionName}'");
 
             return false;
         }
@@ -57,7 +57,7 @@ namespace qASIC.InputManagement.Map
             }
 
             if (logError)
-                qDebug.Log($"Group <b>{groupName}</b> does not contain axis <b>{axisName}</b>");
+                qDebug.Log($"Group '{groupName}' does not contain axis '{axisName}'");
 
             return false;
         }
