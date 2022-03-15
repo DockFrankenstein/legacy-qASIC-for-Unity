@@ -343,7 +343,7 @@ namespace qASIC.InputManagement.Map.Internal
             GetEditorWindow().SetWindowTitle();
         }
 
-        public void DiscardChanges()
+        public void DiscardMapChanges()
         {
             _isDirty = false;
             if (FileManager.TryReadFileJSON(GetUnmodifiedMapLocation(), Map))
@@ -371,7 +371,7 @@ namespace qASIC.InputManagement.Map.Internal
                     return true;
                 case 1:
                     //Discard changes
-                    DiscardChanges();
+                    DiscardMapChanges();
                     return true;
                 default:
                     //Cancel
