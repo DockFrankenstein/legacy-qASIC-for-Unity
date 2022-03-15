@@ -153,11 +153,13 @@ namespace qASIC.InputManagement.Map.Internal
 
         public static void OpenMap(InputMap newMap)
         {
-            if (Map && Map != newMap)
+            if (Map != newMap)
+            {
                 GetEditorWindow().groupBar.SelectedGroupIndex = 0;
+                Map = newMap;
+                EditorPrefs.SetString(MapPrefsKey, AssetDatabase.GetAssetPath(Map));
+            }
 
-            Map = newMap;
-            EditorPrefs.SetString(MapPrefsKey, AssetDatabase.GetAssetPath(Map));
             OpenWindow();
         }
 
@@ -285,9 +287,11 @@ namespace qASIC.InputManagement.Map.Internal
             };
         }
 
-        public static void Cleanup()
+        public static void Cleanup(bool resetMap = true)
         {
-            Map = null;
+            if (resetMap)
+                Map = null;
+
             _isDirty = false;
             if (FileManager.FileExists(GetUnmodifiedMapLocation()))
                 FileManager.DeleteFile(GetUnmodifiedMapLocation());
@@ -376,7 +380,9 @@ namespace qASIC.InputManagement.Map.Internal
 
             SetWindowTitle();
             ReloadTrees();
+            InputMap map = Map;
             Cleanup();
+            OpenMap(map);
         }
 
         public bool ConfirmSaveChangesIfNeeded(bool reoppenOnCancel = true)

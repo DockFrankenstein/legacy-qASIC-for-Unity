@@ -54,13 +54,24 @@ namespace qASIC.InputManagement.Map.Internal
 
         public void OnGUI()
         {
+            if (!map) return;
+
             _scroll = BeginScrollView(_scroll);
 
             switch (_inspectionObject)
             {
                 case InputGroup group:
+                    int groupIndex = map.Groups.IndexOf(group);
+                    if (groupIndex == -1) break;
+
                     group.groupName = NameField(group.groupName);
 
+                    EditorGUI.BeginDisabledGroup(map.defaultGroup == groupIndex);
+                    if (GUILayout.Button("Set as default"))
+                        map.defaultGroup = groupIndex;
+                    EditorGUI.EndDisabledGroup();
+
+                    Space();
                     if (DeleteButton())
                         OnDeleteGroup.Invoke(group);
 
