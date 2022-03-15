@@ -6,7 +6,7 @@ namespace qASIC.Options
     public class OptionsSetting : Attribute
     {
         public string Name { get; }
-        public object DefaultValue { get; } = string.Empty;
+        public object DefaultValue { get; } = null;
         public string defaultValueMethodName;
 
         [Obsolete]

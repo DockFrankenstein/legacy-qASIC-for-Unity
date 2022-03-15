@@ -13,7 +13,7 @@ namespace qASIC.Options
 {
     public static class OptionsController
     {
-        public static Dictionary<string, string> UserPreferences { get; private set; } = new Dictionary<string, string>();
+        public static Dictionary<string, object> UserPreferences { get; private set; } = new Dictionary<string, object>();
 
         private static List<MethodInfo> _settings = new List<MethodInfo>();
         public static List<MethodInfo> Settings => _settings;
@@ -68,7 +68,7 @@ namespace qASIC.Options
                     if (!TryGetAttribute(setting, out OptionsSetting attr)) continue;
                     if (UserPreferences.ContainsKey(attr.Name.ToLower())) continue;
 
-                    string defaultValue = attr.DefaultValue != null ? attr.DefaultValue.ToString() : string.Empty;
+                    object defaultValue = attr.DefaultValue != null ? attr.DefaultValue.ToString() : null;
                     if (!string.IsNullOrWhiteSpace(attr.defaultValueMethodName))
                     {
                         object classObj = CreateClass(setting.DeclaringType);
@@ -113,8 +113,8 @@ namespace qASIC.Options
             SaveType = SerializationType.playerPrefs;
             Path = string.Empty;
 
-            Dictionary<string, string> prefs = new Dictionary<string, string>(UserPreferences);
-            foreach (KeyValuePair<string, string> preference in prefs)
+            Dictionary<string, object> prefs = new Dictionary<string, object>(UserPreferences);
+            foreach (KeyValuePair<string, object> preference in prefs)
                 if (PlayerPrefs.HasKey(preference.Key))
                     ChangeOption(preference.Key, PlayerPrefs.GetString(preference.Key), false, false);
 
@@ -142,14 +142,15 @@ namespace qASIC.Options
             if (!Enabled) return;
             try
             {
-                foreach (KeyValuePair<string, string> setting in UserPreferences)
-                    SaveSetting(setting.Key, setting.Value);
+                foreach (KeyValuePair<string, object> setting in UserPreferences)
+                    SaveSetting(setting.Key, setting.Value.ToString());
             }
             catch (Exception e)
             {
                 qDebug.LogError($"There was an error while saving user settings: {e}");
                 return;
             }
+
             qDebug.Log("User settings successfully saved!", "settings");
         }
 
@@ -218,11 +219,18 @@ namespace qASIC.Options
                 SaveSetting(optionName, value.ToString());
         }
 
-        public static bool TryGetOptionValue(string optionName, out string value)
+        public static bool TryGetOptionValue(string optionName, out object value)
         {
             optionName = optionName.ToLower();
             bool exists = UserPreferences.ContainsKey(optionName);
-            value = exists ? UserPreferences[optionName] : string.Empty;
+            value = exists ? UserPreferences[optionName] : null;
+            return exists;
+        }
+
+        public static bool TryGetOptionValue(string optionName, out string value)
+        {
+            bool exists = TryGetOptionValue(optionName, out object o);
+            value = o == null ? string.Empty : o.ToString();
             return exists;
         }
         #endregion
