@@ -5,7 +5,6 @@ namespace qASIC.ProjectSettings
 {
     [System.Serializable]
     [ExcludeFromPreset]
-    //[CreateAssetMenu(fileName = "NewOptionsProjectSettings", menuName = "qASIC/Project Setting Files/Options")]
     public class OptionsProjectSettings : ProjectSettingsBase
     {
         private static OptionsProjectSettings _instance;
@@ -15,5 +14,9 @@ namespace qASIC.ProjectSettings
 
         public SerializationType serializationType = SerializationType.playerPrefs;
         public AdvancedGenericFilePath savePath = new AdvancedGenericFilePath(GenericFolder.PersistentDataPath, "settings.txt", "settings-editor.txt");
+
+        [InspectorLabel("Disable Loading")] public bool startArgsDisableLoad = true;
+        [InspectorLabel("Disable Saving")] public bool startArgsDisableSave = true;
+        [InspectorLabel("Disable Settings")] public bool startArgsDisableInit = true;
     }
 }

@@ -6,7 +6,6 @@ namespace qASIC.ProjectSettings
 {
     [System.Serializable]
     [ExcludeFromPreset]
-    //[CreateAssetMenu(fileName = "NewAudioProjectSettings", menuName = "qASIC/Project Setting Files/Audio")]
     public class AudioProjectSettings : ProjectSettingsBase
     {
         private static AudioProjectSettings _instance;

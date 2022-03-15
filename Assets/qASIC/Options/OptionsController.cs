@@ -23,6 +23,11 @@ namespace qASIC.Options
         public static string Path { get; private set; }
         public static SerializationType SaveType { get; private set; }
 
+        #region Start args
+        public static bool DisableLoading { get; private set; }
+        public static bool DisableSaving { get; private set; }
+        #endregion
+
         #region Enable
         private static bool? _enabledOverride = null;
         public static bool Enabled => _enabledOverride ?? OptionsProjectSettings.Instance.enableOptionsSystem;
@@ -51,6 +56,16 @@ namespace qASIC.Options
         static void Initialize()
         {
             if (!Enabled) return;
+
+            OptionsProjectSettings settings = OptionsProjectSettings.Instance;
+            string[] args = Environment.GetCommandLineArgs();
+
+            DisableSaving = settings.startArgsDisableSave && Array.IndexOf(args, "-qASIC-options-disable-save") != -1;
+            DisableLoading = settings.startArgsDisableLoad && Array.IndexOf(args, "-qASIC-options-disable-load") != -1;
+
+            if (settings.startArgsDisableInit && Array.IndexOf(args, "-qASIC-options-disable-initialization") != -1)
+                return;
+
             CreateSettingsList();
             LoadUserPreferences();
         }
@@ -89,6 +104,8 @@ namespace qASIC.Options
         #region Loading
         static void LoadUserPreferences()
         {
+            if (DisableLoading) return;
+
             OptionsProjectSettings settings = OptionsProjectSettings.Instance;
 
             switch (settings.serializationType)
@@ -110,6 +127,8 @@ namespace qASIC.Options
         public static void LoadPrefs()
         {
             if (!Enabled) return;
+            if (DisableLoading) return;
+
             SaveType = SerializationType.playerPrefs;
             Path = string.Empty;
 
@@ -124,6 +143,8 @@ namespace qASIC.Options
         public static void LoadConfig(string path)
         {
             if (!Enabled) return;
+            if (DisableLoading) return;
+
             SaveType = SerializationType.config;
             Path = path;
 
@@ -140,6 +161,8 @@ namespace qASIC.Options
         public static void Save()
         {
             if (!Enabled) return;
+            if (DisableSaving) return;
+
             try
             {
                 foreach (KeyValuePair<string, object> setting in UserPreferences)
@@ -157,6 +180,8 @@ namespace qASIC.Options
         static void SaveSetting(string optionName, string value)
         {
             if (!Enabled) return;
+            if (DisableSaving) return;
+
             switch (SaveType)
             {
                 case SerializationType.playerPrefs:

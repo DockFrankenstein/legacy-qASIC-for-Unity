@@ -3,7 +3,6 @@ using qASIC.FileManagement;
 
 namespace qASIC.ProjectSettings
 {
-    //[CreateAssetMenu(fileName = "NewInputProjectSettings", menuName = "qASIC/Project Setting Files/Input")]
     public class InputProjectSettings : ProjectSettingsBase
     {
         public static InputProjectSettings _instance;
@@ -13,7 +12,7 @@ namespace qASIC.ProjectSettings
         public SerializationType serializationType = SerializationType.playerPrefs;
         public AdvancedGenericFilePath filePath = new AdvancedGenericFilePath(GenericFolder.PersistentDataPath, "input.txt", "input-editor.txt");
 
-        public bool startArgsDisableLoad = true;
-        public bool startArgsDisableSave = true;
+        [InspectorLabel("Disable Loading")] public bool startArgsDisableLoad = true;
+        [InspectorLabel("Disable Saving")] public bool startArgsDisableSave = true;
     }
 }
