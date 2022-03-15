@@ -19,7 +19,7 @@ namespace qASIC.InputManagement.Map.Internal
             get => _map;
             set
             {
-                FileManager.SaveFileJSON(GetUnmodifiedMapLocation(), value);
+                SaveUnmodifiedMap(value);
                 _map = value;
             }
         }
@@ -361,12 +361,16 @@ namespace qASIC.InputManagement.Map.Internal
                 Save();
         }
 
+        private static void SaveUnmodifiedMap(InputMap map) =>
+            FileManager.SaveFileJSON(GetUnmodifiedMapLocation(), map);
+
         public static void Save()
         {
             _isDirty = false;
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             GetEditorWindow().SetWindowTitle();
+            SaveUnmodifiedMap(Map);
         }
 
         public void DiscardMapChanges()
