@@ -38,8 +38,9 @@ namespace qASIC.InputManagement.Map.Internal
 
         #region Menus
         Rect fileMenuRect;
-        Rect debugMenuRect;
+        Rect settingsMenuRect;
         Rect helpMenuRect;
+        Rect debugMenuRect;
 
         void DrawMenus()
         {
@@ -57,10 +58,15 @@ namespace qASIC.InputManagement.Map.Internal
                 menu.AddItem("Close", false, InputMapWindow.GetEditorWindow().Close);
             });
 
+            DisplayMenu("Settings", ref settingsMenuRect, (GenericMenu menu) =>
+            {
+                menu.AddItem("Open project settings", false, () => SettingsService.OpenProjectSettings("Project/qASIC/Input"));
+            });
+
             DisplayMenu("Help", ref helpMenuRect, (GenericMenu menu) =>
             {
-                menu.AddItem("Documentation", false, () => Application.OpenURL("https://docs.qasictools.com/input/getting-started"));
-                menu.AddDisabledItem("Guides", false/*, () => Application.OpenURL("https://docs.qasictools.com/")*/);
+                menu.AddItem("Documentation", false, () => Application.OpenURL("https://docs.qasictools.com/input/"));
+                menu.AddDisabledItem("Guides (comming not so soon)", false/*, () => Application.OpenURL("https://docs.qasictools.com/")*/);
                 menu.AddSeparator("");
                 menu.AddItem("Support", false, () => Application.OpenURL("https://qasictools.com/support"));
             });
