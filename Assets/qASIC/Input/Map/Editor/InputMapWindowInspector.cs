@@ -152,6 +152,7 @@ namespace qASIC.InputManagement.Map.Internal
                     {
                         action.keys[i] = Event.current.keyCode;
                         _currentListeningKeyCode = -1;
+                        InputMapWindow.SetMapDirty();
                         InputMapWindow.GetEditorWindow().Repaint();
                     }
 
