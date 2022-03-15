@@ -167,6 +167,16 @@ namespace qASIC.InputManagement.Map.Internal
 					break;
 			}
 		}
+		#endregion
+
+		#region Expanding
+		public event Action OnExpand;
+
+        protected override void ExpandedStateChanged()
+        {
+			base.ExpandedStateChanged();
+			OnExpand?.Invoke();
+		}
         #endregion
 
         #region Context menu

@@ -53,6 +53,9 @@ namespace qASIC.InputManagement.Map.Internal
         const string autoSavePrefsKey = "qASIC_input_map_editor_autosave";
         const string debugPrefsKey = "qASIC_input_map_editor_debug";
 
+        const string treeActionsExpanded = "qASIC_input_map_editor_actions_expanded";
+        const string treeAxesExpanded = "qASIC_input_map_editor_axes_expanded";
+
         static bool? _debugMode = null;
         public static bool DebugMode
         {
@@ -225,10 +228,7 @@ namespace qASIC.InputManagement.Map.Internal
             inspector = new InputMapWindowInspector();
 
             //Trees
-            if (contentTreeState == null)
-                contentTreeState = new TreeViewState();
-
-            contentTree = new InputMapWindowContentTree(contentTreeState, Map ? Map.Groups.ElementAtOrDefault(groupBar.SelectedGroupIndex) : null);
+            InitTree();
 
             //Assigning maps
             toolbar.map = Map;
@@ -260,6 +260,28 @@ namespace qASIC.InputManagement.Map.Internal
 
                 action.group.actions.RemoveAt(index);
                 contentTree.Reload();
+            };
+        }
+
+        void InitTree()
+        {
+            if (contentTreeState == null)
+                contentTreeState = new TreeViewState();
+
+            contentTree = new InputMapWindowContentTree(contentTreeState, Map ? Map.Groups.ElementAtOrDefault(groupBar.SelectedGroupIndex) : null);
+
+
+            if (contentTree.ActionsRoot != null)
+                contentTree.SetExpanded(contentTree.ActionsRoot.id, PlayerPrefs.GetInt(treeActionsExpanded, 1) != 0);
+
+            if (contentTree.ActionsRoot != null)
+                contentTree.SetExpanded(contentTree.AxesRoot.id, PlayerPrefs.GetInt(treeAxesExpanded, 1) != 0);
+
+
+            contentTree.OnExpand += () =>
+            {
+                PlayerPrefs.SetInt(treeActionsExpanded, contentTree.IsExpanded(contentTree.ActionsRoot.id) ? 1 : 0);
+                PlayerPrefs.SetInt(treeAxesExpanded, contentTree.IsExpanded(contentTree.AxesRoot.id) ? 1 : 0);
             };
         }
 
