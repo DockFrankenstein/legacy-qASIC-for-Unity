@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using qASIC.Tools;
 
 namespace qASIC.Console.Internal
 {
@@ -9,6 +10,9 @@ namespace qASIC.Console.Internal
         public bool showThankYouMessage = true;
         public bool logConfigAssigment = true;
         public bool logScene = true;
+
+        //Preferences
+        public TextTreeStyle textTreeStyle = new TextTreeStyle(TextTreeStyle.Preset.basic);
 
         //Built in commands
         public bool clearCommand = true;

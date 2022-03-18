@@ -18,6 +18,9 @@ namespace qASIC.Console.Internal
             //Basic
             DrawGroup("Color theme", new string[] { "colorTheme" });
 
+            //Preferences
+            DrawGroup("Preferences", new string[] { "textTreeStyle" });
+
             //Built in commands
             DrawGroup("Built in commands", new string[]
             {
