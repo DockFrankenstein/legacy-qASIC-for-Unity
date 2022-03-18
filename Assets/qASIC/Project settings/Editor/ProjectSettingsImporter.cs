@@ -27,7 +27,7 @@ namespace qASIC.ProjectSettings.Internal
         public static void Import()
         {
 #if qASIC_DEV
-            if (!EditorUtility.DisplayDialog("Create default project settings?", "Do you want to rebuild default project settings?", "ok", "cancel"))
+            if (!EditorUtility.DisplayDialog("Create default project settings?", "Do you want to rebuild default project settings?", "Ok", "Cancel"))
                 return;
 #endif
 
@@ -42,12 +42,12 @@ namespace qASIC.ProjectSettings.Internal
             catch (Exception e)
             {
                 EditorUtility.ClearProgressBar();
-                EditorUtility.DisplayDialog("Importing failed!", "There was an error while importing project settings.", "ok");
+                EditorUtility.DisplayDialog("Importing failed!", "There was an error while importing project settings.", "Ok");
                 throw e;
             }
 
             EditorUtility.ClearProgressBar();
-            EditorUtility.DisplayDialog("Success", "Project Settings imported successfully!", "ok");
+            EditorUtility.DisplayDialog("Success", "Project Settings imported successfully!", "Ok");
         }
     }
 }
