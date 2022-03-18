@@ -78,7 +78,7 @@ namespace qASIC.InputManagement.Internal.ReferenceExplorers
             {
                 HelpBox("Input Map not loaded - Please select an Input Map in project settings.", MessageType.Warning);
                 if (GUILayout.Button("Open project settings"))
-                    SettingsService.OpenProjectSettings("Project/qASIC/Input Management");
+                    SettingsService.OpenProjectSettings("Project/qASIC/Input");
                 return;
             }
 

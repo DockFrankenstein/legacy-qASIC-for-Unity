@@ -1,6 +1,8 @@
 ﻿using UnityEditor;
 using qASIC.EditorTools;
 
+using static UnityEngine.GUILayout;
+
 namespace qASIC.InputManagement.Map.Internal
 {
     public class InputMapWindowGroupBar : InputMapGroupBar
@@ -34,6 +36,12 @@ namespace qASIC.InputManagement.Map.Internal
             menu.AddItem("Add", false, () => Add(index));
             menu.AddItem("Delete", false, () => DeleteGroup(index));
             menu.ShowAsContext();
+        }
+
+        protected override void OnListGUI()
+        {
+            if (Button("+", EditorStyles.toolbarButton, Width(EditorGUIUtility.singleLineHeight)))
+                Add();
         }
 
         public override void DeleteGroup(int index)

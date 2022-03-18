@@ -39,8 +39,7 @@ namespace qASIC.InputManagement.Map.Internal
 
             DisplayGroups();
 
-            if (Button("+", EditorStyles.toolbarButton, Width(EditorGUIUtility.singleLineHeight)))
-                Add();
+            OnListGUI();
 
             EndHorizontal();
             EditorGUILayout.EndScrollView();
@@ -48,6 +47,8 @@ namespace qASIC.InputManagement.Map.Internal
 
             EndHorizontal();
         }
+
+        protected virtual void OnListGUI() { }
 
         void MoveButton(char character, int value, bool canScroll)
         {
