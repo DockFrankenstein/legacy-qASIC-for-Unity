@@ -65,10 +65,10 @@ namespace qASIC.InputManagement.Map.Internal
 
             DisplayMenu("Help", ref helpMenuRect, (GenericMenu menu) =>
             {
-                menu.AddItem("Documentation", false, () => Application.OpenURL("https://docs.qasictools.com/input/"));
-                menu.AddDisabledItem("Guides (comming not so soon)", false/*, () => Application.OpenURL("https://docs.qasictools.com/")*/);
+                menu.AddItem("Documentation", false, () => Application.OpenURL("https://docs.qasictools.com/docs/input/map"));
+                menu.AddDisabledItem("Guides (comming not so soon)", false/*, () => Application.OpenURL("https://docs.qasictools.com")*/);
                 menu.AddSeparator("");
-                menu.AddItem("Support", false, () => Application.OpenURL("https://qasictools.com/support"));
+                menu.AddItem("Support", false, () => Application.OpenURL("https://qasictools.com/support#support"));
             });
 
             if (InputMapWindow.DebugMode)

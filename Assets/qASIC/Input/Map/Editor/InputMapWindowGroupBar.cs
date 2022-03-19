@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using qASIC.EditorTools;
+using UnityEngine;
 
 using static UnityEngine.GUILayout;
 
@@ -32,8 +33,14 @@ namespace qASIC.InputManagement.Map.Internal
         {
             GenericMenu menu = new GenericMenu();
             int index = groupIndex;
-            menu.AddToggableItem("Set as default", false, () => SetAsDefault(index), Map.defaultGroup != index);
             menu.AddItem("Add", false, () => Add(index));
+            menu.AddToggableItem("Set as default", false, () => SetAsDefault(index), Map.defaultGroup != index);
+            menu.AddSeparator("");
+            menu.AddToggableItem("Move left", false, () => Move(groupIndex, -1), groupIndex > 0);
+            menu.AddToggableItem("Move right", false, () => Move(groupIndex, 1), groupIndex < Map.Groups.Count - 1);
+            menu.AddSeparator("");
+            menu.AddItem("Duplicate", false, () => Duplicate(index));
+            menu.AddSeparator("");
             menu.AddItem("Delete", false, () => DeleteGroup(index));
             menu.ShowAsContext();
         }
@@ -54,6 +61,39 @@ namespace qASIC.InputManagement.Map.Internal
         {
             base.SetAsDefault(index);
             InputMapWindow.SetMapDirty();
+        }
+
+        public void Move(int index, int amount)
+        {
+            int newIndex = index + amount;
+            int groupCount = Map.Groups.Count;
+
+            if (!Map) return;
+            Debug.Assert(index >= 0 && index < Map.Groups.Count, $"Cannot move group {index}, index is out of range!");
+
+            if (newIndex < 0 || newIndex >= groupCount) return;
+
+            InputMapWindow.SetMapDirty();
+
+            InputGroup group = Map.Groups[index];
+            Map.Groups.RemoveAt(index);
+            Map.Groups.Insert(newIndex, group);
+
+            Select(newIndex);
+        }
+
+        public void Duplicate(int index)
+        {
+            InputMapWindow.SetMapDirty();
+
+            if (!Map) return;
+            Debug.Assert(index >= 0 && index < Map.Groups.Count, $"Cannot duplicate group {index}, index is out of range!");
+
+            InputGroup group = JsonUtility.FromJson<InputGroup>(JsonUtility.ToJson(Map.Groups[index]));
+
+            Map.Groups.Insert(index, group);
+
+            Select(index + 1);
         }
 
         public override void Add(int index, InputGroup group)

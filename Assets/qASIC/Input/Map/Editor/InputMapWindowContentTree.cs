@@ -225,11 +225,10 @@ namespace qASIC.InputManagement.Map.Internal
 			InputMapContentEditableItemBase editableItem = item as InputMapContentEditableItemBase;
 			bool editable = !(editableItem is null);
 
-			menu.AddToggableItem("Delete", false, () => Delete(editableItem), editable);
 			menu.AddToggableItem("Rename", false, () => BeginRename(item), editable);
+			menu.AddToggableItem("Delete", false, () => Delete(editableItem), editable);
 
 			menu.AddSeparator("");
-
 			menu.AddItem("Expand all", false, ExpandAll);
 			menu.AddItem("Collapse all", false, CollapseAll);
 		}
@@ -282,7 +281,7 @@ namespace qASIC.InputManagement.Map.Internal
 		}
         #endregion
 
-        #region Copy&Pase&Delete
+        #region Copy&Pase&Move&Delete
 		void Delete(InputMapContentEditableItemBase item)
         {
 			item.Delete(Group);
