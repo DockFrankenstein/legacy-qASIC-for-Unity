@@ -183,7 +183,10 @@ namespace qASIC.InputManagement.Map.Internal
             Add(-1);
 
         public void Add(int index) =>
-            Add(index, new InputGroup(InputMapWindowEditorUtility.GenerateUniqueName("New group", Map.GroupExists)));
+            Add(index, new InputGroup(GenerateUniqueName()));
+
+        public string GenerateUniqueName() =>
+            InputMapWindowEditorUtility.GenerateUniqueName("New group", Map.GroupExists);
 
         public void Add(InputGroup group) =>
             Add(-1, group);
