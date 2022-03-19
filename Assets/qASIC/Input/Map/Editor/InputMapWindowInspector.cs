@@ -47,6 +47,7 @@ namespace qASIC.InputManagement.Map.Internal
         public event Action<InspectorInputAxis> OnDeleteAxis;
 
         bool actionKeyFoldout = true;
+        bool _resetField = false;
 
         string nameFieldValue;
 
@@ -148,6 +149,8 @@ namespace qASIC.InputManagement.Map.Internal
                 _inspectionObject = obj;
                 _displayDeletePrompt = false;
                 _currentListeningKeyCode = -1;
+                GUI.FocusControl(null);
+                _resetField = true;
             };
         }
 
@@ -155,6 +158,7 @@ namespace qASIC.InputManagement.Map.Internal
         {
             SetObject(null);
             GUI.FocusControl(null);
+            _resetField = true;
         }
 
         void DisplayKeys(InputAction action)
@@ -213,8 +217,11 @@ namespace qASIC.InputManagement.Map.Internal
 
         string NameField(string name)
         {
-            if (!EditorGUIUtility.editingTextField)
+            if (!EditorGUIUtility.editingTextField || _resetField)
+            {
                 nameFieldValue = name;
+                _resetField = false;
+            }
 
             nameFieldValue = TextField("Name", nameFieldValue);
             if (EditorGUIUtility.editingTextField)
