@@ -8,7 +8,7 @@ namespace qASIC.Console.Commands
         public virtual bool Active { get; } = true;
         public abstract string CommandName { get; }
         public abstract string Description { get; }
-        public virtual string Help { get; }
+        public virtual string Help { get => Description; }
         public virtual string[] Aliases { get; }
 
         public abstract void Run(List<string> args);

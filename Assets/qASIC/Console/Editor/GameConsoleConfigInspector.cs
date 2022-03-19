@@ -1,5 +1,8 @@
 ﻿using UnityEditor;
 using qASIC.EditorTools.Internal;
+using qASIC.EditorTools;
+
+using Config = qASIC.Console.Internal.GameConsoleConfig;
 
 namespace qASIC.Console.Internal
 {
@@ -8,7 +11,7 @@ namespace qASIC.Console.Internal
     {
         public override void OnInspectorGUI()
         {
-            bool isReadOnly = (target as GameConsoleConfig).IsReadOnly;
+            bool isReadOnly = (target as Config).IsReadOnly;
 
             if (isReadOnly)
                 EditorGUILayout.HelpBox("This is a read only configuration. If you want to modify values, please create a new one.", MessageType.Warning);
@@ -22,61 +25,29 @@ namespace qASIC.Console.Internal
             DrawGroup("Preferences", new string[] { "textTreeStyle" });
 
             //Built in commands
-            DrawGroup("Built in commands", new string[]
-            {
-                "clearCommand",
-                "echoCommand",
-                "exitCommand",
-                "helpCommand",
-                "inputCommand",
-                "optionCommand",
-                "audioCommand",
-                "sceneCommand",
-                "sceneListCommand",
-                "versionCommand",
-                "specsCommand",
-                "debugDisplayerCommand",
-                "clearDebugDisplayerCommand",
-                "timeScaleCommand",
-                "fovCommand",
-            });
+            qGUIInternalUtility.BeginGroup("Built in commands");
+            qGUIEditorUtility.DrawPropertiesInRange(serializedObject, nameof(Config.clearCommand), nameof(Config.fovCommand));
+            qGUIInternalUtility.EndGroup();
 
             //Unity
-            DrawGroup("Unity", new string[]
-            {
-                "logToUnity",
-                "logUnityErrorsToConsole",
-                "logUnityAssertsToConsole",
-                "logUnityExceptionsToConsole",
-                "logUnityWarningsToConsole",
-                "logUnityMessagesToConsole",
-            });
+            qGUIInternalUtility.BeginGroup("Unity");
+            qGUIEditorUtility.DrawPropertiesInRange(serializedObject, nameof(Config.logToUnity), nameof(Config.logUnityMessagesToConsole));
+            qGUIInternalUtility.EndGroup();
 
             //Version command
-            DrawGroup("Version command", new string[]
-            {
-                "displayGameVersion",
-                "displayUnityVerion",
-                "displayQasicVersion",
-            });
+            qGUIInternalUtility.BeginGroup("Version command");
+            qGUIEditorUtility.DrawPropertiesInRange(serializedObject, nameof(Config.displayGameVersion), nameof(Config.displayQasicVersion));
+            qGUIInternalUtility.EndGroup();
 
             //Specs command
-            DrawGroup("Specs command", new string[]
-            {
-                "displayCpu",
-                "displayCpuThreads",
-                "displayGpu",
-                "displayMemory",
-                "displaySystem",
-            });
+            qGUIInternalUtility.BeginGroup("Specs command");
+            qGUIEditorUtility.DrawPropertiesInRange(serializedObject, nameof(Config.displayCpu), nameof(Config.displaySystem));
+            qGUIInternalUtility.EndGroup();
 
             //Help command
-            DrawGroup("Help command", new string[]
-            {
-                "showDetailedHelp",
-                "usePageCommandLimit",
-                "pageCommandLimit",
-            });
+            qGUIInternalUtility.BeginGroup("Help command");
+            qGUIEditorUtility.DrawPropertiesInRange(serializedObject, nameof(Config.showDetailedHelp), nameof(Config.pageCommandLimit));
+            qGUIInternalUtility.EndGroup();
 
             serializedObject.ApplyModifiedProperties();
 

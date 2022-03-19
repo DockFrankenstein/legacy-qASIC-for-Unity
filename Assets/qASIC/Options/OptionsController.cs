@@ -291,6 +291,35 @@ namespace qASIC.Options
             type = args[0].ParameterType;
             return true;
         }
+
+        public static List<OptionsSetting> GetSettingsList()
+        {
+            int count = Settings.Count;
+            List<OptionsSetting> list = new List<OptionsSetting>();
+
+            for (int i = 0; i < count; i++)
+            {
+                try
+                {
+                    if (!TryGetAttribute(Settings[i], out OptionsSetting setting)) continue;
+                    list.Add(setting);
+                }
+                catch { }
+            }
+
+            return list;
+        }
+
+        public static List<string> GetSettingNames()
+        {
+            List<OptionsSetting> SettingsList = GetSettingsList();
+            List<string> namesList = new List<string>();
+
+            for (int i = 0; i < SettingsList.Count; i++)
+                namesList.Add(SettingsList[i].Name);
+
+            return namesList;
+        }
         #endregion
 
         #region Temp object

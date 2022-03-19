@@ -19,8 +19,10 @@ namespace qASIC.Console.Internal
         public bool echoCommand = true;
         public bool exitCommand = true;
         public bool helpCommand = true;
-        public bool inputCommand = true;
-        public bool optionCommand = true;
+        public bool changeInputCommand = true;
+        public bool inputListCommand = true;
+        public bool changeSettingCommand = true;
+        public bool settingListCommand = true;
         public bool audioCommand = true;
         public bool sceneCommand = true;
         public bool sceneListCommand = true;

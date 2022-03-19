@@ -7,6 +7,7 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleInputListCommand : GameConsoleCommand
     {
+        public override bool Active => GameConsoleController.GetConfig().inputListCommand;
         public override string CommandName { get; } = "inputlist";
         public override string Description { get; } = "lists all actions and axes";
         public override string Help { get; } = "lists all actions and axes";
@@ -56,7 +57,7 @@ namespace qASIC.Console.Commands
 
             string log = $"\n{tree.GenerateTree(list)}";
 
-            Log(log.ToString());
+            Log(log.ToString(), "info");
         }
     }
 }

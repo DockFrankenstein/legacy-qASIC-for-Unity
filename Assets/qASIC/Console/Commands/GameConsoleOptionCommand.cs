@@ -5,11 +5,11 @@ namespace qASIC.Console.Commands
 {
     public class GameConsoleOptionCommand : GameConsoleCommand
     {
-        public override bool Active { get => GameConsoleController.GetConfig().optionCommand; }
-        public override string CommandName { get; } = "changeoption";
+        public override bool Active { get => GameConsoleController.GetConfig().changeSettingCommand; }
+        public override string CommandName { get; } = "changesettings";
         public override string Description { get; } = "changes the specified setting";
-        public override string Help { get; } = "Use changeoption <setting name> <value>";
-        public override string[] Aliases { get; } = new string[] { "option", "options", "settings" };
+        public override string Help { get; } = "Use changesettings <setting name> <value>";
+        public override string[] Aliases { get; } = new string[] { "settings", "setting", "option", "options" };
 
         public override void Run(List<string> args)
         {

@@ -54,8 +54,8 @@ namespace qASIC.Console.Commands
                 for (int i = 0; i < command.Aliases.Length; i++)
                     aliasList += $" {command.Aliases[i]}";
             }
-            string helpMessage = command.Help == null ? $"No help avalible for command <b>{command.CommandName}</b>" 
-                : $"Help for command <b>{(command.CommandName)}</b>: {command.Help}";
+            string helpMessage = command.Help == null ? $"No help avalible for command '{command.CommandName}'" 
+                : $"Help for command '{(command.CommandName)}': {command.Help}";
 
             Log($"{helpMessage}{aliasList}", "info");
         }
@@ -72,7 +72,7 @@ namespace qASIC.Console.Commands
 
         private void DisplayHelp(int pageIndex)
         {
-            string helpMessage = useLimit ? $"<b>Help page {pageIndex + 1} out of {maxPages}:</b>\n" : "<b>Avalible commands:</b>\n";
+            string helpMessage = useLimit ? $"'Help page {pageIndex + 1} out of {maxPages}:'\n" : "'Available commands:'\n";
             List<GameConsoleCommand> commands = GameConsoleCommandList.Commands;
 
             int limit = useLimit ? onePageCommandLimit : commands.Count;
