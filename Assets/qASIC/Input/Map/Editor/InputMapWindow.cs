@@ -53,8 +53,10 @@ namespace qASIC.InputManagement.Map.Internal
         const string autoSavePrefsKey = "qASIC_input_map_editor_autosave";
         const string debugPrefsKey = "qASIC_input_map_editor_debug";
 
-        const string treeActionsExpanded = "qASIC_input_map_editor_actions_expanded";
-        const string treeAxesExpanded = "qASIC_input_map_editor_axes_expanded";
+        const string treeActionsExpandedPrefsKey = "qASIC_input_map_editor_actions_expanded";
+        const string treeAxesExpandedPrefsKey = "qASIC_input_map_editor_axes_expanded";
+
+        const string inspectorWidthPrefsKey = "qASIC_input_map_editor_inspector_width";
 
         static bool? _debugMode = null;
         public static bool DebugMode
@@ -73,7 +75,8 @@ namespace qASIC.InputManagement.Map.Internal
         }
 
         static bool? _autoSave = null;
-        public static bool AutoSave {
+        public static bool AutoSave
+        {
             get
             {
                 if (_autoSave == null)
@@ -92,13 +95,32 @@ namespace qASIC.InputManagement.Map.Internal
             }
         }
 
+        public static float? _inspectorWidth = null;
+        public static float InspectorWidth
+        {
+            get
+            {
+                if (_inspectorWidth == null)
+                    _inspectorWidth = EditorPrefs.GetFloat(inspectorWidthPrefsKey, 300f);
+
+                return Mathf.Max(_inspectorWidth ?? 300f, 220f);
+            }
+            set
+            {
+                EditorPrefs.SetFloat(inspectorWidthPrefsKey, value);
+                _inspectorWidth = value;
+            }
+        }
+
         public static void ResetPreferences()
         {
             EditorPrefs.DeleteKey(autoSavePrefsKey);
             EditorPrefs.DeleteKey(debugPrefsKey);
+            EditorPrefs.DeleteKey(inspectorWidthPrefsKey);
 
             _autoSave = null;
             _debugMode = null;
+            _inspectorWidth = null;
         }
         #endregion
 
@@ -274,16 +296,16 @@ namespace qASIC.InputManagement.Map.Internal
 
 
             if (contentTree.ActionsRoot != null)
-                contentTree.SetExpanded(contentTree.ActionsRoot.id, PlayerPrefs.GetInt(treeActionsExpanded, 1) != 0);
+                contentTree.SetExpanded(contentTree.ActionsRoot.id, PlayerPrefs.GetInt(treeActionsExpandedPrefsKey, 1) != 0);
 
             if (contentTree.ActionsRoot != null)
-                contentTree.SetExpanded(contentTree.AxesRoot.id, PlayerPrefs.GetInt(treeAxesExpanded, 1) != 0);
+                contentTree.SetExpanded(contentTree.AxesRoot.id, PlayerPrefs.GetInt(treeAxesExpandedPrefsKey, 1) != 0);
 
 
             contentTree.OnExpand += () =>
             {
-                PlayerPrefs.SetInt(treeActionsExpanded, contentTree.IsExpanded(contentTree.ActionsRoot.id) ? 1 : 0);
-                PlayerPrefs.SetInt(treeAxesExpanded, contentTree.IsExpanded(contentTree.AxesRoot.id) ? 1 : 0);
+                PlayerPrefs.SetInt(treeActionsExpandedPrefsKey, contentTree.IsExpanded(contentTree.ActionsRoot.id) ? 1 : 0);
+                PlayerPrefs.SetInt(treeAxesExpandedPrefsKey, contentTree.IsExpanded(contentTree.AxesRoot.id) ? 1 : 0);
             };
         }
 
@@ -314,7 +336,7 @@ namespace qASIC.InputManagement.Map.Internal
 
             HorizontalLine();
 
-            GUILayout.BeginVertical(GUILayout.Width(300f));
+            GUILayout.BeginVertical(GUILayout.Width(Mathf.Min(InspectorWidth, position.width * 0.8f)));
             inspector.OnGUI();
             GUILayout.EndVertical();
 
@@ -411,6 +433,14 @@ namespace qASIC.InputManagement.Map.Internal
                         Instantiate(this).Show();
                     return false;
             }
+        }
+        #endregion
+
+        #region Other
+        public void SelectInInspector(object obj)
+        {
+            if (inspector == null) return;
+            inspector.SetObject(obj);
         }
         #endregion
     }

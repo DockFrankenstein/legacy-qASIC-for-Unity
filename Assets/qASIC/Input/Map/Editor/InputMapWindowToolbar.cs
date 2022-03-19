@@ -60,7 +60,15 @@ namespace qASIC.InputManagement.Map.Internal
 
             DisplayMenu("Settings", ref settingsMenuRect, (GenericMenu menu) =>
             {
+                InputMapWindow window = InputMapWindow.GetEditorWindow();
+
                 menu.AddItem("Open project settings", false, () => SettingsService.OpenProjectSettings("Project/qASIC/Input"));
+
+                if (InputMapWindow.DebugMode)
+                {
+                    menu.AddSeparator("");
+                    menu.AddItem("Window settings (experimental)", false, () => window.SelectInInspector("settings"));
+                }
             });
 
             DisplayMenu("Help", ref helpMenuRect, (GenericMenu menu) =>

@@ -102,6 +102,9 @@ namespace qASIC.InputManagement.Map.Internal
                 case InputAxis _:
                     HelpBox(new GUIContent($"Use '{nameof(InspectorInputAxis)}' instead of '{nameof(InputAxis)}'!"));
                     break;
+                case string s:
+                    HandleStringInspection(s);
+                    break;
             }
 
             EndScrollView();
@@ -111,6 +114,27 @@ namespace qASIC.InputManagement.Map.Internal
                 OnNextRepaint?.Invoke();
                 OnNextRepaint = null;
                 InputMapWindow.GetEditorWindow().Repaint();
+            }
+        }
+
+        void HandleStringInspection(string s)
+        {
+            switch (s)
+            {
+                case "settings":
+                    GUILayout.Label("Settings", EditorStyles.whiteLargeLabel);
+
+                    InputMapWindow.AutoSave = Toggle("Auto Save", InputMapWindow.AutoSave);
+                    InputMapWindow.DebugMode = Toggle("Debug Mode", InputMapWindow.DebugMode);
+
+                    InputMapWindow.InspectorWidth = FloatField("Inspector width", InputMapWindow.InspectorWidth);
+
+                    if (GUILayout.Button("Reset preferences"))
+                        InputMapWindow.ResetPreferences();
+                    break;
+                default:
+                    HelpBox($"Message {s} not recognized!", MessageType.Error);
+                    break;
             }
         }
 
