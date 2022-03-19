@@ -31,7 +31,7 @@ namespace qASIC.InputManagement.DebugTools
                     for (int i = 0; i < action.keys.Count; i++)
                     {
                         KeyCode key = InputManager.GetKeyCode(group.groupName, action.actionName, i);
-                        AddLine($"├─{key}: {Input.GetKey(key).ToStringFormated()}");
+                        AddLine($"├─{key}: {Input.GetKey(key).ToStringFormatted()}");
                     }
                 }
             }

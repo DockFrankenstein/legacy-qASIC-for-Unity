@@ -5,6 +5,12 @@ namespace qASIC
     public static class VectorText
     {
         #region ToString
+        public static string ToText(Vector2? vector) => vector == null ? "NULL" : ToText(vector ?? new Vector2());
+        public static string ToText(Vector2Int? vector) => vector == null ? "NULL" : ToText(vector ?? new Vector2Int());
+        public static string ToText(Vector3? vector) => vector == null ? "NULL" : ToText(vector ?? new Vector3());
+        public static string ToText(Vector3Int? vector) => vector == null ? "NULL" : ToText(vector ?? new Vector3Int());
+        public static string ToText(Vector4? vector) => vector == null ? "NULL" : ToText(vector ?? new Vector4());
+
         public static string ToText(Vector2 vector) => $"{vector.x}x{vector.y}";
         public static string ToText(Vector2Int vector) => $"{vector.x}x{vector.y}";
         public static string ToText(Vector3 vector) => $"{vector.x}x{vector.y}x{vector.z}";
