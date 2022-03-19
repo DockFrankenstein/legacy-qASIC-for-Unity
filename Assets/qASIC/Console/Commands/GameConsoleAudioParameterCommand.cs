@@ -15,6 +15,12 @@ namespace qASIC.Console.Commands
         {
             if (!CheckForArgumentCount(args, 1, 2)) return;
 
+            if (!AudioManager.Enabled)
+            {
+                LogError("Audio Manager is disabled!");
+                return;
+            }
+
             switch (args.Count)
             {
                 case 2:

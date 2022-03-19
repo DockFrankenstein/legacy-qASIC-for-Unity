@@ -16,6 +16,12 @@ namespace qASIC.Console.Commands
         {
             if (!CheckForArgumentCount(args, 2, 4)) return;
 
+            if (!InputManager.MapLoaded)
+            {
+                LogError("Input Map has not been assigned!");
+                return;
+            }
+
             if (!Enum.TryParse(args[args.Count - 1], out KeyCode key))
             {
                 ParseException(args[args.Count - 1], nameof(KeyCode));

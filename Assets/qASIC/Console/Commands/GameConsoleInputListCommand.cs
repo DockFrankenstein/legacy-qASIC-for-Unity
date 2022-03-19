@@ -17,12 +17,13 @@ namespace qASIC.Console.Commands
         {
             if (!CheckForArgumentCount(args, 0)) return;
 
-            InputMap map = InputManager.Map;
-            if (!map)
+            if (!InputManager.MapLoaded)
             {
-                LogError("No map assigned!");
+                LogError("Input Map has not been assigned!");
                 return;
             }
+
+            InputMap map = InputManager.Map;
 
             TextTree tree = new TextTree(GameConsoleController.GetConfig().textTreeStyle);
             TextTreeItem list = new TextTreeItem(map.name);

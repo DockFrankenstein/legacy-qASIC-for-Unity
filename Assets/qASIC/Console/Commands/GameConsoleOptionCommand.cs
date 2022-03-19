@@ -14,6 +14,13 @@ namespace qASIC.Console.Commands
         public override void Run(List<string> args)
         {
             if (!CheckForArgumentCount(args, 2)) return;
+
+            if (!OptionsController.Enabled)
+            {
+                LogError("Options System is disabled!");
+                return;
+            }
+
             OptionsController.ChangeOption(args[1], args[2]);
         }
     }
