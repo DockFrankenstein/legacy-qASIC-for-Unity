@@ -369,6 +369,9 @@ namespace qASIC.InputManagement.Map.Internal
 
             style.normal.background = qGUIEditorUtility.BorderTexture;
             GUILayout.Box(GUIContent.none, style);
+
+            //TODO: add inspector resizing
+            //EditorGUIUtility.AddCursorRect(GUILayoutUtility.GetLastRect().Border(-2f, 0f), MouseCursor.ResizeHorizontal);
         }
         #endregion
 
