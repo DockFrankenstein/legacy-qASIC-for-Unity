@@ -11,7 +11,7 @@ namespace qASIC.InputManagement.Tools
         {
             EditorGUILayout.HelpBox("Input Preset has been replaced with Input Map. For more details click the button bellow.", MessageType.Warning);
             if (Button("More details"))
-                Application.OpenURL(@"https://docs.qasictools.com/");
+                Application.OpenURL(@"https://docs.qasictools.com/general/faq/legacy-input-system");
         }
     }
 
@@ -22,7 +22,7 @@ namespace qASIC.InputManagement.Tools
         {
             EditorGUILayout.HelpBox("Set Global Input Keys has been replaced with Input Load. For more details click the button bellow.", MessageType.Warning);
             if (Button("More details"))
-                Application.OpenURL(@"https://docs.qasictools.com/");
+                Application.OpenURL(@"https://docs.qasictools.com/general/faq/legacy-input-system");
         }
     }
 }
