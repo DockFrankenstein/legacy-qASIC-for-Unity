@@ -47,7 +47,8 @@ namespace qASIC.InputManagement.Map.Internal
         public event Action<InspectorInputAxis> OnDeleteAxis;
 
         bool actionKeyFoldout = true;
-        bool _resetField = false;
+        bool _resetNameField = false;
+        bool _editingNameField = false;
 
         string nameFieldValue;
 
@@ -69,13 +70,17 @@ namespace qASIC.InputManagement.Map.Internal
 
                     EditorGUI.BeginDisabledGroup(map.defaultGroup == groupIndex);
                     if (GUILayout.Button("Set as default"))
+                    {
                         map.defaultGroup = groupIndex;
-                    EditorGUI.EndDisabledGroup();
+                        _displayDeletePrompt = false;
+                        InputMapWindow.SetMapDirty();
+                    }
 
                     Space();
                     if (DeleteButton())
-                        OnDeleteGroup.Invoke(group);
+                        OnDeleteGroup?.Invoke(group);
 
+                    EditorGUI.EndDisabledGroup();
                     break;
                 case InspectorInputAction action:
                     action.action.actionName = NameField(action.action.actionName);
@@ -84,7 +89,7 @@ namespace qASIC.InputManagement.Map.Internal
                     Space();
 
                     if (DeleteButton())
-                        OnDeleteAction.Invoke(action);
+                        OnDeleteAction?.Invoke(action);
                     break;
                 case InspectorInputAxis axis:
                     axis.axis.axisName = NameField(axis.axis.axisName);
@@ -95,7 +100,7 @@ namespace qASIC.InputManagement.Map.Internal
                     EditorChangeChecker.EndChangeCheckAndCleanup();
 
                     if (DeleteButton())
-                        OnDeleteAxis.Invoke(axis);
+                        OnDeleteAxis?.Invoke(axis);
                     break;
                 case InputAction _:
                     HelpBox(new GUIContent($"Use '{nameof(InspectorInputAction)}' instead of '{nameof(InputAction)}'!"));
@@ -149,8 +154,9 @@ namespace qASIC.InputManagement.Map.Internal
                 _inspectionObject = obj;
                 _displayDeletePrompt = false;
                 _currentListeningKeyCode = -1;
-                GUI.FocusControl(null);
-                _resetField = true;
+                if (_editingNameField)
+                    GUI.FocusControl(null);
+                _resetNameField = true;
             };
         }
 
@@ -158,7 +164,7 @@ namespace qASIC.InputManagement.Map.Internal
         {
             SetObject(null);
             GUI.FocusControl(null);
-            _resetField = true;
+            _resetNameField = true;
         }
 
         void DisplayKeys(InputAction action)
@@ -217,14 +223,16 @@ namespace qASIC.InputManagement.Map.Internal
 
         string NameField(string name)
         {
-            if (!EditorGUIUtility.editingTextField || _resetField)
+            _editingNameField = EditorGUIUtility.editingTextField;
+            if (!_editingNameField || _resetNameField)
             {
                 nameFieldValue = name;
-                _resetField = false;
+                _resetNameField = false;
+                _editingNameField = false;
             }
 
             nameFieldValue = TextField("Name", nameFieldValue);
-            if (EditorGUIUtility.editingTextField)
+            if (_editingNameField)
                 return name;
 
             if(nameFieldValue != name)

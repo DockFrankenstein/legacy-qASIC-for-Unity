@@ -41,7 +41,7 @@ namespace qASIC.InputManagement.Map.Internal
             menu.AddSeparator("");
             menu.AddItem("Duplicate", false, () => Duplicate(index));
             menu.AddSeparator("");
-            menu.AddItem("Delete", false, () => DeleteGroup(index));
+            menu.AddToggableItem("Delete", false, () => DeleteGroup(index), Map.defaultGroup != groupIndex);
             menu.ShowAsContext();
         }
 

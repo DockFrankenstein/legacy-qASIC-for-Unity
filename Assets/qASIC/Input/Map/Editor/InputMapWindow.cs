@@ -284,6 +284,17 @@ namespace qASIC.InputManagement.Map.Internal
 
                 action.group.actions.RemoveAt(index);
                 contentTree.Reload();
+                SelectInInspector(null);
+            };
+
+            inspector.OnDeleteAxis += (InputMapWindowInspector.InspectorInputAxis axis) =>
+            {
+                int index = axis.group.axes.IndexOf(axis.axis);
+                if (index == -1) return;
+
+                axis.group.axes.RemoveAt(index);
+                contentTree.Reload();
+                SelectInInspector(null);
             };
         }
 

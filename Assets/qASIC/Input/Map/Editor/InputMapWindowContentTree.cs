@@ -286,6 +286,8 @@ namespace qASIC.InputManagement.Map.Internal
         {
 			item.Delete(Group);
 			InputMapWindow.SetMapDirty();
+			InputMapWindow.GetEditorWindow().SelectInInspector(null);
+			SetSelection(new List<int>());
 			Reload();
         }
         #endregion
