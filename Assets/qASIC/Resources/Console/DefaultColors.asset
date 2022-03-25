@@ -18,8 +18,8 @@ MonoBehaviour:
   InfoColor: {r: 1, g: 1, b: 1, a: 1}
   qASICColor: {r: 0, g: 0.7, b: 1, a: 1}
   SettingsColor: {r: 0, g: 0.301, b: 1, a: 1}
-  InputColor: {r: 0.878, g: 0.129, b: 0, a: 1}
-  AudioColor: {r: 1, g: 0, b: 0.5, a: 1}
+  InputColor: {r: 1, g: 0.1882353, b: 0.34509805, a: 1}
+  AudioColor: {r: 0.9137255, g: 0, b: 0.6156863, a: 1}
   ConsoleColor: {r: 0, g: 0.518, b: 0.663, a: 1}
   SceneColor: {r: 0.7019608, g: 0, b: 1, a: 1}
   UnityAssertColor: {r: 1, g: 0, b: 0, a: 1}

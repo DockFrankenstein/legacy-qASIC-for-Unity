@@ -20,7 +20,7 @@ namespace qASIC.Options.Internal
 
         public override void OnInspectorGUI()
         {
-            qGUIInternalUtility.DrawqASICBanner(docs: "https://docs.qasictools.com/options/getting-started");
+            qGUIInternalUtility.DrawqASICBanner(docs: "https://docs.qasictools.com/docs/options");
 
             PropertyField(serializationTypeProperty);
             if ((SerializationType)serializationTypeProperty.intValue == SerializationType.config)

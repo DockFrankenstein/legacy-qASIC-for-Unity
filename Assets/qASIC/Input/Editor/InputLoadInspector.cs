@@ -23,7 +23,7 @@ namespace qASIC.InputManagement.Internal
         public override void OnInspectorGUI()
         {
             //TODO: change docs link to point to input system
-            qGUIInternalUtility.DrawqASICBanner();
+            qGUIInternalUtility.DrawqASICBanner(docs: "https://docs.qasictools.com/docs/input");
 
             PropertyField(mapProperty);
             PropertyField(serializationTypeProperty);

@@ -31,6 +31,9 @@ namespace qASIC.Console.Internal
         public GameConsoleColor[] Colors;
 
         public bool IsReadOnly => isReadOnly;
-        [HideInInspector] [SerializeField] bool isReadOnly;
+#if qASIC_DEV
+        [HideInInspector]
+#endif
+        [SerializeField] bool isReadOnly;
     }
 }

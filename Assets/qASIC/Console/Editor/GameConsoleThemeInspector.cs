@@ -15,7 +15,9 @@ namespace qASIC.Console.Internal
             if (isReadOnly)
                 EditorGUILayout.HelpBox("This is a read only theme. If you want to modify values, please create a new one.", MessageType.Warning);
 
+#if !qASIC_DEV
             EditorGUI.BeginDisabledGroup(isReadOnly);
+#endif
 
             DrawGroup("Basic", new string[]
             {
@@ -48,9 +50,16 @@ namespace qASIC.Console.Internal
             DrawCustomColorArray();
             qGUIInternalUtility.EndGroup();
 
-            serializedObject.ApplyModifiedProperties();
-
+#if !qASIC_DEV
             EditorGUI.EndDisabledGroup();
+#endif
+
+
+#if qASIC_DEV
+            DrawGroup("Other", new string[] { "isReadOnly" });
+#endif
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         void DrawCustomColorArray()
