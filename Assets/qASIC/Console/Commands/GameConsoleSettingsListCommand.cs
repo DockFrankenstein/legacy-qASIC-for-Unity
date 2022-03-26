@@ -25,7 +25,13 @@ namespace qASIC.Console.Commands
             StringBuilder log = new StringBuilder("Avaliable settings:");
             List<string> settings = OptionsController.GetSettingNames().Distinct().ToList();
             for (int i = 0; i < settings.Count; i++)
-                log.Append($"\n- {settings[i]}");
+            {
+                string valueString = "N/A";
+                if (OptionsController.TryGetOptionValue(settings[i], out object value))
+                    valueString = value.ToString();
+
+                log.Append($"\n- {settings[i]}: {valueString}");
+            }
 
             Log(log.ToString(), "info");
         }
