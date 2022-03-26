@@ -72,7 +72,7 @@ namespace qASIC.Console.Commands
 
         private void DisplayHelp(int pageIndex)
         {
-            string helpMessage = useLimit ? $"'Help page {pageIndex + 1} out of {maxPages}:'\n" : "'Available commands:'\n";
+            string helpMessage = useLimit ? $"Help page {pageIndex + 1} out of {maxPages}:\n" : "Available commands:\n";
             List<GameConsoleCommand> commands = GameConsoleCommandList.Commands;
 
             int limit = useLimit ? onePageCommandLimit : commands.Count;

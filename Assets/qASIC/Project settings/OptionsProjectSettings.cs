@@ -11,6 +11,7 @@ namespace qASIC.ProjectSettings
         public static OptionsProjectSettings Instance => CheckInstance("Options", _instance);
 
         public bool enableOptionsSystem = true;
+        public bool autoInitialize = true;
 
         public SerializationType serializationType = SerializationType.playerPrefs;
         public AdvancedGenericFilePath savePath = new AdvancedGenericFilePath(GenericFolder.PersistentDataPath, "settings.txt", "settings-editor.txt");

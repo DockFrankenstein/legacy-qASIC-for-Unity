@@ -2,7 +2,6 @@
 using System;
 using System.Reflection;
 using qASIC.Tools;
-using UnityEngine;
 
 namespace qASIC.Console.Commands
 {
@@ -11,9 +10,14 @@ namespace qASIC.Console.Commands
         private static bool _disableInitialization;
         public static bool DisableInitialization => _disableInitialization;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
-        static void Initialize()
+        private static bool _initialized = false;
+        public static bool Initialized => _initialized;
+
+        public static void Initialize()
         {
+            if (_initialized) return;
+            _initialized = true;
+
             _disableInitialization = ProjectSettings.ConsoleProjectSettings.Instance.startArgsDisableCommandInitialization
                 && Array.IndexOf(Environment.GetCommandLineArgs(), "-qASIC-console-disable-commandlistinitialization") != -1;
 
@@ -45,7 +49,6 @@ namespace qASIC.Console.Commands
             return false;
         }
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
         public static List<GameConsoleCommand> UpdateList()
         {
             _commands = new List<GameConsoleCommand>();

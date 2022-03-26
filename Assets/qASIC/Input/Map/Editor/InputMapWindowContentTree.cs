@@ -314,6 +314,7 @@ namespace qASIC.InputManagement.Map.Internal
         protected override void RenameEnded(RenameEndedArgs args)
 		{
 			if (!args.acceptedRename) return;
+			if (string.IsNullOrWhiteSpace(args.newName)) return;
 
 			switch (FindItem(args.itemID, rootItem))
 			{

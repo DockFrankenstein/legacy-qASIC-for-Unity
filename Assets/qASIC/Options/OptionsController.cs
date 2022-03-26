@@ -51,11 +51,20 @@ namespace qASIC.Options
         #endregion
 
         #region Initializing
+        private static bool _initialized = false;
+        public static bool Initialized => _initialized;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
-        static void Initialize()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        static void AutoInitialize()
         {
-            if (!Enabled) return;
+            if (OptionsProjectSettings.Instance.autoInitialize)
+                Initialize();
+        }
+
+        public static void Initialize()
+        {
+            if (!Enabled || _initialized) return;
+            _initialized = true;
 
             OptionsProjectSettings settings = OptionsProjectSettings.Instance;
             string[] args = Environment.GetCommandLineArgs();

@@ -79,5 +79,27 @@ namespace qASIC.InputManagement.Map
 
         public bool NameEquals(string name) =>
             groupName.ToLower() == name.ToLower();
+
+        public bool ActionExists(string actionName)
+        {
+            for (int i = 0; i < actions.Count; i++)
+                if (actions[i]?.NameEquals(actionName) == true)
+                    return true;
+            return false;
+        }
+
+        public bool AxisExists(string axisName)
+        {
+            for (int i = 0; i < axes.Count; i++)
+                if (axes[i]?.NameEquals(axisName) == true)
+                    return true;
+            return false;
+        }
+
+        public bool CanRenameAction(string newName) =>
+            !string.IsNullOrWhiteSpace(newName) && !ActionExists(newName);
+
+        public bool CanRenameAxis(string newName) =>
+            !string.IsNullOrWhiteSpace(newName) && !AxisExists(newName);
     }
 }

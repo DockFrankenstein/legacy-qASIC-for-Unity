@@ -65,5 +65,8 @@ namespace qASIC.InputManagement.Map
 
         public override string ToString() =>
             actionName;
+
+        public bool NameEquals(string name) =>
+            NonRepeatableChecker.Compare(actionName, name);
     }
 }

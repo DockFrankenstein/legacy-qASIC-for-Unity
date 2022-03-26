@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using qASIC.Tools;
+using System;
 
 namespace qASIC.InputManagement.Map
 {
@@ -63,5 +64,8 @@ namespace qASIC.InputManagement.Map
                     return true;
             return false;
         }
+
+        public bool CanRenameGroup(string newName) =>
+            !string.IsNullOrWhiteSpace(newName) && !GroupExists(newName);
     }
 }

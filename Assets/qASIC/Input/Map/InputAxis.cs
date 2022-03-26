@@ -18,5 +18,8 @@ namespace qASIC.InputManagement.Map
         {
             axisName = name;
         }
+
+        public bool NameEquals(string name) =>
+            NonRepeatableChecker.Compare(axisName, name);
     }
 }

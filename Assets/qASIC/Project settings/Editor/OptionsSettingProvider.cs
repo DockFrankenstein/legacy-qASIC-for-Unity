@@ -22,9 +22,11 @@ namespace qASIC.ProjectSettings.Internal
 
         public override void OnGUI(string searchContext)
         {
-            qGUIInternalUtility.BeginGroup("General");
-            DrawProperty(nameof(Settings.enableOptionsSystem));
-            qGUIInternalUtility.EndGroup();
+            qGUIInternalUtility.DrawPropertyGroup(serializedSettings, "General", new string[]
+            {
+                nameof(Settings.enableOptionsSystem),
+                nameof(Settings.autoInitialize),
+            });
 
             EditorGUI.BeginDisabledGroup(!settings.enableOptionsSystem);
 

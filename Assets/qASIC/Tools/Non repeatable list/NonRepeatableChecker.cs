@@ -10,8 +10,8 @@ namespace qASIC.Tools
 
             for (int i = 0; i < list.Count; i++)
             {
-                if (!(list[i] is INonRepeatable nonRepeatable) || usedNames.Contains(nonRepeatable.ItemName.ToLower())) return true;
-                usedNames.Add(nonRepeatable.ItemName.ToLower());
+                if (!(list[i] is INonRepeatable nonRepeatable) || usedNames.Contains(GetFormatedName(nonRepeatable.ItemName))) return true;
+                usedNames.Add(GetFormatedName(nonRepeatable.ItemName));
             }
 
             return false;
@@ -20,7 +20,7 @@ namespace qASIC.Tools
         public static bool ContainsKey<T>(List<T> list, string key)
         {
             for (int i = 0; i < list.Count; i++)
-                if (list[i] is INonRepeatable nonRepeatable && Compare(nonRepeatable.ItemName, key))
+                if (list[i] is INonRepeatable nonRepeatable && Compare(GetFormatedName(nonRepeatable.ItemName), key))
                     return true;
 
             return false;
@@ -42,13 +42,13 @@ namespace qASIC.Tools
 
             for (int i = 0; i < list.Count; i++)
             {
-                if (!(list[i] is INonRepeatable nonRepeatable) || usedNames.Contains(nonRepeatable.ItemName.ToLower()))
+                if (!(list[i] is INonRepeatable nonRepeatable) || usedNames.Contains(GetFormatedName(nonRepeatable.ItemName)))
                 {
                     list.RemoveAt(i);
                     continue;
                 }
 
-                usedNames.Add(nonRepeatable.ItemName.ToLower());
+                usedNames.Add(GetFormatedName(nonRepeatable.ItemName));
             }
         }
 
@@ -58,10 +58,11 @@ namespace qASIC.Tools
 
             for (int i = 0; i < list.Count; i++)
             {
-                if (!(list[i] is INonRepeatable nonRepeatable) || names.Contains(nonRepeatable.ItemName.ToLower()))
-                    continue;
+                if (!(list[i] is INonRepeatable nonRepeatable)) continue;
+                string name = GetFormatedName(nonRepeatable.ItemName);
+                if (names.Contains(name)) continue;
 
-                names.Add(nonRepeatable.ItemName.ToLower());
+                names.Add(name);
             }
 
             return names;
@@ -69,12 +70,12 @@ namespace qASIC.Tools
 
         public static bool TryGetItem<T>(List<T> list, string itemName, out T item, bool logError = false)
         {
-            itemName = itemName.ToLower();
+            itemName = GetFormatedName(itemName);
             item = default;
 
             for (int i = 0; i < list.Count; i++)
             {
-                if (!(list[i] is INonRepeatable nonRepeatable) || nonRepeatable.ItemName.ToLower() != itemName)
+                if (!(list[i] is INonRepeatable nonRepeatable) || GetFormatedName(nonRepeatable.ItemName) != itemName)
                     continue;
 
                 item = list[i];

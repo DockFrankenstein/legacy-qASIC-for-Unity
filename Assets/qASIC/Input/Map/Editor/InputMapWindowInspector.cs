@@ -66,7 +66,7 @@ namespace qASIC.InputManagement.Map.Internal
                     int groupIndex = map.Groups.IndexOf(group);
                     if (groupIndex == -1) break;
 
-                    group.groupName = NameField(group.groupName);
+                    group.groupName = NameField(group.groupName, (string newName) => { return map.CanRenameGroup(newName); });
 
                     EditorGUI.BeginDisabledGroup(map.defaultGroup == groupIndex);
                     if (GUILayout.Button("Set as default"))
@@ -83,7 +83,7 @@ namespace qASIC.InputManagement.Map.Internal
                     EditorGUI.EndDisabledGroup();
                     break;
                 case InspectorInputAction action:
-                    action.action.actionName = NameField(action.action.actionName);
+                    action.action.actionName = NameField(action.action.actionName, (string newName) => { return action.group.CanRenameAction(newName); });
 
                     DisplayKeys(action.action);
                     Space();
@@ -92,11 +92,11 @@ namespace qASIC.InputManagement.Map.Internal
                         OnDeleteAction?.Invoke(action);
                     break;
                 case InspectorInputAxis axis:
-                    axis.axis.axisName = NameField(axis.axis.axisName);
+                    axis.axis.axisName = NameField(axis.axis.axisName, (string newName) => { return axis.group.CanRenameAxis(newName); });
 
                     EditorChangeChecker.BeginChangeCheck(InputMapWindow.SetMapDirty);
-                    axis.axis.positiveAction = EditorGUILayout.TextField("Positive", axis.axis.positiveAction);
-                    axis.axis.negativeAction = EditorGUILayout.TextField("Negative", axis.axis.negativeAction);
+                    axis.axis.positiveAction = TextField("Positive", axis.axis.positiveAction);
+                    axis.axis.negativeAction = TextField("Negative", axis.axis.negativeAction);
                     EditorChangeChecker.EndChangeCheckAndCleanup();
 
                     if (DeleteButton())
@@ -223,9 +223,9 @@ namespace qASIC.InputManagement.Map.Internal
         }
 
         string NameField(string name, bool setDirty = true) =>
-            NameField(name, _ => { }, setDirty);
+            NameField(name, _ => { return true; }, setDirty);
 
-        string NameField(string text, Action<string> onEditEnd, bool setDirty = true)
+        string NameField(string text, Func<string, bool> canRename, bool setDirty = true)
         {
             if (!_editingNameField || _resetNameField || !EditorGUIUtility.editingTextField)
             {
@@ -236,7 +236,7 @@ namespace qASIC.InputManagement.Map.Internal
 
             nameFieldValue = TextField("Name", nameFieldValue);
             _editingNameField = EditorGUIUtility.editingTextField;
-            if (_editingNameField)
+            if (_editingNameField || !canRename.Invoke(nameFieldValue))
                 return text;
 
             if (setDirty && nameFieldValue != text)
@@ -244,8 +244,6 @@ namespace qASIC.InputManagement.Map.Internal
                 InputMapWindow.SetMapDirty();
                 InputMapWindow.GetEditorWindow().ReloadTreesNextRepaint();
             }
-
-            onEditEnd?.Invoke(nameFieldValue);
 
             return nameFieldValue;
         }

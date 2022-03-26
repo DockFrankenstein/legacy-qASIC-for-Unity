@@ -43,8 +43,8 @@ namespace qASIC.Console.Commands
                     {
                         children = new List<TextTreeItem>()
                         {
-                            new TextTreeItem($"+{axis.positiveAction}"),
-                            new TextTreeItem($"-{axis.negativeAction}"),
+                            new TextTreeItem($" +{axis.positiveAction}"),
+                            new TextTreeItem($" -{axis.negativeAction}"),
                         },
                     };
 

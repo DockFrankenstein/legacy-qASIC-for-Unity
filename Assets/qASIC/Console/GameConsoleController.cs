@@ -23,6 +23,8 @@ namespace qASIC.Console
             Application.logMessageReceived += HandleUnityLog;
 
             LoadProjectSettings();
+
+            GameConsoleCommandList.Initialize();
         }
 
         static void LoadProjectSettings()
@@ -96,7 +98,7 @@ namespace qASIC.Console
             colorName = colorName.ToLower();
 
             //base colors
-            switch(colorName)
+            switch (colorName)
             {
                 case "default":
                     return _config.colorTheme.DefaultColor;
@@ -148,11 +150,11 @@ namespace qASIC.Console
 
         public static GameConsoleConfig GetConfig()
         {
-            if(_config == null)
+            if (_config == null)
             {
                 GameConsoleConfig defaultConfig = Resources.Load<GameConsoleConfig>("Console/DefaultConfig");
 
-                if(defaultConfig == null)
+                if (defaultConfig == null)
                 {
                     Debug.LogError("Internal qASIC exception! Couldn't locate default configuration for Game Console. Package has been modified or corrupted. Please reinstall or update!");
                     return _config;
@@ -233,7 +235,7 @@ namespace qASIC.Console
 
         public static void RunCommand(string cmd)
         {
-            if(invokedCommands.Count == 0 || invokedCommands[invokedCommands.Count - 1].ToLower() != cmd.ToLower())
+            if (invokedCommands.Count == 0 || invokedCommands[invokedCommands.Count - 1].ToLower() != cmd.ToLower())
                 invokedCommands.Add(cmd);
 
             List<string> args = SortCommand(cmd);
