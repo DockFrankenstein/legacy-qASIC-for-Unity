@@ -61,7 +61,7 @@ namespace qASIC.Options
                 Initialize();
         }
 
-        public static void Initialize()
+        public static void Initialize(bool loadUserPreferences = true)
         {
             if (!Enabled || _initialized) return;
             _initialized = true;
@@ -76,7 +76,8 @@ namespace qASIC.Options
                 return;
 
             CreateSettingsList();
-            LoadUserPreferences();
+            if (loadUserPreferences)
+                LoadUserPreferences();
         }
 
         private static void CreateSettingsList()
