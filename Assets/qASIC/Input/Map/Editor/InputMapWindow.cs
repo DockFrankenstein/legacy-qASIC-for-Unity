@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEditor.IMGUI.Controls;
 using UnityEditor.Callbacks;
 using qASIC.FileManagement;
+using System.Collections.Generic;
 
 //FIXME: For some reason when recompiling Unity flashes when this window is oppened
 namespace qASIC.InputManagement.Map.Internal
@@ -31,26 +32,9 @@ namespace qASIC.InputManagement.Map.Internal
         InputMapWindowContentTree contentTree;
         TreeViewState contentTreeState;
 
-        public static string GetUnmodifiedMapLocation() =>
-            $"{Application.persistentDataPath}/qASIC_inputmap-unmodified.txt";
-
-        private static bool? _isDirty = null;
-        public static bool IsDirty
-        {
-            get
-            {
-                if (!Map)
-                    return false;
-
-                if (_isDirty == null)
-                    _isDirty = EditorUtility.GetDirtyCount(Map) != 0;
-
-                return _isDirty ?? false;
-            }
-        }
-
         #region Preferences
         const string autoSavePrefsKey = "qASIC_input_map_editor_autosave";
+        const string autoSaveTimeLimitPrefsKey = "qASIC_input_map_editor_autosave_timelimit";
         const string debugPrefsKey = "qASIC_input_map_editor_debug";
 
         const string treeActionsExpandedPrefsKey = "qASIC_input_map_editor_actions_expanded";
@@ -58,7 +42,8 @@ namespace qASIC.InputManagement.Map.Internal
 
         const string inspectorWidthPrefsKey = "qASIC_input_map_editor_inspector_width";
 
-        static bool? _debugMode = null;
+
+        private static bool? _debugMode = null;
         public static bool DebugMode
         {
             get
@@ -74,7 +59,7 @@ namespace qASIC.InputManagement.Map.Internal
             }
         }
 
-        static bool? _autoSave = null;
+        private static bool? _autoSave = null;
         public static bool AutoSave
         {
             get
@@ -95,7 +80,7 @@ namespace qASIC.InputManagement.Map.Internal
             }
         }
 
-        public static float? _inspectorWidth = null;
+        private static float? _inspectorWidth = null;
         public static float InspectorWidth
         {
             get
@@ -112,15 +97,35 @@ namespace qASIC.InputManagement.Map.Internal
             }
         }
 
+        private static float? _autoSaveTimeLimit = null;
+        public static float AutoSaveTimeLimit
+        {
+            get
+            {
+                if (_autoSaveTimeLimit == null)
+                    _autoSaveTimeLimit = EditorPrefs.GetFloat(autoSaveTimeLimitPrefsKey, 0f);
+
+                return _autoSaveTimeLimit ?? 0f;
+            }
+            set
+            {
+                value = Mathf.Max(0f, value);
+                EditorPrefs.SetFloat(autoSaveTimeLimitPrefsKey, value);
+                _autoSaveTimeLimit = value;
+            }
+        }
+
         public static void ResetPreferences()
         {
             EditorPrefs.DeleteKey(autoSavePrefsKey);
             EditorPrefs.DeleteKey(debugPrefsKey);
             EditorPrefs.DeleteKey(inspectorWidthPrefsKey);
+            EditorPrefs.DeleteKey(autoSaveTimeLimitPrefsKey);
 
             _autoSave = null;
             _debugMode = null;
             _inspectorWidth = null;
+            _autoSaveTimeLimit = null;
         }
         #endregion
 
@@ -237,6 +242,11 @@ namespace qASIC.InputManagement.Map.Internal
         {
             contentTree?.Reload();
         }
+
+        bool _reloadTreesNextRepaint = false;
+
+        public void ReloadTreesNextRepaint() =>
+            _reloadTreesNextRepaint = true;
 
         public void ResetEditor()
         {
@@ -359,6 +369,23 @@ namespace qASIC.InputManagement.Map.Internal
                 SettingsService.OpenProjectSettings("Project/Player");
             EditorGUILayout.Space(16f);
 #endif
+
+            if (Event.current.type != EventType.Repaint) return;
+
+            if (_reloadTreesNextRepaint)
+            {
+                _reloadTreesNextRepaint = false;
+                ReloadTrees();
+            }
+        }
+
+        private void Update()
+        {
+            if (_waitForAutoSave && CanAutoSave())
+            {
+                _waitForAutoSave = false;
+                Save();
+            }
         }
 
         void DrawTreeView(TreeView tree)
@@ -382,19 +409,56 @@ namespace qASIC.InputManagement.Map.Internal
             GUILayout.Box(GUIContent.none, style);
 
             //TODO: add inspector resizing
-            //EditorGUIUtility.AddCursorRect(GUILayoutUtility.GetLastRect().Border(-2f, 0f), MouseCursor.ResizeHorizontal);
+
+            if (DebugMode)
+                EditorGUIUtility.AddCursorRect(GUILayoutUtility.GetLastRect().Border(-2f, 0f), MouseCursor.ResizeHorizontal);
         }
         #endregion
 
         #region Saving
+        static bool _waitForAutoSave = false;
+
+        public static string GetUnmodifiedMapLocation() =>
+            $"{Application.persistentDataPath}/qASIC_inputmap-unmodified.txt";
+
+        private static bool? _isDirty = null;
+        public static bool IsDirty
+        {
+            get
+            {
+                if (!Map)
+                    return false;
+
+                if (_isDirty == null)
+                    _isDirty = EditorUtility.GetDirtyCount(Map) != 0;
+
+                return _isDirty ?? false;
+            }
+        }
+
+        private static float _lastSaveTime = float.NegativeInfinity;
+
+        public static bool CanAutoSave() =>
+            _lastSaveTime + AutoSaveTimeLimit < EditorApplication.timeSinceStartup;
+
+        public static float TimeSinceLastSave =>
+            (float)EditorApplication.timeSinceStartup - _lastSaveTime;
+
         public static void SetMapDirty()
         {
             _isDirty = true;
             EditorUtility.SetDirty(Map);
             GetEditorWindow().SetWindowTitle();
-            
-            if (AutoSave)
-                Save();
+
+            if (!AutoSave) return;
+
+            if (!CanAutoSave())
+            {
+                _waitForAutoSave = true;
+                return;
+            }
+
+            Save();
         }
 
         private static void SaveUnmodifiedMap(InputMap map) =>
@@ -402,6 +466,7 @@ namespace qASIC.InputManagement.Map.Internal
 
         public static void Save()
         {
+            _lastSaveTime = (float)EditorApplication.timeSinceStartup;
             _isDirty = false;
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();

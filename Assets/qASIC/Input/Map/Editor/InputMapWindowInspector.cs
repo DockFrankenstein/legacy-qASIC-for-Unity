@@ -95,8 +95,8 @@ namespace qASIC.InputManagement.Map.Internal
                     axis.axis.axisName = NameField(axis.axis.axisName);
 
                     EditorChangeChecker.BeginChangeCheck(InputMapWindow.SetMapDirty);
-                    axis.axis.positiveAction = TextField("Positive", axis.axis.positiveAction);
-                    axis.axis.negativeAction = TextField("Negative", axis.axis.negativeAction);
+                    axis.axis.positiveAction = EditorGUILayout.TextField("Positive", axis.axis.positiveAction);
+                    axis.axis.negativeAction = EditorGUILayout.TextField("Negative", axis.axis.negativeAction);
                     EditorChangeChecker.EndChangeCheckAndCleanup();
 
                     if (DeleteButton())
@@ -131,9 +131,10 @@ namespace qASIC.InputManagement.Map.Internal
                     GUILayout.Label("Settings", EditorStyles.whiteLargeLabel);
 
                     InputMapWindow.AutoSave = Toggle("Auto Save", InputMapWindow.AutoSave);
+                    InputMapWindow.AutoSaveTimeLimit = FloatField("Auto Save Time Limit", InputMapWindow.AutoSaveTimeLimit);
                     InputMapWindow.DebugMode = Toggle("Debug Mode", InputMapWindow.DebugMode);
 
-                    InputMapWindow.InspectorWidth = FloatField("Inspector width", InputMapWindow.InspectorWidth);
+                    InputMapWindow.InspectorWidth = FloatField("Inspector Width", InputMapWindow.InspectorWidth);
 
                     if (GUILayout.Button("Reset preferences"))
                         InputMapWindow.ResetPreferences();
@@ -221,22 +222,30 @@ namespace qASIC.InputManagement.Map.Internal
             EndVertical();
         }
 
-        string NameField(string name)
+        string NameField(string name, bool setDirty = true) =>
+            NameField(name, _ => { }, setDirty);
+
+        string NameField(string text, Action<string> onEditEnd, bool setDirty = true)
         {
-            _editingNameField = EditorGUIUtility.editingTextField;
-            if (!_editingNameField || _resetNameField)
+            if (!_editingNameField || _resetNameField || !EditorGUIUtility.editingTextField)
             {
-                nameFieldValue = name;
+                nameFieldValue = text;
                 _resetNameField = false;
                 _editingNameField = false;
             }
 
             nameFieldValue = TextField("Name", nameFieldValue);
+            _editingNameField = EditorGUIUtility.editingTextField;
             if (_editingNameField)
-                return name;
+                return text;
 
-            if(nameFieldValue != name)
+            if (setDirty && nameFieldValue != text)
+            {
                 InputMapWindow.SetMapDirty();
+                InputMapWindow.GetEditorWindow().ReloadTreesNextRepaint();
+            }
+
+            onEditEnd?.Invoke(nameFieldValue);
 
             return nameFieldValue;
         }
