@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using qASIC.Tools;
-using System;
 
 namespace qASIC.InputManagement.Map
 {
@@ -23,19 +22,12 @@ namespace qASIC.InputManagement.Map
 
         public bool TryGetGroup(string groupName, out InputGroup group, bool logError = false)
         {
-            group = null;
+            bool contains = NonRepeatableChecker.TryGetItem(Groups, groupName, out group);
 
-            for (int i = 0; i < Groups.Count; i++)
-            {
-                if (Groups[i].groupName != groupName) continue;
-                group = Groups[i];
-                return true;
-            }
+            if (!contains && logError)
+                qDebug.LogError($"Map does not contain group '{groupName}'");
 
-            if (logError)
-                qDebug.LogError($"Map does not contain group <b>{groupName}</b>");
-
-            return false;
+            return contains;
         }
 
         public InputGroup GetGroup(string groupName)

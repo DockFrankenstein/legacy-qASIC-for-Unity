@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 using qASIC.Tools;
 
 namespace qASIC.InputManagement.Map
@@ -24,19 +23,12 @@ namespace qASIC.InputManagement.Map
 
         public bool TryGetAction(string actionName, out InputAction action, bool logError = false)
         {
-            action = null;
+            bool contains = NonRepeatableChecker.TryGetItem(actions, actionName, out action);
 
-            for (int i = 0; i < actions.Count; i++)
-            {
-                if (actions[i].actionName != actionName) continue;
-                action = actions[i];
-                return true;
-            }
-
-            if (logError)
+            if (!contains && logError)
                 qDebug.LogError($"Group '{groupName}' does not contain action '{actionName}'");
 
-            return false;
+            return contains;
         }
 
         public InputAction GetAction(string actionName)
@@ -47,19 +39,12 @@ namespace qASIC.InputManagement.Map
 
         public bool TryGetAxis(string axisName, out InputAxis axis, bool logError = false)
         {
-            axis = null;
+            bool contains = NonRepeatableChecker.TryGetItem(axes, axisName, out axis);
 
-            for (int i = 0; i < axes.Count; i++)
-            {
-                if (axes[i].axisName != axisName) continue;
-                axis = axes[i];
-                return true;
-            }
-
-            if (logError)
+            if (!contains && logError)
                 qDebug.Log($"Group '{groupName}' does not contain axis '{axisName}'");
 
-            return false;
+            return contains;
         }
 
         public InputAxis GetAxis(string axisName)

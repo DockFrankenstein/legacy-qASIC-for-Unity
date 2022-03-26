@@ -35,6 +35,11 @@ namespace qASIC.Console.Commands
                 case 3:
                     InputManager.ChangeInput(args[1], 0, key);
                     return;
+                case 4:
+                    //User isn't parsing key index
+                    if (!int.TryParse(args[2], out int keyIndex)) break;
+                    InputManager.ChangeInput(args[1], keyIndex, key);
+                    return;
                 case 5:
                     if (int.TryParse(args[3], out index)) break;
                     ParseException(args[3], "int");
