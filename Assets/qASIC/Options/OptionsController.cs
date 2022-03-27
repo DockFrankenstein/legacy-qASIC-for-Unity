@@ -36,16 +36,12 @@ namespace qASIC.Options
         {
             if (enabled == _enabledOverride) return;
             _enabledOverride = enabled;
-            switch (enabled)
+
+            if (!enabled)
             {
-                case true:
-                    CreateSettingsList();
-                    break;
-                case false:
-                    UserPreferences.Clear();
-                    _settings.Clear();
-                    DisposeTemp();
-                    break;
+                UserPreferences.Clear();
+                _settings.Clear();
+                DisposeTemp();
             }
         }
         #endregion
@@ -86,12 +82,21 @@ namespace qASIC.Options
             _settings = methodInfos.ToList();
 
             UserPreferences.Clear();
-            foreach (MethodInfo setting in _settings)
+
+            List<MethodInfo> tempSettings = new List<MethodInfo>(_settings);
+            foreach (MethodInfo setting in tempSettings)
             {
                 try
                 {
                     if (!TryGetAttribute(setting, out OptionsSetting attr)) continue;
                     if (UserPreferences.ContainsKey(attr.Name.ToLower())) continue;
+
+                    if (!setting.IsStatic)
+                    {
+                        qDebug.LogError($"Setting {attr.Name.ToLower()} must be static!");
+                        _settings.Remove(setting);
+                        continue;
+                    }
 
                     object defaultValue = attr.DefaultValue != null ? attr.DefaultValue.ToString() : null;
                     if (!string.IsNullOrWhiteSpace(attr.defaultValueMethodName))
@@ -104,6 +109,7 @@ namespace qASIC.Options
                         DisposeTemp();
                     }
 
+                    Debug.Log(attr.Name.ToLower());
                     UserPreferences.Add(attr.Name.ToLower(), defaultValue);
                 }
                 catch { }
@@ -335,13 +341,17 @@ namespace qASIC.Options
         #region Temp object
         static object CreateClass(Type type)
         {
-            if (type.IsSubclassOf(typeof(MonoBehaviour)))
-            {
-                tempGameObject = new GameObject("Options Setting temp script");
-                tempGameObject.SetActive(false);
-                return tempGameObject.AddComponent(type);
-            }
-            return Activator.CreateInstance(type);
+            return null;
+
+            //qASIC doesn't support non static field anymore, as they caused a lot of issues
+            //and didn't make much sense (as they were still treated as static)
+            //if (type.IsSubclassOf(typeof(MonoBehaviour)))
+            //{
+            //    tempGameObject = new GameObject("Options Setting temp script");
+            //    tempGameObject.SetActive(false);
+            //    return tempGameObject.AddComponent(type);
+            //}
+            //return Activator.CreateInstance(type);
         }
 
         static void DisposeTemp()
