@@ -4533,7 +4533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aed4f971ec8a92443a265e4f3d0ae9c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationType: 1
+  serializationType: 2
   filePath:
     buildPath:
       genericFolder: 62
@@ -4555,7 +4555,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 11400000, guid: ffcabac4cc9d9db4cabe73d1163f2a79, type: 2}
-  serializationType: 1
+  serializationType: 2
   filePath:
     buildPath:
       genericFolder: 62
@@ -9044,8 +9044,10 @@ MonoBehaviour:
   dialogue:
   - By pausing the game with escape you can go to the options menu, where you can
     remap buttons.
-  - This helps players from around the world play your game on different keyboard
-    layouts.
+  - This is achieved by using Cablebox Input System.
+  - Cablebox is an easy to use and intuitive Input System that's included with qASIC.
+  - It's a better alternative to Unity's legacy Input Manager, while not being as
+    complicated as the new Input System.
   colorZoneIndex: 4
 --- !u!61 &1139879847
 BoxCollider2D:
@@ -12661,14 +12663,14 @@ MonoBehaviour:
     interactableColor: {r: 0.8627451, g: 0.8666667, b: 0.88235295, a: 1}
     textColor: {r: 0, g: 0, b: 0, a: 1}
   - backgroundColorMain: {r: 1, g: 1, b: 1, a: 1}
-    backgroundColorSecondary: {r: 1, g: 0.95495284, b: 0.94716984, a: 1}
-    wallColor: {r: 0.8784314, g: 0.12941177, b: 0, a: 1}
+    backgroundColorSecondary: {r: 1, g: 0.97, b: 0.976, a: 1}
+    wallColor: {r: 1, g: 0.1882353, b: 0.34509805, a: 1}
     playerColor: {r: 0.12941177, g: 0.12941177, b: 0.12941177, a: 1}
     interactableColor: {r: 0.8627451, g: 0.8666667, b: 0.88235295, a: 1}
     textColor: {r: 0, g: 0, b: 0, a: 1}
   - backgroundColorMain: {r: 1, g: 1, b: 1, a: 1}
-    backgroundColorSecondary: {r: 1, g: 0.93773586, b: 0.96899, a: 1}
-    wallColor: {r: 1, g: 0, b: 0.5019608, a: 1}
+    backgroundColorSecondary: {r: 0.9137255, g: 0.88631374, b: 0.90393555, a: 1}
+    wallColor: {r: 0.9137255, g: 0, b: 0.6156863, a: 1}
     playerColor: {r: 0.12941177, g: 0.12941177, b: 0.12941177, a: 1}
     interactableColor: {r: 0.8627451, g: 0.8666667, b: 0.88235295, a: 1}
     textColor: {r: 0, g: 0, b: 0, a: 1}
@@ -17229,8 +17231,10 @@ MonoBehaviour:
   togglerTag: console
   addToDontDestroy: 1
   removeDuplicates: 1
-  groupName: UI
-  actionName: Console
+  action:
+    groupName: UI
+    useDefaultGroup: 0
+    actionName: Console
 --- !u!4 &2045916094
 Transform:
   m_ObjectHideFlags: 0
