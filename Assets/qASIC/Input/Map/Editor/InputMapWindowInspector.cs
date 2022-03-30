@@ -95,8 +95,8 @@ namespace qASIC.InputManagement.Map.Internal
                     axis.axis.axisName = NameField(axis.axis.axisName, (string newName) => { return axis.group.CanRenameAxis(newName); });
 
                     EditorChangeChecker.BeginChangeCheck(InputMapWindow.SetMapDirty);
-                    axis.axis.positiveAction = TextField("Positive", axis.axis.positiveAction);
-                    axis.axis.negativeAction = TextField("Negative", axis.axis.negativeAction);
+                    axis.axis.positiveAction = DelayedTextField("Positive", axis.axis.positiveAction);
+                    axis.axis.negativeAction = DelayedTextField("Negative", axis.axis.negativeAction);
                     EditorChangeChecker.EndChangeCheckAndCleanup();
 
                     if (DeleteButton())
