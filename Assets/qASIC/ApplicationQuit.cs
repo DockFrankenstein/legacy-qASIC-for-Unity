@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace qASIC
 {
@@ -8,7 +7,7 @@ namespace qASIC
 #if UNITY_EDITOR
         private void Reset()
         {
-            Button button = GetComponent<Button>();
+            UnityEngine.UI.Button button = GetComponent<UnityEngine.UI.Button>();
             if (button == null) return;
 
             UnityEditor.Events.UnityEventTools.AddPersistentListener(button.onClick, Quit);
