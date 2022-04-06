@@ -37,7 +37,7 @@ namespace qASIC.InputManagement.Menu
                 ListenForKey();
         }
 
-        public void ListenForKey()
+        private void ListenForKey()
         {
             if (!Input.anyKeyDown) return;
             for (int i = 0; i < KeyboardManager.AllKeyCodes.Length; i++)
