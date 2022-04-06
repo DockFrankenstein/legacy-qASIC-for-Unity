@@ -49,8 +49,12 @@ namespace qASIC
         {
             if (pauseTime)
                 Time.timeScale = state ? 0f : 1f;
+
             if (lockCursor)
+            {
                 Cursor.lockState = state ? CursorLockMode.None : CursorLockMode.Locked;
+                Cursor.visible = state;
+            }
 
             if (pauseAudio)
             {
