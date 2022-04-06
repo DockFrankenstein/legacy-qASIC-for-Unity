@@ -4,11 +4,10 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - ConsoleConfig: {fileID: 11400000, guid: 67849b547219c6544b513c8321bd7756, type: 2}
-  - CanvasObject: {instanceID: 0}
-  - Logs: {instanceID: 0}
-  - Input: {instanceID: 0}
-  - Scroll: {instanceID: 0}
+  - logText: {instanceID: 0}
+  - inputField: {instanceID: 0}
+  - scrollRect: {instanceID: 0}
+  - ConsoleConfig: {instanceID: 0}
   executionOrder: -2100
   icon: {fileID: 2800000, guid: e355bcd6386461844ace6e5d581bd99e, type: 3}
   userData: 

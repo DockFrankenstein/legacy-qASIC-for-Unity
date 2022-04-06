@@ -19,7 +19,7 @@ namespace qASIC.ProjectSettings
 
         [Header("Toggler")]
         [InspectorLabel("Toggler Name")] public string debugTogglerName = "debug displayer";
-        [InspectorLabel("Toggler Key")] [KeyCodeListener] public KeyCode debugTogglerKey = KeyCode.None;
+        [KeyCodeListener] public KeyCode debugTogglerKey = KeyCode.None;
 
         [Header("Auto generation console message")]
         [InspectorLabel("Log")] public bool displayDebugGenerationMessage = true;
