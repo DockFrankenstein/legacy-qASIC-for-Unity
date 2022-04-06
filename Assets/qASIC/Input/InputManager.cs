@@ -81,9 +81,15 @@ namespace qASIC.InputManagement
         #endregion
 
         #region Loading
+        private static bool _initialized = false;
+        public static bool Initialized => _initialized;
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Initialize()
         {
+            if (_initialized) return;
+            _initialized = true;
+
             LoadStartingArguments();
 
             InputProjectSettings settings = InputProjectSettings.Instance;

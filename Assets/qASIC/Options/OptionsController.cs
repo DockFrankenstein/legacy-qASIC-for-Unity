@@ -50,7 +50,7 @@ namespace qASIC.Options
         private static bool _initialized = false;
         public static bool Initialized => _initialized;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
         static void AutoInitialize()
         {
             if (OptionsProjectSettings.Instance.autoInitialize)
@@ -109,7 +109,6 @@ namespace qASIC.Options
                         DisposeTemp();
                     }
 
-                    Debug.Log(attr.Name.ToLower());
                     UserPreferences.Add(attr.Name.ToLower(), defaultValue);
                 }
                 catch { }

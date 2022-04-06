@@ -18,10 +18,14 @@ namespace qASIC.AudioManagement
         public static bool Enabled { get => AudioProjectSettings.Instance.enableAudioManager; }
 
         #region Initialization
+        private static bool _initialized = false;
+        public static bool Initialized => _initialized;
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Initialize()
         {
-            if (!Enabled) return;
+            if (!Enabled || _initialized) return;
+            _initialized = true;
 
             AudioProjectSettings settings = AudioProjectSettings.Instance;
             LoadSettings();
