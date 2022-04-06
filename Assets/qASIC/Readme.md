@@ -4,7 +4,7 @@ Discord: https://discord.gg/fs3SBprvbA
 Github: https://github.com/DockFrankenstein/qASIC
 
 # Description
-qASIC is a simple collection of tools for quickly creating games in Unity. It comes with a lot of basic features that can make your game more accessible to others and help you debug faster and easier.
+qASIC is a collection of simple well integrated tools that allow you to make and debug games quicker. It takes care of the basics while you focus on your game. During development it can help you debug and fix problems on the spot without having to make temporary buttons or keyboard shortcuts.
 
 # Features
 - Game Console
