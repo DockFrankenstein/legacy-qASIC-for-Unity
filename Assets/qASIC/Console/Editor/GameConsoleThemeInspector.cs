@@ -10,6 +10,8 @@ namespace qASIC.Console.Internal
     {
         public override void OnInspectorGUI()
         {
+            serializedObject.Update();
+
             bool isReadOnly = (target as GameConsoleTheme).IsReadOnly;
 
             if (isReadOnly)

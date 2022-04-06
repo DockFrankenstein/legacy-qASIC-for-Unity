@@ -40,7 +40,7 @@ namespace qASIC.Console
         static void HandleSceneLoad(Scene scene, LoadSceneMode mode)
         {
             if (_config?.logScene != true) return;
-            Log($"Loaded scene <b>{scene.name}</b> in mode <b>{mode}</b>", "scene");
+            Log($"Loaded scene '{scene.name}' in mode '{mode}'", "scene");
         }
 
         static void HandleUnityLog(string logText, string trace, LogType type)
@@ -87,14 +87,18 @@ namespace qASIC.Console
         public static void Log(GameConsoleLog log)
         {
             logs.Add(log);
-            if (_config != null && _config.logToUnity && log.Type != GameConsoleLog.LogType.User && !log.UnityHidden) Debug.Log($"qASIC game console: {log.Message}");
+            if (_config != null && _config.logToUnity && log.Type != GameConsoleLog.LogType.User &&!log.UnityHidden)
+                Debug.Log($"[qASIC] {log.Message}");
+            
             OnLog?.Invoke(log);
         }
 
         /// <summary>Get color from color settings</summary>
         public static Color GetColor(string colorName)
         {
-            if (_config == null || _config.colorTheme == null) return new Color(1f, 1f, 1f);
+            if (_config == null || _config.colorTheme == null)
+                return new Color(1f, 1f, 1f);
+
             colorName = colorName.ToLower();
 
             //base colors
@@ -135,6 +139,7 @@ namespace qASIC.Console
             for (int i = 0; i < _config.colorTheme.Colors.Length; i++)
                 if (_config.colorTheme.Colors[i].colorName.ToLower() == colorName)
                     return _config.colorTheme.Colors[i].color;
+
             return _config.colorTheme.DefaultColor;
         }
         #endregion

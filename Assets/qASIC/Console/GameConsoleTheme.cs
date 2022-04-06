@@ -28,7 +28,7 @@ namespace qASIC.Console.Internal
         public Color UnityMessageColor = new Color(1f, 1f, 1f);
         
         //Custom
-        public GameConsoleColor[] Colors;
+        public GameConsoleColor[] Colors = new GameConsoleColor[0];
 
         public bool IsReadOnly => isReadOnly;
 #if qASIC_DEV
