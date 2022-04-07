@@ -198,7 +198,7 @@ namespace qASIC.Console
             {
                 if (isAdvanced)
                 {
-                    if (cmd[i] == '"' && (cmd.Length > i + 1 && cmd[i + 1] == ' ' || cmd.Length > i))
+                    if (cmd[i] == '"' && cmd.Length > i + 1 && cmd[i + 1] == ' ')
                     {
                         isAdvanced = false;
                         continue;
