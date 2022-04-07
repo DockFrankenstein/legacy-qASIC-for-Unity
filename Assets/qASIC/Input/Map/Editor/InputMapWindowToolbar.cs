@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+#if UNITY_EDITOR
+using UnityEngine;
 using UnityEditor;
 using System;
 using qASIC.EditorTools;
@@ -167,3 +168,4 @@ namespace qASIC.InputManagement.Map.Internal
         #endregion
     }
 }
+#endif

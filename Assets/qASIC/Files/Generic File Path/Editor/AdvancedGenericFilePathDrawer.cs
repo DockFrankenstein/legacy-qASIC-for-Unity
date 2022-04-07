@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 using static UnityEditor.EditorGUIUtility;
@@ -63,3 +64,5 @@ namespace qASIC.FileManagement.Internal
         }
     }
 }
+
+#endif

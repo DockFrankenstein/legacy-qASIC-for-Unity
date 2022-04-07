@@ -1,4 +1,5 @@
-﻿using System;
+#if UNITY_EDITOR
+using System;
 using System.Text.RegularExpressions;
 
 namespace qASIC.InputManagement.Map.Internal
@@ -31,3 +32,4 @@ namespace qASIC.InputManagement.Map.Internal
         }
     }
 }
+#endif

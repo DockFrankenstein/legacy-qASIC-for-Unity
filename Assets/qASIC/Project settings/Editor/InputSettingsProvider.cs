@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 using qASIC.EditorTools.Internal;
 using System.Collections.Generic;
@@ -82,3 +83,4 @@ namespace qASIC.ProjectSettings.Internal
         }
     }
 }
+#endif

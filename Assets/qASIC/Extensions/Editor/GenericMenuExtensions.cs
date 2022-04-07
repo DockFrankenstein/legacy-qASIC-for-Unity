@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+#if UNITY_EDITOR
+using UnityEngine;
 using UnityEditor;
 
 namespace qASIC.EditorTools
@@ -36,3 +37,5 @@ namespace qASIC.EditorTools
             menu.AddDisabledItem(new GUIContent(text), on);
     }
 }
+
+#endif

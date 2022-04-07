@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+#if UNITY_EDITOR
+using UnityEditor;
 using qASIC.InputManagement.Internal.ReferenceExplorers;
 
 namespace qASIC.InputManagement.Internal
@@ -15,3 +16,4 @@ namespace qASIC.InputManagement.Internal
         }
     }
 }
+#endif

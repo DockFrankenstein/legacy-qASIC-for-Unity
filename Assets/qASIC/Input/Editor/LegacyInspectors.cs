@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+#if UNITY_EDITOR
+using UnityEngine;
 using UnityEditor;
 using static UnityEngine.GUILayout;
 
@@ -26,3 +27,4 @@ namespace qASIC.InputManagement.Tools
         }
     }
 }
+#endif

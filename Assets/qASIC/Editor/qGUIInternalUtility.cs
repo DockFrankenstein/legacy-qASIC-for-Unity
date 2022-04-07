@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+#if UNITY_EDITOR
+using UnityEngine;
 using UnityEditor;
 
 using static qASIC.qGUIUtility;
@@ -65,3 +66,4 @@ namespace qASIC.EditorTools.Internal
         }
     }
 }
+#endif

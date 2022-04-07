@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 
@@ -50,3 +51,4 @@ namespace qASIC.Displayer.Tools
             new Rect(position.x + localPosition.x, position.y, localPosition.y, position.height);
     }
 }
+#endif

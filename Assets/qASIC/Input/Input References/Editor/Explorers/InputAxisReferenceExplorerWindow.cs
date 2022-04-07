@@ -1,4 +1,5 @@
-﻿using qASIC.Tools;
+#if UNITY_EDITOR
+using qASIC.Tools;
 using System.Collections.Generic;
 using UnityEditor;
 
@@ -22,3 +23,5 @@ namespace qASIC.InputManagement.Internal.ReferenceExplorers
         }
     }
 }
+
+#endif

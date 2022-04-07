@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+#if UNITY_EDITOR
+using System.Collections.Generic;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using System;
@@ -454,3 +455,4 @@ namespace qASIC.InputManagement.Map.Internal
         }
     }
 }
+#endif

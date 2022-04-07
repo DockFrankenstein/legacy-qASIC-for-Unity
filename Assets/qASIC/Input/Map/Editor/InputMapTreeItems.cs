@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+#if UNITY_EDITOR
+using UnityEngine;
 using UnityEditor.IMGUI.Controls;
 
 namespace qASIC.InputManagement.Map.Internal
@@ -108,3 +109,4 @@ namespace qASIC.InputManagement.Map.Internal
         public InputMapTreeAxisHeaderItem(int id, int depth, string displayName, Color barColor) : base(id, depth, displayName, barColor) { }
     }
 }
+#endif

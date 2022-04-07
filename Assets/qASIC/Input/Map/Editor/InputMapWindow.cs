@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 using qASIC.EditorTools;
 using System.Linq;
@@ -524,3 +525,4 @@ namespace qASIC.InputManagement.Map.Internal
         #endregion
     }
 }
+#endif

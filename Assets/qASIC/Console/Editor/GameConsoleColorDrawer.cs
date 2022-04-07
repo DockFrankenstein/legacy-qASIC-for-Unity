@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 namespace qASIC.Console.Internal
@@ -41,3 +42,4 @@ namespace qASIC.Console.Internal
             new Rect(position.x + localPosition.x, position.y, localPosition.y, position.height);
     }
 }
+#endif

@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+#if UNITY_EDITOR
+using UnityEditor;
 using qASIC.FileManagement;
 using qASIC.EditorTools.Internal;
 
@@ -38,3 +39,4 @@ namespace qASIC.InputManagement.Internal
         }
     }
 }
+#endif

@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 namespace qASIC.AudioManagement.Internal
@@ -9,3 +10,4 @@ namespace qASIC.AudioManagement.Internal
         public override void OnInspectorGUI() { }
     }
 }
+#endif

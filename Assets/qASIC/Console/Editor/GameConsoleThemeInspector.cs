@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+#if UNITY_EDITOR
+using UnityEngine;
 using UnityEditor;
 using qASIC.EditorTools.Internal;
 using System;
@@ -94,3 +95,4 @@ namespace qASIC.Console.Internal
             qGUIInternalUtility.DrawPropertyGroup(serializedObject, label, properties);
     }
 }
+#endif
