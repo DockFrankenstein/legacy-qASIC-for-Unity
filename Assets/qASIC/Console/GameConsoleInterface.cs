@@ -29,6 +29,7 @@ namespace qASIC.Console
         bool init = false;
 
         public bool IsScrollSnapped { get; private set; } = true;
+        public string Content { get; private set; }
 
         Toggler toggler;
 
@@ -111,9 +112,15 @@ namespace qASIC.Console
         /// <summary>Updates logs from controller</summary>
         public virtual void RefreshLogs()
         {
-            if (logText == null) return;
-            logText.text = GameConsoleController.LogsToString(logLimit);
+            Content = GameConsoleController.LogsToString(logLimit);
+            UpdateText();
             if (IsScrollSnapped) ResetScroll();
+        }
+
+        public void UpdateText()
+        {
+            if (logText == null) return;
+            logText.text = Content;
         }
 
         public virtual void RunCommand()
