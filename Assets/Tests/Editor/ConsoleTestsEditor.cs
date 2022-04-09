@@ -30,10 +30,13 @@ namespace qASIC.Tests.Editor
         public void CommandArgumentCount()
         {
             GameConsoleEchoCommand command = new GameConsoleEchoCommand();
-            List<string> args = new List<string>(3);
+            List<string> args = new List<string>(new string[3]);
 
-            Assert.IsTrue(command.CheckForArgumentCount(args, 1) == false);
-            Assert.IsTrue(command.CheckForArgumentCount(args, 2) == true);
+            Assert.IsTrue(command.CheckForArgumentCount(args, 1) == false, GetLastLog().Message);
+            Assert.IsTrue(command.CheckForArgumentCount(args, 2) == true, GetLastLog().Message);
         }
+
+        GameConsoleLog GetLastLog() =>
+            GameConsoleController.logs[GameConsoleController.logs.Count - 1];
     }
 }
