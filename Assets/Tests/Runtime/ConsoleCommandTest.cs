@@ -4,7 +4,9 @@ using qASIC.Console;
 using System;
 using qASIC.InputManagement;
 using qASIC.InputManagement.Map;
+using UnityEngine.TestTools;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 namespace qASIC.Tests.Runtime
 {
@@ -80,28 +82,40 @@ namespace qASIC.Tests.Runtime
             //No tests yet
         }
 
-        [Test]
-        public void Scene()
+        bool _waitForSceneLoad;
+
+        [UnityTest]
+        public IEnumerator Scene()
         {
             string cmd = "scene";
 
-            //TODO: test scene reloading
+            SceneManager.sceneLoaded += (Scene scene, LoadSceneMode mode) => SceneCommandHandleSceneLoad();
+
+            //Print
             RunCommand(cmd);
 
-            RunCommand(cmd, "reload");
-            WaitForSceneLoad(() => 
-            {
-                RunCommand(cmd, SceneManager.GetActiveScene().name);
-                WaitForSceneLoad(() =>
-                {
-                    RunCommand(cmd, SceneManager.GetActiveScene().buildIndex.ToString());
-                });
-            });
+            //Reload
+            WaitForSceneCommand(cmd, "reload");
+            while (_waitForSceneLoad) yield return null;
+
+            //Load with name
+            WaitForSceneCommand(cmd, SceneManager.GetActiveScene().name);
+            while (_waitForSceneLoad) yield return null;
+
+            //Load with index
+            WaitForSceneCommand(cmd, SceneManager.GetActiveScene().buildIndex.ToString());
+            while (_waitForSceneLoad) yield return null;
+
+            SceneManager.sceneLoaded -= (Scene scene, LoadSceneMode mode) => SceneCommandHandleSceneLoad();
         }
-        public void WaitForSceneLoad(Action onLoad)
+
+        void SceneCommandHandleSceneLoad() =>
+            _waitForSceneLoad = false;
+
+        void WaitForSceneCommand(params string[] args)
         {
-            SceneManager.sceneLoaded -= (Scene scene, LoadSceneMode mode) => WaitForSceneLoad(onLoad);
-            onLoad?.Invoke();
+            RunCommand(args);
+            _waitForSceneLoad = true;
         }
 
         [Test]
