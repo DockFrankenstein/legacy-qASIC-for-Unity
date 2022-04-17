@@ -93,6 +93,14 @@ namespace qASIC.InputManagement.Map.Internal
                     menu.AddItem("Reload trees", false, window.ReloadTrees);
                     menu.AddItem("Reset preferences", false, InputMapWindow.ResetPreferences);
                     menu.AddSeparator("");
+
+                    menu.AddItem("Open unmodified", false, () =>
+                    System.Diagnostics.Process.Start(InputMapWindow.GetUnmodifiedMapLocation()));
+
+                    menu.AddItem("Open unmodified in explorer", false, () => 
+                    System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{InputMapWindow.GetUnmodifiedMapLocation().Replace('/', '\\')}\""));
+
+                    menu.AddSeparator("");
                     menu.AddToggableItem($"{(InputMapWindow.AutoSave ? "*" : "")}Set dirty", false, InputMapWindow.SetMapDirty, map);
                     menu.AddToggableItem("Close map", false, InputMapWindow.CloseMap, map);
                 });

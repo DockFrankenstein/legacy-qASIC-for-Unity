@@ -202,8 +202,6 @@ namespace qASIC.InputManagement.Map.Internal
 
         public static void CloseMap()
         {
-            Map = null;
-            EditorPrefs.DeleteKey(MapPrefsKey);
             Cleanup();
             GetEditorWindow().ResetEditor();
         }
@@ -253,6 +251,11 @@ namespace qASIC.InputManagement.Map.Internal
         {
             //Map
             _isDirty = Map && EditorUtility.GetDirtyCount(Map.GetInstanceID()) != 0;
+
+            if (Map && !IsDirty)
+            {
+                SaveUnmodifiedMap(Map);
+            }
 
             //Title
             SetWindowTitle();
@@ -337,6 +340,11 @@ namespace qASIC.InputManagement.Map.Internal
                 Map = null;
 
             _isDirty = false;
+            DeleteUnmodified();
+        }
+
+        public static void DeleteUnmodified()
+        {
             if (FileManager.FileExists(GetUnmodifiedMapLocation()))
                 FileManager.DeleteFile(GetUnmodifiedMapLocation());
 
@@ -471,7 +479,7 @@ namespace qASIC.InputManagement.Map.Internal
         }
 
         private static void SaveUnmodifiedMap(InputMap map) =>
-            FileManager.SaveFileJSON(GetUnmodifiedMapLocation(), map);
+            FileManager.SaveFileJSON(GetUnmodifiedMapLocation(), map, true);
 
         public static void Save()
         {
@@ -499,9 +507,15 @@ namespace qASIC.InputManagement.Map.Internal
             OpenMap(map);
         }
 
-        public bool ConfirmSaveChangesIfNeeded(bool reoppenOnCancel = true)
+        public bool ConfirmSaveChangesIfNeeded(bool reoppenOnCancel = true, bool deleteUnmodified = true)
         {
-            if (!Map || !IsDirty) return true;
+            if (!Map || !IsDirty)
+            {
+                if (deleteUnmodified)
+                    DeleteUnmodified();
+                return true;
+            }
+
             int result = EditorUtility.DisplayDialogComplex("Input Map has been modified",
                 $"Would you like to save changes you made to '{Map.name}'",
                 "Save", "Discard changes", "Cancel");
@@ -514,6 +528,8 @@ namespace qASIC.InputManagement.Map.Internal
                 case 1:
                     //Discard changes
                     DiscardMapChanges();
+                    if (deleteUnmodified)
+                        DeleteUnmodified();
                     return true;
                 default:
                     //Cancel
