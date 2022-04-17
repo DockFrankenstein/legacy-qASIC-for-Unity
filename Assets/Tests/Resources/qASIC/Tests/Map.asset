@@ -20,7 +20,10 @@ MonoBehaviour:
       keys: 61000000
     - actionName: Action1
       keys: 61000000
-    axes: []
+    axes:
+    - axisName: Axis0
+      positiveAction: Action0
+      negativeAction: Action1
   - groupName: Group1
     actions:
     - actionName: Action0

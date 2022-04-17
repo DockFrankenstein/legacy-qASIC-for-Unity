@@ -19,12 +19,12 @@ namespace qASIC.Tests.Runtime
 
         [Test]
         public void CommandException() =>
-            RunCommand("test exception");
+            _RunCommand("test exception");
 
-        void RunCommand(params string[] args) =>
-            RunCommand(true, args);
+        void _RunCommand(params string[] args) =>
+            _RunCommand(true, args);
 
-        void RunCommand(bool log, params string[] args)
+        void _RunCommand(bool log, params string[] args)
         {
             GameConsoleController.RunCommand(string.Join(" ", args));
             if (log)

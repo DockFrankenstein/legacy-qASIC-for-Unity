@@ -15,45 +15,45 @@ namespace qASIC.Tests.Runtime
         [Test]
         public void AudioParameter()
         {
-            RunCommand("audioparameter", "test");
-            RunCommand("audioparameter", "test", "0");
+            _RunCommand("audioparameter", "test");
+            _RunCommand("audioparameter", "test", "0");
         }
 
         [Test]
         public void Clear()
         {
-            RunCommand("clear");
-            Assert.IsTrue(GetLastLog().Type == GameConsoleLog.LogType.Clear);
+            _RunCommand("clear");
+            Assert.IsTrue(_GetLastLog().Type == GameConsoleLog.LogType.Clear);
         }
 
         [Test]
         public void ClearDebug() =>
-            RunCommand("cleardebugdisplayer");
+            _RunCommand("cleardebugdisplayer");
 
         [Test]
         public void DebugDisplayer()
         {
-            RunCommand("debugdisplayer");
-            RunCommand("debugdisplayer", "true");
+            _RunCommand("debugdisplayer");
+            _RunCommand("debugdisplayer", "true");
         }
 
         [Test]
         public void Echo() =>
-            RunCommand("echo", "test message");
+            _RunCommand("echo", "test message");
 
         [Test]
         public void FOV()
         {
-            RunCommand("fov");
-            RunCommand("fov", "60");
+            _RunCommand("fov");
+            _RunCommand("fov", "60");
         }
 
         [Test]
         public void Help()
         {
-            RunCommand("help");
-            RunCommand("help", "help");
-            RunCommand("help", "0");
+            _RunCommand("help");
+            _RunCommand("help", "help");
+            _RunCommand("help", "0");
         }
 
         [Test]
@@ -62,19 +62,19 @@ namespace qASIC.Tests.Runtime
             InputMap map = Resources.Load<InputMap>("qASIC/Tests/Map");
             InputManager.LoadMap(map);
 
-            RunCommand("changeinput", "Action0", "Return");
+            _RunCommand("changeinput", "Action0", "Return");
             Assert.IsTrue(InputManager.GetKeyCode("Action0", 0) == KeyCode.Return);
-            RunCommand("changeinput", "Action1", "0", "Return");
+            _RunCommand("changeinput", "Action1", "0", "Return");
             Assert.IsTrue(InputManager.GetKeyCode("Action1", 0) == KeyCode.Return);
-            RunCommand("changeinput", "Group1", "Action0", "Return");
+            _RunCommand("changeinput", "Group1", "Action0", "Return");
             Assert.IsTrue(InputManager.GetKeyCode("Group1", "Action0", 0) == KeyCode.Return);
-            RunCommand("changeinput", "Group1", "Action1", "0", "Return");
+            _RunCommand("changeinput", "Group1", "Action1", "0", "Return");
             Assert.IsTrue(InputManager.GetKeyCode("Group1", "Action1", 0) == KeyCode.Return);
         }
 
         [Test]
         public void InputList() =>
-            RunCommand("inputlist");
+            _RunCommand("inputlist");
 
         [Test]
         public void Options()
@@ -89,68 +89,68 @@ namespace qASIC.Tests.Runtime
         {
             string cmd = "scene";
 
-            SceneManager.sceneLoaded += (Scene scene, LoadSceneMode mode) => SceneCommandHandleSceneLoad();
+            SceneManager.sceneLoaded += (Scene scene, LoadSceneMode mode) => _SceneCommandHandleSceneLoad();
 
             //Print
-            RunCommand(cmd);
+            _RunCommand(cmd);
 
             //Reload
-            WaitForSceneCommand(cmd, "reload");
+            _WaitForSceneCommand(cmd, "reload");
             while (_waitForSceneLoad) yield return null;
 
             //Load with name
-            WaitForSceneCommand(cmd, SceneManager.GetActiveScene().name);
+            _WaitForSceneCommand(cmd, SceneManager.GetActiveScene().name);
             while (_waitForSceneLoad) yield return null;
 
             //Load with index
-            WaitForSceneCommand(cmd, SceneManager.GetActiveScene().buildIndex.ToString());
+            _WaitForSceneCommand(cmd, SceneManager.GetActiveScene().buildIndex.ToString());
             while (_waitForSceneLoad) yield return null;
 
-            SceneManager.sceneLoaded -= (Scene scene, LoadSceneMode mode) => SceneCommandHandleSceneLoad();
+            SceneManager.sceneLoaded -= (Scene scene, LoadSceneMode mode) => _SceneCommandHandleSceneLoad();
         }
 
-        void SceneCommandHandleSceneLoad() =>
+        void _SceneCommandHandleSceneLoad() =>
             _waitForSceneLoad = false;
 
-        void WaitForSceneCommand(params string[] args)
+        void _WaitForSceneCommand(params string[] args)
         {
-            RunCommand(args);
+            _RunCommand(args);
             _waitForSceneLoad = true;
         }
 
         [Test]
         public void SceneList() =>
-            RunCommand("scenelist");
+            _RunCommand("scenelist");
 
         [Test]
         public void SettingsList() =>
-            RunCommand("settinglist");
+            _RunCommand("settinglist");
 
         [Test]
         public void Specification() =>
-            RunCommand("specification");
+            _RunCommand("specification");
 
         [Test]
         public void TimeScale() =>
-            RunCommand("timescale 1");
+            _RunCommand("timescale 1");
 
         [Test]
         public void Version() =>
-            RunCommand("version");
+            _RunCommand("version");
 
-        GameConsoleLog GetLastLog() =>
+        GameConsoleLog _GetLastLog() =>
             GameConsoleController.logs[GameConsoleController.logs.Count - 1];
 
-        void RunCommand(params string[] args) =>
-            RunCommand(true, args);
+        void _RunCommand(params string[] args) =>
+            _RunCommand(true, args);
 
-        void RunCommand(bool log, params string[] args)
+        void _RunCommand(bool log, params string[] args)
         {
             string cmd = string.Join(" ", args);
             GameConsoleController.RunCommand(cmd);
             Debug.Log(cmd);
             if (log)
-                Debug.Log(GetLastLog().Message);
+                Debug.Log(_GetLastLog().Message);
         }
     }
 }

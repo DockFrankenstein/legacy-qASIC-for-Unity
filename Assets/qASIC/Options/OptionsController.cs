@@ -24,8 +24,19 @@ namespace qASIC.Options
         public static SerializationType SaveType { get; private set; }
 
         #region Start args
-        public static bool DisableLoading { get; private set; }
-        public static bool DisableSaving { get; private set; }
+        public static bool DisableLoading { get; set; }
+        public static bool DisableSaving { get; set; }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void LoadArgs()
+        {
+            OptionsProjectSettings settings = OptionsProjectSettings.Instance;
+            string[] args = Environment.GetCommandLineArgs();
+
+            DisableSaving = settings.startArgsDisableSave && Array.IndexOf(args, "-qASIC-options-disable-save") != -1;
+            DisableLoading = settings.startArgsDisableLoad && Array.IndexOf(args, "-qASIC-options-disable-load") != -1;
+
+        }
         #endregion
 
         #region Enable
@@ -63,10 +74,8 @@ namespace qASIC.Options
             _initialized = true;
 
             OptionsProjectSettings settings = OptionsProjectSettings.Instance;
-            string[] args = Environment.GetCommandLineArgs();
 
-            DisableSaving = settings.startArgsDisableSave && Array.IndexOf(args, "-qASIC-options-disable-save") != -1;
-            DisableLoading = settings.startArgsDisableLoad && Array.IndexOf(args, "-qASIC-options-disable-load") != -1;
+            string[] args = Environment.GetCommandLineArgs();
 
             if (settings.startArgsDisableInit && Array.IndexOf(args, "-qASIC-options-disable-initialization") != -1)
                 return;
@@ -213,9 +222,10 @@ namespace qASIC.Options
         #endregion
 
         #region Get and set
-        public static void ChangeOption(string optionName, object value, bool log = true, bool save = true)
+        /// <returns>Returns the ammount of affected settings</returns>
+        public static int ChangeOption(string optionName, object value, bool log = true, bool save = true)
         {
-            if (!Enabled) return;
+            if (!Enabled) return 0;
             optionName = optionName.ToLower();
 
             int targetsCount = 0;
@@ -257,6 +267,8 @@ namespace qASIC.Options
 
             if (save)
                 SaveSetting(optionName, value.ToString());
+
+            return targetsCount;
         }
 
         public static bool TryGetOptionValue(string optionName, out object value)

@@ -68,8 +68,8 @@ namespace qASIC.InputManagement
         #endregion
 
         #region Starting arguments
-        public static bool DisableLoading { get; private set; }
-        public static bool DisableSaving { get; private set; }
+        public static bool DisableLoading { get; set; }
+        public static bool DisableSaving { get; set; }
 
         static void LoadStartingArguments()
         {
@@ -115,6 +115,9 @@ namespace qASIC.InputManagement
         public static void LoadMap(InputMap map)
         {
             Map = map;
+
+            if (Map == null) return;
+
             Map.CheckForRepeating();
 
             for (int i = 0; i < Map.Groups.Count; i++)

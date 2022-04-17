@@ -83,7 +83,7 @@ namespace qASIC.Console
 
         public virtual void HandleInput()
         {
-            if (!toggler.State) return;
+            if (toggler?.State == false) return;
 
 #if ENABLE_INPUT_SYSTEM
             if (Keyboard.current[Key.Enter].wasPressedThisFrame) RunCommand();

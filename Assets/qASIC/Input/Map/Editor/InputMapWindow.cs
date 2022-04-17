@@ -16,7 +16,7 @@ namespace qASIC.InputManagement.Map.Internal
         [SerializeField] Texture2D icon;
 
         static InputMap _map;
-        static InputMap Map
+        public static InputMap Map
         {
             get => _map;
             set
@@ -460,6 +460,14 @@ namespace qASIC.InputManagement.Map.Internal
             }
 
             Save();
+        }
+
+        public static void ResetMapDirty()
+        {
+            _isDirty = false;
+            _waitForAutoSave = false;
+            EditorUtility.ClearDirty(Map);
+            GetEditorWindow().SetWindowTitle();
         }
 
         private static void SaveUnmodifiedMap(InputMap map) =>
