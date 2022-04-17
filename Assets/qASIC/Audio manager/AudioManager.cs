@@ -206,6 +206,16 @@ namespace qASIC.AudioManagement
                     break;
             }
         }
+
+        public static void SetVolume(string name, float value, bool preview = true) =>
+            SetFloat(name, value == 0 ? -80f : Mathf.Log10(value) * 40f, preview);
+
+        public static bool GetVolume(string name, out float value)
+        {
+            bool exists = GetFloat(name, out value);
+            value = Mathf.Pow(10f, value / 40f);
+            return exists;
+        }
         #endregion
 
         #region Channels
