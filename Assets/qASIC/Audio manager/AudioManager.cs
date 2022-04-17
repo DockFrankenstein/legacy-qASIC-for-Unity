@@ -15,7 +15,19 @@ namespace qASIC.AudioManagement
         public static string Path { get; private set; }
         public static SerializationType SaveType { get; private set; }
 
-        public static bool Enabled { get => AudioProjectSettings.Instance.enableAudioManager; }
+        private static bool? _enabledOverride = null;
+        public static bool Enabled => _enabledOverride ?? AudioProjectSettings.Instance.enableAudioManager;
+
+        public static void OverrideEnabled(bool enabled)
+        {
+            if (enabled == _enabledOverride) return;
+            _enabledOverride = enabled;
+
+            if (!enabled)
+            {
+                DestroyManager();
+            }
+        }
 
         #region Initialization
         private static bool _initialized = false;
@@ -28,12 +40,24 @@ namespace qASIC.AudioManagement
             _initialized = true;
 
             AudioProjectSettings settings = AudioProjectSettings.Instance;
-            LoadSettings();
 
             if (settings.createOnStart)
                 GenerateManager();
+
+#if UNITY_EDITOR
+            CreateEditorLoader();
+#else
+            LoadSettings();
+#endif
         }
-        #endregion
+
+#if UNITY_EDITOR
+        private static void CreateEditorLoader()
+        {
+            DontDestroyOnLoad(new GameObject("[Temp] Audio Manager Loader", typeof(Internal.AudioManagerEditorLoader)));
+        }
+#endif
+#endregion
 
         #region Singleton
         static AudioManager _instance;
@@ -57,6 +81,9 @@ namespace qASIC.AudioManagement
             private set => _instance = value;
         }
 
+        public static bool ManagerExists =>
+            _instance != null;
+
         internal static bool GenerateManager()
         {
             AudioProjectSettings settings = AudioProjectSettings.Instance;
@@ -78,6 +105,12 @@ namespace qASIC.AudioManagement
                 qDebug.Log(settings.creationLogMessage, settings.creationLogColor);
 
             return true;
+        }
+
+        internal static void DestroyManager()
+        {
+            if (!ManagerExists) return;
+            Destroy(_instance);
         }
 
         private void Awake()
@@ -103,7 +136,7 @@ namespace qASIC.AudioManagement
         #endregion
 
         #region Saving
-        private static void LoadSettings()
+        internal static void LoadSettings()
         {
             if (!Enabled) return;
             AudioProjectSettings settings = AudioProjectSettings.Instance;

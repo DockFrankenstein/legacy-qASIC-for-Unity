@@ -11,7 +11,7 @@ namespace qASIC
             UnityEngine.UI.Button button = GetComponent<UnityEngine.UI.Button>();
             if (button == null) return;
 
-            UnityEditor.Events.UnityEventTools.AddPersistentListener(button.onClick, () => Load(""));
+            UnityEditor.Events.UnityEventTools.AddStringPersistentListener(button.onClick, Load, "");
         }
 #endif
 
@@ -26,5 +26,11 @@ namespace qASIC
             if (!Application.CanStreamedLevelBeLoaded(index)) return;
             SceneManager.LoadScene(index);
         }
+
+        public void LoadPrevious() =>
+            Load(SceneManager.GetActiveScene().buildIndex - 1);
+
+        public void LoadNext() =>
+            Load(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

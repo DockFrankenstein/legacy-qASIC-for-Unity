@@ -1,6 +1,5 @@
 using qASIC.Toggling;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace qASIC
 {
@@ -12,30 +11,28 @@ namespace qASIC
 
         Toggler toggler;
 
+        bool _isQuitting;
+
         private void Awake()
         {
             toggler = GetComponent<Toggler>();
             toggler?.OnChangeState.AddListener(OnChangeState);
         }
 
-        private void OnEnable()
-        {
-            SceneManager.sceneLoaded += OnSceneLoad;
-        }
-
         private void OnDisable()
         {
-            SceneManager.sceneLoaded -= OnSceneLoad;
+            ResetPause();
         }
 
-        void OnSceneLoad(Scene scene, LoadSceneMode mode)
+        private void OnApplicationQuit()
         {
-            if (mode != LoadSceneMode.Single) return;
-            ResetPause();
+            _isQuitting = true;
         }
 
         void ResetPause()
         {
+            if (_isQuitting) return;
+
             if (toggler == null) return;
             if (!toggler.State) return;
 
@@ -43,7 +40,8 @@ namespace qASIC
             OnChangeState(false);
         }
 
-        public void Toggle(bool state) => toggler?.Toggle(state);
+        public void Toggle(bool state) =>
+            toggler?.Toggle(state);
 
         private void OnChangeState(bool state)
         {
