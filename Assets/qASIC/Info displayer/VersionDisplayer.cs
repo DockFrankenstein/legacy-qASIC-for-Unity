@@ -2,6 +2,7 @@
 
 namespace qASIC.Displayer.Displayers
 {
+    [AddComponentMenu("qASIC/Displayer/Verion Displayer")]
     public class VersionDisplayer : MonoBehaviour
     {
         public string displayerName = "main";

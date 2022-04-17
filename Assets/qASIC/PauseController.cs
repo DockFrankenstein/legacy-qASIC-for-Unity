@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace qASIC
 {
+    [AddComponentMenu("qASIC/Menu/Pause Controller")]
     public class PauseController : MonoBehaviour
     {
         public bool pauseTime = true;

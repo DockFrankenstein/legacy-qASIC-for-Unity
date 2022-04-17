@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using System;
 
 namespace qASIC.InputManagement.Menu
 {
+    [AddComponentMenu("qASIC/Input/Legacy/Input Listener")]
     public class InputListener : MonoBehaviour
     {
         [Message("Input Listener will no longer be updated.", InspectorMessageIconType.notification)]

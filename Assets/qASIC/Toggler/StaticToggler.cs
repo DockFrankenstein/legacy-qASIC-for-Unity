@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace qASIC.Toggling
 {
+    [AddComponentMenu("qASIC/Togglers/Static Toggler")]
     public class StaticToggler : Toggler
     {
         public string togglerTag;

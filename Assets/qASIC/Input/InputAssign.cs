@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace qASIC.InputManagement.Menu
 {
+    [AddComponentMenu("qASIC/Options/Input Asign")]
     public class InputAssign : MonoBehaviour
     {
         [Header("Updating name")]

@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace qASIC.AudioManagement.Internal
 {
+    [AddComponentMenu("")]
     public class AudioManagerEditorLoader : MonoBehaviour
     {
         private void Start()

@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace qASIC.Toggling
 {
+    [AddComponentMenu("qASIC/Togglers/Toggler")]
     public class Toggler : MonoBehaviour
     {
         public bool State { get; private set; }

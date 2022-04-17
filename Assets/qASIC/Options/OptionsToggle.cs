@@ -1,5 +1,8 @@
-﻿namespace qASIC.Options.Menu
+﻿using UnityEngine;
+
+namespace qASIC.Options.Menu
 {
+    [AddComponentMenu("qASIC/Options/Toggle")]
     public class OptionsToggle : MenuOption
     {
         private UnityEngine.UI.Toggle toggle;

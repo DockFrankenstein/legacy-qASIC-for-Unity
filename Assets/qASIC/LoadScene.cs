@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace qASIC
 {
+    [AddComponentMenu("qASIC/Menu/Load Scene")]
     public class LoadScene : MonoBehaviour
     {
 #if UNITY_EDITOR

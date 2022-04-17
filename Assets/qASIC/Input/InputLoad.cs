@@ -4,6 +4,7 @@ using qASIC.InputManagement.Map;
 
 namespace qASIC.InputManagement
 {
+    [AddComponentMenu("qASIC/Input/Input Load")]
     public class InputLoad : MonoBehaviour
     {
         [SerializeField] InputMap map;

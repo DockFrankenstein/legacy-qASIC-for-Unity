@@ -1,7 +1,9 @@
 using qASIC.InputManagement;
+using UnityEngine;
 
 namespace qASIC.Toggling
 {
+    [AddComponentMenu("qASIC/Togglers/Static Toggler Remappable")]
     public class StaticTogglerRemappable : StaticToggler
     {
 #if !ENABLE_LEGACY_INPUT_MANAGER

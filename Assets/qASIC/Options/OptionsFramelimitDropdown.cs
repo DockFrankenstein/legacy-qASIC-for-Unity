@@ -2,6 +2,7 @@
 
 namespace qASIC.Options.Menu
 {
+    [AddComponentMenu("qASIC/Options/Framelimit Dropdown")]
     public class OptionsFramelimitDropdown : AdvancedOptionsDropdown
     {
         [Space]

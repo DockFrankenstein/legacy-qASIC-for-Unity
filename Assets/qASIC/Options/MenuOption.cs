@@ -9,7 +9,7 @@ namespace qASIC.Options.Menu
         public TextMeshProUGUI nameText;
         public string optionLabelName;
 
-        [Header("Options")]
+        [Header("Settings")]
         public string optionName;
         public bool save = true;
 

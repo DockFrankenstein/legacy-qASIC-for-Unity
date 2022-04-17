@@ -3,7 +3,10 @@ using qASIC.Demo.ColorZones;
 
 namespace qASIC.Demo.Dialogue
 {
-	public class BackgroundAnimation : MonoBehaviour
+#if !qASIC_DEV
+	[AddComponentMenu("")]
+#endif
+    public class BackgroundAnimation : MonoBehaviour
 	{
 		public AnimationCurve curve;
 

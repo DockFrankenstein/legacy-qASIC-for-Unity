@@ -4,6 +4,9 @@ using qASIC.Demo.ColorZones;
 
 namespace qASIC.Demo.Dialogue
 {
+#if !qASIC_DEV
+	[AddComponentMenu("")]
+#endif
 	public class Interactable : MonoBehaviour
 	{
 		public TMPro.TextMeshPro text;

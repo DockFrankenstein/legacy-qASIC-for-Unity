@@ -2,7 +2,10 @@ using UnityEngine;
 
 namespace qASIC.Demo.ColorZones
 {
-	public class WallColorAssigner : MonoBehaviour
+#if !qASIC_DEV
+	[AddComponentMenu("")]
+#endif
+    public class WallColorAssigner : MonoBehaviour
 	{
         SpriteRenderer[] walls;
 

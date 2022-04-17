@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace qASIC
 {
+    [AddComponentMenu("qASIC/Menu/Set Active On Platforms")]
     public class SetActiveOnPlatforms : MonoBehaviour
     {
         [SerializeField] bool state = false;

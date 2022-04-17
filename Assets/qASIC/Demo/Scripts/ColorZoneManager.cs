@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace qASIC.Demo.ColorZones
 {
+#if !qASIC_DEV
+	[AddComponentMenu("")]
+#endif
 	public class ColorZoneManager : MonoBehaviour
 	{
 		[System.Serializable]

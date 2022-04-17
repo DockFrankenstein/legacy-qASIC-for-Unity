@@ -10,6 +10,7 @@ using UnityEngine.InputSystem;
 
 namespace qASIC.Console
 {
+    [AddComponentMenu("qASIC/Console/Game Console Interface")]
     public class GameConsoleInterface : MonoBehaviour
     {
         [Header("Settings")]

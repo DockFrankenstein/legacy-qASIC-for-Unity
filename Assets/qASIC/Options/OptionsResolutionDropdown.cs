@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace qASIC.Options.Menu
 {
+    [AddComponentMenu("qASIC/Options/Resolution Dropdown")]
     public class OptionsResolutionDropdown : AdvancedOptionsDropdown
     {
         public override void Start()

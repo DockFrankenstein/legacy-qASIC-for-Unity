@@ -1,7 +1,9 @@
 ﻿using TMPro;
+using UnityEngine;
 
 namespace qASIC.Options.Menu
 {
+    [AddComponentMenu("qASIC/Options/Dropdown")]
     public class OptionsDropdown : MenuOption
     {
         private TMP_Dropdown dropdown;

@@ -5,6 +5,7 @@ using TMPro;
 
 namespace qASIC.AudioManagement.Menu
 {
+    [AddComponentMenu("qASIC/Options/Audio Menu Setting")]
     [RequireComponent(typeof(Slider))]
     public class AudioMenuSetting : MonoBehaviour, IPointerUpHandler
     {

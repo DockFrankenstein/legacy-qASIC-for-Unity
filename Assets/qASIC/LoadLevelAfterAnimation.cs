@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 namespace qASIC
 {
+    [AddComponentMenu("qASIC/Load Level After Animation")]
     public class LoadLevelAfterAnimation : StateMachineBehaviour
     {
         public string sceneName;

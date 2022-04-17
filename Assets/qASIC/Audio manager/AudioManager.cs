@@ -6,6 +6,7 @@ using qASIC.ProjectSettings;
 
 namespace qASIC.AudioManagement
 {
+    [AddComponentMenu("")]
     public class AudioManager : MonoBehaviour
     {
         public static AudioMixer Mixer { get => AudioProjectSettings.Instance.mixer; }

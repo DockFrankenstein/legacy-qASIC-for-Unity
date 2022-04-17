@@ -4,6 +4,7 @@ using TMPro;
 
 namespace qASIC.Displayer
 {
+	[AddComponentMenu("qASIC/Displayer/Info Displayer")]
     public class InfoDisplayer : MonoBehaviour
     {
         public string displayerName = "main";

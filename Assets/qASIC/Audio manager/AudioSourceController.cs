@@ -3,6 +3,7 @@ using System;
 
 namespace qASIC.AudioManagement
 {
+    [AddComponentMenu("qASIC/Audio/Audio Source Controller")]
     [RequireComponent(typeof(AudioSource))]
     public class AudioSourceController : MonoBehaviour
     {

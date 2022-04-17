@@ -4,6 +4,7 @@ using qASIC.InputManagement.Map;
 
 namespace qASIC.InputManagement.DebugTools
 {
+    [AddComponentMenu("qASIC/Input/Input List")]
     public class InputList : MonoBehaviour
     {
         [SerializeField] TMP_Text text;

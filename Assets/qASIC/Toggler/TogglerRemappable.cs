@@ -1,8 +1,10 @@
 using qASIC.InputManagement;
+using UnityEngine;
 
 namespace qASIC.Toggling
 {
-	public class TogglerRemappable : Toggler
+    [AddComponentMenu("qASIC/Togglers/Toggler Remappable")]
+    public class TogglerRemappable : Toggler
 	{
 #if !ENABLE_LEGACY_INPUT_MANAGER
         [Message("qASIC Input System only works with the Legacy Input System! Please, change the toggler or switch back to the old solution.", InspectorMessageIconType.error)]

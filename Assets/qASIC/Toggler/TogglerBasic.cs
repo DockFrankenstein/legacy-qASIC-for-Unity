@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace qASIC.Toggling
 {
+    [AddComponentMenu("qASIC/Togglers/Toggler Basic")]
     public class TogglerBasic : Toggler
     {
 #if ENABLE_INPUT_SYSTEM

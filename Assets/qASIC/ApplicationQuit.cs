@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace qASIC
 {
+    [AddComponentMenu("qASIC/Menu/Application Quit")]
     public class ApplicationQuit : MonoBehaviour
     {
 #if UNITY_EDITOR

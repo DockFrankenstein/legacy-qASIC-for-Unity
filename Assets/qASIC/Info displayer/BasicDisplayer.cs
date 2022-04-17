@@ -2,6 +2,7 @@
 
 namespace qASIC.Displayer.Displayers
 {
+    [AddComponentMenu("qASIC/Displayer/Basic Displayer")]
     public class BasicDisplayer : MonoBehaviour
     {
         public string displayerName = "main";

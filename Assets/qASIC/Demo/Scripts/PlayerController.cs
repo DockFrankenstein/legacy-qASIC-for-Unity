@@ -6,7 +6,10 @@ using qASIC.Demo.ColorZones;
 
 namespace qASIC.Demo
 {
-	public class PlayerController : MonoBehaviour
+#if !qASIC_DEV
+	[AddComponentMenu("")]
+#endif
+    public class PlayerController : MonoBehaviour
 	{
         public static bool freeze = false;
         public static float SpeedMultiplier { get; set; } = 1f;

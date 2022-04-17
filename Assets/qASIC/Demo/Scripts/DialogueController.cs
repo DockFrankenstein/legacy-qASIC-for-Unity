@@ -3,7 +3,10 @@ using qASIC.InputManagement;
 
 namespace qASIC.Demo
 {
-	public class DialogueController : MonoBehaviour
+#if !qASIC_DEV
+	[AddComponentMenu("")]
+#endif
+    public class DialogueController : MonoBehaviour
 	{
 		public static DialogueController singleton;
 

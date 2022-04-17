@@ -3,6 +3,7 @@ using qASIC.FileManagement;
 
 namespace qASIC.Options
 {
+    [AddComponentMenu("qASIC/Options/Options Load")]
     public class OptionsLoad : MonoBehaviour
     {
         [SerializeField] SerializationType serializationType = SerializationType.playerPrefs;

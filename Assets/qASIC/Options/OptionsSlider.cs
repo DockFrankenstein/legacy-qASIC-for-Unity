@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace qASIC.Options.Menu
 {
+    [AddComponentMenu("qASIC/Options/Slider")]
     public class OptionsSlider : MenuOption, IPointerUpHandler
     {
         private Slider slider;
