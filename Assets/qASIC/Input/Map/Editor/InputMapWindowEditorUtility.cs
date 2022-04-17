@@ -15,18 +15,19 @@ namespace qASIC.InputManagement.Map.Internal
         }
 
         private static string GetUniqueIndexName(string baseText, int index) =>
-            index == 0 ? baseText : $"{baseText} {index - 1}";
+            index == 0 ? baseText : $"{baseText}{index - 1}";
 
         private static string GetIndex(string name, out int index)
         {
             index = 0;
+            //Checks if there is a number at the end
             var m = Regex.Match(name, @"\d+$");
-            if (!m.Success) return name;
+            if (!m.Success) return $"{name} ";
 
+            //new index
             index = int.Parse(m.Value) + 1;
+            //Removing the number
             name = name.Substring(0, name.LastIndexOf(m.Value));
-            if (name.Length != 0)
-                name = name.Substring(0, name.LastIndexOf(" "));
 
             return name;
         }
