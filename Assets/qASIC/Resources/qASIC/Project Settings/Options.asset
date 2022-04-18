@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85a87615d30808a4d9e015bd5b85bd6c, type: 3}
+  m_Name: Options
+  m_EditorClassIdentifier: 
+  enableOptionsSystem: 1
+  autoInitialize: 1
+  serializationType: 1
+  savePath:
+    buildPath:
+      genericFolder: 62
+      filePath: settings.txt
+    separateEditorPath: 1
+    editorPath:
+      genericFolder: 62
+      filePath: settings-editor.txt
+  startArgsDisableLoad: 1
+  startArgsDisableSave: 1
+  startArgsDisableInit: 1

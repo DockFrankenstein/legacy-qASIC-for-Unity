@@ -67,7 +67,16 @@ namespace qASIC.Tests.Editor
             _ModifyMap();
             window.DiscardMapChanges();
             Assert.IsFalse(_IsMapModified());
+        }
+
+        [Test]
+        public void DeleteUnmodifiedOnClose()
+        {
+            window.Close();
             Assert.IsFalse(System.IO.File.Exists(InputMapWindow.GetUnmodifiedMapLocation()));
+
+            //Finishing
+            window = InputMapWindow.GetEditorWindow();
         }
 
         [TearDown]
