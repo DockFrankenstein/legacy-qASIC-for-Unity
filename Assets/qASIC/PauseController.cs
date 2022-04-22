@@ -1,4 +1,5 @@
 using qASIC.Toggling;
+using qASIC.Toggling.Controllers;
 using UnityEngine;
 
 namespace qASIC
@@ -10,14 +11,32 @@ namespace qASIC
         public bool lockCursor = true;
         public bool pauseAudio = true;
 
-        Toggler toggler;
+        [SerializeField] [InspectorLabel("Toggler")] MonoBehaviour togglerObject;
+
+        IToggable _toggler;
 
         bool _isQuitting;
 
+        private void Reset()
+        {
+            togglerObject = GetComponent<IToggable>() as MonoBehaviour;
+        }
+
+        private void OnValidate()
+        {
+            if (togglerObject != null && !(togglerObject is IToggable))
+            {
+                Debug.LogError("Toggler must implement IToggable!");
+                togglerObject = null;
+            }
+        }
+
         private void Awake()
         {
-            toggler = GetComponent<Toggler>();
-            toggler?.OnChangeState.AddListener(OnChangeState);
+            if (!(togglerObject is IToggable toggler)) return;
+            _toggler = toggler;
+
+            _toggler.OnToggle += OnChangeState;
         }
 
         private void OnDisable()
@@ -34,15 +53,15 @@ namespace qASIC
         {
             if (_isQuitting) return;
 
-            if (toggler == null) return;
-            if (!toggler.State) return;
+            if (_toggler == null) return;
+            if (!_toggler.State) return;
 
             //Reset pause controller
             OnChangeState(false);
         }
 
         public void Toggle(bool state) =>
-            toggler?.Toggle(state);
+            _toggler?.Toggle(state);
 
         private void OnChangeState(bool state)
         {

@@ -34,10 +34,14 @@ namespace qASIC.EditorTools.Internal
             EditorGUILayout.Space();
         }
 
+        public static void BeginGroup() =>
+            BeginGroup("");
+
         public static void BeginGroup(string label)
         {
             GUILayout.BeginVertical(EditorStyles.helpBox);
-            GUILayout.Label(label, EditorStyles.whiteLargeLabel);
+            if (!string.IsNullOrWhiteSpace(label))
+                GUILayout.Label(label, EditorStyles.whiteLargeLabel);
 
             //Alternative, with no background (you have to remove everything from end group)
             //EditorGUILayout.Space();

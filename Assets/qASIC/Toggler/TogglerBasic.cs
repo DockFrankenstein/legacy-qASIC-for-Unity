@@ -12,7 +12,7 @@ namespace qASIC.Toggling
         public KeyCode key = KeyCode.F2;
 #endif
 
-        private void Update()
+        protected override void HandleInput()
         {
 #if ENABLE_INPUT_SYSTEM
             if (UnityEngine.InputSystem.Keyboard.current[key].wasPressedThisFrame)

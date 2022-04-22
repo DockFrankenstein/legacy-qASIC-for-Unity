@@ -37,7 +37,7 @@ namespace qASIC.Toggling
 
         public static readonly Dictionary<string, TogglerState> states = new Dictionary<string, TogglerState>();
 
-        public override void Awake()
+        public override void Initialize()
         {
             if (toggleObject == null) return;
 

@@ -11,7 +11,7 @@ namespace qASIC
 
         private void Awake()
         {
-            gameObject.SetActive(Array.IndexOf(platforms, Application.platform) != -1 == state);
+            gameObject.SetActive(Array.IndexOf(platforms, qApplication.Platform) != -1 == state);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace qASIC.Toggling
         public InputActionReference action;
 
 #if ENABLE_LEGACY_INPUT_MANAGER
-        private void Update()
+        protected override void HandleInput()
         {
             if (InputManager.GetInputDown(action))
                 KeyToggle();
