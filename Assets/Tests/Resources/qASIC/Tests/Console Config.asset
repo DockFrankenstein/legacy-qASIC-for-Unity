@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569f2b6a606c9ec4b882a30ffe6a32e1, type: 3}
+  m_Name: Console Config
+  m_EditorClassIdentifier: 
+  colorTheme: {fileID: 11400000, guid: 76640509fabc8c843a61ce162a36c06d, type: 2}
+  showThankYouMessage: 1
+  logConfigAssigment: 1
+  logScene: 1
+  textTreeStyle:
+    middle: +-
+    last: +-
+    space: '   '
+    vertical: " \u2502 "
+    preset: 2
+  clearCommand: 1
+  echoCommand: 1
+  exitCommand: 1
+  helpCommand: 1
+  changeInputCommand: 1
+  inputListCommand: 1
+  changeSettingCommand: 1
+  settingListCommand: 1
+  audioCommand: 1
+  sceneCommand: 1
+  sceneListCommand: 1
+  versionCommand: 1
+  specsCommand: 1
+  debugDisplayerCommand: 1
+  clearDebugDisplayerCommand: 1
+  timeScaleCommand: 1
+  fovCommand: 1
+  logToUnity: 1
+  logUnityErrorsToConsole: 1
+  logUnityAssertsToConsole: 1
+  logUnityExceptionsToConsole: 1
+  logUnityWarningsToConsole: 1
+  logUnityMessagesToConsole: 1
+  displayGameVersion: 1
+  displayUnityVerion: 1
+  displayQasicVersion: 1
+  displayCpu: 1
+  displayCpuThreads: 1
+  displayGpu: 1
+  displayMemory: 1
+  displaySystem: 1
+  showDetailedHelp: 1
+  usePageCommandLimit: 1
+  pageCommandLimit: 5
+  readOnly: 0

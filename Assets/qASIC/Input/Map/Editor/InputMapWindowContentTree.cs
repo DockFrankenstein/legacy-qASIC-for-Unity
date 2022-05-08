@@ -6,7 +6,7 @@ using System;
 using UnityEditor;
 using qASIC.Tools;
 using qASIC.EditorTools;
-using qASIC;
+using System.Linq;
 
 using WindowUtility = qASIC.InputManagement.Map.Internal.InputMapWindowEditorUtility;
 
@@ -282,7 +282,7 @@ namespace qASIC.InputManagement.Map.Internal
 		}
         #endregion
 
-        #region Copy&Pase&Move&Delete
+        #region Copy&Paste&Move&Delete
 		void Delete(InputMapContentEditableItemBase item)
         {
 			item.Delete(Group);
@@ -291,6 +291,49 @@ namespace qASIC.InputManagement.Map.Internal
 			SetSelection(new List<int>());
 			Reload();
         }
+
+		//TODO: maybe one day
+  //      protected override void SetupDragAndDrop(SetupDragAndDropArgs args)
+  //      {
+		//	DragAndDrop.PrepareStartDrag();
+		//	DragAndDrop.SetGenericData("itemID", args.draggedItemIDs[0]);
+		//	DragAndDrop.SetGenericData("tree", this);
+		//	DragAndDrop.StartDrag(FindItem(args.draggedItemIDs[0], rootItem).displayName);
+		//}
+
+		//protected override bool CanStartDrag(CanStartDragArgs args)
+		//{
+		//	if (!(args.draggedItem is InputMapContentItemBase item))
+		//		return false;
+
+		//	return item.CanDrag;
+		//}
+
+		//protected override DragAndDropVisualMode HandleDragAndDrop(DragAndDropArgs args)
+  //      {
+		//	if (!(DragAndDrop.GetGenericData("tree") is InputMapWindowContentTree sourceTree))
+		//		return DragAndDropVisualMode.Rejected;
+
+		//	int itemID = (int)DragAndDrop.GetGenericData("itemID");
+		//	var item = FindItem(itemID, rootItem);
+
+		//	if (!(args.parentItem is InputMapContentHeaderItemBase))
+		//		return DragAndDropVisualMode.Rejected;
+
+		//	if (args.performDrop)
+  //          {
+		//		switch (item)
+  //              {
+		//			case InputMapContentActionTreeItem actionItem:
+
+		//				break;
+		//			case InputMapContentAxisTreeItem axisItem:
+		//				break;
+  //              }
+  //          }				
+
+		//	return DragAndDropVisualMode.Move;
+  //      }
         #endregion
 
         #region Finding
@@ -358,7 +401,7 @@ namespace qASIC.InputManagement.Map.Internal
 
 			GUIContent buttonContent = new GUIContent();
 
-			switch(args.item)
+			switch (args.item)
             {
 				case InputMapContentEditableItemBase _:
 					buttonContent.image = qGUIEditorUtility.MinusIcon;
@@ -394,7 +437,15 @@ namespace qASIC.InputManagement.Map.Internal
 
 			//Label
 			Rect rowRect = new Rect(args.rowRect).MoveRight(GetContentIndent(args.item));
-			Styles.Label.Draw(rowRect, new GUIContent(args.label), false, false, args.selected, args.focused);
+
+			GUIContent labelContent = new GUIContent(args.label);
+			if (InputMapWindow.Prefs_ShowItemIcons)
+            {
+				labelContent.image = item.GetIcon(group);
+				labelContent.tooltip = item.GetTooltip(group);
+            }
+
+			Styles.Label.Draw(rowRect, labelContent, false, false, args.selected, args.focused);
 
 			//Separator
 			Rect separatorRect = new Rect(rowRect).ResizeToBottom(1f);

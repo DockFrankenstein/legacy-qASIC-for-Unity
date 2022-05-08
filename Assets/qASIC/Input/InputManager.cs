@@ -91,11 +91,11 @@ namespace qASIC.InputManagement
             _initialized = true;
 
             LoadStartingArguments();
-
             InputProjectSettings settings = InputProjectSettings.Instance;
 
             if (settings.map == null) return;
 
+            qDebug.Log($"Initializing Cablebox Input System v{qASIC.Internal.Info.InputVersion}...", "init");
             LoadMap(settings.map);
 
             switch (settings.serializationType)
@@ -110,6 +110,8 @@ namespace qASIC.InputManagement
                     qDebug.LogError($"Serialization type '{settings.serializationType}' is not supported by the input system!");
                     break;
             }
+
+            qDebug.Log($"Cablebox initialization complete!", "input");
         }
 
         public static void LoadMap(InputMap map)
@@ -154,7 +156,7 @@ namespace qASIC.InputManagement
                 ChangeInput(keys[i].group.groupName, keys[i].action.actionName, keys[i].index, result, false, false);
             }
 
-            qDebug.Log("Input preferences loaded successfully.", "input");
+            qDebug.Log("Cablebox preferences successfully loaded!", "init");
         }
 
         /// <summary>Loads user key preferences using Player Prefs</summary>
@@ -179,7 +181,7 @@ namespace qASIC.InputManagement
                 ChangeInput(keys[i].group.groupName, keys[i].action.actionName, keys[i].index, (KeyCode)PlayerPrefs.GetInt(key), false, false);
             }
 
-            qDebug.Log("Input preferences loaded successfully.", "input");
+            qDebug.Log("Cablebox preferences successfully loaded!", "init");
         }
         #endregion
 

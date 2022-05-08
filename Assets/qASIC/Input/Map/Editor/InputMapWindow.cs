@@ -6,7 +6,8 @@ using System.Linq;
 using UnityEditor.IMGUI.Controls;
 using UnityEditor.Callbacks;
 using qASIC.FileManagement;
-using System.Collections.Generic;
+using qASIC.EditorTools.Internal;
+using UnityEditor.ShortcutManagement;
 
 //FIXME: For some reason when recompiling Unity flashes when this window is oppened
 namespace qASIC.InputManagement.Map.Internal
@@ -34,14 +35,16 @@ namespace qASIC.InputManagement.Map.Internal
         TreeViewState contentTreeState;
 
         #region Preferences
-        const string autoSavePrefsKey = "qASIC_input_map_editor_autosave";
-        const string autoSaveTimeLimitPrefsKey = "qASIC_input_map_editor_autosave_timelimit";
-        const string debugPrefsKey = "qASIC_input_map_editor_debug";
+        const string prefsKey_autoSave = "qASIC_input_map_editor_autosave";
+        const string prefskey_autoSaveTimeLimit = "qASIC_input_map_editor_autosave_timelimit";
+        const string prefsKey_debug = "qASIC_input_map_editor_debug";
 
-        const string treeActionsExpandedPrefsKey = "qASIC_input_map_editor_actions_expanded";
-        const string treeAxesExpandedPrefsKey = "qASIC_input_map_editor_axes_expanded";
+        const string prefsKey_treeActionsExpanded = "qASIC_input_map_editor_actions_expanded";
+        const string prefsKey_treeAxesExpanded = "qASIC_input_map_editor_axes_expanded";
 
-        const string inspectorWidthPrefsKey = "qASIC_input_map_editor_inspector_width";
+        const string prefsKey_inspectorWidth = "qASIC_input_map_editor_inspector_width";
+        const string prefsKey_defaultGroupColor = "qASIC_input_map_editor_defaultgroup_color";
+        const string prefsKey_showItemIcons = "qASIC_input_map_editor_showitemicons";
 
 
         private static bool? _debugMode = null;
@@ -50,88 +53,125 @@ namespace qASIC.InputManagement.Map.Internal
             get
             {
                 if (_debugMode == null)
-                    _debugMode = EditorPrefs.GetBool(debugPrefsKey, false);
+                    _debugMode = EditorPrefs.GetBool(prefsKey_debug, false);
                 return _debugMode ?? false;
             }
             set
             {
-                EditorPrefs.SetBool(debugPrefsKey, value);
+                EditorPrefs.SetBool(prefsKey_debug, value);
                 _debugMode = value;
             }
         }
 
-        private static bool? _autoSave = null;
-        public static bool AutoSave
+        private static bool? prefs_autoSave = null;
+        public static bool Prefs_AutoSave
         {
             get
             {
-                if (_autoSave == null)
-                    _autoSave = EditorPrefs.GetBool(autoSavePrefsKey, true);
+                if (prefs_autoSave == null)
+                    prefs_autoSave = EditorPrefs.GetBool(prefsKey_autoSave, true);
 
-                return _autoSave ?? false;
+                return prefs_autoSave ?? false;
             }
             set
             {
-                EditorPrefs.SetBool(autoSavePrefsKey, value);
+                EditorPrefs.SetBool(prefsKey_autoSave, value);
 
                 if (IsDirty)
                     Save();
 
-                _autoSave = value;
+                prefs_autoSave = value;
             }
         }
 
-        private static float? _inspectorWidth = null;
-        public static float InspectorWidth
+        private static float? prefs_inspectorWidth = null;
+        public static float Prefs_InspectorWidth
         {
             get
             {
-                if (_inspectorWidth == null)
-                    _inspectorWidth = EditorPrefs.GetFloat(inspectorWidthPrefsKey, 300f);
+                if (prefs_inspectorWidth == null)
+                    prefs_inspectorWidth = EditorPrefs.GetFloat(prefsKey_inspectorWidth, 300f);
 
-                return Mathf.Max(_inspectorWidth ?? 300f, 220f);
+                return Mathf.Max(prefs_inspectorWidth ?? 300f, 220f);
             }
             set
             {
-                EditorPrefs.SetFloat(inspectorWidthPrefsKey, value);
-                _inspectorWidth = value;
+                EditorPrefs.SetFloat(prefsKey_inspectorWidth, value);
+                prefs_inspectorWidth = value;
             }
         }
 
-        private static float? _autoSaveTimeLimit = null;
-        public static float AutoSaveTimeLimit
+        private static float? prefs_autoSaveTimeLimit = null;
+        public static float Prefs_AutoSaveTimeLimit
         {
             get
             {
-                if (_autoSaveTimeLimit == null)
-                    _autoSaveTimeLimit = EditorPrefs.GetFloat(autoSaveTimeLimitPrefsKey, 0f);
+                if (prefs_autoSaveTimeLimit == null)
+                    prefs_autoSaveTimeLimit = EditorPrefs.GetFloat(prefskey_autoSaveTimeLimit, 0f);
 
-                return _autoSaveTimeLimit ?? 0f;
+                return prefs_autoSaveTimeLimit ?? 0f;
             }
             set
             {
                 value = Mathf.Max(0f, value);
-                EditorPrefs.SetFloat(autoSaveTimeLimitPrefsKey, value);
-                _autoSaveTimeLimit = value;
+                EditorPrefs.SetFloat(prefskey_autoSaveTimeLimit, value);
+                prefs_autoSaveTimeLimit = value;
+            }
+        }
+
+        private static Color? prefs_defaultGroupColor;
+        public static Color Prefs_DefaultGroupColor
+        {
+            get
+            {
+                if (prefs_defaultGroupColor == null)
+                    prefs_defaultGroupColor = AdvancedEditorPrefs.GetColor(prefsKey_defaultGroupColor, qGUIInternalUtility.qASICColor);
+
+                return prefs_defaultGroupColor ?? Color.white;
+            }
+            set
+            {
+                AdvancedEditorPrefs.SetColorWithAlpha(prefsKey_defaultGroupColor, value);
+                prefs_defaultGroupColor = value;
+            }
+        }
+
+        private static bool? prefs_showItemIcons = null;
+        public static bool Prefs_ShowItemIcons
+        {
+            get
+            {
+                if (prefs_showItemIcons == null)
+                    prefs_showItemIcons = EditorPrefs.GetBool(prefsKey_showItemIcons, true);
+
+                return prefs_showItemIcons ?? false;
+            }
+            set
+            {
+                EditorPrefs.SetBool(prefsKey_showItemIcons, value);
+                prefs_showItemIcons = value;
             }
         }
 
         public static void ResetPreferences()
         {
-            EditorPrefs.DeleteKey(autoSavePrefsKey);
-            EditorPrefs.DeleteKey(debugPrefsKey);
-            EditorPrefs.DeleteKey(inspectorWidthPrefsKey);
-            EditorPrefs.DeleteKey(autoSaveTimeLimitPrefsKey);
+            EditorPrefs.DeleteKey(prefsKey_autoSave);
+            EditorPrefs.DeleteKey(prefskey_autoSaveTimeLimit);
+            EditorPrefs.DeleteKey(prefsKey_inspectorWidth);
+            AdvancedEditorPrefs.DeleteColorKey(prefsKey_defaultGroupColor);
 
-            _autoSave = null;
-            _debugMode = null;
-            _inspectorWidth = null;
-            _autoSaveTimeLimit = null;
+            prefs_autoSave = null;
+            prefs_autoSaveTimeLimit = null;
+            prefs_inspectorWidth = null;
+            prefs_defaultGroupColor = null;
         }
         #endregion
 
         #region Opening
         static string MapPrefsKey => $"{Application.productName}_qASIC_input_map_editor_map";
+
+        internal static string GetMapPath() =>
+            EditorPrefs.GetString(MapPrefsKey, "NULL");
 
         [OnOpenAsset]
         public static bool OnOpenAsset(int instanceID, int line)
@@ -191,18 +231,19 @@ namespace qASIC.InputManagement.Map.Internal
             OpenWindow();
         }
 
-        void LoadMap()
+        internal void LoadMap()
         {
             if (!EditorPrefs.HasKey(MapPrefsKey)) return;
 
-            string mapPath = EditorPrefs.GetString(MapPrefsKey);
+            string mapPath = GetMapPath();
             if (string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(mapPath))) return;
             Map = (InputMap)AssetDatabase.LoadAssetAtPath(mapPath, typeof(InputMap));
         }
 
-        public static void CloseMap()
+        public static void CloseMap() 
         {
             Cleanup();
+            EditorPrefs.DeleteKey(MapPrefsKey);
             GetEditorWindow().ResetEditor();
         }
 
@@ -212,6 +253,22 @@ namespace qASIC.InputManagement.Map.Internal
         public void SetWindowTitle()
         {
             titleContent = new GUIContent($"{(IsDirty ? "*" : "")}{(Map ? Map.name : "Input Map Editor")}", icon);
+        }
+        #endregion
+
+        #region Shortcuts
+        [Shortcut("Cablebox Map Editor/Save", typeof(InputMapWindow), KeyCode.S, ShortcutModifiers.Alt)]
+        private static void SaveShortcut(ShortcutArguments args)
+        {
+            Save();
+        }
+
+        [Shortcut("Cablebox Map Editor/Set Group As Default", typeof(InputMapWindow), KeyCode.G, ShortcutModifiers.Alt)]
+        private static void DefaultGroupShortcut(ShortcutArguments args)
+        {
+            if (!Map) return;
+            Map.defaultGroup = GetEditorWindow().groupBar.SelectedGroupIndex;
+            SetMapDirty(); 
         }
         #endregion
 
@@ -321,16 +378,16 @@ namespace qASIC.InputManagement.Map.Internal
 
 
             if (contentTree.ActionsRoot != null)
-                contentTree.SetExpanded(contentTree.ActionsRoot.id, PlayerPrefs.GetInt(treeActionsExpandedPrefsKey, 1) != 0);
+                contentTree.SetExpanded(contentTree.ActionsRoot.id, PlayerPrefs.GetInt(prefsKey_treeActionsExpanded, 1) != 0);
 
             if (contentTree.ActionsRoot != null)
-                contentTree.SetExpanded(contentTree.AxesRoot.id, PlayerPrefs.GetInt(treeAxesExpandedPrefsKey, 1) != 0);
+                contentTree.SetExpanded(contentTree.AxesRoot.id, PlayerPrefs.GetInt(prefsKey_treeAxesExpanded, 1) != 0);
 
 
             contentTree.OnExpand += () =>
             {
-                PlayerPrefs.SetInt(treeActionsExpandedPrefsKey, contentTree.IsExpanded(contentTree.ActionsRoot.id) ? 1 : 0);
-                PlayerPrefs.SetInt(treeAxesExpandedPrefsKey, contentTree.IsExpanded(contentTree.AxesRoot.id) ? 1 : 0);
+                PlayerPrefs.SetInt(prefsKey_treeActionsExpanded, contentTree.IsExpanded(contentTree.ActionsRoot.id) ? 1 : 0);
+                PlayerPrefs.SetInt(prefsKey_treeAxesExpanded, contentTree.IsExpanded(contentTree.AxesRoot.id) ? 1 : 0);
             };
         }
 
@@ -347,12 +404,13 @@ namespace qASIC.InputManagement.Map.Internal
         {
             if (FileManager.FileExists(GetUnmodifiedMapLocation()))
                 FileManager.DeleteFile(GetUnmodifiedMapLocation());
-
-            EditorPrefs.DeleteKey(MapPrefsKey);
         }
         #endregion
 
         #region GUI
+        bool _resizingInspector;
+        float _inspectorLineCursorOffset;
+
         private void OnGUI()
         {
             groupBar.SetMap(Map);
@@ -366,7 +424,7 @@ namespace qASIC.InputManagement.Map.Internal
 
             HorizontalLine();
 
-            GUILayout.BeginVertical(GUILayout.Width(Mathf.Min(InspectorWidth, position.width * 0.8f)));
+            GUILayout.BeginVertical(GUILayout.Width(Mathf.Min(Prefs_InspectorWidth, position.width * 0.8f)));
             inspector.OnGUI();
             GUILayout.EndVertical();
 
@@ -419,8 +477,29 @@ namespace qASIC.InputManagement.Map.Internal
 
             //TODO: add inspector resizing
 
-            if (DebugMode)
-                EditorGUIUtility.AddCursorRect(GUILayoutUtility.GetLastRect().Border(-2f, 0f), MouseCursor.ResizeHorizontal);
+            Rect lineRect = GUILayoutUtility.GetLastRect();
+            Rect mouseAreaRect = new Rect(lineRect).Border(-2f, 0f);
+
+            EditorGUIUtility.AddCursorRect(mouseAreaRect, MouseCursor.ResizeHorizontal);
+
+            if (Event.current.rawType == EventType.MouseDown &&
+                mouseAreaRect.Contains(Event.current.mousePosition))
+            {
+                _inspectorLineCursorOffset = lineRect.x - Event.current.mousePosition.x;
+                _resizingInspector = true;
+            }
+
+            if (_resizingInspector)
+            {
+                Prefs_InspectorWidth = position.width - Event.current.mousePosition.x - _inspectorLineCursorOffset - lineRect.width;
+                Repaint();
+            }
+
+            if (Event.current.rawType == EventType.MouseUp)
+            {
+                _inspectorLineCursorOffset = 0f;
+                _resizingInspector = false;
+            }
         }
         #endregion
 
@@ -445,10 +524,12 @@ namespace qASIC.InputManagement.Map.Internal
             }
         }
 
+        public static double TimeToAutoSave => _lastSaveTime + Prefs_AutoSaveTimeLimit - EditorApplication.timeSinceStartup;
+
         private static float _lastSaveTime = float.NegativeInfinity;
 
         public static bool CanAutoSave() =>
-            _lastSaveTime + AutoSaveTimeLimit < EditorApplication.timeSinceStartup;
+            _lastSaveTime + Prefs_AutoSaveTimeLimit < EditorApplication.timeSinceStartup;
 
         public static float TimeSinceLastSave =>
             (float)EditorApplication.timeSinceStartup - _lastSaveTime;
@@ -459,7 +540,7 @@ namespace qASIC.InputManagement.Map.Internal
             EditorUtility.SetDirty(Map);
             GetEditorWindow().SetWindowTitle();
 
-            if (!AutoSave) return;
+            if (!Prefs_AutoSave) return;
 
             if (!CanAutoSave())
             {

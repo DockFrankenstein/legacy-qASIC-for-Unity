@@ -40,6 +40,7 @@ namespace qASIC.AudioManagement
             if (!Enabled || _initialized) return;
             _initialized = true;
 
+            qDebug.Log($"Initializing Audio Manager v{qASIC.Internal.Info.AudioVersion}", "init");
             AudioProjectSettings settings = AudioProjectSettings.Instance;
 
             if (settings.createOnStart)
@@ -50,11 +51,13 @@ namespace qASIC.AudioManagement
 #else
             LoadSettings();
 #endif
+            qDebug.Log("Audio Manager initialization complete!", "audio");
         }
 
 #if UNITY_EDITOR
         private static void CreateEditorLoader()
         {
+            qDebug.Log($"[Editor] Creating audio manager loader", "init");
             DontDestroyOnLoad(new GameObject("[Temp] Audio Manager Loader", typeof(Internal.AudioManagerEditorLoader)));
         }
 #endif
@@ -112,6 +115,7 @@ namespace qASIC.AudioManagement
         {
             if (!ManagerExists) return;
             Destroy(_instance);
+            qDebug.Log("Destroyed Audio Manager", "audio");
         }
 
         private void Awake()
@@ -168,6 +172,8 @@ namespace qASIC.AudioManagement
                 if (!float.TryParse(list[i].Value, out float value)) continue;
                 SetFloat(list[i].Key, value, true);
             }
+
+            qDebug.Log("Audio Manager preferences successfully loaded!", "init");
         }
         #endregion
 

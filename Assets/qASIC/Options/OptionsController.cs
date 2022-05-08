@@ -77,16 +77,24 @@ namespace qASIC.Options
 
             string[] args = Environment.GetCommandLineArgs();
 
+            qDebug.Log($"Initializing Options System v{qASIC.Internal.Info.OptionsVersion}...", "init");
+
             if (settings.startArgsDisableInit && Array.IndexOf(args, "-qASIC-options-disable-initialization") != -1)
+            {
+                qDebug.Log("Options System initialization stopped", "init");
                 return;
+            }
 
             CreateSettingsList();
             if (loadUserPreferences)
                 LoadUserPreferences();
+
+            qDebug.Log("Options System initialization complete!", "settings");
         }
 
         private static void CreateSettingsList()
         {
+            qDebug.Log("Creating setting list...", "init");
             IEnumerable<MethodInfo> methodInfos = TypeFinder.FindAllAttributes<OptionsSetting>();
             _settings = methodInfos.ToList();
 
@@ -122,6 +130,8 @@ namespace qASIC.Options
                 }
                 catch { }
             }
+
+            qDebug.Log($"Successfully finished Options System setting list creation, setting count: {UserPreferences.Count}", "init");
         }
         #endregion
 
@@ -161,7 +171,7 @@ namespace qASIC.Options
                 if (PlayerPrefs.HasKey(preference.Key))
                     ChangeOption(preference.Key, PlayerPrefs.GetString(preference.Key), false, false);
 
-            qDebug.Log("Loaded user settings", "settings");
+            qDebug.Log("User settings successfully loaded!", "init");
         }
 
         public static void LoadConfig(string path)
@@ -177,7 +187,7 @@ namespace qASIC.Options
             for (int i = 0; i < settings.Count; i++)
                 ChangeOption(settings[i].Key, settings[i].Value, false, false);
 
-            qDebug.Log("Loaded user settings", "settings");
+            qDebug.Log("User settings successfully loaded!", "init");
         }
         #endregion
 

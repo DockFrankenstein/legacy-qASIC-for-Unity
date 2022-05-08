@@ -1,12 +1,16 @@
 #if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor.IMGUI.Controls;
+using qASIC.EditorTools;
 
 namespace qASIC.InputManagement.Map.Internal
 {
     public abstract class InputMapContentItemBase : TreeViewItem
     {
-        public Color BarColor { get; set; } = Color.clear;
+        public virtual Texture GetIcon(InputGroup group) => null;
+        public virtual string GetTooltip(InputGroup group) => string.Empty;
+        public virtual Color BarColor { get; set; } = Color.clear;
+        public virtual bool CanDrag { get => false; }
 
         public InputMapContentItemBase() : base() { }
         public InputMapContentItemBase(int id) : base(id) { }
@@ -22,6 +26,7 @@ namespace qASIC.InputManagement.Map.Internal
     public abstract class InputMapContentEditableItemBase : InputMapContentItemBase
     {
         public virtual bool Deletable => true;
+        public override bool CanDrag => true;
 
         public abstract void Rename(string newName);
         public abstract void Delete(InputGroup group);
@@ -58,6 +63,27 @@ namespace qASIC.InputManagement.Map.Internal
     public class InputMapContentAxisTreeItem : InputMapContentEditableItemBase
     {
         public InputAxis Axis { get; }
+
+        public override Texture GetIcon(InputGroup group) =>
+            HasErrors(group) ? qGUIEditorUtility.ErrorIcon : null;
+
+        public override string GetTooltip(InputGroup group) =>
+            HasErrors(group) ? "Axis contains incorrect action names" : string.Empty;
+
+        bool HasErrors(InputGroup group)
+        {
+            if (Axis == null)
+                return false;
+
+            if (!ActionNameHasErrors(Axis.positiveAction) &&
+                !ActionNameHasErrors(Axis.negativeAction))
+                return false;
+
+            return true;
+
+            bool ActionNameHasErrors(string actionName) =>
+                !string.IsNullOrWhiteSpace(actionName) && !group.ActionExists(actionName);
+        }
 
         public InputMapContentAxisTreeItem(InputAxis axis, int id)
         {

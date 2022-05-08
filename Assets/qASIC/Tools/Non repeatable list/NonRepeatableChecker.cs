@@ -83,7 +83,7 @@ namespace qASIC.Tools
             }
 
             if (logError)
-                qDebug.LogError($"There are multiple items of name <b>{itemName}</b> in a non repeatable list!");
+                qDebug.LogError($"Item '{itemName}' doesn't exist!");
 
             return false;
         }

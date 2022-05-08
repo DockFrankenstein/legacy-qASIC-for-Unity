@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 using qASIC.EditorTools.Internal;
+using qASIC.EditorTools;
 using System;
 
 namespace qASIC.Console.Internal
@@ -22,32 +23,23 @@ namespace qASIC.Console.Internal
             EditorGUI.BeginDisabledGroup(isReadOnly);
 #endif
 
-            DrawGroup("Basic", new string[]
-            {
-                "DefaultColor",
-                "WarningColor",
-                "ErrorColor",
-                "InfoColor",
-            });
+            qGUIInternalUtility.BeginGroup("Basic");
+            qGUIEditorUtility.DrawPropertiesInRange(serializedObject, 
+                nameof(GameConsoleTheme.DefaultColor), 
+                nameof(GameConsoleTheme.InfoColor));
+            qGUIInternalUtility.EndGroup();
 
-            DrawGroup("Tools", new string[]
-            {
-                "qASICColor",
-                "SettingsColor",
-                "InputColor",
-                "AudioColor",
-                "ConsoleColor",
-                "SceneColor",
-            });
+            qGUIInternalUtility.BeginGroup("Tools");
+            qGUIEditorUtility.DrawPropertiesInRange(serializedObject,
+                nameof(GameConsoleTheme.qASICColor),
+                nameof(GameConsoleTheme.InitColor));
+            qGUIInternalUtility.EndGroup();
 
-            DrawGroup("Unity", new string[]
-            {
-                "UnityAssertColor",
-                "UnityExceptionColor",
-                "UnityErrorColor",
-                "UnityWarningColor",
-                "UnityMessageColor",
-            });
+            qGUIInternalUtility.BeginGroup("Unity");
+            qGUIEditorUtility.DrawPropertiesInRange(serializedObject,
+                nameof(GameConsoleTheme.UnityAssertColor),
+                nameof(GameConsoleTheme.UnityMessageColor));
+            qGUIInternalUtility.EndGroup();
 
             qGUIInternalUtility.BeginGroup("Custom");
             DrawCustomColorArray();

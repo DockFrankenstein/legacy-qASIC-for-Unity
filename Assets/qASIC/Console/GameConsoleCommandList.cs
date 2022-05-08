@@ -18,10 +18,14 @@ namespace qASIC.Console.Commands
             if (_initialized) return;
             _initialized = true;
 
+            qDebug.Log("Initializing command list...", "init");
+
             _disableInitialization = ProjectSettings.ConsoleProjectSettings.Instance.startArgsDisableCommandInitialization
                 && Array.IndexOf(Environment.GetCommandLineArgs(), "-qASIC-console-disable-commandlistinitialization") != -1;
 
             UpdateList();
+
+            qDebug.Log($"Successfully finished console command list initialization! Command count: {Commands.Count}", "init");
         }
 
         public static bool TryGettingCommandByName(string commandName, out GameConsoleCommand command)

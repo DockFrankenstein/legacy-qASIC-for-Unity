@@ -213,7 +213,7 @@ namespace qASIC.InputManagement.Map.Internal
 
         static class Styles
         {
-            public static GUIStyle DefaultGroupBar => new GUIStyle().WithBackground(qGUIInternalUtility.qASICColorTexture);
+            public static GUIStyle DefaultGroupBar => new GUIStyle().WithBackground(qGUIUtility.GenerateColorTexture(InputMapWindow.Prefs_DefaultGroupColor));
         }
 
     }

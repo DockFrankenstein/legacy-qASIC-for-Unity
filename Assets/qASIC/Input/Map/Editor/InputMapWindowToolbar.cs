@@ -24,13 +24,13 @@ namespace qASIC.InputManagement.Map.Internal
 
             FlexibleSpace();
 
-            Label((InputMapWindow.IsDirty && !InputMapWindow.CanAutoSave()) ? $"Auto save delayed ({Mathf.Round(InputMapWindow.AutoSaveTimeLimit)}s)" : "");
+            DisplayAutoSaveTime();
 
             if (Button("Show in folder", EditorStyles.toolbarButton))
                 ShowInFolder();
 
-            if (Toggle(map && InputMapWindow.AutoSave, "Auto save", EditorStyles.toolbarButton) != InputMapWindow.AutoSave)
-                InputMapWindow.AutoSave = !InputMapWindow.AutoSave;
+            if (Toggle(map && InputMapWindow.Prefs_AutoSave, "Auto save", EditorStyles.toolbarButton) != InputMapWindow.Prefs_AutoSave)
+                InputMapWindow.Prefs_AutoSave = !InputMapWindow.Prefs_AutoSave;
 
             if (Button("Save", EditorStyles.toolbarButton))
                 InputMapWindow.Save();
@@ -38,6 +38,22 @@ namespace qASIC.InputManagement.Map.Internal
             EditorGUILayout.Space();
             EndHorizontal();
         }
+
+        #region Auto Save Time
+        void DisplayAutoSaveTime()
+        {
+            switch (InputMapWindow.IsDirty && !InputMapWindow.CanAutoSave())
+            {
+                case true:
+                    Label($"Auto save delayed ({Mathf.Round((float)InputMapWindow.TimeToAutoSave + 0.5f)}s)");
+                    InputMapWindow.GetEditorWindow().Repaint();
+                    break;
+                case false:
+                    Label("");
+                    break;
+            }
+        }
+        #endregion
 
         #region Menus
         Rect fileMenuRect;
@@ -52,7 +68,7 @@ namespace qASIC.InputManagement.Map.Internal
                 InputMapWindow window = InputMapWindow.GetEditorWindow();
 
                 menu.AddToggableItem("Save", false, InputMapWindow.Save, map);
-                menu.AddToggableItem("Auto save", InputMapWindow.AutoSave, () => { InputMapWindow.AutoSave = !InputMapWindow.AutoSave; }, map);
+                menu.AddToggableItem("Auto save", InputMapWindow.Prefs_AutoSave, () => { InputMapWindow.Prefs_AutoSave = !InputMapWindow.Prefs_AutoSave; }, map);
                 menu.AddToggableItem("Show in folder", false, ShowInFolder, map);
                 menu.AddSeparator("");
                 menu.AddItem("Open", false, OpenAsset);
@@ -66,12 +82,7 @@ namespace qASIC.InputManagement.Map.Internal
                 InputMapWindow window = InputMapWindow.GetEditorWindow();
 
                 menu.AddItem("Open project settings", false, () => SettingsService.OpenProjectSettings("Project/qASIC/Input"));
-
-                if (InputMapWindow.DebugMode)
-                {
-                    menu.AddSeparator("");
-                    menu.AddItem("Window settings (experimental)", false, () => window.SelectInInspector("settings"));
-                }
+                menu.AddItem("Window settings", false, () => window.SelectInInspector("settings"));
             });
 
             DisplayMenu("Help", ref helpMenuRect, (GenericMenu menu) =>
@@ -93,15 +104,20 @@ namespace qASIC.InputManagement.Map.Internal
                     menu.AddItem("Reload trees", false, window.ReloadTrees);
                     menu.AddItem("Reset preferences", false, InputMapWindow.ResetPreferences);
                     menu.AddSeparator("");
+                    menu.AddItem("Load current map", false, window.LoadMap);
+                    menu.AddItem("Print current map", false, () => Debug.Log(InputMapWindow.GetMapPath()));
+                    menu.AddSeparator("");
 
                     menu.AddItem("Open unmodified", false, () =>
-                    System.Diagnostics.Process.Start(InputMapWindow.GetUnmodifiedMapLocation()));
+                        System.Diagnostics.Process.Start(InputMapWindow.GetUnmodifiedMapLocation()));
 
                     menu.AddItem("Open unmodified in explorer", false, () => 
-                    System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{InputMapWindow.GetUnmodifiedMapLocation().Replace('/', '\\')}\""));
+                        System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{InputMapWindow.GetUnmodifiedMapLocation().Replace('/', '\\')}\""));
 
                     menu.AddSeparator("");
-                    menu.AddToggableItem($"{(InputMapWindow.AutoSave ? "*" : "")}Set dirty", false, InputMapWindow.SetMapDirty, map);
+                    menu.AddItem("Reset inspector", false, () => window.SelectInInspector(null));
+                    menu.AddSeparator("");
+                    menu.AddToggableItem($"{(InputMapWindow.Prefs_AutoSave ? "*" : "")}Set dirty", false, InputMapWindow.SetMapDirty, map);
                     menu.AddToggableItem("Close map", false, InputMapWindow.CloseMap, map);
                 });
             }

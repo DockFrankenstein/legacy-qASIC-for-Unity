@@ -33,13 +33,30 @@ namespace qASIC.Console.Commands
                     Log($"Current value: {parameter}", "audio");
                     break;
                 case 3:
-                    if (!float.TryParse(args[2], out float newValue))
+                    bool setVolume = false;
+                    string s = args[2];
+
+                    if (s.EndsWith("%"))
+                    {
+                        setVolume = true;
+                        s = s.Substring(0, s.Length - 1);
+                    }
+
+                    if (!float.TryParse(s, out float newValue))
                     {
                         ParseException(args[2], "float");
                         return;
                     }
 
-                    AudioManager.SetFloat(args[1], newValue, false);
+                    switch (setVolume)
+                    {
+                        case true:
+                            AudioManager.SetVolume(args[1], newValue / 100f, false);
+                            break;
+                        case false:
+                            AudioManager.SetFloat(args[1], newValue, false);
+                            break;
+                    }
                     break;
             }
         }

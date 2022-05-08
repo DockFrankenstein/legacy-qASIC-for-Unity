@@ -54,9 +54,9 @@ namespace qASIC.Console.Commands
             GameConsoleController.Log(text, "error");
 
         protected virtual void NoOptionException(string option) =>
-            GameConsoleController.Log($"Option <b>{option}</b> does not exist!", "error");
+            GameConsoleController.Log($"Option '{option}' does not exist!", "error");
 
         protected virtual void ParseException(string text, string type) =>
-            GameConsoleController.Log($"Couldn't parse <b>{text}</b> to {type}!", "error");
+            GameConsoleController.Log($"Couldn't parse '{text}' to {type}!", "error");
     }
 }

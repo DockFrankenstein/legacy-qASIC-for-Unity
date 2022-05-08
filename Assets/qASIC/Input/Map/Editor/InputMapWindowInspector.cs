@@ -19,6 +19,8 @@ namespace qASIC.InputManagement.Map.Internal
         Vector2 _scroll;
         int _currentListeningKeyCode = -1;
 
+        public string DefaultText { get; set; }
+
         public struct InspectorInputAction
         {
             public InputGroup group;
@@ -55,6 +57,7 @@ namespace qASIC.InputManagement.Map.Internal
 
         event Action OnNextRepaint;
 
+        #region GUI
         public void OnGUI()
         {
             if (!map) return;
@@ -95,10 +98,14 @@ namespace qASIC.InputManagement.Map.Internal
                 case InspectorInputAxis axis:
                     axis.axis.axisName = NameField(axis.axis.axisName, (string newName) => { return axis.group.CanRenameAxis(newName); });
 
+                    Space();
+
                     EditorChangeChecker.BeginChangeCheck(InputMapWindow.SetMapDirty);
-                    axis.axis.positiveAction = DelayedTextField("Positive", axis.axis.positiveAction);
-                    axis.axis.negativeAction = DelayedTextField("Negative", axis.axis.negativeAction);
+                    axis.axis.positiveAction = AxisField(axis.group, "Positive", axis.axis.positiveAction);
+                    axis.axis.negativeAction = AxisField(axis.group, "Negative", axis.axis.negativeAction);
                     EditorChangeChecker.EndChangeCheckAndCleanup();
+
+                    Space();
 
                     if (DeleteButton())
                         OnDeleteAxis?.Invoke(axis);
@@ -111,6 +118,9 @@ namespace qASIC.InputManagement.Map.Internal
                     break;
                 case string s:
                     HandleStringInspection(s);
+                    break;
+                default:
+                    GUILayout.Label(DefaultText);
                     break;
             }
 
@@ -131,42 +141,29 @@ namespace qASIC.InputManagement.Map.Internal
                 case "settings":
                     GUILayout.Label("Settings", EditorStyles.whiteLargeLabel);
 
-                    InputMapWindow.AutoSave = Toggle("Auto Save", InputMapWindow.AutoSave);
-                    InputMapWindow.AutoSaveTimeLimit = FloatField("Auto Save Time Limit", InputMapWindow.AutoSaveTimeLimit);
-                    InputMapWindow.DebugMode = Toggle("Debug Mode", InputMapWindow.DebugMode);
+                    InputMapWindow.Prefs_AutoSave = Toggle("Auto Save", InputMapWindow.Prefs_AutoSave);
+                    InputMapWindow.Prefs_AutoSaveTimeLimit = FloatField("Auto Save Time Limit", InputMapWindow.Prefs_AutoSaveTimeLimit);
+                    Space();
+                    InputMapWindow.Prefs_DefaultGroupColor = ColorField("Default Group Color", InputMapWindow.Prefs_DefaultGroupColor);
+                    Space();
+                    InputMapWindow.Prefs_ShowItemIcons = Toggle("Show Item Icons", InputMapWindow.Prefs_ShowItemIcons);
 
-                    InputMapWindow.InspectorWidth = FloatField("Inspector Width", InputMapWindow.InspectorWidth);
+                    if (InputMapWindow.DebugMode)
+                    {
+                        Space();
+                        GUILayout.Label("Debug", EditorStyles.largeLabel);
+                        InputMapWindow.Prefs_InspectorWidth = FloatField("Inspector Width", InputMapWindow.Prefs_InspectorWidth);
+                    }
 
-                    if (GUILayout.Button("Reset preferences"))
+                    Space();
+
+                    if (DeleteButton("Reset preferences"))
                         InputMapWindow.ResetPreferences();
                     break;
                 default:
                     HelpBox($"Message {s} not recognized!", MessageType.Error);
                     break;
             }
-        }
-
-        public void SetObject(object obj)
-        {
-            //If the object gets selected right now after the layout event
-            //there could be a problem with instance IDs so in order to avoid
-            //that we assign the object on next repaint
-            OnNextRepaint += () =>
-            {
-                _inspectionObject = obj;
-                _displayDeletePrompt = false;
-                _currentListeningKeyCode = -1;
-                if (_editingNameField)
-                    GUI.FocusControl(null);
-                _resetNameField = true;
-            };
-        }
-
-        public void ResetInspector()
-        {
-            SetObject(null);
-            GUI.FocusControl(null);
-            _resetNameField = true;
         }
 
         void DisplayKeys(InputAction action)
@@ -222,7 +219,34 @@ namespace qASIC.InputManagement.Map.Internal
             EditorChangeChecker.EndChangeCheckAndCleanup();
             EndVertical();
         }
+        #endregion
 
+        #region Control
+        public void SetObject(object obj)
+        {
+            //If the object gets selected right now after the layout event
+            //there could be a problem with instance IDs so in order to avoid
+            //that we assign the object on next repaint
+            OnNextRepaint += () =>
+            {
+                _inspectionObject = obj;
+                _displayDeletePrompt = false;
+                _currentListeningKeyCode = -1;
+                if (_editingNameField)
+                    GUI.FocusControl(null);
+                _resetNameField = true;
+            };
+        }
+
+        public void ResetInspector()
+        {
+            SetObject(null);
+            GUI.FocusControl(null);
+            _resetNameField = true;
+        }
+        #endregion
+
+        #region GUI Methods
         string NameField(string name, bool setDirty = true) =>
             NameField(name, _ => { return true; }, setDirty);
 
@@ -249,17 +273,29 @@ namespace qASIC.InputManagement.Map.Internal
             return nameFieldValue;
         }
 
-        bool DeleteButton()
+        string AxisField(InputGroup group, string label, string value)
+        {
+            GUIContent guiContent = new GUIContent(label);
+            if (!group.ActionExists(value))
+            {
+                guiContent.image = ErrorIcon;
+                guiContent.tooltip = "This action doesn't exist";
+            }
+
+            return DelayedTextField(guiContent, value);
+        }
+
+        bool DeleteButton(string label = "Delete", string confirm = "Confirm", string cancel = "Cancel")
         {
             bool state = false;
             BeginHorizontal();
             switch (_displayDeletePrompt)
             {
                 case true:
-                    if (GUILayout.Button("Cancel"))
+                    if (GUILayout.Button(cancel))
                         _displayDeletePrompt = false;
 
-                    if (state = GUILayout.Button("Confirm"))
+                    if (state = GUILayout.Button(confirm))
                     {
                         _displayDeletePrompt = false;
                         ResetInspector();
@@ -267,13 +303,14 @@ namespace qASIC.InputManagement.Map.Internal
                     }
                     break;
                 case false:
-                    if (GUILayout.Button("Delete"))
+                    if (GUILayout.Button(label))
                         _displayDeletePrompt = true;
                     break;
             }
             EndHorizontal();
             return state;
         }
+        #endregion
     }
 }
 #endif

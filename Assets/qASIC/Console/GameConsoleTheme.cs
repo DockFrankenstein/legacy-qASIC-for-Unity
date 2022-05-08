@@ -19,6 +19,7 @@ namespace qASIC.Console.Internal
         public Color AudioColor = new Color(0.9137254901960784f, 0f, 0.6156862745098039f);
         public Color ConsoleColor = new Color(0f, 0.518f, 0.663f);
         public Color SceneColor = new Color(0.7019608f, 0f, 1f);
+        [InspectorLabel("Initialization color")] public Color InitColor = new Color(0.3f, 0.3f, 0.3f);
 
         //Unity
         public Color UnityAssertColor = new Color(1f, 0f, 0f);

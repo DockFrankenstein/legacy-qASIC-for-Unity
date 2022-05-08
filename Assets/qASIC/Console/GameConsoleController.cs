@@ -21,10 +21,17 @@ namespace qASIC.Console
         {
             SceneManager.sceneLoaded += HandleSceneLoad;
             Application.logMessageReceived += HandleUnityLog;
-
             LoadProjectSettings();
 
+            Log($"qASIC Game Console System v{qASIC.Internal.Info.ConsoleVersion}!", "console");
+            Log("Successfully finished console controller initialization!", "init");
+
             GameConsoleCommandList.Initialize();
+
+            Log("Full console initialization complete! Type in 'help' to print available commands", "console");
+
+            if (_config.showThankYouMessage)
+                Log($"Thank you for using qASIC v{qASIC.Internal.Info.Version}", "qasic");
         }
 
         static void LoadProjectSettings()
@@ -46,6 +53,10 @@ namespace qASIC.Console
         static void HandleUnityLog(string logText, string trace, LogType type)
         {
             if (_config == null) return;
+
+            //Ignore log if it was printed out from the console
+            if (trace.Contains(nameof(GameConsoleController))) return;
+
             string color = "default";
             switch (type)
             {
@@ -87,7 +98,11 @@ namespace qASIC.Console
         public static void Log(GameConsoleLog log)
         {
             logs.Add(log);
-            if (_config != null && _config.logToUnity && log.Type != GameConsoleLog.LogType.User &&!log.UnityHidden)
+
+            if (_config != null && 
+                _config.logToUnity && 
+                log.Type != GameConsoleLog.LogType.User && 
+                !log.UnityHidden)
                 Debug.Log($"[qASIC] {log.Message}");
             
             OnLog?.Invoke(log);
@@ -120,6 +135,8 @@ namespace qASIC.Console
                     return _config.colorTheme.AudioColor;
                 case "scene":
                     return _config.colorTheme.SceneColor;
+                case "init":
+                    return _config.colorTheme.InitColor;
                 case "unity exception":
                     return _config.colorTheme.UnityExceptionColor;
                 case "unity error":
@@ -176,8 +193,6 @@ namespace qASIC.Console
         {
             if (newConfig == null || _config == newConfig) return;
             _config = newConfig;
-            if (_config.showThankYouMessage)
-                Log($"Thank you for using qASIC v{qASIC.Internal.Info.Version} console", "qasic");
             if (_config.logConfigAssigment)
                 Log("Assigned new config", "console");
         }
@@ -230,7 +245,7 @@ namespace qASIC.Console
             for (int i = 0; i < logLimit; i++)
             {
                 if (i >= logs.Count) break;
-                int index = Mathf.Clamp(logs.Count - logLimit, 0, int.MaxValue) + i;
+                int index = Mathf.Max(logs.Count - logLimit, 0) + i;
                 if (logs[index].Type == GameConsoleLog.LogType.Clear) log = "";
                 else if (log != string.Empty) log += $"\n{logs[index].ToText()}";
                 else log += logs[index].ToText();
