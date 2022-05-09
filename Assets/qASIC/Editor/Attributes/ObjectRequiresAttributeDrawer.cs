@@ -9,13 +9,6 @@ namespace qASIC.Internal
     [CustomPropertyDrawer(typeof(ObjectRequiresAttribute))]
     public class ObjectRequiresAttributeDrawer : PropertyDrawer
     {
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-        {
-            return base.GetPropertyHeight(property, label) + notificationHeight;
-        }
-
-        float notificationHeight = 0f;
-
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             if (property.propertyType != SerializedPropertyType.ObjectReference)
