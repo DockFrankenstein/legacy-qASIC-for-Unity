@@ -25,6 +25,11 @@ namespace qASIC.Console
         [Tooltip("The scrollRect that contains Logs")]
         public UnityEngine.UI.ScrollRect scrollRect;
 
+        [Header("Toggling")]
+        [ObjectRequires(typeof(IToggable))]
+        [SerializeField] IToggable toggler;
+
+
         private int _commandIndex = -1;
 
         bool init = false;
@@ -32,7 +37,6 @@ namespace qASIC.Console
         public bool IsScrollSnapped { get; private set; } = true;
         public string Content { get; private set; }
 
-        Toggler toggler;
 
         [Tooltip("Platforms on which the input field won't be reselected after running a command or enabling the console")]
         public RuntimePlatform[] ignoreReselectPlatforms = new RuntimePlatform[]
@@ -47,16 +51,21 @@ namespace qASIC.Console
         public virtual void Awake()
         {
             if (init) return;
-
             init = true;
 
-            toggler = GetComponent<Toggler>();
+            AssignComponents();
             if (toggler != null)
-                toggler.OnChangeState.AddListener(OnChangeState);
+                toggler.OnToggle += OnChangeState;
 
             GameConsoleController.AssignConfig(ConsoleConfig);
             GameConsoleController.OnLog += _ => RefreshLogs();
             RefreshLogs();
+        }
+
+        void AssignComponents()
+        {
+            if (toggler == null)
+                toggler = GetComponent<IToggable>();
         }
 
         void OnChangeState(bool state)
@@ -67,6 +76,11 @@ namespace qASIC.Console
             DiscardPreviousCommand();
             inputField?.SetTextWithoutNotify(string.Empty);
             StartCoroutine(Reselect());
+        }
+
+        private void Reset()
+        {
+            AssignComponents();
         }
 
         private void OnDestroy()

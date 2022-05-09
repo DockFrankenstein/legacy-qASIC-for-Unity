@@ -77,13 +77,24 @@ namespace qASIC.EditorTools
 
             bool draw = !useStartProperty;
 
+            //script reference
+            bool isScript = !useStartProperty;
+
             do
             {
                 if (property.name == startProperty)
                     draw = true;
 
                 if (draw)
-                    EditorGUILayout.PropertyField(property, true);
+                {
+                    var disabledScope = new EditorGUI.DisabledGroupScope(isScript);
+                    using (disabledScope)
+                    {
+                        EditorGUILayout.PropertyField(property, true);
+                    }
+                }
+
+                isScript = false;
 
                 if (useEndProperty && property.name == endProperty)
                     return;
