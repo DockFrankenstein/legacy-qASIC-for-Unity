@@ -8,7 +8,7 @@ namespace qASIC.Options.Menu
         [UnityEngine.HideInInspector] public TMP_Dropdown dropdown;
         public List<object> properties = new List<object>();
 
-        public override void Start()
+        protected override void Start()
         {
             dropdown = GetComponent<TMP_Dropdown>();
             if (dropdown == null) return;

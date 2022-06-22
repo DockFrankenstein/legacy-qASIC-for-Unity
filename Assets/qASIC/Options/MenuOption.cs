@@ -13,7 +13,8 @@ namespace qASIC.Options.Menu
         public string optionName;
         public bool save = true;
 
-        public virtual void Start() => LoadOption();
+        protected virtual void Start() =>
+            LoadOption();
 
         public abstract void LoadOption();
 
@@ -22,7 +23,7 @@ namespace qASIC.Options.Menu
 
         public abstract string GetLabel();
 
-        public virtual void Update()
+        protected virtual void Update()
         {
             if (nameText != null) 
                 nameText.text = GetLabel();

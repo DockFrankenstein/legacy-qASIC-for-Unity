@@ -11,7 +11,7 @@ namespace qASIC.Tests.Runtime
         bool _disableLoading;
         bool _disableSaving;
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             _disableLoading = OptionsController.DisableLoading;
@@ -67,7 +67,9 @@ namespace qASIC.Tests.Runtime
             Debug.Log(OptionsController.GetSettingsList().Count);
         }
 
-        [TearDown]
+
+
+        [OneTimeTearDown]
         public void Teardown()
         {
             OptionsController.DisableLoading = _disableLoading;

@@ -6,18 +6,26 @@ namespace qASIC.Options.Menu
     [AddComponentMenu("qASIC/Options/Dropdown")]
     public class OptionsDropdown : MenuOption
     {
-        private TMP_Dropdown dropdown;
+        public TMP_Dropdown dropdown;
 
-        private void Awake()
+        private void Reset()
         {
             dropdown = GetComponent<TMP_Dropdown>();
-            if (dropdown != null) dropdown.onValueChanged.AddListener((int index) => SetValue(index, true));
+        }
+
+        protected virtual void Awake()
+        {
+            if (dropdown == null)
+                dropdown = GetComponent<TMP_Dropdown>();
+
+            if (dropdown != null)
+                dropdown.onValueChanged.AddListener((int index) => SetValue(index, true));
         }
 
         public override string GetLabel()
         {
             if (dropdown == null || dropdown.value >= dropdown.options.Count) return string.Empty;
-            return $"{nameText}{dropdown.options[dropdown.value].text}";
+            return $"{optionLabelName}{dropdown.options[dropdown.value].text}";
         }
 
         public override void LoadOption()

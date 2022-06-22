@@ -8,6 +8,7 @@ namespace qASIC.Options
         public string Name { get; }
         public object DefaultValue { get; } = null;
         public string defaultValueMethodName;
+        public string enableMethodName;
 
         [Obsolete]
         public OptionsSetting(string name, Type type)

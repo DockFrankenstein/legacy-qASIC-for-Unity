@@ -6592,6 +6592,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  mode: 0
   key: 27
 --- !u!114 &690019134
 MonoBehaviour:
@@ -6608,6 +6609,7 @@ MonoBehaviour:
   pauseTime: 1
   lockCursor: 0
   pauseAudio: 0
+  togglerObject: {fileID: 0}
 --- !u!4 &690019135
 Transform:
   m_ObjectHideFlags: 0
@@ -8825,6 +8827,7 @@ MonoBehaviour:
   OnChangeState:
     m_PersistentCalls:
       m_Calls: []
+  mode: 0
   key: 283
 --- !u!4 &1089685564
 Transform:
@@ -9362,6 +9365,7 @@ MonoBehaviour:
   OnChangeState:
     m_PersistentCalls:
       m_Calls: []
+  mode: 0
   togglerTag: 
   addToDontDestroy: 1
   removeDuplicates: 1
@@ -14027,6 +14031,7 @@ MonoBehaviour:
   OnChangeState:
     m_PersistentCalls:
       m_Calls: []
+  mode: 0
 --- !u!224 &1740753994
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17228,6 +17233,7 @@ MonoBehaviour:
   OnChangeState:
     m_PersistentCalls:
       m_Calls: []
+  mode: 0
   togglerTag: console
   addToDontDestroy: 1
   removeDuplicates: 1

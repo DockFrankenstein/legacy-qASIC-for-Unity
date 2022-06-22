@@ -6,7 +6,7 @@ namespace qASIC.Options.Menu
     [AddComponentMenu("qASIC/Options/Resolution Dropdown")]
     public class OptionsResolutionDropdown : AdvancedOptionsDropdown
     {
-        public override void Start()
+        protected override void Start()
         {
             CreateList();
             base.Start();

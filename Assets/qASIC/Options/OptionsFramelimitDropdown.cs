@@ -10,7 +10,7 @@ namespace qASIC.Options.Menu
         public bool replaceWithOff = true;
         public int[] framerates;
 
-        public override void Start()
+        protected override void Start()
         {
             CreateList();
             base.Start();

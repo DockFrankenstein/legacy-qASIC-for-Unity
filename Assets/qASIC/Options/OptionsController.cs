@@ -115,16 +115,14 @@ namespace qASIC.Options
                         continue;
                     }
 
-                    object defaultValue = attr.DefaultValue != null ? attr.DefaultValue.ToString() : null;
-                    if (!string.IsNullOrWhiteSpace(attr.defaultValueMethodName))
-                    {
-                        object classObj = CreateClass(setting.DeclaringType);
-                        MethodInfo defaultValueMethod = setting.DeclaringType.GetMethod(attr.defaultValueMethodName);
-                        if (defaultValueMethod.GetGenericArguments().Length == 0)
-                            defaultValue = defaultValueMethod.Invoke(classObj, new object[0]).ToString();
+                    if (!string.IsNullOrWhiteSpace(attr.defaultValueMethodName) &&
+                        TryGetValueOfMethodFromName(setting, attr.enableMethodName, out bool isEnabled) &&
+                        !isEnabled) return;
 
-                        DisposeTemp();
-                    }
+                    object defaultValue = attr.DefaultValue != null ? attr.DefaultValue.ToString() : null;
+                    if (!string.IsNullOrWhiteSpace(attr.defaultValueMethodName) &&
+                        TryGetValueOfMethodFromName(setting, attr.defaultValueMethodName, out object obj))
+                            defaultValue = obj.ToString();
 
                     UserPreferences.Add(attr.Name.ToLower(), defaultValue);
                 }
@@ -298,6 +296,34 @@ namespace qASIC.Options
         #endregion
 
         #region Utility
+        private static bool TryGetValueOfMethodFromName<T>(MethodInfo info, string methodName, out T value)
+        {
+            value = default;
+
+            object obj;
+
+            try
+            {
+                MethodInfo defaultValueMethod = info.DeclaringType.GetMethod(methodName);
+                obj = defaultValueMethod.Invoke(null, new object[0]);
+            }
+            catch
+            {
+                return false;
+            }
+
+            try
+            {
+                value = (T)Convert.ChangeType(obj, typeof(T));
+                return true;
+            }
+            catch
+            {
+                Debug.LogError($"Couldn't convert return value of method '{methodName}' to '{typeof(T)}'!");
+                return false;
+            }
+        }
+
         static void LogChangeOption(string optionName, string value, int targetsCount)
         {
             if (targetsCount == 0)
