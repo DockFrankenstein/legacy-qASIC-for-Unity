@@ -28,7 +28,7 @@ namespace qASIC.Console.Commands
             {
                 string valueString = "N/A";
                 if (OptionsController.TryGetOptionValue(settings[i], out object value))
-                    valueString = value.ToString();
+                    valueString = value == null ? "NULL" : value.ToString();
 
                 log.Append($"\n- {settings[i]}: {valueString}");
             }

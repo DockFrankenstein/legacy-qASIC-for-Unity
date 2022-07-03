@@ -274,7 +274,7 @@ namespace qASIC.Console
             catch (Exception e)
             {
                 Log($"Command execution failed: {e.Message}!", "error");
-                throw e;
+                throw new Exception("Command execution failed", e);
             }
         }
         #endregion
