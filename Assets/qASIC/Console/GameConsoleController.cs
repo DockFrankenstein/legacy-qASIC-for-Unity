@@ -263,7 +263,7 @@ namespace qASIC.Console
 
             if (!GameConsoleCommandList.TryGettingCommandByName(args[0].ToLower(), out GameConsoleCommand command))
             {
-                Log("Command not found!", "error");
+                Log(Constants.CommandNotFoundMessage, "error");
                 return;
             }
 
@@ -278,5 +278,10 @@ namespace qASIC.Console
             }
         }
         #endregion
+
+        public static class Constants
+        {
+            public const string CommandNotFoundMessage = "Command not found!";
+        }
     }
 }

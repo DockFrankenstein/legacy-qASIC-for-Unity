@@ -19,7 +19,15 @@ namespace qASIC.ProjectSettings
 
         [Header("Toggler")]
         [InspectorLabel("Toggler Name")] public string debugTogglerName = "debug displayer";
+
+#if ENABLE_INPUT_SYSTEM
+        [HideInInspector]
+#endif
         [KeyCodeListener] public KeyCode debugTogglerKey = KeyCode.None;
+#if ENABLE_INPUT_SYSTEM
+        public Key debugTogglerKey = Key.None;
+#endif
+
 
         [Header("Auto generation console message")]
         [InspectorLabel("Log")] public bool displayDebugGenerationMessage = true;
@@ -37,7 +45,7 @@ namespace qASIC.ProjectSettings
             {
 #if UNITY_EDITOR
                 return createDebugInEditor;
-#else            
+#else
                 return (Debug.isDebugBuild && createDebugInDeveloperBuild) || createDebugInBuild;
 #endif
 

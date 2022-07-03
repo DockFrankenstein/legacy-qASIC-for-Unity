@@ -10,7 +10,7 @@ namespace qASIC.Tests.Runtime
     {
         static GameConsoleLog testLog = new GameConsoleLog("[Test] This is a test", DateTime.Now, Color.green, GameConsoleLog.LogType.Game);
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             GameConsoleController.AssignConfig(Resources.Load<GameConsoleConfig>("qASIC/Tests/Console Config"));

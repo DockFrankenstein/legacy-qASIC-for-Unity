@@ -138,6 +138,17 @@ namespace qASIC.Tests.Runtime
         public void Version() =>
             _RunCommand("version");
 
+        //Test command only appears in the editor, so it won't be possible to
+        //run this test successfully in a standalone build
+#if UNITY_EDITOR
+        [Test]
+        public void OtherAssemblyCommand()
+        {
+            _RunCommand("test");
+            Assert.AreNotEqual(GameConsoleController.Constants.CommandNotFoundMessage, _GetLastLog().Message);
+        }
+#endif
+
         GameConsoleLog _GetLastLog() =>
             GameConsoleController.logs[GameConsoleController.logs.Count - 1];
 
