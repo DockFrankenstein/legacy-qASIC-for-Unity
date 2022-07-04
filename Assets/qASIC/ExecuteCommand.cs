@@ -4,7 +4,7 @@ using qASIC.Console;
 
 namespace qASIC
 {
-    public class MenuExecuteCommand : MonoBehaviour
+    public class ExecuteCommand : MonoBehaviour
     {
 #if UNITY_EDITOR
         private void Reset()
