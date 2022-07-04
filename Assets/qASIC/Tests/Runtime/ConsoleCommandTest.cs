@@ -59,6 +59,9 @@ namespace qASIC.Tests.Runtime
         [Test]
         public void Input()
         {
+#if !ENABLE_LEGACY_INPUT_MANAGER
+            throw new Exception("This test requires the old Input Handler!");
+#else
             InputMap map = Resources.Load<InputMap>("qASIC/Tests/Map");
             InputManager.LoadMap(map);
 
@@ -70,6 +73,7 @@ namespace qASIC.Tests.Runtime
             Assert.IsTrue(InputManager.GetKeyCode("Group1", "Action0", 0) == KeyCode.Return);
             _RunCommand("changeinput", "Group1", "Action1", "0", "Return");
             Assert.IsTrue(InputManager.GetKeyCode("Group1", "Action1", 0) == KeyCode.Return);
+#endif
         }
 
         [Test]
