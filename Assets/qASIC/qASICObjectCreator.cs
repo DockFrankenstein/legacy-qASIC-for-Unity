@@ -73,7 +73,7 @@ namespace qASIC.Tools
 
             StaticTogglerBasic toggler = displayer.gameObject.AddComponent<StaticTogglerBasic>();
             toggler.togglerTag = settings.debugTogglerName;
-            toggler.key = settings.debugTogglerKey;
+            toggler.key = settings.DebugTogglerKey;
             toggler.toggleObject = canvasObject;
             displayerObject.SetActive(true);
         }

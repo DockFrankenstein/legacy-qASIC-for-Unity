@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
+
 namespace qASIC.ProjectSettings
 {
     [System.Serializable]
@@ -20,13 +24,22 @@ namespace qASIC.ProjectSettings
         [Header("Toggler")]
         [InspectorLabel("Toggler Name")] public string debugTogglerName = "debug displayer";
 
+        //----Debug Toggler Key----
+#pragma warning disable CS0414
+
 #if ENABLE_INPUT_SYSTEM
         [HideInInspector]
 #endif
-        [KeyCodeListener] public KeyCode debugTogglerKey = KeyCode.None;
+        [KeyCodeListener] [SerializeField] private KeyCode debugTogglerKey = KeyCode.None;
 #if ENABLE_INPUT_SYSTEM
-        public Key debugTogglerKey = Key.None;
+        [InspectorLabel("Debug Toggler Key")] [SerializeField] private Key debugTogglerKeyUIS = Key.None;
+        public Key DebugTogglerKey { get => debugTogglerKeyUIS; set => debugTogglerKeyUIS = value; }
+#else
+        public KeyCode DebugTogglerKey { get => debugTogglerKey; set => debugTogglerKey = value; }
 #endif
+
+#pragma warning restore CS0414
+        //-------------------------
 
 
         [Header("Auto generation console message")]
