@@ -16,6 +16,12 @@ namespace qASIC.Console
         [Header("Settings")]
         [Tooltip("Limit of logs that will be displayed. By default it is set to 64, for professional use 512 or 1024 is recomended")]
         public int logLimit = 64;
+        [Tooltip("Platforms on which the input field won't be reselected after running a command or enabling the console")]
+        public RuntimePlatform[] ignoreReselectPlatforms = new RuntimePlatform[]
+        {
+            RuntimePlatform.IPhonePlayer,
+            RuntimePlatform.Android,
+        };
 
         [Header("Objects")]
         [Tooltip("TextMesh Pro text that will display logs")]
@@ -27,26 +33,18 @@ namespace qASIC.Console
 
         [Header("Toggling")]
         [ObjectRequires(typeof(IToggable))]
-        [SerializeField] IToggable toggler;
+        [SerializeField] MonoBehaviour toggler;
+        IToggable _togglerScript;
+
+        [Tooltip("Console configuration asset that will be sent to the controller on awake")]
+        public GameConsoleConfig ConsoleConfig;
 
 
         private int _commandIndex = -1;
-
         bool init = false;
 
         public bool IsScrollSnapped { get; private set; } = true;
         public string Content { get; private set; }
-
-
-        [Tooltip("Platforms on which the input field won't be reselected after running a command or enabling the console")]
-        public RuntimePlatform[] ignoreReselectPlatforms = new RuntimePlatform[]
-        {
-            RuntimePlatform.IPhonePlayer,
-            RuntimePlatform.Android,
-        };
-
-        [Tooltip("Console configuration asset that will be sent to the controller on awake")]
-        public GameConsoleConfig ConsoleConfig;
 
         public virtual void Awake()
         {
@@ -54,8 +52,10 @@ namespace qASIC.Console
             init = true;
 
             AssignComponents();
-            if (toggler != null)
-                toggler.OnToggle += OnChangeState;
+
+            _togglerScript = (IToggable)toggler;
+            if (_togglerScript != null)
+                _togglerScript.OnToggle += OnChangeState;
 
             GameConsoleController.AssignConfig(ConsoleConfig);
             GameConsoleController.OnLog += _ => RefreshLogs();
@@ -65,7 +65,7 @@ namespace qASIC.Console
         void AssignComponents()
         {
             if (toggler == null)
-                toggler = GetComponent<IToggable>();
+                toggler = (MonoBehaviour)GetComponent<IToggable>();
         }
 
         void OnChangeState(bool state)
@@ -98,7 +98,7 @@ namespace qASIC.Console
 
         public virtual void HandleInput()
         {
-            if (toggler?.State == false) return;
+            if (_togglerScript?.State == false) return;
 
 #if ENABLE_INPUT_SYSTEM
             if (Keyboard.current[Key.Enter].wasPressedThisFrame) RunCommand();
