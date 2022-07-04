@@ -12,6 +12,7 @@ namespace qASIC.Tests.Runtime
 
         public override void Run(List<string> args)
         {
+            Debug.Log(args.Count.ToString());
             if (!CheckForArgumentCount(args, 0, 1)) return;
 
             if (args.Count == 1)
@@ -23,8 +24,13 @@ namespace qASIC.Tests.Runtime
             switch (args[1].ToLower())
             {
                 case "exception":
-                    throw new System.Exception("This is a test exception");
+                    throw new System.Exception(Constants.ExceptionTestMessage);
             }
+        }
+
+        public static class Constants
+        {
+            public const string ExceptionTestMessage = "EXCEPTION_TEST";
         }
     }
 }

@@ -25,8 +25,20 @@ namespace qASIC.Tests.Runtime
         }
 
         [Test]
-        public void CommandException() =>
-            _RunCommand("test exception");
+        public void CommandException()
+        {
+            try
+            {
+                _RunCommand("test exception");
+
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e.ToString().Contains(TestCommand.Constants.ExceptionTestMessage));
+                return;
+            }
+            throw new Exception();
+        }
 
         void _RunCommand(params string[] args) =>
             _RunCommand(true, args);

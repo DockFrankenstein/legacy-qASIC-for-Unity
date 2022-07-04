@@ -9,10 +9,16 @@ namespace qASIC.Tests.Runtime
     {
         GameConsoleInterface console;
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             console = new GameObject("Console").AddComponent<GameConsoleInterface>();
+        }
+
+        [OneTimeTearDown]
+        public void Teardown()
+        {
+            Destroy(console);
         }
 
         [Test]
