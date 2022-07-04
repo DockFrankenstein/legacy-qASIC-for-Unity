@@ -15,7 +15,8 @@ namespace qASIC.Toggling
         protected override void HandleInput()
         {
 #if ENABLE_INPUT_SYSTEM
-            if (UnityEngine.InputSystem.Keyboard.current[key].wasPressedThisFrame)
+            if (key != UnityEngine.InputSystem.Key.None && 
+                UnityEngine.InputSystem.Keyboard.current[key].wasPressedThisFrame)
 #else
             if (Input.GetKeyDown(key))
 #endif
