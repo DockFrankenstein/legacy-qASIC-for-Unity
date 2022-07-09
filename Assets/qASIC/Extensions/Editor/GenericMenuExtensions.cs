@@ -4,7 +4,7 @@ using UnityEditor;
 
 namespace qASIC.EditorTools
 {
-    static class GenericMenuExtensions
+    public static class GenericMenuExtensions
     {
         /// <summary>Depending on the state, it will add a normal item or a disabled one</summary>
         public static void AddToggableItem(this GenericMenu menu, GUIContent content, bool on, GenericMenu.MenuFunction func, bool enabled)

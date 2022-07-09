@@ -42,7 +42,7 @@ namespace qASIC.Console.Commands
         }
 
         protected virtual void Log(string text) =>
-            GameConsoleController.Log(text, "default");
+            Log(text, "default");
 
         protected virtual void Log(string text, string color) =>
             GameConsoleController.Log(text, color);
@@ -51,12 +51,12 @@ namespace qASIC.Console.Commands
             GameConsoleController.Log(text, color);
 
         protected virtual void LogError(string text) =>
-            GameConsoleController.Log(text, "error");
+            Log(text, "error");
 
         protected virtual void NoOptionException(string option) =>
-            GameConsoleController.Log($"Option '{option}' does not exist!", "error");
+            Log($"Option '{option}' does not exist!", "error");
 
         protected virtual void ParseException(string text, string type) =>
-            GameConsoleController.Log($"Couldn't parse '{text}' to {type}!", "error");
+            Log($"Couldn't parse '{text}' to {type}!", "error");
     }
 }
