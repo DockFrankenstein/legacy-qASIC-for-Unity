@@ -60,7 +60,7 @@ namespace qASIC.Console.Commands
             if (DisableInitialization)
                 return _commands;
 
-            List<Type> types = TypeFinder.FindAllTypes<GameConsoleCommand>();
+            List<Type> types = TypeFinder.FindAllTypesList<GameConsoleCommand>();
             for (int i = 0; i < types.Count; i++)
             {
                 ConstructorInfo constructor = types[i].GetConstructor(Type.EmptyTypes);

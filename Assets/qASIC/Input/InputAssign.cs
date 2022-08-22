@@ -2,6 +2,7 @@
 using UnityEngine.Events;
 using TMPro;
 using UnityEngine.UI;
+using qASIC.InputManagement.Devices;
 
 namespace qASIC.InputManagement.Menu
 {
@@ -52,8 +53,8 @@ namespace qASIC.InputManagement.Menu
         public string GetLabel()
         {
             string currentKey = "UNKNOWN";
-            if (InputManager.TryGetKeyCode(inputAction.GroupName, inputAction.ActionName, keyIndex, out KeyCode key, false))
-                currentKey = key.ToString();
+            //if (InputManager.TryGetKeyCode(inputAction.GroupName, inputAction.ActionName, keyIndex, out KeyCode key, false))
+            //    currentKey = key.ToString();
             return $"{optionLabelName}{currentKey}";
         }
 

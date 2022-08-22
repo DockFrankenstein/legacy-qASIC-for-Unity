@@ -4,19 +4,33 @@ using System;
 using qASIC.FileManagement;
 using qASIC.InputManagement.Map;
 using qASIC.ProjectSettings;
+using qASIC.InputManagement.Players;
 
 namespace qASIC.InputManagement
 {
     public static class InputManager
     {
-        public static InputMap Map { get; set; }
-        public static bool MapLoaded { get => Map != null; }
+        public static InputMap Map { get; private set; }
+        public static bool MapLoaded => Map != null;
 
-        private static string SavePath { get; set; }
-        private static SerializationType SaveType { get; set; } = SerializationType.playerPrefs;
-        private static Dictionary<string, Dictionary<string, Dictionary<int, KeyCode>>> UserKeys { get; set; } = new Dictionary<string, Dictionary<string, Dictionary<int, KeyCode>>>();
+        #region Static
+        private static GamepadButton[] _gamepadButtons = null;
+        public static GamepadButton[] GamepadButtons
+        {
+            get
+            {
+                if (_gamepadButtons == null)
+                    _gamepadButtons = (GamepadButton[])Enum.GetValues(typeof(GamepadButton));
+
+                return _gamepadButtons;
+            }
+        }
+        #endregion
 
         #region Saving
+        private static string SavePath { get; set; }
+        private static SerializationType SaveType { get; set; } = SerializationType.playerPrefs;
+
         public static void SaveKeys(SerializationType saveType)
         {
             if (DisableSaving) return;
@@ -29,11 +43,34 @@ namespace qASIC.InputManagement
         {
             if (DisableSaving) return;
 
-            List<KeyData> keys = GenerateKeyList();
+            //foreach (var player in UserActions)
+            //{
+            //    foreach (var action in player.Value)
+            //    {
 
-            for (int i = 0; i < keys.Count; i++)
-                if (UserKeyExists(keys[i].group.groupName, keys[i].action.actionName, keys[i].index))
-                    SaveKey(keys[i].GroupName, keys[i].ActionName, keys[i].index, UserKeys[keys[i].GroupName][keys[i].ActionName][keys[i].index]);
+            //    }
+            //}
+
+            switch (SaveType)
+            {
+                case SerializationType.config:
+                    if (string.IsNullOrWhiteSpace(SavePath))
+                    {
+                        qDebug.LogError("Cannot save user input preferences, path is empty!");
+                        return;
+                    }
+
+                    //ConfigController.SetSettingFromFile(SavePath, saveKey, key.ToString());
+                    break;
+                case SerializationType.playerPrefs:
+                    //PlayerPrefs.SetInt(saveKey, (int)key);
+                    break;
+                case SerializationType.none:
+                    break;
+                default:
+                    qDebug.LogError($"Serialization type '{SaveType}' is not supported by the input system!");
+                    break;
+            }
 
             qDebug.Log("Successfully saved user input preferences.", "input");
         }
@@ -84,7 +121,7 @@ namespace qASIC.InputManagement
         private static bool _initialized = false;
         public static bool Initialized => _initialized;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Initialize()
         {
             if (_initialized) return;
@@ -125,7 +162,13 @@ namespace qASIC.InputManagement
             for (int i = 0; i < Map.Groups.Count; i++)
                 Map.Groups[i].CheckForRepeating();
 
-            UserKeys.Clear();
+            //UserActions.Clear();
+
+            //foreach (InputGroup group in Map.Groups)
+            //    foreach (InputAction action in group.actions)
+            //        UserActions.Add(action, action.Duplicate());
+
+            InputPlayerManager.RebuildPlayerMapData(map);
 
             qDebug.Log("Input map has been assigned", "input");
         }
@@ -195,7 +238,7 @@ namespace qASIC.InputManagement
             public string GroupName { get => group.groupName; }
             public string ActionName { get => action.actionName; }
 
-            /// <returns>Returns key used for saving and loading</returns>
+            /// <returns>Returns key used for saving and loading using player prefs</returns>
             public string GetSaveKey() =>
                 GenerateSaveKey(group.groupName, action.actionName, index);
 
@@ -210,6 +253,7 @@ namespace qASIC.InputManagement
             }
         }
 
+        /// <summary>Generates a list of keys being used in the Input Manager</summary>
         public static List<KeyData> GenerateKeyList()
         {
             List<KeyData> keys = new List<KeyData>();
@@ -220,16 +264,15 @@ namespace qASIC.InputManagement
                 return keys;
             }
 
-            for (int groupIndex = 0; groupIndex < Map.Groups.Count; groupIndex++)
-            {
-                InputGroup group = Map.Groups[groupIndex];
-                for (int actionIndex = 0; actionIndex < group.actions.Count; actionIndex++)
-                {
-                    InputAction action = group.actions[actionIndex];
-                    for (int i = 0; i < action.keys.Count; i++)
-                        keys.Add(new KeyData(group, action, i));
-                }
-            }
+            //foreach (var player in UserActions.Values)
+            //{
+            //    foreach (InputAction action in player.Values)
+            //    {
+            //        InputAction userAction = UserActions[action];
+            //        for (int i = 0; i < userAction.keys.Count; i++)
+            //            keys.Add(new KeyData(group, userAction, i));
+            //    }
+            //}
 
             return keys;
         }
@@ -241,104 +284,78 @@ namespace qASIC.InputManagement
 
         public static void ChangeInput(string groupName, string actionName, int index, KeyCode newKey, bool save = true, bool log = true)
         {
-            if (!MapLoaded) return;
-            if (!TryGetInputAction(groupName, actionName, out InputAction action, true)) return;
-            if (!action.TryGetKey(index, out _, true)) return;
+            //if (!MapLoaded) return;
+            //if (!TryGetInputAction(groupName, actionName, out InputAction action, true)) return;
+            //if (!action.TryGetKey(index, out _, true)) return;
 
-            CreateUserKey(groupName, actionName, index);
-            UserKeys[groupName][actionName][index] = newKey;
+            ////UserActions[action].keys[index] = newKey;
 
-            if (save)
-                SaveKey(groupName, actionName, index, newKey);
+            //if (save)
+            //    SaveKey(groupName, actionName, index, newKey);
 
-            if (log)
-                qDebug.Log($"Changed key {action.actionName} to {newKey}", "input");
-        }
-
-        static void CreateUserKey(string groupName, string keyName, int index)
-        {
-            if (!UserKeys.ContainsKey(groupName))
-                UserKeys.Add(groupName, new Dictionary<string, Dictionary<int, KeyCode>>());
-
-            if (!UserKeys[groupName].ContainsKey(keyName))
-                UserKeys[groupName].Add(keyName, new Dictionary<int, KeyCode>());
-
-            if (!UserKeys[groupName][keyName].ContainsKey(index))
-                UserKeys[groupName][keyName].Add(index, KeyCode.None);
-        }
-        #endregion
-
-        #region Get KeyCode
-        public static KeyCode GetKeyCode(string actionName, int index) =>
-            GetKeyCode(MapLoaded ? Map.DefaultGroupName : string.Empty, actionName, index);
-
-        public static KeyCode GetKeyCode(string groupName, string actionName, int index)
-        {
-            TryGetKeyCode(groupName, actionName, index, out KeyCode key, true);
-            return key;
-        }
-
-        public static bool TryGetKeyCode(string actionName, int index, out KeyCode key, bool logError) =>
-            TryGetKeyCode(MapLoaded ? Map.DefaultGroupName : string.Empty, actionName, index, out key, logError);
-
-        public static bool TryGetKeyCode(string groupName, string actionName, int index, out KeyCode key, bool logError = false)
-        {
-            key = KeyCode.None;
-
-            if (!MapLoaded)
-                return false;
-
-            if (!TryGetInputAction(groupName, actionName, out InputAction action, logError) || !action.TryGetKey(index, out key, true))
-                return false;
-
-            if (UserKeyExists(groupName, actionName, index))
-                key = UserKeys[groupName][actionName][index];
-
-            return true;
+            //if (log)
+            //    qDebug.Log($"Changed key {action.actionName} to {newKey}", "input");
         }
         #endregion
 
         #region Getting Input
+        //Get input via name
         public static bool GetInputDown(string groupName, string actionName) =>
-            HandleInput(new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKeyDown(key); }), groupName, actionName);
-
+            GetInputDown(-1, groupName, actionName);
         public static bool GetInput(string groupName, string actionName) =>
-            HandleInput(new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKey(key); }), groupName, actionName);
+            GetInput(-1, groupName, actionName);
 
         public static bool GetInputUp(string groupName, string actionName) =>
-            HandleInput(new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKeyDown(key); }), groupName, actionName);
+            GetInputUp(-1, groupName, actionName);
 
         public static bool GetInputDown(string actionName) =>
-            HandleInput(new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKeyDown(key); }), actionName);
+            GetInputDown(-1, actionName);
 
         public static bool GetInput(string actionName) =>
-            HandleInput(new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKey(key); }), actionName);
+            GetInput(-1, actionName);
 
         public static bool GetInputUp(string actionName) =>
-            HandleInput(new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKeyDown(key); }), actionName);
+            GetInput(-1, actionName);
 
-        public static bool HandleInput(Func<KeyCode, bool> statement, string actionName) =>
-            MapLoaded && HandleInput(statement, Map.DefaultGroupName, actionName);
+        public static bool GetInputDown(int playerIndex, string groupName, string actionName) =>
+            HandleInput(playerIndex, new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKeyDown(key); }), groupName, actionName);
 
-        static bool HandleInput(Func<KeyCode, bool> statement, string groupName, string actionName)
+        public static bool GetInput(int playerIndex, string groupName, string actionName) =>
+            HandleInput(playerIndex, new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKey(key); }), groupName, actionName);
+
+        public static bool GetInputUp(int playerIndex, string groupName, string actionName) =>
+            HandleInput(playerIndex, new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKeyDown(key); }), groupName, actionName);
+
+        public static bool GetInputDown(int playerIndex, string actionName) =>
+            HandleInput(playerIndex, new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKeyDown(key); }), actionName);
+
+        public static bool GetInput(int playerIndex, string actionName) =>
+            HandleInput(playerIndex, new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKey(key); }), actionName);
+
+        public static bool GetInputUp(int playerIndex, string actionName) =>
+            HandleInput(playerIndex, new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKeyDown(key); }), actionName);
+
+        public static bool HandleInput(int playerIndex, Func<KeyCode, bool> statement, string actionName) =>
+            MapLoaded && HandleInput(playerIndex, statement, Map.DefaultGroupName, actionName);
+
+        static bool HandleInput(int playerIndex, Func<KeyCode, bool> statement, string groupName, string actionName)
         {
-            if (!MapLoaded) return false;
+            //if (!MapLoaded) return false;
 
-            if (!TryGetInputAction(groupName, actionName, out InputAction action)) return false;
+            //if (!TryGetInputAction(groupName, actionName, out InputAction action)) return false;
+            //InputAction userAction = action/*UserActions[action]*/;
 
-            for (int i = 0; i < action.keys.Count; i++)
-            {
-                KeyCode key = action.keys[i];
-                if (UserKeyExists(groupName, actionName, i))
-                    key = UserKeys[groupName][actionName][i];
-
-                if (statement.Invoke(key))
-                    return true;
-            }
+            //for (int i = 0; i < userAction.keys.Count; i++)
+            //{
+            //    KeyCode key = userAction.keys[i];
+            //    if (statement.Invoke(key))
+            //        return true;
+            //}
 
             return false;
         }
 
+        //Get Input via reference
         public static bool GetInputUp(InputActionReference action) =>
             action != null && GetInputUp(action.GroupName, action.ActionName);
 
@@ -347,17 +364,15 @@ namespace qASIC.InputManagement
 
         public static bool GetInputDown(InputActionReference action) =>
             action != null && GetInputDown(action.GroupName, action.ActionName);
-        #endregion
 
-        #region UserKeys Exist
-        public static bool UserGroupExists(string groupName) =>
-            UserKeys.ContainsKey(groupName);
+        public static bool GetInputUp(int playerIndex, InputActionReference action) =>
+            action != null && GetInputUp(playerIndex, action.GroupName, action.ActionName);
 
-        public static bool UserActionExists(string groupName, string actionName) =>
-            UserGroupExists(groupName) && UserKeys[groupName].ContainsKey(actionName);
+        public static bool GetInput(int playerIndex, InputActionReference action) =>
+            action != null && GetInput(playerIndex, action.GroupName, action.ActionName);
 
-        public static bool UserKeyExists(string groupName, string actionName, int index) =>
-            UserActionExists(groupName, actionName) && UserKeys[groupName][actionName].ContainsKey(index);
+        public static bool GetInputDown(int playerIndex, InputActionReference action) =>
+            action != null && GetInputDown(playerIndex, action.GroupName, action.ActionName);
         #endregion
 
         #region Get Action and Axis
@@ -387,8 +402,18 @@ namespace qASIC.InputManagement
         #endregion
 
         #region Axis
-        public static float GetMapAxis(string groupName, string axisName)
+        public static float GetMapAxis(string groupName, string axisName) =>
+            GetMapAxis(-1, groupName, axisName);
+
+        public static float GetMapAxis(string axisName) =>
+            GetMapAxis(-1, axisName);
+
+        public static float GetMapAxisRaw(string groupName, string axisName) =>
+            GetMapAxisRaw(-1, groupName, axisName);
+
+        public static float GetMapAxis(int playerIndex, string groupName, string axisName)
         {
+            playerIndex = -1;
             if (!MapLoaded) return 0f;
             if (!TryGetInputAxis(groupName, axisName, out InputAxis axis)) return 0f;
 
@@ -399,12 +424,12 @@ namespace qASIC.InputManagement
             return value;
         }
 
-        public static float GetMapAxis(string axisName) =>
-            MapLoaded ? GetMapAxis(Map.DefaultGroupName, axisName) : 0f;
+        public static float GetMapAxis(int playerIndex, string axisName) =>
+            MapLoaded ? GetMapAxis(playerIndex, Map.DefaultGroupName, axisName) : 0f;
 
-        public static float GetMapAxisRaw(string groupName, string axisName)
+        public static float GetMapAxisRaw(int playerIndex, string groupName, string axisName)
         {
-            float value = GetMapAxis(groupName, axisName);
+            float value = GetMapAxis(playerIndex, groupName, axisName);
             //TODO: this is stupid
             return Mathf.Round(Mathf.Abs(value)) * (value < 0 ? -1f : 1f);
         }

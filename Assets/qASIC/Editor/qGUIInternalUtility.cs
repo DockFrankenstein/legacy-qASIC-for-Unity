@@ -48,9 +48,11 @@ namespace qASIC.EditorTools.Internal
             //EditorGUILayout.LabelField(label, EditorStyles.boldLabel);
         }
 
-        public static void EndGroup()
+        public static void EndGroup(bool space = true)
         {
-            EditorGUILayout.Space();
+            if (space)
+                EditorGUILayout.Space();
+
             GUILayout.EndVertical();
         }
 

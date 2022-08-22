@@ -42,16 +42,7 @@ namespace qASIC.Toggling.Controllers
                 if (!togglers.ContainsKey(platformTogglers[i].platform))
                     togglers.Add(platformTogglers[i].platform, platformTogglers[i].toggler);
 
-            RuntimePlatform[] platforms = ((RuntimePlatform[])Enum.GetValues(typeof(RuntimePlatform)))
-                .Distinct()
-                .Where(x =>
-                {
-                    var attributes = (ObsoleteAttribute[])typeof(RuntimePlatform)
-                    .GetField(x.ToString())
-                    .GetCustomAttributes(typeof(ObsoleteAttribute), false);
-                    return attributes == null || attributes.Length == 0;
-                })
-                .ToArray();
+            RuntimePlatform[] platforms = qApplication.UnitySupportedPlatforms;
 
             int platformsCount = platforms.Length;
 

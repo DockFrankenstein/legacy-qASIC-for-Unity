@@ -7,6 +7,7 @@ namespace qASIC.InputManagement.Map
     public class InputAxis : INonRepeatable
     {
         public string axisName;
+        public string guid = Guid.NewGuid().ToString();
 
         public string positiveAction;
         public string negativeAction;

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections;
 using System;
 using System.Reflection;
 using System.Linq;
@@ -10,13 +9,16 @@ namespace qASIC.Tools
     {
         private const BindingFlags defaultFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
 
-        public static List<Type> FindAllTypes<T>()
+        public static List<Type> FindAllTypesList<T>() =>
+            FindAllTypes<T>()
+                .ToList();
+
+        public static IEnumerable<Type> FindAllTypes<T>()
         {
             var type = typeof(T);
             return AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes())
-                .Where(t => t != type && type.IsAssignableFrom(t))
-                .ToList();
+                .Where(t => t != type && type.IsAssignableFrom(t));
         }
 
         public static IEnumerable<MethodInfo> FindAllAttributes<T>(BindingFlags bindingFlags = defaultFlags) =>

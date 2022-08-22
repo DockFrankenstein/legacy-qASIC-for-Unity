@@ -2,19 +2,13 @@
 using System;
 using System.Collections.Generic;
 using qASIC.Tools;
+using System.Linq;
 
 namespace qASIC.InputManagement.Map
 {
     [Serializable]
     public class InputAction : INonRepeatable
     {
-        public string actionName;
-
-        [KeyCodeListener]
-        public List<KeyCode> keys = new List<KeyCode>();
-
-        public string ItemName { get => actionName; set => actionName = value; }
-
         public InputAction() { }
         
         public InputAction(string name)
@@ -22,45 +16,57 @@ namespace qASIC.InputManagement.Map
             actionName = name;
         }
 
-        public bool GetInput() =>
-            HandleInput(new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKey(key); }));
+        public string actionName;
+        public string guid = Guid.NewGuid().ToString();
 
-        public bool GetInputDown() =>
-            HandleInput(new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKeyDown(key); }));
+        public List<KeyList> keys = new List<KeyList>();
 
-        public bool GetInputUp() =>
-            HandleInput(new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKey(key); }));
+        public string ItemName { get => actionName; set => actionName = value; }
 
-        public bool HandleInput(Func<KeyCode, bool> statement)
+        [Serializable]
+        public struct KeyList
         {
-            for (int i = 0; i < keys.Count; i++)
+            public KeyList(string keyType)
             {
-                if (statement.Invoke(keys[i]))
-                    return true;
+                this.keyType = keyType;
+                keys = new List<int>();
             }
 
-            return false;
+            public KeyList(Type keyType) : this(keyType.AssemblyQualifiedName) { }
+
+            public string keyType;
+            public List<int> keys;
         }
 
-        public KeyCode GetKey(int index)
+        private Dictionary<Type, List<int>> keysCache = new Dictionary<Type, List<int>>();
+
+        public List<int> GetKeyList(Type type)
         {
-            TryGetKey(index, out KeyCode key, true);
-            return key;
+#if !UNITY_EDITOR && !QASIC_FORCE_CABLEBOX_INPUT_ACTION_EDITOR_KEY_CACHE
+            if (keysCache.ContainsKey(type))
+                return keysCache[type];
+#endif
+
+            string keyType = type.AssemblyQualifiedName;
+
+            List<KeyList> targets = keys.Where(x => x.keyType == keyType).ToList();
+            List<int> list = new List<int>();
+
+            if (targets.Count == 1)
+                list = keys.Where(x => x.keyType == keyType).ToList()[0].keys;
+
+#if !UNITY_EDITOR && !QASIC_FORCE_CABLEBOX_INPUT_ACTION_EDITOR_KEY_CACHE
+            if (!keysCache.ContainsKey(type))
+                keysCache.Add(type, list);
+#endif
+
+            return list;
         }
 
-        public bool TryGetKey(int index, out KeyCode key, bool logError = false)
+        public InputAction Duplicate()
         {
-            if (index >= 0 && index < keys.Count)
-            {
-                key = keys[index];
-                return true;
-            }
-
-            key = KeyCode.None;
-            if (logError)
-                qDebug.LogError($"Action does not contain key '{index}': {keys.Count}");
-
-            return false;
+            string json = JsonUtility.ToJson(this);
+            return JsonUtility.FromJson<InputAction>(json);
         }
 
         public override string ToString() =>

@@ -2,7 +2,12 @@
 using UnityEditor;
 using UnityEngine;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using qASIC.EditorTools;
+using qASIC.EditorTools.Internal;
+using UnityEditorInternal;
+using qASIC.InputManagement.Internal.KeyProviders;
 
 using static qASIC.EditorTools.qGUIEditorUtility;
 using static UnityEditor.EditorGUILayout;
@@ -11,16 +16,7 @@ namespace qASIC.InputManagement.Map.Internal
 {
     public class InputMapWindowInspector
     {
-        public InputMap map;
-
-        object _inspectionObject;
-        bool _displayDeletePrompt;
-
-        Vector2 _scroll;
-        int _currentListeningKeyCode = -1;
-
-        public string DefaultText { get; set; }
-
+        #region Field Initialization
         public struct InspectorInputAction
         {
             public InputGroup group;
@@ -44,12 +40,21 @@ namespace qASIC.InputManagement.Map.Internal
                 this.axis = axis;
             }
         }
+        #endregion
+
+        public InputMap map;
+
+        object _inspectionObject;
+        bool _displayDeletePrompt;
+
+        Vector2 _scroll;
+
+        public string DefaultText { get; set; }
 
         public event Action<InputGroup> OnDeleteGroup;
         public event Action<InspectorInputAction> OnDeleteAction;
         public event Action<InspectorInputAxis> OnDeleteAxis;
 
-        bool actionKeyFoldout = true;
         bool _resetNameField = false;
         bool _editingNameField = false;
 
@@ -72,19 +77,33 @@ namespace qASIC.InputManagement.Map.Internal
 
                     group.groupName = NameField(group.groupName, (string newName) => { return map.CanRenameGroup(newName); });
 
-                    EditorGUI.BeginDisabledGroup(map.defaultGroup == groupIndex);
-                    if (GUILayout.Button("Set as default"))
+                    using (new EditorGUI.DisabledScope(map.defaultGroup == groupIndex))
                     {
-                        map.defaultGroup = groupIndex;
-                        _displayDeletePrompt = false;
-                        InputMapWindow.SetMapDirty();
+                        if (GUILayout.Button("Set as default"))
+                        {
+                            map.defaultGroup = groupIndex;
+                            _displayDeletePrompt = false;
+                            InputMapWindow.SetMapDirty();
+                        }
+
+                        Space();
+                        if (DeleteButton())
+                            OnDeleteGroup?.Invoke(group);
                     }
 
-                    Space();
-                    if (DeleteButton())
-                        OnDeleteGroup?.Invoke(group);
 
-                    EditorGUI.EndDisabledGroup();
+                    //Debug
+                    if (InputMapWindow.DebugMode)
+                    {
+                        Space();
+                        qGUIInternalUtility.BeginGroup();
+                        EditorChangeChecker.BeginChangeCheck(InputMapWindow.SetMapDirty);
+
+                        group.guid = DelayedTextField("GUID", group.guid);
+
+                        EditorChangeChecker.EndChangeCheckAndCleanup();
+                        qGUIInternalUtility.EndGroup(false);
+                    }
                     break;
                 case InspectorInputAction action:
                     action.action.actionName = NameField(action.action.actionName, (string newName) => { return action.group.CanRenameAction(newName); });
@@ -94,6 +113,19 @@ namespace qASIC.InputManagement.Map.Internal
 
                     if (DeleteButton())
                         OnDeleteAction?.Invoke(action);
+
+                    //Debug
+                    if (InputMapWindow.DebugMode)
+                    {
+                        Space();
+                        qGUIInternalUtility.BeginGroup();
+                        EditorChangeChecker.BeginChangeCheck(InputMapWindow.SetMapDirty);
+
+                        action.action.guid = DelayedTextField("GUID", action.action.guid);
+
+                        EditorChangeChecker.EndChangeCheckAndCleanup();
+                        qGUIInternalUtility.EndGroup(false);
+                    }
                     break;
                 case InspectorInputAxis axis:
                     axis.axis.axisName = NameField(axis.axis.axisName, (string newName) => { return axis.group.CanRenameAxis(newName); });
@@ -109,6 +141,19 @@ namespace qASIC.InputManagement.Map.Internal
 
                     if (DeleteButton())
                         OnDeleteAxis?.Invoke(axis);
+
+                    //Debug
+                    if (InputMapWindow.DebugMode)
+                    {
+                        Space();
+                        qGUIInternalUtility.BeginGroup();
+                        EditorChangeChecker.BeginChangeCheck(InputMapWindow.SetMapDirty);
+
+                        axis.axis.guid = DelayedTextField("GUID", axis.axis.guid);
+
+                        EditorChangeChecker.EndChangeCheckAndCleanup();
+                        qGUIInternalUtility.EndGroup(false);
+                    }
                     break;
                 case InputAction _:
                     HelpBox(new GUIContent($"Use '{nameof(InspectorInputAction)}' instead of '{nameof(InputAction)}'!"));
@@ -166,58 +211,37 @@ namespace qASIC.InputManagement.Map.Internal
             }
         }
 
+
+        Dictionary<Type, ReorderableList> _keysReorderableLists;
         void DisplayKeys(InputAction action)
         {
-            actionKeyFoldout = Foldout(actionKeyFoldout, "Keys", true, EditorStyles.foldoutHeader);
-            if (!actionKeyFoldout) return;
-
-            BeginVertical(new GUIStyle() { margin = new RectOffset((int)EditorGUIUtility.singleLineHeight, 0, 0, 0) });
-
-            //Checking for changes
+            //qGUIInternalUtility.BeginGroup("Keys");
+            EditorGUILayout.Space();
+            BeginVertical(new GUIStyle() { margin = new RectOffset(4, 4, 0, 0) });
             EditorChangeChecker.BeginChangeCheck(InputMapWindow.SetMapDirty);
 
-            for (int i = 0; i < action.keys.Count; i++)
-            {
-                //Listening for key
-                if (_currentListeningKeyCode == i)
-                {
-                    if (Event.current.isKey)
-                    {
-                        action.keys[i] = Event.current.keyCode;
-                        _currentListeningKeyCode = -1;
-                        InputMapWindow.SetMapDirty();
-                        InputMapWindow.GetEditorWindow().Repaint();
-                    }
 
-                    if (EditorChangeChecker.IgnorableButton("Cancel") || Event.current.isMouse)
-                    {
-                        _currentListeningKeyCode = -1;
-                        InputMapWindow.GetEditorWindow().Repaint();
-                    }
+            Dictionary<Type, KeyTypeProvider> providers = InputMapEditorUtility.KeyTypeProvidersDictionary;
+
+            foreach (InputAction.KeyList list in action.keys)
+            {
+                Type type = Type.GetType(list.keyType);
+
+                if (type == null || !providers.ContainsKey(type))
+                {
+                    HelpBox($"Type '{list.keyType}' cannot be recognized!", MessageType.Error);
+                    Space();
                     continue;
                 }
 
-                //Drawing normal line
-                BeginHorizontal();
-                action.keys[i] = KeyCodePopup(action.keys[i]);
-
-                if (EditorChangeChecker.IgnorableButton("Change", GUILayout.Width(60f)))
-                {
-                    _currentListeningKeyCode = i;
-                    GUI.FocusControl(null);
-                }
-
-                if (GUILayout.Button("-", GUILayout.Width(EditorGUIUtility.singleLineHeight)))
-                    action.keys.RemoveAt(i);
-
-                EndHorizontal();
+                _keysReorderableLists[type].DoLayoutList();
+                Space();
             }
 
-            if (GUILayout.Button("+"))
-                action.keys.Add(default);
 
             EditorChangeChecker.EndChangeCheckAndCleanup();
             EndVertical();
+            //qGUIInternalUtility.EndGroup();
         }
         #endregion
 
@@ -231,10 +255,35 @@ namespace qASIC.InputManagement.Map.Internal
             {
                 _inspectionObject = obj;
                 _displayDeletePrompt = false;
-                _currentListeningKeyCode = -1;
                 if (_editingNameField)
                     GUI.FocusControl(null);
                 _resetNameField = true;
+
+                //Initialize for specific types
+                switch (obj)
+                {
+                    case InspectorInputAction action:
+                        _keysReorderableLists = new Dictionary<Type, ReorderableList>();
+                        Dictionary<Type, KeyTypeProvider> providers = InputMapEditorUtility.KeyTypeProvidersDictionary;
+
+                        foreach (InputAction.KeyList list in action.action.keys)
+                        {
+                            Type type = Type.GetType(list.keyType);
+
+                            if (type == null || !providers.ContainsKey(type) || _keysReorderableLists.ContainsKey(type))
+                                continue;
+
+                            ReorderableList reorderableList = new ReorderableList(list.keys, typeof(int), true, true, true, true);
+                            reorderableList.drawHeaderCallback += (rect) => EditorGUI.LabelField(rect, providers[type].KeyName);
+                            reorderableList.drawElementCallback += (rect, index, isActive, isFocused) =>
+                            {
+                                list.keys[index] = providers[type].OnPopupGUI(rect, list.keys[index], isActive, isFocused);
+                            };
+
+                            _keysReorderableLists.Add(type, reorderableList);
+                        }
+                        break;
+                }
             };
         }
 

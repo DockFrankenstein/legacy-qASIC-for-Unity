@@ -22,5 +22,6 @@ MonoBehaviour:
     editorPath:
       genericFolder: 62
       filePath: input-editor.txt
+  uimAxisMapper: {fileID: 11400000, guid: 041847f58c2b1664cab13e3621daaf25, type: 2}
   startArgsDisableLoad: 1
   startArgsDisableSave: 1

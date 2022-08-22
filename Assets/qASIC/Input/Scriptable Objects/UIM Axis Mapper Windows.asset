@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 012f61e7af4c3c94ca334c02fa1ef1c0, type: 3}
+  m_Name: UIM Axis Mapper Windows
+  m_EditorClassIdentifier: 
+  axes:
+  - button: 1
+    type: 0
+    axisName: 
+    negative: 0
+    uimKey: 330
+  - button: 2
+    type: 0
+    axisName: 
+    negative: 0
+    uimKey: 331
+  - button: 3
+    type: 0
+    axisName: 
+    negative: 0
+    uimKey: 332
+  - button: 4
+    type: 0
+    axisName: 
+    negative: 0
+    uimKey: 333
+  - button: 5
+    type: 0
+    axisName: 
+    negative: 0
+    uimKey: 334
+  - button: 6
+    type: 0
+    axisName: gamepad_{0}_axis_8
+    negative: 0
+    uimKey: 335
+  - button: 7
+    type: 1
+    axisName: gamepad_{0}_axis_8
+    negative: 0
+    uimKey: 0
+  - button: 8
+    type: 1
+    axisName: gamepad_{0}_axis_9
+    negative: 0
+    uimKey: 338
+  - button: 9
+    type: 0
+    axisName: 
+    negative: 0
+    uimKey: 338
+  - button: 10
+    type: 0
+    axisName: gamepad_{0}_axis_1
+    negative: 1
+    uimKey: 339
+  - button: 11
+    type: 1
+    axisName: gamepad_{0}_axis_1
+    negative: 1
+    uimKey: 0
+  - button: 12
+    type: 1
+    axisName: gamepad_{0}_axis_0
+    negative: 0
+    uimKey: 0
+  - button: 13
+    type: 1
+    axisName: gamepad_{0}_axis_1
+    negative: 0
+    uimKey: 0
+  - button: 14
+    type: 1
+    axisName: gamepad_{0}_axis_0
+    negative: 1
+    uimKey: 0
+  - button: 15
+    type: 1
+    axisName: gamepad_{0}_axis_4
+    negative: 1
+    uimKey: 0
+  - button: 16
+    type: 1
+    axisName: gamepad_{0}_axis_3
+    negative: 0
+    uimKey: 0
+  - button: 17
+    type: 1
+    axisName: gamepad_{0}_axis_4
+    negative: 0
+    uimKey: 0
+  - button: 18
+    type: 1
+    axisName: gamepad_{0}_axis_3
+    negative: 1
+    uimKey: 0
+  - button: 19
+    type: 1
+    axisName: gamepad_{0}_axis_6
+    negative: 0
+    uimKey: 0
+  - button: 20
+    type: 1
+    axisName: gamepad_{0}_axis_5
+    negative: 0
+    uimKey: 0
+  - button: 21
+    type: 1
+    axisName: gamepad_{0}_axis_6
+    negative: 1
+    uimKey: 0
+  - button: 22
+    type: 1
+    axisName: gamepad_{0}_axis_5
+    negative: 1
+    uimKey: 336
+  - button: 23
+    type: 0
+    axisName: 
+    negative: 0
+    uimKey: 336
+  - button: 24
+    type: 0
+    axisName: 
+    negative: 0
+    uimKey: 337

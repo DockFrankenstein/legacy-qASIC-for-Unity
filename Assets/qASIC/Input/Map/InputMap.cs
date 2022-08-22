@@ -10,6 +10,13 @@ namespace qASIC.InputManagement.Map
         public int defaultGroup = 0;
         public List<InputGroup> Groups = new List<InputGroup>(new InputGroup[] { new InputGroup("Default") });
 
+        public InputMapData GetData()
+        {
+            InputMapData data = new InputMapData(defaultGroup, Groups);
+            data = data.Duplicate();
+            return data;
+        }
+
         public string DefaultGroupName
         { 
             get

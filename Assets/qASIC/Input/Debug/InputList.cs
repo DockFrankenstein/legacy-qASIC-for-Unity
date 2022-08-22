@@ -14,28 +14,28 @@ namespace qASIC.InputManagement.DebugTools
 
         private void Update()
         {
-            if (text == null) return;
-            ResetText();
+            //if (text == null) return;
+            //ResetText();
 
-            if (!InputManager.MapLoaded)
-            {
-                text.text = "Map not assigned";
-                return;
-            }
+            //if (!InputManager.MapLoaded)
+            //{
+            //    text.text = "Map not assigned";
+            //    return;
+            //}
 
-            foreach (InputGroup group in InputManager.Map.Groups)
-            {
-                AddLine(group.groupName);
-                foreach(InputAction action in group.actions)
-                {
-                    AddLine($"├{action.actionName}: {action.GetInput()}");
-                    for (int i = 0; i < action.keys.Count; i++)
-                    {
-                        KeyCode key = InputManager.GetKeyCode(group.groupName, action.actionName, i);
-                        AddLine($"├─{key}: {Input.GetKey(key).ToStringFormatted()}");
-                    }
-                }
-            }
+            //foreach (InputGroup group in InputManager.Map.Groups)
+            //{
+            //    AddLine(group.groupName);
+            //    foreach(InputAction action in group.actions)
+            //    {
+            //        AddLine($"├{action.actionName}: {action.GetInput()}");
+            //        for (int i = 0; i < action.keys.Count; i++)
+            //        {
+            //            KeyCode key = InputManager.GetKeyCode(group.groupName, action.actionName, i);
+            //            AddLine($"├─{key}: {Input.GetKey(key).ToStringFormatted()}");
+            //        }
+            //    }
+            //}
         }
 
         void AddLine(string line)

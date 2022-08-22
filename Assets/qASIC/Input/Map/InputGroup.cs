@@ -7,19 +7,20 @@ namespace qASIC.InputManagement.Map
     [Serializable]
     public class InputGroup : INonRepeatable
     {
-        public string groupName;
-
-        public List<InputAction> actions = new List<InputAction>();
-        public List<InputAxis> axes = new List<InputAxis>();
-
-        public string ItemName { get => groupName; set => groupName = value; }
-
         public InputGroup() { }
 
         public InputGroup(string name)
         {
             groupName = name;
         }
+
+        public string groupName;
+        public string guid = Guid.NewGuid().ToString();
+
+        public List<InputAction> actions = new List<InputAction>();
+        public List<InputAxis> axes = new List<InputAxis>();
+
+        public string ItemName { get => groupName; set => groupName = value; }
 
         public bool TryGetAction(string actionName, out InputAction action, bool logError = false)
         {

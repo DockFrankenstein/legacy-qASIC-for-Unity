@@ -65,14 +65,14 @@ namespace qASIC.Tests.Runtime
             InputMap map = Resources.Load<InputMap>("qASIC/Tests/Map");
             InputManager.LoadMap(map);
 
-            _RunCommand("changeinput", "Action0", "Return");
-            Assert.IsTrue(InputManager.GetKeyCode("Action0", 0) == KeyCode.Return);
-            _RunCommand("changeinput", "Action1", "0", "Return");
-            Assert.IsTrue(InputManager.GetKeyCode("Action1", 0) == KeyCode.Return);
-            _RunCommand("changeinput", "Group1", "Action0", "Return");
-            Assert.IsTrue(InputManager.GetKeyCode("Group1", "Action0", 0) == KeyCode.Return);
-            _RunCommand("changeinput", "Group1", "Action1", "0", "Return");
-            Assert.IsTrue(InputManager.GetKeyCode("Group1", "Action1", 0) == KeyCode.Return);
+            //_RunCommand("changeinput", "Action0", "Return");
+            //Assert.IsTrue(InputManager.GetKeyCode("Action0", 0) == KeyCode.Return);
+            //_RunCommand("changeinput", "Action1", "0", "Return");
+            //Assert.IsTrue(InputManager.GetKeyCode("Action1", 0) == KeyCode.Return);
+            //_RunCommand("changeinput", "Group1", "Action0", "Return");
+            //Assert.IsTrue(InputManager.GetKeyCode("Group1", "Action0", 0) == KeyCode.Return);
+            //_RunCommand("changeinput", "Group1", "Action1", "0", "Return");
+            //Assert.IsTrue(InputManager.GetKeyCode("Group1", "Action1", 0) == KeyCode.Return);
 #endif
         }
 

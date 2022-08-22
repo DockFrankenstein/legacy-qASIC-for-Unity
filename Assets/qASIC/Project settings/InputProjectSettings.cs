@@ -1,5 +1,6 @@
 ﻿using qASIC.InputManagement.Map;
 using qASIC.FileManagement;
+using qASIC.InputManagement.UIM;
 
 namespace qASIC.ProjectSettings
 {
@@ -11,6 +12,8 @@ namespace qASIC.ProjectSettings
         public InputMap map;
         public SerializationType serializationType = SerializationType.playerPrefs;
         public AdvancedGenericFilePath filePath = new AdvancedGenericFilePath(GenericFolder.PersistentDataPath, "input.txt", "input-editor.txt");
+
+        public UIMAxisMapper uimAxisMapper;
 
         [InspectorLabel("Disable Loading")] public bool startArgsDisableLoad = true;
         [InspectorLabel("Disable Saving")] public bool startArgsDisableSave = true;

@@ -41,25 +41,23 @@ namespace qASIC.ProjectSettings.Internal
                 InputManagement.Map.Internal.InputMapWindow.OpenMapIfNotDirty(settings.map);
             qGUIInternalUtility.EndGroup();
 
-            //Disable rest if there is no map assigned
-            EditorGUI.BeginDisabledGroup(!settings.map);
-
-            //Saving
             qGUIInternalUtility.BeginGroup("Saving");
             DrawProperty(nameof(Settings.serializationType));
             if (settings.serializationType == SerializationType.config)
                 DrawProperty(nameof(Settings.filePath));
             qGUIInternalUtility.EndGroup();
 
-            //Starting arguments
+            qGUIInternalUtility.BeginGroup("UIM Settings");
+            qGUIEditorUtility.DrawPropertiesInRange(serializedSettings,
+                nameof(Settings.uimAxisMapper),
+                nameof(Settings.uimAxisMapper));
+            qGUIInternalUtility.EndGroup();
+
             qGUIInternalUtility.BeginGroup("Starting arguments");
             qGUIEditorUtility.DrawPropertiesInRange(serializedSettings,
                 nameof(Settings.startArgsDisableLoad),
                 nameof(Settings.startArgsDisableSave));
             qGUIInternalUtility.EndGroup();
-
-            //End no map assigned disabled group
-            EditorGUI.EndDisabledGroup();
 
             //End not supported input handler disabled group
             EditorGUI.EndDisabledGroup();
