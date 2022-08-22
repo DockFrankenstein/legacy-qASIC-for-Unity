@@ -17,32 +17,32 @@ MonoBehaviour:
     type: 0
     axisName: 
     negative: 0
-    uimKey: 330
+    uimKey: 350
   - button: 2
     type: 0
     axisName: 
     negative: 0
-    uimKey: 331
+    uimKey: 351
   - button: 3
     type: 0
     axisName: 
     negative: 0
-    uimKey: 332
+    uimKey: 352
   - button: 4
     type: 0
     axisName: 
     negative: 0
-    uimKey: 333
+    uimKey: 353
   - button: 5
     type: 0
     axisName: 
     negative: 0
-    uimKey: 334
+    uimKey: 354
   - button: 6
     type: 0
     axisName: gamepad_{0}_axis_8
     negative: 0
-    uimKey: 335
+    uimKey: 355
   - button: 7
     type: 1
     axisName: gamepad_{0}_axis_8
@@ -57,12 +57,12 @@ MonoBehaviour:
     type: 0
     axisName: 
     negative: 0
-    uimKey: 338
+    uimKey: 358
   - button: 10
     type: 0
     axisName: gamepad_{0}_axis_1
     negative: 1
-    uimKey: 339
+    uimKey: 359
   - button: 11
     type: 1
     axisName: gamepad_{0}_axis_1
@@ -127,9 +127,9 @@ MonoBehaviour:
     type: 0
     axisName: 
     negative: 0
-    uimKey: 336
+    uimKey: 356
   - button: 24
     type: 0
     axisName: 
     negative: 0
-    uimKey: 337
+    uimKey: 357
