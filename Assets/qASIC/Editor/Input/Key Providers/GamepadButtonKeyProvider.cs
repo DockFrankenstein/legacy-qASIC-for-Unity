@@ -2,21 +2,41 @@
 using UnityEngine;
 using System;
 using UnityEditor;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace qASIC.InputManagement.Internal.KeyProviders
 {
     public class GamepadButtonKeyProvider : KeyTypeProvider
     {
-        public override string KeyName => "Gamepad Button";
+        public override string KeyName => "key_gamepad";
+        public override string DisplayName => "Gamepad Button";
         public override Type KeyType => typeof(GamepadButton);
 
-        public override int[] GetKeyList() =>
-            (int[])Enum.GetValues(KeyType);
+        public override string[] GetKeyList() =>
+            _KeyNameMap
+            .Select(x => x.Key)
+            .ToArray();
 
-        public override int OnPopupGUI(Rect rect, int keyIndex, bool isActive, bool isFocused)
+        private static Map<string, GamepadButton> _keyNameMap = null;
+        static Map<string, GamepadButton> _KeyNameMap
         {
-            GamepadButton button = (GamepadButton)keyIndex;
-            return (int)(GamepadButton)EditorGUI.EnumPopup(rect, string.Empty, button);
+            get
+            {
+                if (_keyNameMap == null)
+                {
+                    _keyNameMap = new Map<string, GamepadButton>(((GamepadButton[])Enum.GetValues(typeof(GamepadButton)))
+                        .ToDictionary(x => x.ToString()));
+                }
+
+                return _keyNameMap;
+            }
+        }
+
+        public override string OnPopupGUI(Rect rect, string key, bool isActive, bool isFocused)
+        {
+            GamepadButton button = _KeyNameMap.Forward[key];
+            return _KeyNameMap.Reverse[(GamepadButton)EditorGUI.EnumPopup(rect, string.Empty, button)];
         }
     }
 }

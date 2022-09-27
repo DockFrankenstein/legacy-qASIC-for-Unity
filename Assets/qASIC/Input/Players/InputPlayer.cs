@@ -51,36 +51,26 @@ namespace qASIC.InputManagement.Players
 
         public float GetAxisValue(string groupName, string axisName)
         {
-            if (!InputMapDataUtility.TryGetAxis(MapData, groupName, axisName, out InputAxis axis))
-                return 0f;
-
-            float value = 0f;
-
-            value += GetRawInputValue(groupName, axis.positiveAction);
-            value -= GetRawInputValue(groupName, axis.negativeAction);
-
-            value = Mathf.Clamp(value, -1f, 1f);
-
-            return value;
+            //TODO: REIMPLEMENT
+            return 0f;
         }
 
         /// <returns>Returns the unclamped value of an action</returns>
         private float GetRawInputValue(string groupName, string actionName)
         {
-            if (!InputMapDataUtility.TryGetAction(MapData, groupName, actionName, out InputAction action))
+            if (!InputMapDataUtility.TryGetItem(MapData, groupName, actionName, out InputMapItem item))
                 return 0f;
 
             float value = 0f;
 
             foreach (IInputDevice device in _devices)
             {
-                List<int> keys = action.GetKeyList(device.KeyType);
+                //List<int> keys = item.ReadValueAsObject(device.KeyType);
 
-                foreach (int key in keys)
-                {
-                    Debug.Log(device.GetInputValue(key));
-                    value += device.GetInputValue(key);
-                }
+                //foreach (int key in keys)
+                //{
+                //    value += device.GetInputValue(key);
+                //}
             }
 
             return value;
@@ -88,18 +78,18 @@ namespace qASIC.InputManagement.Players
 
         private bool GetInputEvent(KeyEventType type, string groupName, string actionName)
         {
-            if (!InputMapDataUtility.TryGetAction(MapData, groupName, actionName, out InputAction action))
+            if (!InputMapDataUtility.TryGetItem(MapData, groupName, actionName, out InputMapItem action))
                 return false;
 
             foreach (IInputDevice device in _devices)
             {
-                List<int> keys = action.GetKeyList(device.KeyType);
+                //List<int> keys = action.GetKeyList(device.KeyType);
 
-                foreach (int key in keys)
-                {
-                    if (device.GetInputEvent(type, key))
-                        return true;
-                }
+                //foreach (int key in keys)
+                //{
+                //    if (device.GetInputEvent(type, key))
+                //        return true;
+                //}
             }
 
             return false;

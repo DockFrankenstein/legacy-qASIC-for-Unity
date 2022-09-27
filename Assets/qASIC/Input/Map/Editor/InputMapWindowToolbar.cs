@@ -13,6 +13,7 @@ namespace qASIC.InputManagement.Map.Internal
     public class InputMapWindowToolbar
     {
         public InputMap map;
+        public InputMapWindow window;
 
         public void OnGUI()
         {
@@ -33,7 +34,7 @@ namespace qASIC.InputManagement.Map.Internal
                 InputMapWindow.Prefs_AutoSave = !InputMapWindow.Prefs_AutoSave;
 
             if (Button("Save", EditorStyles.toolbarButton))
-                InputMapWindow.Save();
+                window.Save();
 
             EditorGUILayout.Space();
             EndHorizontal();
@@ -42,7 +43,7 @@ namespace qASIC.InputManagement.Map.Internal
         #region Auto Save Time
         void DisplayAutoSaveTime()
         {
-            switch (InputMapWindow.IsDirty && !InputMapWindow.CanAutoSave())
+            switch (window.IsDirty && !InputMapWindow.CanAutoSave())
             {
                 case true:
                     Label($"Auto save delayed ({Mathf.Round((float)InputMapWindow.TimeToAutoSave + 0.5f)}s)");
@@ -67,7 +68,7 @@ namespace qASIC.InputManagement.Map.Internal
             {
                 InputMapWindow window = InputMapWindow.GetEditorWindow();
 
-                menu.AddToggableItem("Save", false, InputMapWindow.Save, map);
+                menu.AddToggableItem("Save", false, window.Save, map);
                 menu.AddToggableItem("Auto save", InputMapWindow.Prefs_AutoSave, () => { InputMapWindow.Prefs_AutoSave = !InputMapWindow.Prefs_AutoSave; }, map);
                 menu.AddToggableItem("Show in folder", false, ShowInFolder, map);
                 menu.AddSeparator("");
@@ -82,12 +83,12 @@ namespace qASIC.InputManagement.Map.Internal
                 InputMapWindow window = InputMapWindow.GetEditorWindow();
 
                 menu.AddItem("Open project settings", false, () => SettingsService.OpenProjectSettings("Project/qASIC/Input"));
-                menu.AddItem("Window settings", false, () => window.SelectInInspector("settings"));
+                menu.AddItem("Window settings", false, () => window.SelectInInspector(null));
                 menu.AddSeparator("");
                 menu.AddItem("Rebuild action key list", false, () => 
                 {
                     InputMapEditorUtility.RebuildActionsKeyList(map);
-                    InputMapWindow.SetMapDirty();
+                    window.SetMapDirty();
                 });
             });
 
@@ -123,8 +124,8 @@ namespace qASIC.InputManagement.Map.Internal
                     menu.AddSeparator("");
                     menu.AddItem("Reset inspector", false, () => window.SelectInInspector(null));
                     menu.AddSeparator("");
-                    menu.AddToggableItem($"{(InputMapWindow.Prefs_AutoSave ? "*" : "")}Set dirty", false, InputMapWindow.SetMapDirty, map);
-                    menu.AddToggableItem("Close map", false, InputMapWindow.CloseMap, map);
+                    menu.AddToggableItem($"{(InputMapWindow.Prefs_AutoSave ? "*" : "")}Set dirty", false, window.SetMapDirty, map);
+                    menu.AddToggableItem("Close map", false, window.CloseMap, map);
                 });
             }
         }

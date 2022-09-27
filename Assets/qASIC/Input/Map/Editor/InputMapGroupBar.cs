@@ -18,12 +18,12 @@ namespace qASIC.InputManagement.Map.Internal
 
         int scrollIndex;
 
-        public event Action<object> OnItemSelect;
+        public event Action<InputGroup> OnItemSelect;
 
         public bool drawToolbarBackground = true;
 
         public InputGroup GetSelectedGroup() =>
-            Map && SelectedGroupIndex >= 0 && SelectedGroupIndex < Map.Groups.Count ? Map.Groups[SelectedGroupIndex] : null;
+            Map && SelectedGroupIndex >= 0 && SelectedGroupIndex < Map.groups.Count ? Map.groups[SelectedGroupIndex] : null;
 
         public void SetMap(InputMap map) =>
             Map = map;
@@ -44,7 +44,7 @@ namespace qASIC.InputManagement.Map.Internal
 
             EndHorizontal();
             EditorGUILayout.EndScrollView();
-            MoveButton('>', 1, Map && scrollIndex + 1 < Map.Groups.Count);
+            MoveButton('>', 1, Map && scrollIndex + 1 < Map.groups.Count);
 
             EndHorizontal();
         }
@@ -69,7 +69,7 @@ namespace qASIC.InputManagement.Map.Internal
         public void SelectNext()
         {
             int newValue = SelectedGroupIndex + 1;
-            if (newValue >= Map.Groups.Count) return;
+            if (newValue >= Map.groups.Count) return;
             Select(newValue);
         }
 
@@ -80,16 +80,16 @@ namespace qASIC.InputManagement.Map.Internal
         {
             if (!Map) return;
 
-            if (Map.Groups.Count != _buttonRects.Length)
-                _buttonRects = new Rect[Map.Groups.Count];
+            if (Map.groups.Count != _buttonRects.Length)
+                _buttonRects = new Rect[Map.groups.Count];
 
-            for (int i = scrollIndex; i < Map.Groups.Count; i++)
+            for (int i = scrollIndex; i < Map.groups.Count; i++)
             {
                 //calc width
-                EditorStyles.toolbarButton.CalcMinMaxWidth(new GUIContent(Map.Groups[i].groupName), out float width, out _);
+                EditorStyles.toolbarButton.CalcMinMaxWidth(new GUIContent(Map.groups[i].groupName), out float width, out _);
 
                 bool isSelected = SelectedGroupIndex == i;
-                bool pressed = Toggle(isSelected, Map.Groups[i].groupName, EditorStyles.toolbarButton, Width(width)) != isSelected;
+                bool pressed = Toggle(isSelected, Map.groups[i].groupName, EditorStyles.toolbarButton, Width(width)) != isSelected;
 
                 Event e = Event.current;
                 Rect buttonRect = GUILayoutUtility.GetLastRect();
@@ -133,7 +133,7 @@ namespace qASIC.InputManagement.Map.Internal
         public void DeleteGroup(InputGroup group)
         {
             if (!Map) return;
-            int index = Map.Groups.IndexOf(group);
+            int index = Map.groups.IndexOf(group);
             if (index == -1) return;
 
             DeleteGroup(index);
@@ -142,8 +142,8 @@ namespace qASIC.InputManagement.Map.Internal
         public virtual void DeleteGroup(int index)
         {
             if (!Map) return;
-            Debug.Assert(index >= 0 && index < Map.Groups.Count, $"Cannot delete group {index}, index is out of range!");
-            Map.Groups.RemoveAt(index);
+            Debug.Assert(index >= 0 && index < Map.groups.Count, $"Cannot delete group {index}, index is out of range!");
+            Map.groups.RemoveAt(index);
 
             HandleDeleteGroup(index);
 
@@ -152,7 +152,7 @@ namespace qASIC.InputManagement.Map.Internal
 
         void HandleDeleteGroup(int index)
         {
-            if (Map.Groups.Count > 0)
+            if (Map.groups.Count > 0)
             {
                 int selectIndex = Mathf.Max(0, index - 1);
                 Select(selectIndex);
@@ -168,7 +168,7 @@ namespace qASIC.InputManagement.Map.Internal
         public virtual void SetAsDefault(int index)
         {
             if (!Map) return;
-            Debug.Assert(index >= 0 && index < Map.Groups.Count, $"Cannot set group {index} as default, index is out of range!");
+            Debug.Assert(index >= 0 && index < Map.groups.Count, $"Cannot set group {index} as default, index is out of range!");
             Map.defaultGroup = index;
         }
 
@@ -176,7 +176,7 @@ namespace qASIC.InputManagement.Map.Internal
         {
             if (!Map) return;
             SelectedGroupIndex = i;
-            OnItemSelect?.Invoke(Map.Groups[i]);
+            OnItemSelect?.Invoke(Map.groups[i]);
         }
 
         #region Adding
@@ -193,17 +193,17 @@ namespace qASIC.InputManagement.Map.Internal
             Add(-1, group);
 
         public void Add(InputGroup selectedGroup, InputGroup group) =>
-            Add(Map ? Map.Groups.IndexOf(selectedGroup) : -1, group);
+            Add(Map ? Map.groups.IndexOf(selectedGroup) : -1, group);
 
         public virtual void Add(int index, InputGroup group)
         {
             if (!Map) return;
 
             //If index is out of range, add the item at the end
-            if (index < 0 || index >= Map.Groups.Count)
-                index = Map.Groups.Count - 1;
+            if (index < 0 || index >= Map.groups.Count)
+                index = Map.groups.Count - 1;
 
-            Map.Groups.Insert(index + 1, group);
+            Map.groups.Insert(index + 1, group);
             Select(index + 1);
         }
         #endregion

@@ -7,11 +7,12 @@ namespace qASIC.InputManagement.Internal.KeyProviders
     public abstract class KeyTypeProvider
     {
         public abstract string KeyName { get; }
+        public abstract string DisplayName { get; }
         public abstract Type KeyType { get; }
 
-        public abstract int OnPopupGUI(Rect rect, int keyIndex, bool isActive, bool isFocused);
+        public abstract string OnPopupGUI(Rect rect, string key, bool isActive, bool isFocused);
 
-        public abstract int[] GetKeyList();
+        public abstract string[] GetKeyList();
     }
 }
 #endif

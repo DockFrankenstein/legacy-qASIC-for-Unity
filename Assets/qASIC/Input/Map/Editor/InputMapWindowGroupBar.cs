@@ -9,7 +9,9 @@ namespace qASIC.InputManagement.Map.Internal
 {
     public class InputMapWindowGroupBar : InputMapGroupBar
     {
-        const string selectedGroupPrefsKey = "qASIC_input_map_editor_group";
+        const string SELECTED_GROUP_PREFS_KEY = "qASIC_input_map_editor_group";
+
+        public InputMapWindow window;
 
         private int? _selectedGroupIndex;
         public override int SelectedGroupIndex
@@ -17,13 +19,13 @@ namespace qASIC.InputManagement.Map.Internal
             get
             {
                 if (_selectedGroupIndex == null)
-                    _selectedGroupIndex = EditorPrefs.GetInt(selectedGroupPrefsKey, 0);
+                    _selectedGroupIndex = EditorPrefs.GetInt(SELECTED_GROUP_PREFS_KEY, 0);
 
                 return _selectedGroupIndex ?? 0;
             }
             set
             {
-                EditorPrefs.SetInt(selectedGroupPrefsKey, value);
+                EditorPrefs.SetInt(SELECTED_GROUP_PREFS_KEY, value);
                 _selectedGroupIndex = value;
             }
         }
@@ -38,7 +40,7 @@ namespace qASIC.InputManagement.Map.Internal
             menu.AddToggableItem("Set as default", false, () => SetAsDefault(index), Map.defaultGroup != index);
             menu.AddSeparator("");
             menu.AddToggableItem("Move left", false, () => Move(groupIndex, -1), groupIndex > 0);
-            menu.AddToggableItem("Move right", false, () => Move(groupIndex, 1), groupIndex < Map.Groups.Count - 1);
+            menu.AddToggableItem("Move right", false, () => Move(groupIndex, 1), groupIndex < Map.groups.Count - 1);
             menu.AddSeparator("");
             menu.AddItem("Duplicate", false, () => Duplicate(index));
             menu.AddSeparator("");
@@ -55,45 +57,45 @@ namespace qASIC.InputManagement.Map.Internal
         public override void DeleteGroup(int index)
         {
             base.DeleteGroup(index);
-            InputMapWindow.SetMapDirty();
+            window.SetMapDirty();
         }
 
         public override void SetAsDefault(int index)
         {
             base.SetAsDefault(index);
-            InputMapWindow.SetMapDirty();
+            window.SetMapDirty();
         }
 
         public void Move(int index, int amount)
         {
             int newIndex = index + amount;
-            int groupCount = Map.Groups.Count;
+            int groupCount = Map.groups.Count;
 
             if (!Map) return;
-            Debug.Assert(index >= 0 && index < Map.Groups.Count, $"Cannot move group {index}, index is out of range!");
+            Debug.Assert(index >= 0 && index < Map.groups.Count, $"Cannot move group {index}, index is out of range!");
 
             if (newIndex < 0 || newIndex >= groupCount) return;
 
-            InputMapWindow.SetMapDirty();
+            window.SetMapDirty();
 
-            InputGroup group = Map.Groups[index];
-            Map.Groups.RemoveAt(index);
-            Map.Groups.Insert(newIndex, group);
+            InputGroup group = Map.groups[index];
+            Map.groups.RemoveAt(index);
+            Map.groups.Insert(newIndex, group);
 
             Select(newIndex);
         }
 
         public void Duplicate(int index)
         {
-            InputMapWindow.SetMapDirty();
+            window.SetMapDirty();
 
             if (!Map) return;
-            Debug.Assert(index >= 0 && index < Map.Groups.Count, $"Cannot duplicate group {index}, index is out of range!");
+            Debug.Assert(index >= 0 && index < Map.groups.Count, $"Cannot duplicate group {index}, index is out of range!");
 
-            InputGroup group = JsonUtility.FromJson<InputGroup>(JsonUtility.ToJson(Map.Groups[index]));
+            InputGroup group = JsonUtility.FromJson<InputGroup>(JsonUtility.ToJson(Map.groups[index]));
             group.groupName = InputMapWindowEditorUtility.GenerateUniqueName(group.groupName, Map.GroupExists);
 
-            Map.Groups.Insert(index + 1, group);
+            Map.groups.Insert(index + 1, group);
 
             Select(index + 1);
         }
@@ -101,7 +103,7 @@ namespace qASIC.InputManagement.Map.Internal
         public override void Add(int index, InputGroup group)
         {
             base.Add(index, group);
-            InputMapWindow.SetMapDirty();
+            window.SetMapDirty();
         }
     }
 }

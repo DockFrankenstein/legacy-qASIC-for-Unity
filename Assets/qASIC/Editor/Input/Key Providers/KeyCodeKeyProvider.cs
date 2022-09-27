@@ -9,18 +9,34 @@ namespace qASIC.InputManagement.Internal.KeyProviders
 {
     public class KeyCodeKeyProvider : KeyTypeProvider
     {
-        public override string KeyName => "Key";
+        public override string KeyName => "key_keyboard";
+        public override string DisplayName => "Key";
         public override Type KeyType => typeof(KeyCode);
 
-        public override int[] GetKeyList() =>
-            KeyboardManager.AllKeyCodes
-                .Select(x => (int)x)
-                .ToArray();
+        public override string[] GetKeyList() =>
+            _KeyNameMap
+            .Select(x => x.Key)
+            .ToArray();
 
-        public override int OnPopupGUI(Rect rect, int keyIndex, bool isActive, bool isFocused)
+        private static Map<string, KeyCode> _keyNameMap = null;
+        static Map<string, KeyCode> _KeyNameMap
         {
-            KeyCode keyCode = (KeyCode)keyIndex;
-            return (int)(KeyCode)EditorGUI.EnumPopup(rect, string.Empty, keyCode);
+            get
+            {
+                if (_keyNameMap == null)
+                {
+                    _keyNameMap = new Map<string, KeyCode>(KeyboardManager.AllKeyCodes
+                        .ToDictionary(x => x.ToString()));
+                }
+
+                return _keyNameMap;
+            }
+        }
+
+        public override string OnPopupGUI(Rect rect, string key, bool isActive, bool isFocused)
+        {
+            KeyCode keyCode = _KeyNameMap.Forward[key];
+            return _KeyNameMap.Reverse[(KeyCode)EditorGUI.EnumPopup(rect, string.Empty, keyCode)];
         }
     }
 }

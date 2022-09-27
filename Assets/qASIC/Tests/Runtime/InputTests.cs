@@ -41,14 +41,14 @@ namespace qASIC.Tests.Runtime
         [Test]
         public void GetAction()
         {
-            Assert.IsTrue(InputManager.TryGetInputAction("Group0", "Action0", out InputAction action));
+            Assert.IsTrue(InputManager.TryGetInputAction("Group0", "Action0", out InputBinding action));
             Assert.IsNotNull(action);
         }
 
         [Test]
         public void GetAxis()
         {
-            Assert.IsTrue(InputManager.TryGetInputAxis("Group0", "Axis0", out InputAxis axis));
+            Assert.IsTrue(InputManager.TryGetInputAxis("Group0", "Axis0", out Input1DAxis axis));
             Assert.IsNotNull(axis);
         }
 

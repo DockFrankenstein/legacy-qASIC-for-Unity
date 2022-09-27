@@ -16,8 +16,8 @@ namespace qASIC.InputManagement.Map.Internal
     {
         [SerializeField] Texture2D icon;
 
-        static InputMap _map;
-        public static InputMap Map
+        InputMap _map;
+        public InputMap Map
         {
             get => _map;
             set
@@ -77,8 +77,9 @@ namespace qASIC.InputManagement.Map.Internal
             {
                 EditorPrefs.SetBool(prefsKey_autoSave, value);
 
-                if (IsDirty)
-                    Save();
+                var window = GetEditorWindow();
+                if (window.IsDirty)
+                    window.Save();
 
                 prefs_autoSave = value;
             }
@@ -168,10 +169,10 @@ namespace qASIC.InputManagement.Map.Internal
         #endregion
 
         #region Opening
-        static string MapPrefsKey => $"{Application.productName}_qASIC_input_map_editor_map";
+        static string _MapPrefsKey => $"{Application.productName}_qASIC_input_map_editor_map";
 
         internal static string GetMapPath() =>
-            EditorPrefs.GetString(MapPrefsKey, "NULL");
+            EditorPrefs.GetString(_MapPrefsKey, "NULL");
 
         [OnOpenAsset]
         public static bool OnOpenAsset(int instanceID, int line)
@@ -213,7 +214,7 @@ namespace qASIC.InputManagement.Map.Internal
         public static void OpenMapIfNotDirty(InputMap newMap)
         {
             InputMapWindow window = GetEditorWindow();
-            if (Map && Map != newMap && !window.ConfirmSaveChangesIfNeeded(false))
+            if (window.Map && window.Map != newMap && !window.ConfirmSaveChangesIfNeeded(false))
                 return;
 
             OpenMap(newMap);
@@ -221,11 +222,12 @@ namespace qASIC.InputManagement.Map.Internal
 
         public static void OpenMap(InputMap newMap)
         {
-            if (Map != newMap)
+            var window = GetEditorWindow();
+            if (window.Map != newMap)
             {
-                GetEditorWindow().groupBar.SelectedGroupIndex = 0;
-                Map = newMap;
-                EditorPrefs.SetString(MapPrefsKey, AssetDatabase.GetAssetPath(Map));
+                window.groupBar.SelectedGroupIndex = 0;
+                window.Map = newMap;
+                EditorPrefs.SetString(_MapPrefsKey, AssetDatabase.GetAssetPath(window.Map));
             }
 
             OpenWindow();
@@ -233,17 +235,17 @@ namespace qASIC.InputManagement.Map.Internal
 
         internal void LoadMap()
         {
-            if (!EditorPrefs.HasKey(MapPrefsKey)) return;
+            if (!EditorPrefs.HasKey(_MapPrefsKey)) return;
 
             string mapPath = GetMapPath();
             if (string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(mapPath))) return;
             Map = (InputMap)AssetDatabase.LoadAssetAtPath(mapPath, typeof(InputMap));
         }
 
-        public static void CloseMap() 
+        public void CloseMap() 
         {
             Cleanup();
-            EditorPrefs.DeleteKey(MapPrefsKey);
+            EditorPrefs.DeleteKey(_MapPrefsKey);
             GetEditorWindow().ResetEditor();
         }
 
@@ -260,15 +262,17 @@ namespace qASIC.InputManagement.Map.Internal
         [Shortcut("Cablebox Map Editor/Save", typeof(InputMapWindow), KeyCode.S, ShortcutModifiers.Alt)]
         private static void SaveShortcut(ShortcutArguments args)
         {
-            Save();
+            GetEditorWindow().Save();
         }
 
         [Shortcut("Cablebox Map Editor/Set Group As Default", typeof(InputMapWindow), KeyCode.G, ShortcutModifiers.Alt)]
         private static void DefaultGroupShortcut(ShortcutArguments args)
         {
-            if (!Map) return;
-            Map.defaultGroup = GetEditorWindow().groupBar.SelectedGroupIndex;
-            SetMapDirty(); 
+            InputMapWindow window = GetEditorWindow();
+            if (window == null) return;
+
+            window.Map.defaultGroup = window.groupBar.SelectedGroupIndex;
+            window.SetMapDirty(); 
         }
         #endregion
 
@@ -321,6 +325,9 @@ namespace qASIC.InputManagement.Map.Internal
             toolbar = new InputMapWindowToolbar();
             groupBar = new InputMapWindowGroupBar();
             inspector = new InputMapWindowInspector();
+            toolbar.window = this;
+            groupBar.window = this;
+            inspector.window = this;
 
             //Trees
             InitTree();
@@ -330,42 +337,20 @@ namespace qASIC.InputManagement.Map.Internal
             inspector.map = Map;
 
             //Events
-            groupBar.OnItemSelect += (object o) =>
+            groupBar.OnItemSelect += (g) =>
             {
                 if (contentTree != null)
                 {
-                    contentTree.Group = o as InputGroup;
+                    contentTree.Group = g;
                     contentTree.Reload();
                 }
 
+                inspector.SetObject(null);
+            };
+
+            contentTree.OnItemSelect += (o) =>
+            {
                 inspector.SetObject(o);
-            };
-
-            contentTree.OnItemSelect += (object o) =>
-            {
-                inspector.SetObject(o); 
-            };
-
-            inspector.OnDeleteGroup += groupBar.DeleteGroup;
-
-            inspector.OnDeleteAction += (InputMapWindowInspector.InspectorInputAction action) =>
-            {
-                int index = action.group.actions.IndexOf(action.action);
-                if (index == -1) return;
-
-                action.group.actions.RemoveAt(index);
-                contentTree.Reload();
-                SelectInInspector(null);
-            };
-
-            inspector.OnDeleteAxis += (InputMapWindowInspector.InspectorInputAxis axis) =>
-            {
-                int index = axis.group.axes.IndexOf(axis.axis);
-                if (index == -1) return;
-
-                axis.group.axes.RemoveAt(index);
-                contentTree.Reload();
-                SelectInInspector(null);
             };
         }
 
@@ -374,24 +359,24 @@ namespace qASIC.InputManagement.Map.Internal
             if (contentTreeState == null)
                 contentTreeState = new TreeViewState();
 
-            contentTree = new InputMapWindowContentTree(contentTreeState, Map ? Map.Groups.ElementAtOrDefault(groupBar.SelectedGroupIndex) : null);
+            contentTree = new InputMapWindowContentTree(contentTreeState, Map ? Map.groups.ElementAtOrDefault(groupBar.SelectedGroupIndex) : null);
+            contentTree.window = this;
 
+            if (contentTree.BindingsRoot != null)
+                contentTree.SetExpanded(contentTree.BindingsRoot.id, PlayerPrefs.GetInt(prefsKey_treeActionsExpanded, 1) != 0);
 
-            if (contentTree.ActionsRoot != null)
-                contentTree.SetExpanded(contentTree.ActionsRoot.id, PlayerPrefs.GetInt(prefsKey_treeActionsExpanded, 1) != 0);
-
-            if (contentTree.ActionsRoot != null)
-                contentTree.SetExpanded(contentTree.AxesRoot.id, PlayerPrefs.GetInt(prefsKey_treeAxesExpanded, 1) != 0);
+            if (contentTree.BindingsRoot != null)
+                contentTree.SetExpanded(contentTree.OthersRoot.id, PlayerPrefs.GetInt(prefsKey_treeAxesExpanded, 1) != 0);
 
 
             contentTree.OnExpand += () =>
             {
-                PlayerPrefs.SetInt(prefsKey_treeActionsExpanded, contentTree.IsExpanded(contentTree.ActionsRoot.id) ? 1 : 0);
-                PlayerPrefs.SetInt(prefsKey_treeAxesExpanded, contentTree.IsExpanded(contentTree.AxesRoot.id) ? 1 : 0);
+                PlayerPrefs.SetInt(prefsKey_treeActionsExpanded, contentTree.IsExpanded(contentTree.BindingsRoot.id) ? 1 : 0);
+                PlayerPrefs.SetInt(prefsKey_treeAxesExpanded, contentTree.IsExpanded(contentTree.OthersRoot.id) ? 1 : 0);
             };
         }
 
-        public static void Cleanup(bool resetMap = true)
+        public void Cleanup(bool resetMap = true)
         {
             if (resetMap)
                 Map = null;
@@ -509,8 +494,8 @@ namespace qASIC.InputManagement.Map.Internal
         public static string GetUnmodifiedMapLocation() =>
             $"{Application.persistentDataPath}/qASIC_inputmap-unmodified.txt";
 
-        private static bool? _isDirty = null;
-        public static bool IsDirty
+        private bool? _isDirty = null;
+        public bool IsDirty
         {
             get
             {
@@ -534,7 +519,7 @@ namespace qASIC.InputManagement.Map.Internal
         public static float TimeSinceLastSave =>
             (float)EditorApplication.timeSinceStartup - _lastSaveTime;
 
-        public static void SetMapDirty()
+        public void SetMapDirty()
         {
             _isDirty = true;
             EditorUtility.SetDirty(Map);
@@ -551,7 +536,7 @@ namespace qASIC.InputManagement.Map.Internal
             Save();
         }
 
-        public static void ResetMapDirty()
+        public void ResetMapDirty()
         {
             _isDirty = false;
             _waitForAutoSave = false;
@@ -559,10 +544,10 @@ namespace qASIC.InputManagement.Map.Internal
             GetEditorWindow().SetWindowTitle();
         }
 
-        private static void SaveUnmodifiedMap(InputMap map) =>
+        private void SaveUnmodifiedMap(InputMap map) =>
             FileManager.SaveFileJSON(GetUnmodifiedMapLocation(), map, true);
 
-        public static void Save()
+        public void Save()
         {
             _lastSaveTime = (float)EditorApplication.timeSinceStartup;
             _isDirty = false;
@@ -622,7 +607,7 @@ namespace qASIC.InputManagement.Map.Internal
         #endregion
 
         #region Other
-        public void SelectInInspector(object obj)
+        public void SelectInInspector(InputMapItem obj)
         {
             if (inspector == null) return;
             inspector.SetObject(obj);

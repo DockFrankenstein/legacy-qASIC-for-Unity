@@ -11,30 +11,31 @@ namespace qASIC.InputManagement.Map.Internal
     {
         public static void RebuildActionsKeyList(InputMap map)
         {
-            if (map == null) return;
+            //if (map == null) return;
 
-            IEnumerable<InputAction> actions = map.Groups
-                .SelectMany(x => x.actions);
+            //IEnumerable<InputBinding> items = map.groups
+            //    .SelectMany(x => x.items)
+            //    .OfType<InputBinding>();
 
-            KeyTypeProvider[] providers = KeyTypeProviders;
+            //KeyTypeProvider[] providers = KeyTypeProviders;
 
-            foreach (var action in actions)
-            {
-                List<InputAction.KeyList> savedKeys = new List<InputAction.KeyList>(action.keys);
-                Dictionary<string, InputAction.KeyList> savedKeysDictionary = savedKeys
-                    .ToDictionary(x => x.keyType);
+            //foreach (var item in items)
+            //{
+            //    List<string> savedKeys = new List<string>(item.keys);
+            //    Dictionary<string, InputBinding.KeyList> savedKeysDictionary = item.keys
+            //        .ToDictionary(x => )
 
-                action.keys.Clear();
-                foreach (var provider in providers)
-                {
-                    string typeName = provider.KeyType.AssemblyQualifiedName;
-                    InputAction.KeyList list = new InputAction.KeyList(typeName);
-                    if (savedKeysDictionary.ContainsKey(typeName))
-                        list.keys = savedKeysDictionary[typeName].keys;
+            //    item.keys.Clear();
+            //    foreach (var provider in providers)
+            //    {
+            //        string typeName = provider.KeyType.AssemblyQualifiedName;
+            //        InputBinding.KeyList list = new InputBinding.KeyList(typeName);
+            //        if (savedKeysDictionary.ContainsKey(typeName))
+            //            list.keys = savedKeysDictionary[typeName].keys;
 
-                    action.keys.Add(list);
-                }
-            }
+            //        item.keys.Add(list);
+            //    }
+            //}
         }
 
         private static KeyTypeProvider[] _keyTypeProviders = null;
@@ -49,14 +50,14 @@ namespace qASIC.InputManagement.Map.Internal
             }
         }
 
-        private static Dictionary<Type, KeyTypeProvider> _keyTypeProvidersDictionary = null;
-        public static Dictionary<Type, KeyTypeProvider> KeyTypeProvidersDictionary
+        private static Dictionary<string, KeyTypeProvider> _keyTypeProvidersDictionary = null;
+        public static Dictionary<string, KeyTypeProvider> KeyTypeProvidersDictionary
         {
             get
             {
                 if (_keyTypeProvidersDictionary == null)
                     _keyTypeProvidersDictionary = KeyTypeProviders
-                        .ToDictionary(x => x.KeyType);
+                        .ToDictionary(x => x.KeyName);
 
                 return _keyTypeProvidersDictionary;
             }

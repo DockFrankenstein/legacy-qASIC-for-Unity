@@ -7,45 +7,24 @@ namespace qASIC.InputManagement.Map
         public static bool CompareNames(string a, string b) =>
     a.ToLower() == b.ToLower();
 
-        public static InputAction GetAction(InputMapData mapData, string groupName, string actionName) =>
-            TryGetAction(mapData, groupName, actionName, out InputAction action) ? action : null;
+        public static InputMapItem GetItem(InputMapData mapData, string groupName, string actionName) =>
+            TryGetItem(mapData, groupName, actionName, out InputMapItem action) ? action : null;
 
-        public static bool TryGetAction(InputMapData mapData, string groupName, string actionName, out InputAction action)
+        public static bool TryGetItem(InputMapData mapData, string groupName, string actionName, out InputMapItem item)
         {
-            action = null;
+            item = null;
 
             if (!TryGetGroup(mapData, groupName, out InputGroup group))
                 return false;
 
-            InputAction[] actions = group.actions
-                .Where(x => CompareNames(x.actionName, actionName))
+            InputMapItem[] items = group.items
+                .Where(x => CompareNames(x.itemName, actionName))
                 .ToArray();
 
-            if (actions.Length != 1)
+            if (items.Length != 1)
                 return false;
 
-            action = actions[0];
-            return true;
-        }
-
-        public static InputAxis GetAxis(InputMapData mapData, string groupName, string axisName) =>
-            TryGetAxis(mapData, groupName, axisName, out InputAxis axis) ? axis : null;
-
-        public static bool TryGetAxis(InputMapData mapData, string groupName, string axisName, out InputAxis axis)
-        {
-            axis = null;
-
-            if (!TryGetGroup(mapData, groupName, out InputGroup group))
-                return false;
-
-            InputAxis[] axes = group.axes
-                .Where(x => CompareNames(x.axisName, axisName))
-                .ToArray();
-
-            if (axes.Length != 1)
-                return false;
-
-            axis = axes[0];
+            item = items[0];
             return true;
         }
 

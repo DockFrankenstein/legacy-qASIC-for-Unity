@@ -14,8 +14,13 @@ namespace qASIC.InputManagement.Map.Internal
 {
     public class InputMapWindowContentTree : TreeView
     {
-		public InputMapTreeActionHeaderItem ActionsRoot { get; private set; }
-		public InputMapTreeAxisHeaderItem AxesRoot { get; private set; }
+		private const int BINDINGS_ROOT_ID = -1;
+		private const int OTHERS_ROOT_ID = -2;
+
+		public InputMapWindow window;
+
+		public InputMapContentItemBase BindingsRoot { get; private set; }
+		public InputMapContentItemBase OthersRoot { get; private set; }
 
 		private InputGroup group;
 		public InputGroup Group
@@ -53,59 +58,73 @@ namespace qASIC.InputManagement.Map.Internal
 
             if (Group != null)
             {
-				CreateActionItems(root, rows);
-				CreateAxisItems(root, rows);
+				CreateBindingItems(root, rows);
+				CreateOtherItems(root, rows);
 			}
 
             SetupDepthsFromParentsAndChildren(root);
 			return rows;
 		}
 
-		void CreateActionItems(TreeViewItem root, IList<TreeViewItem> rows)
+		void CreateBindingItems(TreeViewItem root, IList<TreeViewItem> rows)
         {
-			ActionsRoot = new InputMapTreeActionHeaderItem(1, -1, "Actions", HeaderBarColor);
-			root.AddChild(ActionsRoot);
-			rows.Add(ActionsRoot);
+			BindingsRoot = new InputMapContentItemBase(BINDINGS_ROOT_ID, -1);
+			BindingsRoot.displayName = "Bindings";
 
-			if (IsExpanded(ActionsRoot.id))
+			root.AddChild(BindingsRoot);
+			rows.Add(BindingsRoot);
+
+			List<InputBinding> bindings = Group.items
+				.Where(x => x is InputBinding)
+				.Select(x => x as InputBinding)
+				.ToList();
+
+			if (IsExpanded(BindingsRoot.id))
 			{
-				for (int i = 0; i < Group.actions.Count; i++)
+				for (int i = 0; i < bindings.Count; i++)
 				{
-                    TreeViewItem item = new InputMapContentActionTreeItem(Group.actions[i], i + 2);
-                    ActionsRoot.AddChild(item);
+                    TreeViewItem item = new InputMapContentMapItem(bindings[i]);
+                    BindingsRoot.AddChild(item);
 					rows.Add(item);
 				}
 				return;
 			}
 
-			if(Group.actions.Count != 0)
-				ActionsRoot.children = CreateChildListForCollapsedParent();
+			if (bindings.Count != 0)
+				BindingsRoot.children = CreateChildListForCollapsedParent();
 		}
 
-		void CreateAxisItems(TreeViewItem root, IList<TreeViewItem> rows)
+		void CreateOtherItems(TreeViewItem root, IList<TreeViewItem> rows)
         {
-			AxesRoot = new InputMapTreeAxisHeaderItem(-1, -1, "Axes", HeaderBarColor);
-			root.AddChild(AxesRoot);
-			rows.Add(AxesRoot);
+			OthersRoot = new InputMapContentItemBase(OTHERS_ROOT_ID, -1);
+			OthersRoot.displayName = "Items";
 
-			if (IsExpanded(AxesRoot.id))
+            root.AddChild(OthersRoot);
+			rows.Add(OthersRoot);
+
+            List<InputMapItem> items = Group.items
+				.Where(x => !(x is InputBinding))
+				.ToList();
+
+            if (IsExpanded(OthersRoot.id))
             {
-                for (int i = 0; i < Group.axes.Count; i++)
+                for (int i = 0; i < items.Count; i++)
                 {
-					TreeViewItem item = new InputMapContentAxisTreeItem(Group.axes[i], i + 2 + Group.actions.Count);
-					AxesRoot.AddChild(item);
+					TreeViewItem item = new InputMapContentMapItem(items[i]);
+					OthersRoot.AddChild(item);
 					rows.Add(item);
                 }
+
 				return;
             }
 
-			if (Group.axes.Count != 0)
-				AxesRoot.children = CreateChildListForCollapsedParent();
+			if (items.Count != 0)
+				OthersRoot.children = CreateChildListForCollapsedParent();
         }
 		#endregion
 
 		#region Selecting
-		public event Action<object> OnItemSelect;
+		public event Action<InputMapItem> OnItemSelect;
 
 		//TODO: Add multi select support. This will require rewriting how the
 		//context menu gets displayed and used.
@@ -122,14 +141,14 @@ namespace qASIC.InputManagement.Map.Internal
 			SelectItemInInspector(selectedIds[0]);
 		}
 
-        public TreeViewItem GetSelectedContentItem()
+        public InputMapContentItemBase GetSelectedContentItem()
 		{
 			IList<int> selection = GetSelection();
 
 			if (selection.Count != 1)
 				return null;
 
-			return FindItem(selection[0], rootItem);
+			return FindItem(selection[0], rootItem) as InputMapContentItemBase;
 		}
 
         protected override void SingleClickedItem(int id)
@@ -155,18 +174,8 @@ namespace qASIC.InputManagement.Map.Internal
 
 		void SelectItemInInspector(TreeViewItem item)
         {
-			switch (item)
-			{
-				case InputMapContentActionTreeItem action:
-					OnItemSelect?.Invoke(new InputMapWindowInspector.InspectorInputAction(Group, action.Action));
-					break;
-				case InputMapContentAxisTreeItem axis:
-					OnItemSelect?.Invoke(new InputMapWindowInspector.InspectorInputAxis(Group, axis.Axis));
-					break;
-				default:
-					OnItemSelect?.Invoke(null);
-					break;
-			}
+			SetSelection(new int[] { item.id });
+			OnItemSelect?.Invoke((item as InputMapContentMapItem)?.Item);
 		}
 		#endregion
 
@@ -187,43 +196,23 @@ namespace qASIC.InputManagement.Map.Internal
 
 			GenericMenu menu = new GenericMenu();
 
-			switch (item)
-			{
-				case InputMapContentActionTreeItem action:
-					AddActionGenericMenuItems(menu, action);
-					menu.AddSeparator("");
-					break;
-				case InputMapTreeActionHeaderItem _:
-					AddActionGenericMenuItems(menu, null);
-					menu.AddSeparator("");
-					break;
-				case InputMapContentAxisTreeItem axis:
-					AddAxisGenericMenuItems(menu, axis);
-					menu.AddSeparator("");
-					break;
-				case InputMapTreeAxisHeaderItem _:
-					AddAxisGenericMenuItems(menu, null);
-					menu.AddSeparator("");
-					break;
-			}
-
 			AddEditGenericMenuItems(menu, item);
 			menu.ShowAsContext();
 		}
 
-		void AddActionGenericMenuItems(GenericMenu menu, InputMapContentActionTreeItem action)
-        {
-			menu.AddItem("Add", false, () => AddActionItem(action));
-		}
+		//void AddActionGenericMenuItems(GenericMenu menu, InputMapContentActionTreeItem action)
+		//      {
+		//	menu.AddItem("Add", false, () => AddActionItem(action));
+		//}
 
-		void AddAxisGenericMenuItems(GenericMenu menu, InputMapContentAxisTreeItem axis)
-		{
-			menu.AddItem("Add", false, () => AddAxisItem(axis));
-		}
+		//void AddAxisGenericMenuItems(GenericMenu menu, InputMapContentOtherTreeItem axis)
+		//{
+		//	menu.AddItem("Add", false, () => AddAxisItem(axis));
+		//}
 
 		void AddEditGenericMenuItems(GenericMenu menu, TreeViewItem item)
 		{
-			InputMapContentEditableItemBase editableItem = item as InputMapContentEditableItemBase;
+			InputMapContentMapItem editableItem = item as InputMapContentMapItem;
 			bool editable = !(editableItem is null);
 
 			menu.AddToggableItem("Rename", false, () => BeginRename(item), editable);
@@ -236,123 +225,124 @@ namespace qASIC.InputManagement.Map.Internal
 		#endregion
 
 		#region Adding
-		void AddActionItem(InputMapContentActionTreeItem action)
-        {
-			AddItem(Group.actions, action?.Action, new InputAction(WindowUtility.GenerateUniqueName("New action", (string s) =>
-			{
-				return NonRepeatableChecker.ContainsKey(Group.actions, s);
-			})),
-			//Expand action
-			() =>
-            {
-				SetExpanded(ActionsRoot.id, true);
-			});
-		}
-
-		void AddAxisItem(InputMapContentAxisTreeItem axis)
-        {
-			AddItem(Group.axes, axis?.Axis, new InputAxis(WindowUtility.GenerateUniqueName("New axis", (string s) =>
-			{
-				return NonRepeatableChecker.ContainsKey(Group.axes, s);
-			})),
-			//Expand action
-			() =>
-			{
-				SetExpanded(AxesRoot.id, true);
-			});
-		}
-
-		void AddItem<t>(List<t> list, t selectedObject, t item, Action ExpandAction = null)
+		void AddItem<T>() where T : InputMapItem
 		{
-			int index = list.IndexOf(selectedObject);
-			if (index == -1)
-				index = list.Count - 1;
-			list.Insert(index + 1, item);
-			InputMapWindow.SetMapDirty();
+			InputMapItem item = (InputMapItem)Activator.CreateInstance(typeof(T), new object[] { });
+			item.itemName = WindowUtility.GenerateUniqueName("New item", s => NonRepeatableChecker.ContainsKey(Group.items, s));
+            AddItem(item);
+        }
+
+		void AddItem(InputMapItem item)
+		{
+            var selectedItem = GetSelectedContentItem();
+
+            int index = Group.items.Count - 1;
+
+            if (selectedItem is InputMapContentMapItem mapItem)
+			{
+				int indexOf = Group.items.IndexOf(mapItem.Item);
+				if (indexOf != -1)
+					index = indexOf;
+			}
+
+			Group.items.Insert(index + 1, item);
+			window.SetMapDirty();
 			Reload();
 
-			ExpandAction?.Invoke();
-			Repaint();
-			OnNextRepaint += () =>
+
+			switch (item)
 			{
-				InputMapContentEditableItemBase treeItem = GetItemByContent(item);
-				if (treeItem != null)
-					BeginRename(treeItem);
-			};
-		}
+				case InputBinding binding:
+                    SetExpanded(BindingsRoot.id, true);
+                    break;
+				default:
+                    SetExpanded(OthersRoot.id, true);
+                    break;
+			}
+
+            OnNextRepaint += () =>
+            {
+                var treeItem = GetItemByContent(item);
+                if (treeItem != null)
+                    BeginRename(treeItem);
+            };
+
+            Repaint();
+        }
         #endregion
 
         #region Copy&Paste&Move&Delete
-		void Delete(InputMapContentEditableItemBase item)
+		void Delete(InputMapContentMapItem item)
         {
-			item.Delete(Group);
-			InputMapWindow.SetMapDirty();
-			InputMapWindow.GetEditorWindow().SelectInInspector(null);
+			Group.items.Remove(item.Item);
+			window.SetMapDirty();
+			window.SelectInInspector(null);
 			SetSelection(new List<int>());
 			Reload();
         }
 
-		//TODO: maybe one day
-  //      protected override void SetupDragAndDrop(SetupDragAndDropArgs args)
-  //      {
-		//	DragAndDrop.PrepareStartDrag();
-		//	DragAndDrop.SetGenericData("itemID", args.draggedItemIDs[0]);
-		//	DragAndDrop.SetGenericData("tree", this);
-		//	DragAndDrop.StartDrag(FindItem(args.draggedItemIDs[0], rootItem).displayName);
-		//}
+        //TODO: maybe one day
+        //      protected override void SetupDragAndDrop(SetupDragAndDropArgs args)
+        //      {
+        //	DragAndDrop.PrepareStartDrag();
+        //	DragAndDrop.SetGenericData("itemID", args.draggedItemIDs[0]);
+        //	DragAndDrop.SetGenericData("tree", this);
+        //	DragAndDrop.StartDrag(FindItem(args.draggedItemIDs[0], rootItem).displayName);
+        //}
 
-		//protected override bool CanStartDrag(CanStartDragArgs args)
-		//{
-		//	if (!(args.draggedItem is InputMapContentItemBase item))
-		//		return false;
+        //protected override bool CanStartDrag(CanStartDragArgs args)
+        //{
+        //	if (!(args.draggedItem is InputMapContentItemBase item))
+        //		return false;
 
-		//	return item.CanDrag;
-		//}
+        //	return item.CanDrag;
+        //}
 
-		//protected override DragAndDropVisualMode HandleDragAndDrop(DragAndDropArgs args)
-  //      {
-		//	if (!(DragAndDrop.GetGenericData("tree") is InputMapWindowContentTree sourceTree))
-		//		return DragAndDropVisualMode.Rejected;
+        //protected override DragAndDropVisualMode HandleDragAndDrop(DragAndDropArgs args)
+        //      {
+        //	if (!(DragAndDrop.GetGenericData("tree") is InputMapWindowContentTree sourceTree))
+        //		return DragAndDropVisualMode.Rejected;
 
-		//	int itemID = (int)DragAndDrop.GetGenericData("itemID");
-		//	var item = FindItem(itemID, rootItem);
+        //	int itemID = (int)DragAndDrop.GetGenericData("itemID");
+        //	var item = FindItem(itemID, rootItem);
 
-		//	if (!(args.parentItem is InputMapContentHeaderItemBase))
-		//		return DragAndDropVisualMode.Rejected;
+        //	if (!(args.parentItem is InputMapContentHeaderItemBase))
+        //		return DragAndDropVisualMode.Rejected;
 
-		//	if (args.performDrop)
-  //          {
-		//		switch (item)
-  //              {
-		//			case InputMapContentActionTreeItem actionItem:
+        //	if (args.performDrop)
+        //          {
+        //		switch (item)
+        //              {
+        //			case InputMapContentActionTreeItem actionItem:
 
-		//				break;
-		//			case InputMapContentAxisTreeItem axisItem:
-		//				break;
-  //              }
-  //          }				
+        //				break;
+        //			case InputMapContentAxisTreeItem axisItem:
+        //				break;
+        //              }
+        //          }				
 
-		//	return DragAndDropVisualMode.Move;
-  //      }
+        //	return DragAndDropVisualMode.Move;
+        //      }
         #endregion
 
         #region Finding
-        InputMapContentEditableItemBase GetItemByContent<t>(t item)
+        InputMapContentMapItem GetItemByContent<t>(t item) where t : InputMapItem
         {
 			IList<int> items = GetDescendantsThatHaveChildren(rootItem.id);
 
-            for (int i = 0; i < items.Count; i++)
-				if (FindItem(items[i], rootItem) is InputMapContentEditableItemBase editable && editable.CompareContent(item))
-					return editable;
+			var targets = items
+				.Select(x => FindItem(x, rootItem))
+				.Where(x => x is InputMapContentMapItem mapItem && mapItem?.Item == item)
+				.Select(x => x as InputMapContentMapItem);
 
-			return null;
+			return targets.Count() == 1 ? targets.First() : null;
         }
         #endregion
 
         #region Renaming
         protected override bool CanRename(TreeViewItem item)
         {
-            return item is InputMapContentEditableItemBase;
+            return item is InputMapContentMapItem;
         }
 
         protected override void RenameEnded(RenameEndedArgs args)
@@ -360,21 +350,12 @@ namespace qASIC.InputManagement.Map.Internal
 			if (!args.acceptedRename) return;
 			if (string.IsNullOrWhiteSpace(args.newName)) return;
 
-			switch (FindItem(args.itemID, rootItem))
-			{
-				case InputMapContentActionTreeItem item:
-					if (NonRepeatableChecker.ContainsKey(Group.actions, args.newName)) return;
-					item.Rename(args.newName);
-					break;
-				case InputMapContentAxisTreeItem item:
-					if (NonRepeatableChecker.ContainsKey(Group.axes, args.newName)) return;
-					item.Rename(args.newName);
-					break;
-				default:
-					return;
-			}
+			var item = FindItem(args.itemID, rootItem) as InputMapContentMapItem;
 
-			InputMapWindow.SetMapDirty();
+            if (NonRepeatableChecker.ContainsKey(Group.items, args.newName)) return;
+            item.Item.ItemName = args.newName;
+
+			window.SetMapDirty();
 			Reload();
 		}
 		#endregion
@@ -403,26 +384,33 @@ namespace qASIC.InputManagement.Map.Internal
 
 			switch (args.item)
             {
-				case InputMapContentEditableItemBase _:
+				case InputMapContentMapItem _:
 					buttonContent.image = qGUIEditorUtility.MinusIcon;
 					break;
-				case InputMapContentHeaderItemBase _:
+				default:
 					buttonContent.image = qGUIEditorUtility.PlusIcon;
 					break;
             }
+
+
 
 			if (GUI.Button(buttonRect, buttonContent, Styles.Label))
 			{
 				switch (args.item)
 				{
-					case InputMapTreeActionHeaderItem _:
-						AddActionItem(null);
-						break;
-					case InputMapTreeAxisHeaderItem _:
-						AddAxisItem(null);
-						break;
-					case InputMapContentEditableItemBase item:
+					case InputMapContentMapItem item:
 						Delete(item);
+						break;
+					default:
+						switch (args.item.id)
+						{
+							case BINDINGS_ROOT_ID:
+								AddItem<InputBinding>();
+								break;
+							default:
+                                AddItem<Input1DAxis>();
+                                break;
+						}
 						break;
 				}
 			}
@@ -469,10 +457,10 @@ namespace qASIC.InputManagement.Map.Internal
 		{
 			switch (item)
 			{
-				case InputMapContentHeaderItemBase _:
-					return 22f;
-				default:
+				case InputMapContentMapItem _:
 					return 18f;
+				default:
+					return 22f;
 			}
 		}
 

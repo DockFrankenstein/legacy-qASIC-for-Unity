@@ -27,5 +27,17 @@ namespace qASIC.Tools
                 .Where(x => x.IsClass)
                 .SelectMany(x => x.GetMethods(bindingFlags))
                 .Where(x => x.GetCustomAttributes(typeof(T), false).FirstOrDefault() != null);
+
+        public static IEnumerable<T> CreateConstructorsFromTypes<T>(IEnumerable<Type> types) =>
+            types.SelectMany(x =>
+            {
+                ConstructorInfo constructor = x.GetConstructor(Type.EmptyTypes);
+                if (constructor == null || constructor.IsAbstract) return null;
+                return new T[] { (T)constructor.Invoke(null) };
+            });
+
+        public static List<T> CreateConstructorsFromTypesList<T>(IEnumerable<Type> types) =>
+            CreateConstructorsFromTypes<T>(types)
+            .ToList();
     }
 }

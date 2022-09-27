@@ -5,134 +5,131 @@ using qASIC.EditorTools;
 
 namespace qASIC.InputManagement.Map.Internal
 {
-    public abstract class InputMapContentItemBase : TreeViewItem
+    public class InputMapContentItemBase : TreeViewItem
     {
         public virtual Texture GetIcon(InputGroup group) => null;
         public virtual string GetTooltip(InputGroup group) => string.Empty;
         public virtual Color BarColor { get; set; } = Color.clear;
         public virtual bool CanDrag { get => false; }
 
+
         public InputMapContentItemBase() : base() { }
         public InputMapContentItemBase(int id) : base(id) { }
         public InputMapContentItemBase(int id, int depth) : base(id, depth) { }
-        public InputMapContentItemBase(int id, int depth, string displayName) : base(id, depth, displayName) { }
+    }
 
-        public InputMapContentItemBase(int id, int depth, string displayName, Color barColor) : base(id, depth, displayName)
+    public class InputMapContentMapItem : InputMapContentItemBase
+    {
+        public string Guid { get; set; }
+        public InputMapItem Item { get; set; }
+
+        public InputMapContentMapItem() : base()
         {
-            BarColor = barColor;
+            Guid = System.Guid.NewGuid().ToString();
+            id = Guid.GetHashCode();
+        }
+
+        public InputMapContentMapItem(InputMapItem item) : base(item.guid.GetHashCode())
+        {
+            Item = item;
+            Guid = item.guid;
+            displayName = item?.ItemName ?? string.Empty;
         }
     }
 
-    public abstract class InputMapContentEditableItemBase : InputMapContentItemBase
-    {
-        public virtual bool Deletable => true;
-        public override bool CanDrag => true;
+    //public abstract class InputMapContentEditableItemBase : InputMapContentItemBase
+    //{
+    //    public virtual bool Deletable => true;
+    //    public override bool CanDrag => true;
 
-        public abstract void Rename(string newName);
-        public abstract void Delete(InputGroup group);
-        public abstract bool CompareContent<t>(t item);
-    }
+    //    public abstract void Rename(string newName);
+    //    public abstract void Delete(InputGroup group);
+    //    public abstract bool CompareContent<t>(t item);
+    //}
 
-    public class InputMapContentActionTreeItem : InputMapContentEditableItemBase
-    {
-        public InputAction Action { get; }
+    //public class InputMapContentActionTreeItem : InputMapContentEditableItemBase
+    //{
+    //    public InputMapContentActionTreeItem(InputBinding binding, int id) : base()
+    //    {
+    //        Debug.Assert(binding != null, "Binding cannot be null");
+    //        Binding = binding;
+    //        displayName = Binding.itemName;
+    //        this.id = id;
+    //        depth = -1;
+    //    }
 
-        public InputMapContentActionTreeItem(InputAction action, int id)
-        {
-            Debug.Assert(action != null, "Action cannot be null");
-            Action = action;
-            displayName = Action.actionName;
-            this.id = id;
-            depth = -1;
-        }
+    //    /// <summary>Renames item - you have to check if it's unique first</summary>
+    //    public override void Rename(string newName)
+    //    {
+    //        Binding.itemName = newName;
+    //        displayName = newName;
+    //    }
 
-        /// <summary>Renames item - you have to check if it's unique first</summary>
-        public override void Rename(string newName)
-        {
-            Action.actionName = newName;
-            displayName = newName;
-        }
+    //    public override void Delete(InputGroup group) =>
+    //        group.items.Remove(Binding);
 
-        public override void Delete(InputGroup group) =>
-            group.actions.Remove(Action);
+    //    public override bool CompareContent<t>(t item) =>
+    //        item is InputBinding a && Binding == a;
+    //}
 
-        public override bool CompareContent<t>(t item) =>
-            item is InputAction a && Action == a;
-    }
+    //public class InputMapContentOtherTreeItem : InputMapContentEditableItemBase
+    //{
+    //    public InputMapItem Item { get; }
 
-    public class InputMapContentAxisTreeItem : InputMapContentEditableItemBase
-    {
-        public InputAxis Axis { get; }
+    //    //public override Texture GetIcon(InputGroup group) =>
+    //    //    HasErrors(group) ? qGUIEditorUtility.ErrorIcon : null;
 
-        public override Texture GetIcon(InputGroup group) =>
-            HasErrors(group) ? qGUIEditorUtility.ErrorIcon : null;
+    //    //public override string GetTooltip(InputGroup group) =>
+    //    //    HasErrors(group) ? "Axis contains incorrect action names" : string.Empty;
 
-        public override string GetTooltip(InputGroup group) =>
-            HasErrors(group) ? "Axis contains incorrect action names" : string.Empty;
+    //    public InputMapContentOtherTreeItem(InputMapItem item, int id)
+    //    {
+    //        Debug.Assert(item != null, "Axis cannot be null");
+    //        Item = item;
+    //        displayName = Item.itemName;
+    //        this.id = id;
+    //        depth = -1;
+    //    }
 
-        bool HasErrors(InputGroup group)
-        {
-            if (Axis == null)
-                return false;
+    //    public override void Rename(string newName)
+    //    {
+    //        Item.itemName = newName;
+    //        displayName = newName;
+    //    }
 
-            if (!ActionNameHasErrors(Axis.positiveAction) &&
-                !ActionNameHasErrors(Axis.negativeAction))
-                return false;
+    //    public override void Delete(InputGroup group) =>
+    //        group.items.Remove(Item);
 
-            return true;
+    //    public override bool CompareContent<t>(t item) =>
+    //        item is Input1DAxis a && Item == a;
+    //}
 
-            bool ActionNameHasErrors(string actionName) =>
-                !string.IsNullOrWhiteSpace(actionName) && !group.ActionExists(actionName);
-        }
+    ////This is just for recognition
+    //public abstract class InputMapContentHeaderItemBase : InputMapContentItemBase
+    //{
+    //    public InputMapContentHeaderItemBase() : base() { }
+    //    public InputMapContentHeaderItemBase(int id) : base(id) { }
+    //    public InputMapContentHeaderItemBase(int id, int depth) : base(id, depth) { }
+    //    public InputMapContentHeaderItemBase(int id, int depth, string displayName) : base(id, depth, displayName) { }
+    //    public InputMapContentHeaderItemBase(int id, int depth, string displayName, Color barColor) : base(id, depth, displayName, barColor) { }
+    //}
 
-        public InputMapContentAxisTreeItem(InputAxis axis, int id)
-        {
-            Debug.Assert(axis != null, "Axis cannot be null");
-            Axis = axis;
-            displayName = Axis.axisName;
-            this.id = id;
-            depth = -1;
-        }
+    //public class InputMapTreeActionHeaderItem : InputMapContentHeaderItemBase
+    //{
+    //    public InputMapTreeActionHeaderItem() : base() { }
+    //    public InputMapTreeActionHeaderItem(int id) : base(id) { }
+    //    public InputMapTreeActionHeaderItem(int id, int depth) : base(id, depth) { }
+    //    public InputMapTreeActionHeaderItem(int id, int depth, string displayName) : base(id, depth, displayName) { }
+    //    public InputMapTreeActionHeaderItem(int id, int depth, string displayName, Color barColor) : base(id, depth, displayName, barColor) { }
+    //}
 
-        public override void Rename(string newName)
-        {
-            Axis.axisName = newName;
-            displayName = newName;
-        }
-
-        public override void Delete(InputGroup group) =>
-            group.axes.Remove(Axis);
-
-        public override bool CompareContent<t>(t item) =>
-            item is InputAxis a && Axis == a;
-    }
-
-    //This is just for recognition
-    public abstract class InputMapContentHeaderItemBase : InputMapContentItemBase
-    {
-        public InputMapContentHeaderItemBase() : base() { }
-        public InputMapContentHeaderItemBase(int id) : base(id) { }
-        public InputMapContentHeaderItemBase(int id, int depth) : base(id, depth) { }
-        public InputMapContentHeaderItemBase(int id, int depth, string displayName) : base(id, depth, displayName) { }
-        public InputMapContentHeaderItemBase(int id, int depth, string displayName, Color barColor) : base(id, depth, displayName, barColor) { }
-    }
-
-    public class InputMapTreeActionHeaderItem : InputMapContentHeaderItemBase
-    {
-        public InputMapTreeActionHeaderItem() : base() { }
-        public InputMapTreeActionHeaderItem(int id) : base(id) { }
-        public InputMapTreeActionHeaderItem(int id, int depth) : base(id, depth) { }
-        public InputMapTreeActionHeaderItem(int id, int depth, string displayName) : base(id, depth, displayName) { }
-        public InputMapTreeActionHeaderItem(int id, int depth, string displayName, Color barColor) : base(id, depth, displayName, barColor) { }
-    }
-
-    public class InputMapTreeAxisHeaderItem : InputMapContentHeaderItemBase
-    {
-        public InputMapTreeAxisHeaderItem() : base() { }
-        public InputMapTreeAxisHeaderItem(int id) : base(id) { }
-        public InputMapTreeAxisHeaderItem(int id, int depth) : base(id, depth) { }
-        public InputMapTreeAxisHeaderItem(int id, int depth, string displayName) : base(id, depth, displayName) { }
-        public InputMapTreeAxisHeaderItem(int id, int depth, string displayName, Color barColor) : base(id, depth, displayName, barColor) { }
-    }
+    //public class InputMapTreeAxisHeaderItem : InputMapContentHeaderItemBase
+    //{
+    //    public InputMapTreeAxisHeaderItem() : base() { }
+    //    public InputMapTreeAxisHeaderItem(int id) : base(id) { }
+    //    public InputMapTreeAxisHeaderItem(int id, int depth) : base(id, depth) { }
+    //    public InputMapTreeAxisHeaderItem(int id, int depth, string displayName) : base(id, depth, displayName) { }
+    //    public InputMapTreeAxisHeaderItem(int id, int depth, string displayName, Color barColor) : base(id, depth, displayName, barColor) { }
+    //}
 }
 #endif

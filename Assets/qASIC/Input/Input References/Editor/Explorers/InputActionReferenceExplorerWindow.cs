@@ -12,7 +12,7 @@ namespace qASIC.InputManagement.Internal.ReferenceExplorers
         public override string ContentPropertyName => "actionName";
 
         public override List<INonRepeatable> GetContentList(int groupIndex) =>
-            NonRepeatableChecker.GenerateNonRepeatableList(Manager.Map.Groups[groupIndex].actions);
+            NonRepeatableChecker.GenerateNonRepeatableList(Manager.Map.groups[groupIndex].items);
 
         public static void OpenProperty(SerializedProperty property)
         {

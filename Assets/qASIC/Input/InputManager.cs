@@ -159,8 +159,8 @@ namespace qASIC.InputManagement
 
             Map.CheckForRepeating();
 
-            for (int i = 0; i < Map.Groups.Count; i++)
-                Map.Groups[i].CheckForRepeating();
+            for (int i = 0; i < Map.groups.Count; i++)
+                Map.groups[i].CheckForRepeating();
 
             //UserActions.Clear();
 
@@ -191,13 +191,13 @@ namespace qASIC.InputManagement
 
             List<KeyData> keys = GenerateKeyList();
 
-            for (int i = 0; i < keys.Count; i++)
-            {
-                string key = keys[i].GetSaveKey();
-                if (!ConfigController.TryGettingSetting(content, key, out string setting)) continue;
-                if (!Enum.TryParse(setting, out KeyCode result)) continue;
-                ChangeInput(keys[i].group.groupName, keys[i].action.actionName, keys[i].index, result, false, false);
-            }
+            //for (int i = 0; i < keys.Count; i++)
+            //{
+            //    string key = keys[i].GetSaveKey();
+            //    if (!ConfigController.TryGettingSetting(content, key, out string setting)) continue;
+            //    if (!Enum.TryParse(setting, out KeyCode result)) continue;
+            //    ChangeInput(keys[i].group.groupName, keys[i], keys[i].index, result, false, false);
+            //}
 
             qDebug.Log("Cablebox preferences successfully loaded!", "init");
         }
@@ -217,12 +217,12 @@ namespace qASIC.InputManagement
 
             List<KeyData> keys = GenerateKeyList();
 
-            for (int i = 0; i < keys.Count; i++)
-            {
-                string key = keys[i].GetSaveKey();
-                if (!PlayerPrefs.HasKey(key)) continue;
-                ChangeInput(keys[i].group.groupName, keys[i].action.actionName, keys[i].index, (KeyCode)PlayerPrefs.GetInt(key), false, false);
-            }
+            //for (int i = 0; i < keys.Count; i++)
+            //{
+            //    string key = keys[i].GetSaveKey();
+            //    if (!PlayerPrefs.HasKey(key)) continue;
+            //    ChangeInput(keys[i].group.groupName, keys[i].action.actionName, keys[i].index, (KeyCode)PlayerPrefs.GetInt(key), false, false);
+            //}
 
             qDebug.Log("Cablebox preferences successfully loaded!", "init");
         }
@@ -232,23 +232,23 @@ namespace qASIC.InputManagement
         public struct KeyData
         {
             public InputGroup group;
-            public InputAction action;
+            public InputBinding item;
             public int index;
 
             public string GroupName { get => group.groupName; }
-            public string ActionName { get => action.actionName; }
+            public string ActionName { get => string.Empty/*action.actionName*/; }
 
             /// <returns>Returns key used for saving and loading using player prefs</returns>
-            public string GetSaveKey() =>
-                GenerateSaveKey(group.groupName, action.actionName, index);
+            public string GetSaveKey()
+            { /*GenerateSaveKey(group.groupName, action.actionName, index);*/ return string.Empty; }
 
             public static string GenerateSaveKey(string groupName, string actionName, int index) =>
                 $"qASIC_Input_{groupName.ToLower()}_{actionName.ToLower()}_{index}";
 
-            public KeyData(InputGroup group, InputAction action, int index)
+            public KeyData(InputGroup group, InputBinding item, int index)
             {
                 this.group = group;
-                this.action = action;
+                this.item = item;
                 this.index = index;
             }
         }
@@ -376,28 +376,30 @@ namespace qASIC.InputManagement
         #endregion
 
         #region Get Action and Axis
-        public static InputAction GetInputAction(string groupName, string actionName)
+        public static InputBinding GetInputAction(string groupName, string actionName)
         {
-            TryGetInputAction(groupName, actionName, out InputAction action, true);
+            TryGetInputAction(groupName, actionName, out InputBinding action, true);
             return action;
         }
 
-        public static bool TryGetInputAction(string groupName, string actionName, out InputAction action, bool logError = false)
+        public static bool TryGetInputAction(string groupName, string actionName, out InputBinding action, bool logError = false)
         {
             action = null;
-            return Map.TryGetGroup(groupName, out InputGroup group, logError) && group.TryGetAction(actionName, out action, logError);
+            //return Map.TryGetGroup(groupName, out InputGroup group, logError) && group.TryGetItem(actionName, out action, logError);
+            return false;
         }
 
-        public static InputAxis GetInputAxis(string groupName, string axisName)
+        public static Input1DAxis GetInputAxis(string groupName, string axisName)
         {
-            TryGetInputAxis(groupName, axisName, out InputAxis axis, true);
+            TryGetInputAxis(groupName, axisName, out Input1DAxis axis, true);
             return axis;
         }
 
-        public static bool TryGetInputAxis(string groupName, string axisName, out InputAxis axis, bool logError = false)
+        public static bool TryGetInputAxis(string groupName, string axisName, out Input1DAxis axis, bool logError = false)
         {
             axis = null;
-            return Map.TryGetGroup(groupName, out InputGroup group, logError) && group.TryGetAxis(axisName, out axis, logError);
+            //return Map.TryGetGroup(groupName, out InputGroup group, logError) && group.TryGetAxis(axisName, out axis, logError);
+            return false;
         }
         #endregion
 
@@ -415,7 +417,7 @@ namespace qASIC.InputManagement
         {
             playerIndex = -1;
             if (!MapLoaded) return 0f;
-            if (!TryGetInputAxis(groupName, axisName, out InputAxis axis)) return 0f;
+            if (!TryGetInputAxis(groupName, axisName, out Input1DAxis axis)) return 0f;
 
             float value = 0f;
             if (GetInput(groupName, axis.positiveAction)) value += 1f;

@@ -46,20 +46,20 @@ namespace qASIC.InputManagement.Internal.ReferenceExplorers
 
             SelectCurrentProperties();
 
-            groupBar.OnItemSelect += (object o) =>
-            {
-                InputGroup group = o as InputGroup;
-                if (group.groupName == groupProperty.stringValue) return;
-                groupProperty.stringValue = group.groupName;
-                selectedItem = -1;
-            };
+            //groupBar.OnItemSelect += (object o) =>
+            //{
+            //    InputGroup group = o as InputGroup;
+            //    if (group.groupName == groupProperty.stringValue) return;
+            //    groupProperty.stringValue = group.groupName;
+            //    selectedItem = -1;
+            //};
         }
 
         void SelectCurrentProperties()
         {
-            if (!Manager.Map || Manager.Map.Groups.Count == 0) return;
+            if (!Manager.Map || Manager.Map.groups.Count == 0) return;
 
-            int currentGroup = NonRepeatableChecker.GetNameList(Manager.Map.Groups).IndexOf(groupProperty.stringValue.ToLower());
+            int currentGroup = NonRepeatableChecker.GetNameList(Manager.Map.groups).IndexOf(groupProperty.stringValue.ToLower());
             if (currentGroup == -1) return;
 
             groupBar.Select(currentGroup);
@@ -117,7 +117,7 @@ namespace qASIC.InputManagement.Internal.ReferenceExplorers
             if (apply)
             {
                 if(groupBar.SelectedGroupIndex != -1)
-                    groupProperty.stringValue = Manager.Map.Groups[groupBar.SelectedGroupIndex].groupName;
+                    groupProperty.stringValue = Manager.Map.groups[groupBar.SelectedGroupIndex].groupName;
 
                 contentProperty.stringValue = content[selectedItem].ItemName;
                 Property.serializedObject.ApplyModifiedProperties();

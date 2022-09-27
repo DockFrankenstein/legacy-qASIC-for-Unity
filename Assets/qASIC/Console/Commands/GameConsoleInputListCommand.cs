@@ -28,28 +28,14 @@ namespace qASIC.Console.Commands
             TextTree tree = new TextTree(GameConsoleController.GetConfig().textTreeStyle);
             TextTreeItem list = new TextTreeItem(map.name);
 
-            foreach (InputGroup group in map.Groups)
+            foreach (InputGroup group in map.groups)
             {
                 TextTreeItem groupItem = new TextTreeItem(group.groupName);
                 TextTreeItem actionsListItem = new TextTreeItem("Actions");
                 TextTreeItem axexListItem = new TextTreeItem("Axes");
 
-                foreach (InputAction action in group.actions)
-                    actionsListItem.Add(action.actionName);
-
-                foreach (InputAxis axis in group.axes)
-                {
-                    TextTreeItem axisItem = new TextTreeItem(axis.axisName)
-                    {
-                        children = new List<TextTreeItem>()
-                        {
-                            new TextTreeItem($" +{axis.positiveAction}"),
-                            new TextTreeItem($" -{axis.negativeAction}"),
-                        },
-                    };
-
-                    axexListItem.Add(axisItem);
-                }
+                foreach (InputMapItem item in group.items)
+                    actionsListItem.Add(item.itemName);
 
                 groupItem.Add(actionsListItem);
                 groupItem.Add(axexListItem);
