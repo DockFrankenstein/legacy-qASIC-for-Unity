@@ -1,4 +1,5 @@
-﻿using qASIC.InputManagement.Internal.KeyProviders;
+﻿using qASIC.InputManagement.Devices;
+using qASIC.InputManagement.Internal.KeyProviders;
 using qASIC.InputManagement.Map.Internal;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,18 @@ namespace qASIC.InputManagement.Map
 
             return value;
         }
+
+        public override bool GetInputEvent(Func<string, bool> func)
+        {
+            foreach (string key in keys)
+                if (func?.Invoke(key) == true)
+                    return true;
+
+            return false;
+        }
+
+        public override float GetHighestValue(float a, float b) =>
+            a > b ? a : b;
 
         public List<KeyList> GetSortedKeys()
         {

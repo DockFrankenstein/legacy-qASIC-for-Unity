@@ -7,9 +7,9 @@ namespace qASIC.InputManagement.Devices
         string DeviceName { get; }
         Type KeyType { get; }
 
-        float GetInputValue(int button);
+        float GetInputValue(string button);
 
-        bool GetInputEvent(KeyEventType type, int keyIndex);
+        bool GetInputEvent(KeyEventType type, string keyPath);
 
         void Initialize();
         void Update();

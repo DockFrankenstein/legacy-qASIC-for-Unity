@@ -9,25 +9,23 @@ namespace qASIC.InputManagement.Devices
         public string DeviceName => "Keyboard";
         public Type KeyType => typeof(KeyCode);
 
-        private Dictionary<KeyCode, bool> _keys = new Dictionary<KeyCode, bool>();
-        private Dictionary<KeyCode, bool> _keysUp = new Dictionary<KeyCode, bool>();
-        private Dictionary<KeyCode, bool> _keysDown = new Dictionary<KeyCode, bool>();
+        private Dictionary<string, bool> _keys = new Dictionary<string, bool>();
+        private Dictionary<string, bool> _keysUp = new Dictionary<string, bool>();
+        private Dictionary<string, bool> _keysDown = new Dictionary<string, bool>();
         private Vector2 mousePosition;
         private Vector2 mouseMove;
 
-        public float GetInputValue(int keyIndex)
+        public float GetInputValue(string keyPath)
         {
-            KeyCode key = (KeyCode)keyIndex;
-            if (!_keys.ContainsKey(key))
+            if (!_keys.ContainsKey(keyPath))
                 return 0f;
 
-            return _keys[key] ? 1f : 0f;
+            return _keys[keyPath] ? 1f : 0f;
         }
 
-        public bool GetInputEvent(KeyEventType type, int keyIndex)
+        public bool GetInputEvent(KeyEventType type, string keyPath)
         {
-            KeyCode key = (KeyCode)keyIndex;
-            Dictionary<KeyCode, bool> dictionary = _keys;
+            Dictionary<string, bool> dictionary = _keys;
             switch (type)
             {
                 case KeyEventType.up:
@@ -38,10 +36,10 @@ namespace qASIC.InputManagement.Devices
                     break;
             }
 
-            if (!dictionary.ContainsKey(key))
+            if (!dictionary.ContainsKey(keyPath))
                 return false;
 
-            return dictionary[key];
+            return dictionary[keyPath];
         }
 
         public Vector2 GetMousePosition() =>
@@ -54,9 +52,10 @@ namespace qASIC.InputManagement.Devices
         {
             foreach (KeyCode key in KeyboardManager.AllKeyCodes)
             {
-                _keys.Add(key, false);
-                _keysUp.Add(key, false);
-                _keysDown.Add(key, false);
+                string keyName = GetKeyName(key);
+                _keys.Add(keyName, false);
+                _keysUp.Add(keyName, false);
+                _keysDown.Add(keyName, false);
             }
         }
 
@@ -64,16 +63,20 @@ namespace qASIC.InputManagement.Devices
         {
             foreach (var key in KeyboardManager.AllKeyCodes)
             {
+                string keyName = GetKeyName(key);
                 bool keyValue = Input.GetKey(key);
-                bool previousValue = _keys[key];
-                _keysUp[key] = previousValue && !keyValue;
-                _keysDown[key] = !previousValue && keyValue;
-                _keys[key] = keyValue;
+                bool previousValue = _keys[keyName];
+                _keysUp[keyName] = previousValue && !keyValue;
+                _keysDown[keyName] = !previousValue && keyValue;
+                _keys[keyName] = keyValue;
             }
 
             Vector2 newMousePosition = Input.mousePosition;
             mouseMove = newMousePosition - mousePosition;
             mousePosition = newMousePosition;
         }
+
+        string GetKeyName(KeyCode key) =>
+            $"key_keyboard/{key}";
     }
 }

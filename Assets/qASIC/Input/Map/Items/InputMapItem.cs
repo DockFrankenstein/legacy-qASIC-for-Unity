@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using qASIC.Tools;
+using qASIC.InputManagement.Devices;
 
 namespace qASIC.InputManagement.Map
 {
@@ -42,7 +43,9 @@ namespace qASIC.InputManagement.Map
         public bool NameEquals(string name) =>
             NonRepeatableChecker.Compare(itemName, name);
 
-        public virtual object ReadValueAsObject(Func<string, float> func) => null;
+        public abstract object ReadValueAsObject(Func<string, float> func);
+        public abstract object GetHighestValueAsObject(object a, object b);
+        public abstract bool GetInputEvent(Func<string, bool> func);
     }
 
     [Serializable]
@@ -56,6 +59,14 @@ namespace qASIC.InputManagement.Map
         public override object ReadValueAsObject(Func<string, float> func) =>
             ReadValue(func);
 
-        public virtual T ReadValue(Func<string, float> func) => default;
+        public override object GetHighestValueAsObject(object a, object b)
+        {
+            T x = (T)a;
+            T y = (T)b;
+            return GetHighestValue(x, y);
+        }
+
+        public abstract T ReadValue(Func<string, float> func);
+        public abstract T GetHighestValue(T a, T b);
     }
 }

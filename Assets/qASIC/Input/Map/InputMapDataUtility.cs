@@ -28,6 +28,20 @@ namespace qASIC.InputManagement.Map
             return true;
         }
 
+        public static bool TryGetItem<T>(InputMapData mapData, string groupName, string actionName, out InputMapItem<T> item)
+        {
+            item = null;
+
+            if (!TryGetItem(mapData, groupName, actionName, out InputMapItem mapItem))
+                return false;
+
+            if (mapItem.ValueType != typeof(T))
+                return false;
+
+            item = mapItem as InputMapItem<T>;
+            return true;
+        }
+
         public static bool TryGetGroup(InputMapData mapData, string groupName, out InputGroup group)
         {
             group = null;

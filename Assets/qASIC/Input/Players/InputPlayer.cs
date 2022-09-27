@@ -47,30 +47,37 @@ namespace qASIC.InputManagement.Players
             GetInputEvent(KeyEventType.down, groupName, actionName);
 
         public float GetInputValue(string groupName, string actionName) =>
-            Mathf.Clamp(GetRawInputValue(groupName, actionName), 0f, 1f);
+            Mathf.Clamp(GetRawInputValue<float>(groupName, actionName), 0f, 1f);
 
-        public float GetAxisValue(string groupName, string axisName)
+        /// <returns>Returns the unclamped value of an item</returns>
+        public object GetRawInputValue(string groupName, string itemName)
         {
-            //TODO: REIMPLEMENT
-            return 0f;
-        }
+            if (!InputMapDataUtility.TryGetItem(MapData, groupName, itemName, out InputMapItem item))
+                return default;
 
-        /// <returns>Returns the unclamped value of an action</returns>
-        private float GetRawInputValue(string groupName, string actionName)
-        {
-            if (!InputMapDataUtility.TryGetItem(MapData, groupName, actionName, out InputMapItem item))
-                return 0f;
-
-            float value = 0f;
+            object value = default;
 
             foreach (IInputDevice device in _devices)
             {
-                //List<int> keys = item.ReadValueAsObject(device.KeyType);
+                object readValue = item.ReadValueAsObject(device.GetInputValue);
+                value = item.GetHighestValueAsObject(value, readValue);
+            }
 
-                //foreach (int key in keys)
-                //{
-                //    value += device.GetInputValue(key);
-                //}
+            return value;
+        }
+
+        /// <returns>Returns the unclamped value of an item</returns>
+        public T GetRawInputValue<T>(string groupName, string itemName)
+        {
+            if (!InputMapDataUtility.TryGetItem<T>(MapData, groupName, itemName, out InputMapItem<T> item))
+                return default;
+
+            T value = default;
+
+            foreach (IInputDevice device in _devices)
+            {
+                T readValue = item.ReadValue(device.GetInputValue);
+                value = item.GetHighestValue(value, readValue);
             }
 
             return value;
@@ -78,19 +85,12 @@ namespace qASIC.InputManagement.Players
 
         private bool GetInputEvent(KeyEventType type, string groupName, string actionName)
         {
-            if (!InputMapDataUtility.TryGetItem(MapData, groupName, actionName, out InputMapItem action))
+            if (!InputMapDataUtility.TryGetItem(MapData, groupName, actionName, out InputMapItem item))
                 return false;
 
             foreach (IInputDevice device in _devices)
-            {
-                //List<int> keys = action.GetKeyList(device.KeyType);
-
-                //foreach (int key in keys)
-                //{
-                //    if (device.GetInputEvent(type, key))
-                //        return true;
-                //}
-            }
+                if (item.GetInputEvent(keyPath => device.GetInputEvent(type, keyPath)))
+                    return true;
 
             return false;
         }

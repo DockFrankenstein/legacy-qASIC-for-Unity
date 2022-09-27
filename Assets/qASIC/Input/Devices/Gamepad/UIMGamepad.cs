@@ -30,28 +30,26 @@ namespace qASIC.InputManagement.Devices
         public int ManagerJoystickIndex { get; set; }
 
 
-        private Dictionary<GamepadButton, float> _buttons = new Dictionary<GamepadButton, float>();
-        private Dictionary<GamepadButton, float> _buttonsUp = new Dictionary<GamepadButton, float>();
-        private Dictionary<GamepadButton, float> _buttonsDown = new Dictionary<GamepadButton, float>();
+        private Dictionary<string, float> _buttons = new Dictionary<string, float>();
+        private Dictionary<string, float> _buttonsUp = new Dictionary<string, float>();
+        private Dictionary<string, float> _buttonsDown = new Dictionary<string, float>();
 
         public void SetName(string name)
         {
             _deviceName = name;
         }
 
-        public float GetInputValue(int keyIndex)
+        public float GetInputValue(string keyPath)
         {
-            GamepadButton key = (GamepadButton)keyIndex;
-            if (!_buttons.ContainsKey(key))
+            if (!_buttons.ContainsKey(keyPath))
                 return 0f;
 
-            return _buttons[key];
+            return _buttons[keyPath];
         }
 
-        public bool GetInputEvent(KeyEventType type, int keyIndex)
+        public bool GetInputEvent(KeyEventType type, string keyPath)
         {
-            GamepadButton key = (GamepadButton)keyIndex;
-            Dictionary<GamepadButton, float> dictionary = _buttons;
+            Dictionary<string, float> dictionary = _buttons;
             switch (type)
             {
                 case KeyEventType.up:
@@ -62,10 +60,10 @@ namespace qASIC.InputManagement.Devices
                     break;
             }
 
-            if (!dictionary.ContainsKey(key))
+            if (!dictionary.ContainsKey(keyPath))
                 return false;
 
-            return dictionary[key] >= 0.5f;
+            return dictionary[keyPath] >= 0.5f;
         }
 
         public void Initialize()
@@ -77,9 +75,10 @@ namespace qASIC.InputManagement.Devices
             GamepadButton[] buttons = InputManager.GamepadButtons;
             foreach (var button in buttons)
             {
-                _buttons.Add(button, 0f);
-                _buttonsUp.Add(button, 0f);
-                _buttonsDown.Add(button, 0f);
+                string path = GetKeyPath(button);
+                _buttons.Add(path, 0f);
+                _buttonsUp.Add(path, 0f);
+                _buttonsDown.Add(path, 0f);
             }
         }
 
@@ -87,12 +86,13 @@ namespace qASIC.InputManagement.Devices
         {
             foreach (var button in InputManager.GamepadButtons)
             {
+                string path = GetKeyPath(button);
                 float value = GetButtonValue(button);
-                float previousValue = _buttons[button];
+                float previousValue = _buttons[path];
 
-                _buttonsUp[button] = previousValue != 0f && value == 0f ? 1f : 0f;
-                _buttonsDown[button] = previousValue == 0f && value != 0f ? 1f : 0f;
-                _buttons[button] = value;
+                _buttonsUp[path] = previousValue != 0f && value == 0f ? 1f : 0f;
+                _buttonsDown[path] = previousValue == 0f && value != 0f ? 1f : 0f;
+                _buttons[path] = value;
             }
         }
 
@@ -120,5 +120,8 @@ namespace qASIC.InputManagement.Devices
 
             return 0f;
         }
+
+        string GetKeyPath(GamepadButton button) =>
+            $"key_gamepad/{button}";
     }
 }
