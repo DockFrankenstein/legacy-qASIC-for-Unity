@@ -45,7 +45,7 @@ namespace qASIC.InputManagement.Map
 
         public abstract object ReadValueAsObject(Func<string, float> func);
         public abstract object GetHighestValueAsObject(object a, object b);
-        public abstract bool GetInputEvent(Func<string, bool> func);
+        public abstract InputEventType GetInputEvent(Func<string, InputEventType> func);
     }
 
     [Serializable]

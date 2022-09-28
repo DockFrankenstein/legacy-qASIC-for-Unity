@@ -37,20 +37,40 @@ namespace qASIC.InputManagement.Players
             _devices;
 
 
-        public bool GetInput(string groupName, string axisName) =>
-            Mathf.Abs(GetInputValue(groupName, axisName)) >= 0.5f;
+        #region Get Input
+        public bool GetInput(string itemName) =>
+            GetInput(MapData.DefaultGroupName, itemName);
 
-        public bool GetInputUp(string groupName, string actionName) =>
-            GetInputEvent(KeyEventType.up, groupName, actionName);
+        public bool GetInputUp(string itemName) =>
+            GetInputUp(MapData.DefaultGroupName, itemName);
 
-        public bool GetInputDown(string groupName, string actionName) =>
-            GetInputEvent(KeyEventType.down, groupName, actionName);
+        public bool GetInputDown(string itemName) =>
+            GetInputDown(MapData.DefaultGroupName, itemName);
 
-        public float GetInputValue(string groupName, string actionName) =>
-            Mathf.Clamp(GetRawInputValue<float>(groupName, actionName), 0f, 1f);
+        public bool GetInput(string groupName, string itemName) =>
+            GetInputEvent(groupName, itemName).HasFlag(InputEventType.Pressed);
 
+        public bool GetInputUp(string groupName, string itemName) =>
+            GetInputEvent(groupName, itemName).HasFlag(InputEventType.Up);
+
+        public bool GetInputDown(string groupName, string itemName) =>
+            GetInputEvent(groupName, itemName).HasFlag(InputEventType.Down);
+        #endregion
+
+        #region Get Custom Item Input
+        public float GetFloatInput(string groupName, string itemName) =>
+            GetInputValue<float>(groupName, itemName);
+
+        public Vector2 GetVector2Input(string groupName, string itemName) =>
+            GetInputValue<Vector2>(groupName, itemName);
+
+        public Vector3 GetVector3Input(string groupName, string itemName) =>
+            GetInputValue<Vector3>(groupName, itemName);
+        #endregion
+
+        #region Get Raw Input
         /// <returns>Returns the unclamped value of an item</returns>
-        public object GetRawInputValue(string groupName, string itemName)
+        public object GetInputValue(string groupName, string itemName)
         {
             if (!InputMapDataUtility.TryGetItem(MapData, groupName, itemName, out InputMapItem item))
                 return default;
@@ -67,7 +87,7 @@ namespace qASIC.InputManagement.Players
         }
 
         /// <returns>Returns the unclamped value of an item</returns>
-        public T GetRawInputValue<T>(string groupName, string itemName)
+        public T GetInputValue<T>(string groupName, string itemName)
         {
             if (!InputMapDataUtility.TryGetItem<T>(MapData, groupName, itemName, out InputMapItem<T> item))
                 return default;
@@ -83,16 +103,21 @@ namespace qASIC.InputManagement.Players
             return value;
         }
 
-        private bool GetInputEvent(KeyEventType type, string groupName, string actionName)
+        public InputEventType GetInputEvent(string itemName) =>
+            GetInputEvent(MapData.DefaultGroupName, itemName);
+
+        public InputEventType GetInputEvent(string groupName, string bindingName)
         {
-            if (!InputMapDataUtility.TryGetItem(MapData, groupName, actionName, out InputMapItem item))
-                return false;
+            if (!InputMapDataUtility.TryGetItem(MapData, groupName, bindingName, out InputMapItem item))
+                return InputEventType.None;
+
+            InputEventType type = InputEventType.None;
 
             foreach (IInputDevice device in _devices)
-                if (item.GetInputEvent(keyPath => device.GetInputEvent(type, keyPath)))
-                    return true;
+                type |= item.GetInputEvent(keyPath => device.GetInputEvent(keyPath));
 
-            return false;
+            return type;
         }
+        #endregion
     }
 }

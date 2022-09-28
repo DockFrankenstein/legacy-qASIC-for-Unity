@@ -31,13 +31,13 @@ namespace qASIC.InputManagement.Map
             return value;
         }
 
-        public override bool GetInputEvent(Func<string, bool> func)
+        public override InputEventType GetInputEvent(Func<string, InputEventType> func)
         {
+            InputEventType type = InputEventType.None;
             foreach (string key in keys)
-                if (func?.Invoke(key) == true)
-                    return true;
+                type |= func.Invoke(key);
 
-            return false;
+            return type;
         }
 
         public override float GetHighestValue(float a, float b) =>

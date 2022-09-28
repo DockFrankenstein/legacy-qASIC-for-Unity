@@ -17,6 +17,8 @@ namespace qASIC.InputManagement.Map
         public int defaultGroup;
         public List<InputGroup> groups;
 
+        public string DefaultGroupName => (defaultGroup >= 0 && defaultGroup < groups.Count) ? groups[defaultGroup].groupName : string.Empty;
+
         public InputMapData Duplicate()
         {
             string json = JsonUtility.ToJson(this);

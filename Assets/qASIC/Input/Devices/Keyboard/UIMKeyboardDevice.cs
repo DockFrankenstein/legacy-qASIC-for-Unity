@@ -23,23 +23,23 @@ namespace qASIC.InputManagement.Devices
             return _keys[keyPath] ? 1f : 0f;
         }
 
-        public bool GetInputEvent(KeyEventType type, string keyPath)
+        public InputEventType GetInputEvent(string keyPath)
         {
-            Dictionary<string, bool> dictionary = _keys;
-            switch (type)
-            {
-                case KeyEventType.up:
-                    dictionary = _keysUp;
-                    break;
-                case KeyEventType.down:
-                    dictionary = _keysDown;
-                    break;
-            }
+            InputEventType type = InputEventType.None;
 
-            if (!dictionary.ContainsKey(keyPath))
-                return false;
+            if (!_keys.ContainsKey(keyPath))
+                return type;
 
-            return dictionary[keyPath];
+            if (_keys[keyPath])
+                type = InputEventType.Pressed;
+
+            if (_keysUp[keyPath])
+                type = InputEventType.Up;
+
+            if (_keysDown[keyPath])
+                type = InputEventType.Down;
+
+            return type;
         }
 
         public Vector2 GetMousePosition() =>

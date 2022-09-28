@@ -8,6 +8,15 @@ using qASIC.InputManagement.Players;
 
 namespace qASIC.InputManagement
 {
+    [Flags]
+    public enum InputEventType
+    {
+        None = 0,
+        Pressed = 1,
+        Down = 2,
+        Up = 4,
+    }
+
     public static class InputManager
     {
         public static InputMap Map { get; private set; }

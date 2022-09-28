@@ -47,23 +47,23 @@ namespace qASIC.InputManagement.Devices
             return _buttons[keyPath];
         }
 
-        public bool GetInputEvent(KeyEventType type, string keyPath)
+        public InputEventType GetInputEvent(string keyPath)
         {
-            Dictionary<string, float> dictionary = _buttons;
-            switch (type)
-            {
-                case KeyEventType.up:
-                    dictionary = _buttonsUp;
-                    break;
-                case KeyEventType.down:
-                    dictionary = _buttonsDown;
-                    break;
-            }
+            InputEventType type = InputEventType.None;
 
-            if (!dictionary.ContainsKey(keyPath))
-                return false;
+            if (!_buttons.ContainsKey(keyPath))
+                return type;
 
-            return dictionary[keyPath] >= 0.5f;
+            if (_buttons[keyPath] != 0)
+                type = InputEventType.Pressed;
+
+            if (_buttonsUp[keyPath] != 0)
+                type = InputEventType.Up;
+
+            if (_buttonsDown[keyPath] != 0)
+                type = InputEventType.Down;
+
+            return type;
         }
 
         public void Initialize()

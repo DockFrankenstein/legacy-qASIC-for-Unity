@@ -9,11 +9,9 @@ namespace qASIC.InputManagement.Devices
 
         float GetInputValue(string button);
 
-        bool GetInputEvent(KeyEventType type, string keyPath);
+        InputEventType GetInputEvent(string keyPath);
 
         void Initialize();
         void Update();
     }
-
-    public enum KeyEventType { down, up }
 }

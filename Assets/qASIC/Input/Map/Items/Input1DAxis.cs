@@ -1,5 +1,6 @@
 ﻿using System;
 
+
 namespace qASIC.InputManagement.Map
 {
     [Serializable]
@@ -22,12 +23,12 @@ namespace qASIC.InputManagement.Map
             return positiveValue - negativeValue;
         }
 
-        public override bool GetInputEvent(Func<string, bool> func)
+        public override InputEventType GetInputEvent(Func<string, InputEventType> func)
         {
             InputBinding positive = map.GetItem<InputBinding>(positiveAction);
             InputBinding negative = map.GetItem<InputBinding>(negativeAction);
 
-            return positive.GetInputEvent(func) || negative.GetInputEvent(func);
+            return positive.GetInputEvent(func) | negative.GetInputEvent(func);
         }
 
         public override float GetHighestValue(float a, float b) =>
