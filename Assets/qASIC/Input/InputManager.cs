@@ -21,6 +21,7 @@ namespace qASIC.InputManagement
     {
         public static InputMap Map { get; private set; }
         public static bool MapLoaded => Map != null;
+        public static List<InputPlayer> Players => InputPlayerManager.Players;
 
         #region Static
         private static GamepadButton[] _gamepadButtons = null;
@@ -307,171 +308,58 @@ namespace qASIC.InputManagement
         }
         #endregion
 
-        #region Getting Input
-        //Get input via name
-        public static bool GetInputDown(string groupName, string actionName) =>
-            GetInputDown(-1, groupName, actionName);
-        public static bool GetInput(string groupName, string actionName) =>
-            GetInput(-1, groupName, actionName);
+        #region Get Input
+        public static bool GetInput(string itemName) =>
+            Players[0].GetInput(itemName);
 
-        public static bool GetInputUp(string groupName, string actionName) =>
-            GetInputUp(-1, groupName, actionName);
+        public static bool GetInputUp(string itemName) =>
+            Players[0].GetInputUp(itemName);
 
-        public static bool GetInputDown(string actionName) =>
-            GetInputDown(-1, actionName);
+        public static bool GetInputDown(string itemName) =>
+            Players[0].GetInputDown(itemName);
 
-        public static bool GetInput(string actionName) =>
-            GetInput(-1, actionName);
+        public static bool GetInput(string groupName, string itemName) =>
+            Players[0].GetInput(groupName, itemName);
 
-        public static bool GetInputUp(string actionName) =>
-            GetInput(-1, actionName);
+        public static bool GetInputUp(string groupName, string itemName) =>
+            Players[0].GetInputUp(groupName, itemName);
 
-        public static bool GetInputDown(int playerIndex, string groupName, string actionName) =>
-            HandleInput(playerIndex, new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKeyDown(key); }), groupName, actionName);
-
-        public static bool GetInput(int playerIndex, string groupName, string actionName) =>
-            HandleInput(playerIndex, new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKey(key); }), groupName, actionName);
-
-        public static bool GetInputUp(int playerIndex, string groupName, string actionName) =>
-            HandleInput(playerIndex, new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKeyDown(key); }), groupName, actionName);
-
-        public static bool GetInputDown(int playerIndex, string actionName) =>
-            HandleInput(playerIndex, new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKeyDown(key); }), actionName);
-
-        public static bool GetInput(int playerIndex, string actionName) =>
-            HandleInput(playerIndex, new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKey(key); }), actionName);
-
-        public static bool GetInputUp(int playerIndex, string actionName) =>
-            HandleInput(playerIndex, new Func<KeyCode, bool>((KeyCode key) => { return Input.GetKeyDown(key); }), actionName);
-
-        public static bool HandleInput(int playerIndex, Func<KeyCode, bool> statement, string actionName) =>
-            MapLoaded && HandleInput(playerIndex, statement, Map.DefaultGroupName, actionName);
-
-        static bool HandleInput(int playerIndex, Func<KeyCode, bool> statement, string groupName, string actionName)
-        {
-            //if (!MapLoaded) return false;
-
-            //if (!TryGetInputAction(groupName, actionName, out InputAction action)) return false;
-            //InputAction userAction = action/*UserActions[action]*/;
-
-            //for (int i = 0; i < userAction.keys.Count; i++)
-            //{
-            //    KeyCode key = userAction.keys[i];
-            //    if (statement.Invoke(key))
-            //        return true;
-            //}
-
-            return false;
-        }
-
-        //Get Input via reference
-        public static bool GetInputUp(InputActionReference action) =>
-            action != null && GetInputUp(action.GroupName, action.ActionName);
-
-        public static bool GetInput(InputActionReference action) =>
-            action != null && GetInput(action.GroupName, action.ActionName);
-
-        public static bool GetInputDown(InputActionReference action) =>
-            action != null && GetInputDown(action.GroupName, action.ActionName);
-
-        public static bool GetInputUp(int playerIndex, InputActionReference action) =>
-            action != null && GetInputUp(playerIndex, action.GroupName, action.ActionName);
-
-        public static bool GetInput(int playerIndex, InputActionReference action) =>
-            action != null && GetInput(playerIndex, action.GroupName, action.ActionName);
-
-        public static bool GetInputDown(int playerIndex, InputActionReference action) =>
-            action != null && GetInputDown(playerIndex, action.GroupName, action.ActionName);
+        public static bool GetInputDown(string groupName, string itemName) =>
+            Players[0].GetInputDown(groupName, itemName);
         #endregion
 
-        #region Get Action and Axis
-        public static InputBinding GetInputAction(string groupName, string actionName)
-        {
-            TryGetInputAction(groupName, actionName, out InputBinding action, true);
-            return action;
-        }
+        #region Get Custom Item Input
+        public static float GetFloatInput(string itemName) =>
+            Players[0].GetFloatInput(itemName);
 
-        public static bool TryGetInputAction(string groupName, string actionName, out InputBinding action, bool logError = false)
-        {
-            action = null;
-            //return Map.TryGetGroup(groupName, out InputGroup group, logError) && group.TryGetItem(actionName, out action, logError);
-            return false;
-        }
+        public static Vector2 GetVector2Input(string itemName) =>
+            Players[0].GetVector2Input(itemName);
 
-        public static Input1DAxis GetInputAxis(string groupName, string axisName)
-        {
-            TryGetInputAxis(groupName, axisName, out Input1DAxis axis, true);
-            return axis;
-        }
+        public static Vector3 GetVector3Input(string itemName) =>
+            Players[0].GetVector3Input(itemName);
 
-        public static bool TryGetInputAxis(string groupName, string axisName, out Input1DAxis axis, bool logError = false)
-        {
-            axis = null;
-            //return Map.TryGetGroup(groupName, out InputGroup group, logError) && group.TryGetAxis(axisName, out axis, logError);
-            return false;
-        }
+        public static float GetFloatInput(string groupName, string itemName) =>
+            Players[0].GetFloatInput(groupName, itemName);
+
+        public static Vector2 GetVector2Input(string groupName, string itemName) =>
+            Players[0].GetVector2Input(groupName, itemName);
+
+        public static Vector3 GetVector3Input(string groupName, string itemName) =>
+            Players[0].GetVector3Input(groupName, itemName);
         #endregion
 
-        #region Axis
-        public static float GetMapAxis(string groupName, string axisName) =>
-            GetMapAxis(-1, groupName, axisName);
+        #region Get Input Value
+        public static object GetInputValue(string groupName, string itemName) =>
+            Players[0].GetInputValue(groupName, itemName);
 
-        public static float GetMapAxis(string axisName) =>
-            GetMapAxis(-1, axisName);
+        public static T GetInputValue<T>(string groupName, string itemName) =>
+            Players[0].GetInputValue<T>(groupName, itemName);
 
-        public static float GetMapAxisRaw(string groupName, string axisName) =>
-            GetMapAxisRaw(-1, groupName, axisName);
+        public static InputEventType GetInputEvent(string itemName) =>
+            Players[0].GetInputEvent(itemName);
 
-        public static float GetMapAxis(int playerIndex, string groupName, string axisName)
-        {
-            playerIndex = -1;
-            if (!MapLoaded) return 0f;
-            if (!TryGetInputAxis(groupName, axisName, out Input1DAxis axis)) return 0f;
-
-            float value = 0f;
-            if (GetInput(groupName, axis.positiveAction)) value += 1f;
-            if (GetInput(groupName, axis.negativeAction)) value -= 1f;
-
-            return value;
-        }
-
-        public static float GetMapAxis(int playerIndex, string axisName) =>
-            MapLoaded ? GetMapAxis(playerIndex, Map.DefaultGroupName, axisName) : 0f;
-
-        public static float GetMapAxisRaw(int playerIndex, string groupName, string axisName)
-        {
-            float value = GetMapAxis(playerIndex, groupName, axisName);
-            //TODO: this is stupid
-            return Mathf.Round(Mathf.Abs(value)) * (value < 0 ? -1f : 1f);
-        }
-
-        public static float GetMapAxisRaw(string axisName) =>
-            MapLoaded ? GetMapAxisRaw(Map.DefaultGroupName, axisName) : 0f;
-
-        public static float GetMapAxis(InputAxisReference axis) =>
-            axis == null ? 0f : GetMapAxis(axis.GroupName, axis.AxisName);
-
-        public static float GetMapAxisRaw(InputAxisReference axis) =>
-            axis == null ? 0f : GetMapAxisRaw(axis.GroupName, axis.AxisName);
-
-
-        [Obsolete("GetAxis is outdated. Use GetMapAxis or CreateAxis instead.")]
-        public static float GetAxis(string positive, string negative) =>
-            CreateAxis(positive, negative);
-
-        public static float CreateAxis(string positive, string negative) =>
-            CreateAxis(GetInput(positive), GetInput(negative));
-
-        public static float CreateAxis(KeyCode positive, KeyCode negative) =>
-            CreateAxis(Input.GetKey(positive), Input.GetKey(negative));
-
-        public static float CreateAxis(bool positive, bool negative)
-        {
-            float value = 0f;
-            if (positive) value++;
-            if (negative) value--;
-            return value;
-        }
+        public static InputEventType GetInputEvent(string groupName, string itemName) =>
+            Players[0].GetInputEvent(groupName, itemName);
         #endregion
     }
 }

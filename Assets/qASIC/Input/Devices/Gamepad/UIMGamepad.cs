@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace qASIC.InputManagement.Devices
 {
-    public class UIMGamepad : IGamepadDevice
+    public class UIMGamepad : IGamepadDevice, IDeadZone
     {
         public UIMGamepad() { }
 
@@ -25,8 +25,8 @@ namespace qASIC.InputManagement.Devices
         string _deviceName;
         public Type KeyType => typeof(GamepadButton);
 
-        public float DeadZoneInner { get; set; }
-        public float DeadZoneOuter { get; set; }
+        public Vector2 DeadZone { get; set; } = new Vector2(0.1f, 0.9f);
+
         public int ManagerJoystickIndex { get; set; }
 
 
@@ -110,6 +110,10 @@ namespace qASIC.InputManagement.Devices
                     float value = Input.GetAxis(string.Format(mapping.axisName, ManagerJoystickIndex));
 
                     value = mapping.negative ? (Mathf.Clamp(value, -1f, 0f) * -1f) : Mathf.Clamp(value, 0f, 1f);
+
+                    if (HasDeadZone(button))
+                        value = GamepadUtility.CalculateDeadZone(value, DeadZone.x, DeadZone.y);
+
                     return value;
                 case UIMAxisMapperPlatform.UIMInputType.Button:
                     //Get key for gamepad
@@ -119,6 +123,24 @@ namespace qASIC.InputManagement.Devices
             }
 
             return 0f;
+        }
+
+        bool HasDeadZone(GamepadButton button)
+        {
+            switch (button)
+            {
+                case GamepadButton.LeftStickUp:
+                case GamepadButton.LeftStickRight:
+                case GamepadButton.LeftStickDown:
+                case GamepadButton.LeftStickLeft:
+                case GamepadButton.RightStickUp:
+                case GamepadButton.RightStickRight:
+                case GamepadButton.RightStickDown:
+                case GamepadButton.RightStickLeft:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         string GetKeyPath(GamepadButton button) =>

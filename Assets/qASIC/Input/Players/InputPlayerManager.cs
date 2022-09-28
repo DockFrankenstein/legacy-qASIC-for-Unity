@@ -8,8 +8,10 @@ namespace qASIC.InputManagement.Players
 {
     public static class InputPlayerManager
     {
-        public static List<InputPlayer> Players { get; private set; } = new List<InputPlayer>();
-        public static List<string> PlayerNames { get; private set; } = new List<string>();
+        private static string FIRST_PLAYER_DEFAULT_NAME = "InputPlayer.0";
+
+        public static List<InputPlayer> Players { get; private set; } = new List<InputPlayer>() { new InputPlayer(FIRST_PLAYER_DEFAULT_NAME), };
+        public static List<string> PlayerNames { get; private set; } = new List<string>( new string[] { FIRST_PLAYER_DEFAULT_NAME });
 
         public static event Action<InputPlayer> OnPlayerCreated;
         public static event Action<InputPlayer> OnPlayerRemoved;

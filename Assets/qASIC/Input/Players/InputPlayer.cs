@@ -58,6 +58,15 @@ namespace qASIC.InputManagement.Players
         #endregion
 
         #region Get Custom Item Input
+        public float GetFloatInput(string itemName) =>
+            GetInputValue<float>(MapData.DefaultGroupName, itemName);
+
+        public Vector2 GetVector2Input(string itemName) =>
+            GetInputValue<Vector2>(MapData.DefaultGroupName, itemName);
+
+        public Vector3 GetVector3Input(string itemName) =>
+            GetInputValue<Vector3>(MapData.DefaultGroupName, itemName);
+
         public float GetFloatInput(string groupName, string itemName) =>
             GetInputValue<float>(groupName, itemName);
 
@@ -68,7 +77,7 @@ namespace qASIC.InputManagement.Players
             GetInputValue<Vector3>(groupName, itemName);
         #endregion
 
-        #region Get Raw Input
+        #region Get Input Value
         /// <returns>Returns the unclamped value of an item</returns>
         public object GetInputValue(string groupName, string itemName)
         {
@@ -106,9 +115,9 @@ namespace qASIC.InputManagement.Players
         public InputEventType GetInputEvent(string itemName) =>
             GetInputEvent(MapData.DefaultGroupName, itemName);
 
-        public InputEventType GetInputEvent(string groupName, string bindingName)
+        public InputEventType GetInputEvent(string groupName, string itemName)
         {
-            if (!InputMapDataUtility.TryGetItem(MapData, groupName, bindingName, out InputMapItem item))
+            if (!InputMapDataUtility.TryGetItem(MapData, groupName, itemName, out InputMapItem item))
                 return InputEventType.None;
 
             InputEventType type = InputEventType.None;

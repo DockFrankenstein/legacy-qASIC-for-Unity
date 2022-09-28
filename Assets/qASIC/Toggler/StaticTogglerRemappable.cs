@@ -14,8 +14,8 @@ namespace qASIC.Toggling
 #if ENABLE_LEGACY_INPUT_MANAGER
         protected override void HandleInput()
         {
-            if (InputManager.GetInputDown(action))
-                KeyToggle();
+            //if (InputManager.GetInputDown(action))
+            //    KeyToggle();
         }
 #endif
     }
