@@ -27,6 +27,7 @@ namespace qASIC.InputManagement.Players
 
         public string ID { get; set; }
         public InputMapData MapData { get; set; }
+        public InputMap Map { get; set; }
 
         private List<IInputDevice> _devices = new List<IInputDevice>();
 
@@ -39,13 +40,13 @@ namespace qASIC.InputManagement.Players
 
         #region Get Input
         public bool GetInput(string itemName) =>
-            GetInput(MapData.DefaultGroupName, itemName);
+            GetInput(Map?.DefaultGroupName, itemName);
 
         public bool GetInputUp(string itemName) =>
-            GetInputUp(MapData.DefaultGroupName, itemName);
+            GetInputUp(Map?.DefaultGroupName, itemName);
 
         public bool GetInputDown(string itemName) =>
-            GetInputDown(MapData.DefaultGroupName, itemName);
+            GetInputDown(Map?.DefaultGroupName, itemName);
 
         public bool GetInput(string groupName, string itemName) =>
             GetInputEvent(groupName, itemName).HasFlag(InputEventType.Pressed);
@@ -59,13 +60,13 @@ namespace qASIC.InputManagement.Players
 
         #region Get Custom Item Input
         public float GetFloatInput(string itemName) =>
-            GetInputValue<float>(MapData.DefaultGroupName, itemName);
+            GetInputValue<float>(Map?.DefaultGroupName, itemName);
 
         public Vector2 GetVector2Input(string itemName) =>
-            GetInputValue<Vector2>(MapData.DefaultGroupName, itemName);
+            GetInputValue<Vector2>(Map?.DefaultGroupName, itemName);
 
         public Vector3 GetVector3Input(string itemName) =>
-            GetInputValue<Vector3>(MapData.DefaultGroupName, itemName);
+            GetInputValue<Vector3>(Map?.DefaultGroupName, itemName);
 
         public float GetFloatInput(string groupName, string itemName) =>
             GetInputValue<float>(groupName, itemName);
@@ -113,7 +114,7 @@ namespace qASIC.InputManagement.Players
         }
 
         public InputEventType GetInputEvent(string itemName) =>
-            GetInputEvent(MapData.DefaultGroupName, itemName);
+            GetInputEvent(Map?.DefaultGroupName, itemName);
 
         public InputEventType GetInputEvent(string groupName, string itemName)
         {

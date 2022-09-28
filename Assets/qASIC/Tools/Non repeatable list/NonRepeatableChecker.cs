@@ -8,9 +8,9 @@ namespace qASIC.Tools
         public static bool ContainsRepeatable<T>(List<T> list, bool logError = true)
         {
             var usedNames = GetNameEnumerable(list);
-            bool contains = usedNames.Count() != list.Distinct().Count();
+            bool contains = usedNames.Count() != usedNames.Distinct().Count();
 
-            if (!contains && logError)
+            if (contains && logError)
                 qDebug.LogError($"There are multiple items of the same name in a non repeatable list!");
 
             return contains;

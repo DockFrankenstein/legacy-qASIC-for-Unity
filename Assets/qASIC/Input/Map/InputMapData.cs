@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace qASIC.InputManagement.Map
 {
@@ -8,16 +9,37 @@ namespace qASIC.InputManagement.Map
     {
         public InputMapData() { }
 
-        public InputMapData(int defaultGroup, List<InputGroup> groups)
+        public InputMapData(List<InputGroup> groups)
         {
-            this.defaultGroup = defaultGroup;
             this.groups = groups;
         }
 
-        public int defaultGroup;
         public List<InputGroup> groups;
 
-        public string DefaultGroupName => (defaultGroup >= 0 && defaultGroup < groups.Count) ? groups[defaultGroup].groupName : string.Empty;
+        public void LoadFromData(InputMapData dataToLoad)
+        {
+            foreach (var groupToLoad in dataToLoad.groups)
+            {
+                int groupIndex = groups.IndexOf(groups
+                    .Where(x => x.guid == groupToLoad.guid)
+                    .FirstOrDefault());
+
+                if (groupIndex == -1)
+                    continue;
+
+                foreach (var itemToLoad in groupToLoad.items)
+                {
+                    int itemIndex = groups[groupIndex].items.IndexOf(groups[groupIndex].items
+                    .Where(x => x.guid == itemToLoad.guid)
+                    .FirstOrDefault());
+
+                    if (itemIndex == -1)
+                        continue;
+
+                    groups[groupIndex].items[itemIndex] = itemToLoad;
+                }
+            }
+        }
 
         public InputMapData Duplicate()
         {

@@ -19,7 +19,7 @@ namespace qASIC.InputManagement.Players
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
         static void Initialize()
         {
-            DeviceManager.OnDeviceConnected += (_, device) => CreatePlayerFromDevice(device);
+            DeviceManager.OnDeviceConnected += HandleDeviceConnected;
             DeviceManager.OnDeviceDisconnected += (_, device) =>
             {
                 foreach (InputPlayer player in Players)
@@ -28,6 +28,17 @@ namespace qASIC.InputManagement.Players
             };
 
             InputUpdateManager.OnUpdate += UpdatePlayers;
+        }
+
+        static void HandleDeviceConnected(int index, IInputDevice device)
+        {
+            if (Players.Count == 0)
+            {
+                CreatePlayerFromDevice(device);
+                return;
+            }
+
+            Players[0].CurrentDevices.Add(device);
         }
 
         public static void CreatePlayerFromDevice(IInputDevice device)
@@ -72,8 +83,11 @@ namespace qASIC.InputManagement.Players
         public static void RebuildPlayerMapData(InputMap map)
         {
             foreach (var player in Players)
-                if (player != null)
-                    player.MapData = map.GetData();
+            {
+                if (player == null) continue;
+                player.Map = map;
+                player.MapData = map.GetData();
+            }
         }
 
         #region Logic
@@ -124,13 +138,6 @@ namespace qASIC.InputManagement.Players
 
             player = null;
             return false;
-        }
-        #endregion
-
-        #region Saving
-        public static void Save(string path)
-        {
-            
         }
         #endregion
 

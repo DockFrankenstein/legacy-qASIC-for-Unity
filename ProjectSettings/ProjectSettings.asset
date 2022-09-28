@@ -577,7 +577,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLWasmStreaming: 0
   scriptingDefineSymbols:
-    1: qASIC_DEV
+    1: qASIC_DEV;qASIC_CABLEBOX_DISABLE_UIM_GAMEPADS
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}

@@ -24,6 +24,7 @@ namespace qASIC.InputManagement.Devices
 
         private static void Update()
         {
+#if !qASIC_CABLEBOX_DISABLE_UIM_GAMEPADS
             string[] joysticks = Input.GetJoystickNames();
 
             //Return if nothing changed
@@ -57,6 +58,7 @@ namespace qASIC.InputManagement.Devices
             }
 
             _joystickNames = joysticks;
+#endif
         }
 
         private static void AddGamepad(string name, int id)

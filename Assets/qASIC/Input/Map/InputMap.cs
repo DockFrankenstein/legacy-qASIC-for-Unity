@@ -52,7 +52,7 @@ namespace qASIC.InputManagement.Map
 
         public InputMapData GetData()
         {
-            InputMapData data = new InputMapData(defaultGroup, groups);
+            InputMapData data = new InputMapData(groups);
             data = data.Duplicate();
             return data;
         }

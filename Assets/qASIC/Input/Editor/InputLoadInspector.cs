@@ -29,11 +29,11 @@ namespace qASIC.InputManagement.Internal
             PropertyField(mapProperty);
             PropertyField(serializationTypeProperty);
 
-            if ((SerializationType)serializationTypeProperty.intValue == SerializationType.config)
-            {
+            //if ((SerializationType)serializationTypeProperty.intValue == SerializationType.config)
+            //{
                 Space();
                 PropertyField(pathProperty);
-            }
+            //}
 
             serializedObject.ApplyModifiedProperties();
         }

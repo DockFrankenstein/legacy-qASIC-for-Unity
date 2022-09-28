@@ -38,79 +38,15 @@ namespace qASIC.InputManagement
         #endregion
 
         #region Saving
-        private static string SavePath { get; set; }
+        public static string SavePath { get; set; }
         private static SerializationType SaveType { get; set; } = SerializationType.playerPrefs;
 
-        public static void SaveKeys(SerializationType saveType)
+        public static void SavePreferences()
         {
             if (DisableSaving) return;
-
-            SaveType = saveType;
-            SaveKeys();
-        }
-
-        public static void SaveKeys()
-        {
-            if (DisableSaving) return;
-
-            //foreach (var player in UserActions)
-            //{
-            //    foreach (var action in player.Value)
-            //    {
-
-            //    }
-            //}
-
-            switch (SaveType)
-            {
-                case SerializationType.config:
-                    if (string.IsNullOrWhiteSpace(SavePath))
-                    {
-                        qDebug.LogError("Cannot save user input preferences, path is empty!");
-                        return;
-                    }
-
-                    //ConfigController.SetSettingFromFile(SavePath, saveKey, key.ToString());
-                    break;
-                case SerializationType.playerPrefs:
-                    //PlayerPrefs.SetInt(saveKey, (int)key);
-                    break;
-                case SerializationType.none:
-                    break;
-                default:
-                    qDebug.LogError($"Serialization type '{SaveType}' is not supported by the input system!");
-                    break;
-            }
-
-            qDebug.Log("Successfully saved user input preferences.", "input");
-        }
-
-        public static void SaveKey(string groupName, string actionName, int keyIndex, KeyCode key)
-        {
-            if (DisableSaving) return;
-
-            string saveKey = KeyData.GenerateSaveKey(groupName, actionName, keyIndex);
-
-            switch (SaveType)
-            {
-                case SerializationType.config:
-                    if (string.IsNullOrWhiteSpace(SavePath))
-                    {
-                        qDebug.LogError("Cannot save key preference, path is empty!");
-                        return;
-                    }
-
-                    ConfigController.SetSettingFromFile(SavePath, saveKey, key.ToString());
-                    break;
-                case SerializationType.playerPrefs:
-                    PlayerPrefs.SetInt(saveKey, (int)key);
-                    break;
-                case SerializationType.none:
-                    break;
-                default:
-                    qDebug.LogError($"Serialization type '{SaveType}' is not supported by the input system!");
-                    break;
-            }
+            
+            FileManager.SaveFileJSON(SavePath, Players[0].MapData, true);
+            qDebug.Log("[Cablebox] Player preferences saved", "input");
         }
         #endregion
 
@@ -145,18 +81,20 @@ namespace qASIC.InputManagement
             qDebug.Log($"Initializing Cablebox Input System v{qASIC.Internal.Info.InputVersion}...", "init");
             LoadMap(settings.map);
 
-            switch (settings.serializationType)
-            {
-                case SerializationType.playerPrefs:
-                    LoadUserKeysPrefs();
-                    break;
-                case SerializationType.config:
-                    LoadUserKeysConfig(settings.filePath.GetFullPath());
-                    break;
-                default:
-                    qDebug.LogError($"Serialization type '{settings.serializationType}' is not supported by the input system!");
-                    break;
-            }
+            LoadPreferences();
+
+            //switch (settings.serializationType)
+            //{
+            //    case SerializationType.playerPrefs:
+            //        LoadUserKeysPrefs();
+            //        break;
+            //    case SerializationType.config:
+            //        LoadUserKeysConfig(settings.filePath.GetFullPath());
+            //        break;
+            //    default:
+            //        qDebug.LogError($"Serialization type '{settings.serializationType}' is not supported by the input system!");
+            //        break;
+            //}
 
             qDebug.Log($"Cablebox initialization complete!", "input");
         }
@@ -165,18 +103,16 @@ namespace qASIC.InputManagement
         {
             Map = map;
 
-            if (Map == null) return;
+            if (Map == null)
+            {
+                InputPlayerManager.RebuildPlayerMapData(null);
+                return;
+            }
 
             Map.CheckForRepeating();
 
             for (int i = 0; i < Map.groups.Count; i++)
                 Map.groups[i].CheckForRepeating();
-
-            //UserActions.Clear();
-
-            //foreach (InputGroup group in Map.Groups)
-            //    foreach (InputAction action in group.actions)
-            //        UserActions.Add(action, action.Duplicate());
 
             InputPlayerManager.RebuildPlayerMapData(map);
 
@@ -184,57 +120,14 @@ namespace qASIC.InputManagement
         }
 
         /// <summary>Loads user key preferences using Config Controller</summary>
-        public static void LoadUserKeysConfig(string path)
+        public static void LoadPreferences()
         {
-            if (DisableLoading) return;
-
-            SaveType = SerializationType.config;
-            SavePath = path;
-
-            if (!MapLoaded)
-            {
-                qDebug.LogError("Cannot load user keys, Map has not been loaded!");
+            InputMapData saveData = new InputMapData();
+            if (!FileManager.TryReadFileJSON(SavePath, saveData))
                 return;
-            }
 
-            if (!FileManager.TryLoadFileWriter(path, out string content)) return;
-
-            List<KeyData> keys = GenerateKeyList();
-
-            //for (int i = 0; i < keys.Count; i++)
-            //{
-            //    string key = keys[i].GetSaveKey();
-            //    if (!ConfigController.TryGettingSetting(content, key, out string setting)) continue;
-            //    if (!Enum.TryParse(setting, out KeyCode result)) continue;
-            //    ChangeInput(keys[i].group.groupName, keys[i], keys[i].index, result, false, false);
-            //}
-
-            qDebug.Log("Cablebox preferences successfully loaded!", "init");
-        }
-
-        /// <summary>Loads user key preferences using Player Prefs</summary>
-        public static void LoadUserKeysPrefs()
-        {
-            if (DisableLoading) return;
-
-            SaveType = SerializationType.playerPrefs;
-
-            if (!MapLoaded)
-            {
-                qDebug.LogError("Cannot load user keys, Map has not been loaded!");
-                return;
-            }
-
-            List<KeyData> keys = GenerateKeyList();
-
-            //for (int i = 0; i < keys.Count; i++)
-            //{
-            //    string key = keys[i].GetSaveKey();
-            //    if (!PlayerPrefs.HasKey(key)) continue;
-            //    ChangeInput(keys[i].group.groupName, keys[i].action.actionName, keys[i].index, (KeyCode)PlayerPrefs.GetInt(key), false, false);
-            //}
-
-            qDebug.Log("Cablebox preferences successfully loaded!", "init");
+            Players[0].MapData.LoadFromData(saveData);
+            qDebug.Log("[Cablebox] Player preferences have been loaded", "input");
         }
         #endregion
 
