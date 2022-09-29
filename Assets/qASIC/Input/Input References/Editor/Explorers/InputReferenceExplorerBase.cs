@@ -6,24 +6,40 @@ using qASIC.InputManagement.Map.Internal;
 using System.Collections.Generic;
 using qASIC.Tools;
 using System;
+using System.Linq;
 
 using static UnityEditor.EditorGUILayout;
 using Manager = qASIC.InputManagement.Internal.EditorInputManager;
+using UnityEngine.UIElements;
 
 namespace qASIC.InputManagement.Internal.ReferenceExplorers
 {
-    public abstract class InputReferenceExplorerBase : EditorWindow
+    public class InputBindingReferenceExplorer : EditorWindow
     {
-        public SerializedProperty Property { get; protected set; }
-
-        protected SerializedProperty groupProperty;
-        protected SerializedProperty useDefaultProperty;
         protected SerializedProperty contentProperty;
 
         protected InputMapGroupBar groupBar = new InputMapGroupBar();
 
-        Vector2 contentScroll;
-        protected int selectedItem = -1;
+        Vector2 _contentScroll;
+        int _selectedItem;
+
+        Action<string> OnItemSelected { get; set; }
+        string BindingGuid { get; set; }
+
+        [MenuItem("Window/qASIC/Input Reference Explorer")]
+        static void OpenWindowDebug()
+        {
+            GetEditorWindow().Show();
+        }
+
+        public static void OpenSelectWindow(string currentGuid, Action<string> onItemSelect)
+        {
+            InputBindingReferenceExplorer window = CreateInstance(typeof(InputBindingReferenceExplorer)) as InputBindingReferenceExplorer;
+            OpenWindow(window);
+            window.OnItemSelected = onItemSelect;
+            window.BindingGuid = currentGuid;
+            window.ResetEditor();
+        }    
 
         protected static void OpenWindow(EditorWindow window)
         {
@@ -32,49 +48,39 @@ namespace qASIC.InputManagement.Internal.ReferenceExplorers
             window.ShowAuxWindow();
         }
 
-        public static InputActionReferenceExplorerWindow GetEditorWindow() =>
-            (InputActionReferenceExplorerWindow)GetWindow(typeof(InputActionReferenceExplorerWindow), false, "Input Map Editor");
-
-        public abstract List<INonRepeatable> GetContentList(int groupIndex);
-        public abstract string ContentPropertyName { get; }
+        public static InputBindingReferenceExplorer GetEditorWindow() =>
+            (InputBindingReferenceExplorer)GetWindow(typeof(InputBindingReferenceExplorer), false, "Input Map Reference Explorer");
 
         protected void ResetEditor()
         {
-            groupProperty = Property.FindPropertyRelative("groupName");
-            useDefaultProperty = Property.FindPropertyRelative("useDefaultGroup");
-            contentProperty = Property.FindPropertyRelative(ContentPropertyName);
+            groupBar.ResetScroll();
+
+            groupBar.OnItemSelect += g =>
+            {
+                _selectedItem = -1;
+            };
 
             SelectCurrentProperties();
-
-            //groupBar.OnItemSelect += (object o) =>
-            //{
-            //    InputGroup group = o as InputGroup;
-            //    if (group.groupName == groupProperty.stringValue) return;
-            //    groupProperty.stringValue = group.groupName;
-            //    selectedItem = -1;
-            //};
         }
 
         void SelectCurrentProperties()
         {
-            if (!Manager.Map || Manager.Map.groups.Count == 0) return;
+            if (!Manager.Map|| Manager.Map.groups.Count == 0) return;
 
-            int currentGroup = NonRepeatableChecker.GetNameList(Manager.Map.groups).IndexOf(groupProperty.stringValue.ToLower());
-            if (currentGroup == -1) return;
+            int index = 0;
+            if (Manager.Map.ItemsDictionary.ContainsKey(BindingGuid))
+            {
+                var item = Manager.Map.ItemsDictionary[BindingGuid];
+                index = Manager.Map.groups.IndexOf(x => x.items.Contains(item));
+            }
 
-            groupBar.Select(currentGroup);
-            selectedItem = NonRepeatableChecker.GetNameList(GetContentList(currentGroup)).IndexOf(contentProperty.stringValue.ToLower());
+            groupBar.Select(index);
+
+            _selectedItem = groupBar.GetSelectedGroup()?.items.IndexOf(Manager.Map.ItemsDictionary[BindingGuid]) ?? -1;
         }
 
         public void OnGUI()
         {
-            if (Property == null)
-            {
-                Space();
-                LabelField("No property selected", EditorStyles.centeredGreyMiniLabel);
-                return;
-            }
-
             if (!Manager.Map)
             {
                 HelpBox("Input Map not loaded - Please select an Input Map in project settings.", MessageType.Warning);
@@ -85,42 +91,29 @@ namespace qASIC.InputManagement.Internal.ReferenceExplorers
 
             groupBar.SetMap(Manager.Map);
 
-            BeginHorizontal(EditorStyles.toolbar);
-            GUILayout.FlexibleSpace();
-            DrawDefaultGroupButton();
-            Space(8f, false);
-            EndHorizontal();
-
-            EditorGUI.BeginDisabledGroup(useDefaultProperty.boolValue);
             groupBar.OnGUI();
-            EditorGUI.EndDisabledGroup();
 
             DisplayContent();
 
             Space();
-            EditorGUI.BeginDisabledGroup(selectedItem == -1);
+            EditorGUI.BeginDisabledGroup(_selectedItem == -1);
             bool apply = GUILayout.Button("Apply");
             EditorGUI.EndDisabledGroup();
 
-            List<INonRepeatable> content = GetContentList(groupBar.SelectedGroupIndex);
-
             Event e = Event.current;
 
-            if (e.isKey && e.keyCode == KeyCode.Return && selectedItem != -1)
+            if (e.isKey && e.keyCode == KeyCode.Return && _selectedItem != -1)
                 apply = true;
 
-            KeyEvent(KeyCode.UpArrow, selectedItem -1 >= 0, () => { selectedItem--; });
-            KeyEvent(KeyCode.DownArrow, selectedItem + 1 < content.Count, () => { selectedItem++; });
+            KeyEvent(KeyCode.UpArrow, _selectedItem - 1 >= 0, () => { _selectedItem--; });
+            KeyEvent(KeyCode.DownArrow, _selectedItem + 1 < groupBar.GetSelectedGroup().items.Count(), () => { _selectedItem++; });
             KeyEvent(KeyCode.LeftArrow, true, groupBar.SelectPrevious);
             KeyEvent(KeyCode.RightArrow, true, groupBar.SelectNext);
 
             if (apply)
             {
-                if(groupBar.SelectedGroupIndex != -1)
-                    groupProperty.stringValue = Manager.Map.groups[groupBar.SelectedGroupIndex].groupName;
-
-                contentProperty.stringValue = content[selectedItem].ItemName;
-                Property.serializedObject.ApplyModifiedProperties();
+                BindingGuid = groupBar.GetSelectedGroup().items[_selectedItem].guid;
+                OnItemSelected?.Invoke(BindingGuid);
                 Close();
             }
         }
@@ -132,35 +125,47 @@ namespace qASIC.InputManagement.Internal.ReferenceExplorers
             Repaint();
         }
 
-        void DrawDefaultGroupButton()
-        {
-            GUIContent buttonContent = new GUIContent("Use default");
-            EditorStyles.toolbarButton.CalcMinMaxWidth(buttonContent, out float buttonWidth, out _);
-            bool value = GUILayout.Toggle(useDefaultProperty.boolValue, buttonContent, EditorStyles.toolbarButton, GUILayout.Width(buttonWidth));
-
-            if (value && !useDefaultProperty.boolValue)
-                groupBar.Select(Manager.Map.defaultGroup);
-
-            useDefaultProperty.boolValue = value;
-        }
-
         void DisplayContent()
         {
-            List<INonRepeatable> content = GetContentList(groupBar.SelectedGroupIndex);
+            List<InputMapItem> content = groupBar
+                .GetSelectedGroup()?.items ?? new List<InputMapItem>();
+            List<InputMapItem> bindings = content
+                .Where(x => x is InputBinding)
+                .ToList();
+            List<InputMapItem> items = content
+                .Where(x => !bindings.Contains(x))
+                .ToList();
 
-            GUIContent[] contentNames = new GUIContent[content.Count];
-            for (int i = 0; i < content.Count; i++)
-                contentNames[i] = new GUIContent(content[i].ItemName);
+            _contentScroll = BeginScrollView(_contentScroll);
 
-            contentScroll = BeginScrollView(contentScroll);
-            selectedItem = GUILayout.SelectionGrid(selectedItem, contentNames, 1, Styles.ActionStyle);
+            _selectedItem = DisplayList(bindings, "Bindings", _selectedItem);
+            _selectedItem = DisplayList(items, "Others", _selectedItem - bindings.Count) + bindings.Count;
 
             EndScrollView();
         }
 
+        int DisplayList(List<InputMapItem> list, string header, int index)
+        {
+            GUILayout.Label(header);
+            using (new GUILayout.VerticalScope(Styles.ItemsGroupStyle))
+            {
+                GUIContent[] names = list
+                    .Select(x => new GUIContent(x.ItemName))
+                    .ToArray();
+
+                int newIndex = GUILayout.SelectionGrid(index, names, 1, Styles.ListItemStyle);
+
+                if (newIndex != -1)
+                    index = newIndex;
+            }
+
+            return index;
+        }
+
         static class Styles
         {
-            public static GUIStyle ActionStyle => new GUIStyle(EditorStyles.toolbarButton) { alignment = TextAnchor.MiddleLeft, };
+            public static GUIStyle ListItemStyle => new GUIStyle(EditorStyles.toolbarButton) { alignment = TextAnchor.MiddleLeft, };
+            public static GUIStyle ItemsGroupStyle => new GUIStyle() { margin = new RectOffset(16, 0, 0, 0), };
         }
     }
 }

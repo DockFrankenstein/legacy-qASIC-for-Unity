@@ -17,6 +17,8 @@ namespace qASIC.InputManagement.Devices
 
         public float GetInputValue(string keyPath)
         {
+            Debug.Log($"{keyPath}: {_keys.TryGetValue(keyPath, out bool b)} {b}");
+
             if (!_keys.ContainsKey(keyPath))
                 return 0f;
 
@@ -65,6 +67,8 @@ namespace qASIC.InputManagement.Devices
             {
                 string keyName = GetKeyName(key);
                 bool keyValue = Input.GetKey(key);
+                if (key == KeyCode.BackQuote)
+                    Debug.Log(keyValue);
                 bool previousValue = _keys[keyName];
                 _keysUp[keyName] = previousValue && !keyValue;
                 _keysDown[keyName] = !previousValue && keyValue;

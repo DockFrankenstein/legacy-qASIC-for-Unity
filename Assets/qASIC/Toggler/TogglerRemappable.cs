@@ -6,16 +6,14 @@ namespace qASIC.Toggling
     [AddComponentMenu("qASIC/Togglers/Toggler Remappable")]
     public class TogglerRemappable : Toggler
 	{
-#if !ENABLE_LEGACY_INPUT_MANAGER
-        [Message("qASIC Input System only works with the Legacy Input System! Please, change the toggler or switch back to the old solution.", InspectorMessageIconType.error)]
-#endif
-        public InputActionReference action;
+        [Space]
+        public InputMapItemReference item;
 
 #if ENABLE_LEGACY_INPUT_MANAGER
         protected override void HandleInput()
         {
-            //if (InputManager.GetInputDown(action))
-            //    KeyToggle();
+            if (InputManager.GetInputDown(item.GetGroupName(), item.GetItemName()))
+                KeyToggle();
         }
 #endif
     }

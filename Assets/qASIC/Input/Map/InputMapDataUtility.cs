@@ -55,5 +55,34 @@ namespace qASIC.InputManagement.Map
             group = groups[0];
             return true;
         }
+
+        public static bool TryGetItemFromGuid(InputMapData mapData, string guid, out InputMapItem item)
+        {
+            item = null;
+
+            if (!mapData.ItemsDictionary.ContainsKey(guid))
+                return false;
+
+            item = mapData.ItemsDictionary[guid];
+
+            return true;
+        }
+
+        public static bool TryGetItemFromGuid<T>(InputMapData mapData, string guid, out InputMapItem<T> item)
+        {
+            item = null;
+
+            if (!mapData.ItemsDictionary.ContainsKey(guid))
+                return false;
+
+            InputMapItem dataItem = mapData.ItemsDictionary[guid];
+
+            if (!(dataItem is InputMapItem<T> castedItem))
+                return false;
+
+            item = castedItem;
+
+            return true;
+        }
     }
 }

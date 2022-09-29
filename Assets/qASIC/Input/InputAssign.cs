@@ -14,7 +14,7 @@ namespace qASIC.InputManagement.Menu
         [SerializeField] string optionLabelName;
 
         [Header("Options")]
-        [SerializeField] InputActionReference inputAction;
+        [SerializeField] InputMapItemReference inputAction;
         [SerializeField] int keyIndex;
 
         [Header("Events")]
@@ -66,7 +66,7 @@ namespace qASIC.InputManagement.Menu
 
         public void Assign(KeyCode key)
         {
-            InputManager.ChangeInput(inputAction.GroupName, inputAction.ActionName, keyIndex, key);
+            //InputManager.ChangeInput(inputAction.GroupName, inputAction.ActionName, keyIndex, key);
             isListening = false;
             OnAssign.Invoke();
         }

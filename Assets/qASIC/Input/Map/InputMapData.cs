@@ -16,6 +16,37 @@ namespace qASIC.InputManagement.Map
 
         public List<InputGroup> groups;
 
+        [System.NonSerialized] private Dictionary<string, InputGroup> _groupsDictionary = null;
+        public Dictionary<string, InputGroup> GroupsDictionary
+        {
+            get
+            {
+                if (_groupsDictionary == null)
+                {
+                    _groupsDictionary = groups
+                        .ToDictionary(x => x.guid);
+                }
+
+                return _groupsDictionary;
+            }
+        }
+
+        [System.NonSerialized] Dictionary<string, InputMapItem> _itemsDictionary = null;
+        public Dictionary<string, InputMapItem> ItemsDictionary
+        {
+            get
+            {
+                if (_itemsDictionary == null)
+                {
+                    _itemsDictionary = groups
+                        .SelectMany(x => x.items)
+                        .ToDictionary(x => x.guid);
+                }
+
+                return _itemsDictionary;
+            }
+        }
+
         public void LoadFromData(InputMapData dataToLoad)
         {
             foreach (var groupToLoad in dataToLoad.groups)
