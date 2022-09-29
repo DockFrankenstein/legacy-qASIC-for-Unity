@@ -12,7 +12,7 @@ using static UnityEditor.EditorGUIUtility;
 namespace qASIC.InputManagement.Internal
 {
     [CustomPropertyDrawer(typeof(InputMapItemReference))]
-    public class InputBindingReferenceDrawer : PropertyDrawer
+    public class InputMapItemReferenceDrawer : PropertyDrawer
     {
         const string ITEM_NOT_FOUND_TEXT = "ITEM NOT FOUND";
 
@@ -21,7 +21,7 @@ namespace qASIC.InputManagement.Internal
 
         public void OnChangePressed(SerializedProperty guidProperty)
         {
-            InputBindingReferenceExplorer.OpenSelectWindow(guidProperty.stringValue, guid =>
+            InputItemReferenceExplorer.OpenSelectWindow(guidProperty.stringValue, guid =>
             {
                 guidProperty.stringValue = guid;
                 guidProperty.serializedObject.ApplyModifiedProperties();

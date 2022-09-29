@@ -14,7 +14,7 @@ using UnityEngine.UIElements;
 
 namespace qASIC.InputManagement.Internal.ReferenceExplorers
 {
-    public class InputBindingReferenceExplorer : EditorWindow
+    public class InputItemReferenceExplorer : EditorWindow
     {
         protected SerializedProperty contentProperty;
 
@@ -34,7 +34,7 @@ namespace qASIC.InputManagement.Internal.ReferenceExplorers
 
         public static void OpenSelectWindow(string currentGuid, Action<string> onItemSelect)
         {
-            InputBindingReferenceExplorer window = CreateInstance(typeof(InputBindingReferenceExplorer)) as InputBindingReferenceExplorer;
+            InputItemReferenceExplorer window = CreateInstance(typeof(InputItemReferenceExplorer)) as InputItemReferenceExplorer;
             OpenWindow(window);
             window.OnItemSelected = onItemSelect;
             window.BindingGuid = currentGuid;
@@ -48,8 +48,8 @@ namespace qASIC.InputManagement.Internal.ReferenceExplorers
             window.ShowAuxWindow();
         }
 
-        public static InputBindingReferenceExplorer GetEditorWindow() =>
-            (InputBindingReferenceExplorer)GetWindow(typeof(InputBindingReferenceExplorer), false, "Input Map Reference Explorer");
+        public static InputItemReferenceExplorer GetEditorWindow() =>
+            (InputItemReferenceExplorer)GetWindow(typeof(InputItemReferenceExplorer), false, "Input Map Reference Explorer");
 
         protected void ResetEditor()
         {
