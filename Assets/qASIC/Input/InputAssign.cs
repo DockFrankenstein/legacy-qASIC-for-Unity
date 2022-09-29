@@ -56,13 +56,8 @@ namespace qASIC.InputManagement.Menu
             {
                 string key = device.GetAnyKeyDown();
                 if (string.IsNullOrEmpty(key)) continue;
-                string readRootPath = key;
+                if (key.StartsWith(keyRootPath)) continue;
 
-                int index = readRootPath.LastIndexOf("/");
-                if (index >= 0)
-                    readRootPath = readRootPath.Substring(0, index);
-
-                if (readRootPath != keyRootPath) continue;
                 Assign(key);
                 break;
             }
