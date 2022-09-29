@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using qASIC.InputManagement.UIM;
 using qASIC.ProjectSettings;
 using UnityEngine;
+using System.Linq;
 
 namespace qASIC.InputManagement.Devices
 {
@@ -64,6 +65,14 @@ namespace qASIC.InputManagement.Devices
                 type = InputEventType.Down;
 
             return type;
+        }
+
+        public string GetAnyKeyDown()
+        {
+            var downButtons = _buttonsDown
+                .Where(x => x.Value != 0);
+
+            return downButtons.FirstOrDefault().Key;
         }
 
         public void Initialize()

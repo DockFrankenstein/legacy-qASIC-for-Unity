@@ -23,10 +23,6 @@ namespace qASIC.Tools
             InputAssign assign = canvas.gameObject.AddComponent<InputAssign>();
             //assign.keyName = newKeyName;
 
-            InputListener listener = canvas.gameObject.AddComponent<InputListener>();
-            listener.StartListening(true, true);
-            listener.OnInputRecived.AddListener(assign.Assign);
-
             //back color
             Image backColor = CreateImageObject(canvas.transform, Color.black, "Color");
 

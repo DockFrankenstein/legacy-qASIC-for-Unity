@@ -9,6 +9,8 @@ namespace qASIC.InputManagement
     {
         [SerializeField] string guid;
 
+        public string Guid => guid;
+
         public InputMapItemReference() { }
 
         public InputMapItemReference(string guid)

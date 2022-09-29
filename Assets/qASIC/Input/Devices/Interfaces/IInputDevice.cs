@@ -8,8 +8,8 @@ namespace qASIC.InputManagement.Devices
         Type KeyType { get; }
 
         float GetInputValue(string button);
-
         InputEventType GetInputEvent(string keyPath);
+        string GetAnyKeyDown();
 
         void Initialize();
         void Update();

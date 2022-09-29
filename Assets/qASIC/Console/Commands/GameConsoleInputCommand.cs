@@ -10,7 +10,7 @@ namespace qASIC.Console.Commands
         public override bool Active { get => GameConsoleController.GetConfig().changeInputCommand; }
         public override string CommandName { get; } = "changeinput";
         public override string Description { get; } = "changes input preference";
-        public override string Help { get; } = "Use changeinput <group> <action> <index> <key>; changeinput <group> <action> <key>; changeinput <action> <key>";
+        public override string Help { get; } = "Use changeinput <group> <item> <index> <key>; changeinput <group> <item> <key>; changeinput <item> <key>";
 
         public override void Run(List<string> args)
         {
@@ -22,11 +22,7 @@ namespace qASIC.Console.Commands
                 return;
             }
 
-            if (!Enum.TryParse(args[args.Count - 1], out KeyCode key))
-            {
-                ParseException(args[args.Count - 1], nameof(KeyCode));
-                return;
-            }
+            string key = args[args.Count - 1];
 
             int index = 0;
 
@@ -38,6 +34,7 @@ namespace qASIC.Console.Commands
                 case 4:
                     //User isn't parsing key index
                     if (!int.TryParse(args[2], out int keyIndex)) break;
+
                     InputManager.ChangeInput(args[1], keyIndex, key);
                     return;
                 case 5:

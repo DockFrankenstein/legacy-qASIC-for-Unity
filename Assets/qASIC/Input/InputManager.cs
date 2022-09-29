@@ -5,6 +5,7 @@ using qASIC.FileManagement;
 using qASIC.InputManagement.Map;
 using qASIC.ProjectSettings;
 using qASIC.InputManagement.Players;
+using UnityEditor.Graphs;
 
 namespace qASIC.InputManagement
 {
@@ -76,10 +77,12 @@ namespace qASIC.InputManagement
             LoadStartingArguments();
             InputProjectSettings settings = InputProjectSettings.Instance;
 
+            SavePath = settings.filePath.GetFullPath();
             if (settings.map == null) return;
 
             qDebug.Log($"Initializing Cablebox Input System v{qASIC.Internal.Info.InputVersion}...", "init");
             LoadMap(settings.map);
+
 
             LoadPreferences();
 
@@ -182,23 +185,11 @@ namespace qASIC.InputManagement
         #endregion
 
         #region Remapping
-        public static void ChangeInput(string actionName, int index, KeyCode newKey, bool save = true, bool log = true) =>
-            ChangeInput(MapLoaded ? Map.DefaultGroupName : string.Empty, actionName, index, newKey, save, log);
+        public static void ChangeInput(string itemName, int index, string key, bool save = true, bool log = true) =>
+            Players[0].ChangeInput(itemName, index, key, save, log);
 
-        public static void ChangeInput(string groupName, string actionName, int index, KeyCode newKey, bool save = true, bool log = true)
-        {
-            //if (!MapLoaded) return;
-            //if (!TryGetInputAction(groupName, actionName, out InputAction action, true)) return;
-            //if (!action.TryGetKey(index, out _, true)) return;
-
-            ////UserActions[action].keys[index] = newKey;
-
-            //if (save)
-            //    SaveKey(groupName, actionName, index, newKey);
-
-            //if (log)
-            //    qDebug.Log($"Changed key {action.actionName} to {newKey}", "input");
-        }
+        public static void ChangeInput(string groupName, string itemName, int index, string key, bool save = true, bool log = true) =>
+            Players[0].ChangeInput(groupName, itemName, index, key, save, log);
         #endregion
 
         #region Get Input

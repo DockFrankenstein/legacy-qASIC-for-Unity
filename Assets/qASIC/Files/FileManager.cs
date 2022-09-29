@@ -231,14 +231,15 @@ namespace qASIC.FileManagement
         /// <param name="preattyPrint">If the file should be saved for readability or minimum size</param>
         public static void SaveFileJSON(string path, object data, bool preattyPrint = false)
         {
-            try
-            {
+            //try
+            //{
                 SaveJSON(path, data, preattyPrint);
-            }
-            catch (Exception e)
-            {
-                qDebug.LogError($"Couldn't save file: {e}");
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    qDebug.LogError($"Couldn't save file: {e}");
+            //    throw e;
+            //}
         }
 
         /// <param name="preattyPrint">If the file should be saved for readability or minimum size</param>

@@ -3,6 +3,9 @@ using UnityEngine.Events;
 using TMPro;
 using UnityEngine.UI;
 using qASIC.InputManagement.Devices;
+using qASIC.InputManagement.Map;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace qASIC.InputManagement.Menu
 {
@@ -12,10 +15,13 @@ namespace qASIC.InputManagement.Menu
         [Header("Updating name")]
         [SerializeField] TextMeshProUGUI nameText;
         [SerializeField] string optionLabelName;
+        [SerializeField] string listeningForKeyText = "Listening for key";
 
         [Header("Options")]
+        [SerializeField] int playerIndex;
         [SerializeField] InputMapItemReference inputAction;
         [SerializeField] int keyIndex;
+        [SerializeField] string keyRootPath = "key_keyboard";
 
         [Header("Events")]
         [SerializeField] UnityEvent OnStartListening;
@@ -23,17 +29,20 @@ namespace qASIC.InputManagement.Menu
 
         bool isListening = false;
 
-        private void Awake()
+        private void Reset()
         {
             Button button = GetComponent<Button>();
-            if (button == null) return;
-            button.onClick.AddListener(StartListening);
+
+            if (button != null)
+                UnityEditor.Events.UnityEventTools.AddPersistentListener(button.onClick, StartListening);
+
+            nameText = GetComponentInChildren<TextMeshProUGUI>();
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             if (nameText != null)
-                nameText.text = GetLabel();
+                nameText.text = isListening ? listeningForKeyText : GetLabel();
 
             if (isListening)
                 ListenForKey();
@@ -41,20 +50,31 @@ namespace qASIC.InputManagement.Menu
 
         private void ListenForKey()
         {
-            if (!Input.anyKeyDown) return;
-            for (int i = 0; i < KeyboardManager.AllKeyCodes.Length; i++)
+            List<IInputDevice> devices = InputManager.Players[playerIndex].CurrentDevices;
+
+            foreach (var device in devices)
             {
-                if (!Input.GetKeyDown(KeyboardManager.AllKeyCodes[i])) continue;
-                Assign(KeyboardManager.AllKeyCodes[i]);
-                return;
+                string key = device.GetAnyKeyDown();
+                if (string.IsNullOrEmpty(key)) continue;
+                string readRootPath = key;
+
+                int index = readRootPath.LastIndexOf("/");
+                if (index >= 0)
+                    readRootPath = readRootPath.Substring(0, index);
+
+                if (readRootPath != keyRootPath) continue;
+                Assign(key);
+                break;
             }
         }
 
         public string GetLabel()
         {
             string currentKey = "UNKNOWN";
-            //if (InputManager.TryGetKeyCode(inputAction.GroupName, inputAction.ActionName, keyIndex, out KeyCode key, false))
-            //    currentKey = key.ToString();
+            if (InputManager.Players[playerIndex].MapData.ItemsDictionary.TryGetValue(inputAction.Guid, out InputMapItem item) &&
+                item is InputBinding binding)
+                currentKey = binding.keys[keyIndex].Split('/').Last();
+
             return $"{optionLabelName}{currentKey}";
         }
 
@@ -64,9 +84,9 @@ namespace qASIC.InputManagement.Menu
             OnStartListening.Invoke();
         }
 
-        public void Assign(KeyCode key)
+        public void Assign(string key)
         {
-            //InputManager.ChangeInput(inputAction.GroupName, inputAction.ActionName, keyIndex, key);
+            InputManager.ChangeInput(inputAction.GetGroupName(), inputAction.GetItemName(), keyIndex, key);
             isListening = false;
             OnAssign.Invoke();
         }

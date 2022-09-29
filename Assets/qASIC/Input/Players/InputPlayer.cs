@@ -2,6 +2,7 @@
 using qASIC.InputManagement.Map;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace qASIC.InputManagement.Players
 {
@@ -127,6 +128,40 @@ namespace qASIC.InputManagement.Players
                 type |= item.GetInputEvent(keyPath => device.GetInputEvent(keyPath));
 
             return type;
+        }
+        #endregion
+
+        #region Remapping
+        public void ChangeInput(string itemName, int index, string key, bool save = true, bool log = true) =>
+            ChangeInput(Map?.DefaultGroupName, itemName, index, key, save, log);
+
+        public void ChangeInput(string groupName, string itemName, int index, string key, bool save = true, bool log = true)
+        {
+            if (!InputMapDataUtility.TryGetItem(MapData, groupName, itemName, out InputMapItem item))
+            {
+                qDebug.LogError($"[Input Player] Couldn't remap item {groupName}/{itemName}:{index}, item doesn't exist!");
+                return;
+            }
+
+            if (!(item is InputBinding binding))
+            {
+                qDebug.LogError($"[Input Player] Couldn't remap item {groupName}/{itemName}:{index}, item is not a binding!");
+                return;
+            }
+
+            if (index < 0 || binding.keys.Count <= index)
+            {
+                qDebug.LogError($"[Input Player] Couldn't remap item {groupName}/{itemName}:{index}, key index is out of range!");
+                return;
+            }
+
+            binding.keys[index] = key;
+
+            if (log)
+                qDebug.Log($"[Input Player] Changed key {groupName}/{itemName}:{index} to '{key}'", "input");
+
+            if (save)
+                InputManager.SavePreferences();
         }
         #endregion
     }
