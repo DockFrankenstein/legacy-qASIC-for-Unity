@@ -2,6 +2,7 @@
 
 namespace qASIC.InputManagement.Update
 {
+    [AddComponentMenu("")]
     internal class InputBehaviorUpdate : MonoBehaviour
     {
         private void Update()

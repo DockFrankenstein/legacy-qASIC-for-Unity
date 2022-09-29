@@ -1,10 +1,17 @@
 ﻿using System;
+using UnityEngine;
 
-namespace qASIC.InputManagement
+namespace qASIC.InputManagement.Update
 {
     public static class InputUpdateManager
     {
         public static event Action OnUpdate;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void Initialize()
+        {
+            new GameObject("[qASIC] Input Update", typeof(InputBehaviorUpdate), typeof(AddToDontDestroy));
+        }
 
         public static void Update()
         {
