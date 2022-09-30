@@ -24,7 +24,7 @@ namespace qASIC.InputManagement.Map
                 if (_groupsDictionary == null)
                 {
                     _groupsDictionary = groups
-                        .ToDictionary(x => x.guid);
+                        .ToDictionary(x => x.Guid);
                 }
 
                 return _groupsDictionary;
@@ -40,7 +40,7 @@ namespace qASIC.InputManagement.Map
                 {
                     _itemsDictionary = groups
                         .SelectMany(x => x.items)
-                        .ToDictionary(x => x.guid);
+                        .ToDictionary(x => x.Guid);
                 }
 
                 return _itemsDictionary;
@@ -52,7 +52,7 @@ namespace qASIC.InputManagement.Map
             foreach (var groupToLoad in dataToLoad.groups)
             {
                 int groupIndex = groups.IndexOf(groups
-                    .Where(x => x.guid == groupToLoad.guid)
+                    .Where(x => x.Guid == groupToLoad.Guid)
                     .FirstOrDefault());
 
                 if (groupIndex == -1)
@@ -61,7 +61,7 @@ namespace qASIC.InputManagement.Map
                 foreach (var itemToLoad in groupToLoad.items)
                 {
                     int itemIndex = groups[groupIndex].items.IndexOf(groups[groupIndex].items
-                    .Where(x => x.guid == itemToLoad.guid)
+                    .Where(x => x.Guid == itemToLoad.Guid)
                     .FirstOrDefault());
 
                     if (itemIndex == -1)

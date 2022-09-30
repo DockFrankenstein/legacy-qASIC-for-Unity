@@ -23,14 +23,10 @@ namespace qASIC.InputManagement.Map.Internal.Inspectors
             _axis = context.item as Input1DAxis;
         }
 
-        public override void OnGUI(OnGUIContext context)
+        protected override void OnGUI(OnGUIContext context)
         {
-            _axis.itemName = EditorGUILayout.DelayedTextField("Name", _axis.itemName);
-
             _axis.positiveAction = EditorGUILayout.DelayedTextField("Positive", _axis.positiveAction);
             _axis.negativeAction = EditorGUILayout.DelayedTextField("Negative", _axis.negativeAction);
-
-            _delete = DeleteButton(_delete, context);
         }
 
         protected override void HandleDeletion(OnGUIContext context)
@@ -39,7 +35,7 @@ namespace qASIC.InputManagement.Map.Internal.Inspectors
                 .Where(x => x.items.Contains(context.item))
                 .First()
                 .items
-                .Remove(context.item);
+                .Remove(context.item as InputMapItem);
         }
     }
 }

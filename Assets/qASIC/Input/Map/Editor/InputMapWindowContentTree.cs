@@ -228,7 +228,7 @@ namespace qASIC.InputManagement.Map.Internal
 		void AddItem<T>() where T : InputMapItem
 		{
 			InputMapItem item = (InputMapItem)Activator.CreateInstance(typeof(T), new object[] { });
-			item.itemName = WindowUtility.GenerateUniqueName("New item", s => NonRepeatableChecker.ContainsKey(Group.items, s));
+			item.ItemName = WindowUtility.GenerateUniqueName("New item", s => NonRepeatableChecker.ContainsKey(Group.items, s));
             AddItem(item);
         }
 

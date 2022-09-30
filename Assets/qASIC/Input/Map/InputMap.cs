@@ -19,7 +19,7 @@ namespace qASIC.InputManagement.Map
                 if (_groupsDictionary == null)
                 {
                     _groupsDictionary = groups
-                        .ToDictionary(x => x.guid);
+                        .ToDictionary(x => x.Guid);
                 }
 
                 return _groupsDictionary;
@@ -35,7 +35,7 @@ namespace qASIC.InputManagement.Map
                 {
                     _itemsDictionary = groups
                         .SelectMany(x => x.items)
-                        .ToDictionary(x => x.guid);
+                        .ToDictionary(x => x.Guid);
                 }
 
                 return _itemsDictionary;
@@ -62,7 +62,7 @@ namespace qASIC.InputManagement.Map
             get
             {
                 if (defaultGroup >= 0 && defaultGroup < groups.Count)
-                    return groups[defaultGroup].groupName;
+                    return groups[defaultGroup].ItemName;
                 return string.Empty;
             }
         }
@@ -89,7 +89,7 @@ namespace qASIC.InputManagement.Map
 
         public string[] GetGroupNames() =>
             groups
-            .Select(x => x.groupName)
+            .Select(x => x.ItemName)
             .ToArray();
 
         public bool GroupExists(string groupName) =>

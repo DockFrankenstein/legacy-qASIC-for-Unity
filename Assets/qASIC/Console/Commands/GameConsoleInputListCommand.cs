@@ -30,12 +30,12 @@ namespace qASIC.Console.Commands
 
             foreach (InputGroup group in map.groups)
             {
-                TextTreeItem groupItem = new TextTreeItem(group.groupName);
+                TextTreeItem groupItem = new TextTreeItem(group.ItemName);
                 TextTreeItem actionsListItem = new TextTreeItem("Actions");
                 TextTreeItem axexListItem = new TextTreeItem("Axes");
 
                 foreach (InputMapItem item in group.items)
-                    actionsListItem.Add(item.itemName);
+                    actionsListItem.Add(item.ItemName);
 
                 groupItem.Add(actionsListItem);
                 groupItem.Add(axexListItem);

@@ -141,7 +141,7 @@ namespace qASIC.InputManagement
             public InputBinding item;
             public int index;
 
-            public string GroupName { get => group.groupName; }
+            public string GroupName { get => group.ItemName; }
             public string ActionName { get => string.Empty/*action.actionName*/; }
 
             /// <returns>Returns key used for saving and loading using player prefs</returns>

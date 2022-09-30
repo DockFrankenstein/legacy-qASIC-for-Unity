@@ -5,12 +5,12 @@ namespace qASIC.InputManagement.Map
     public static class InputMapDataUtility
     {
         public static bool CompareNames(string a, string b) =>
-    a.ToLower() == b.ToLower();
+            a.ToLower() == b.ToLower();
 
-        public static InputMapItem GetItem(InputMapData mapData, string groupName, string actionName) =>
-            TryGetItem(mapData, groupName, actionName, out InputMapItem action) ? action : null;
+        public static InputMapItem GetItem(InputMapData mapData, string groupName, string itemName) =>
+            TryGetItem(mapData, groupName, itemName, out InputMapItem item) ? item : null;
 
-        public static bool TryGetItem(InputMapData mapData, string groupName, string actionName, out InputMapItem item)
+        public static bool TryGetItem(InputMapData mapData, string groupName, string itemName, out InputMapItem item)
         {
             item = null;
 
@@ -18,7 +18,7 @@ namespace qASIC.InputManagement.Map
                 return false;
 
             InputMapItem[] items = group.items
-                .Where(x => CompareNames(x.itemName, actionName))
+                .Where(x => CompareNames(x.ItemName, itemName))
                 .ToArray();
 
             if (items.Length != 1)
@@ -28,11 +28,11 @@ namespace qASIC.InputManagement.Map
             return true;
         }
 
-        public static bool TryGetItem<T>(InputMapData mapData, string groupName, string actionName, out InputMapItem<T> item)
+        public static bool TryGetItem<T>(InputMapData mapData, string groupName, string itemName, out InputMapItem<T> item)
         {
             item = null;
 
-            if (!TryGetItem(mapData, groupName, actionName, out InputMapItem mapItem))
+            if (!TryGetItem(mapData, groupName, itemName, out InputMapItem mapItem))
                 return false;
 
             if (mapItem.ValueType != typeof(T))
@@ -46,7 +46,7 @@ namespace qASIC.InputManagement.Map
         {
             group = null;
             InputGroup[] groups = mapData.groups
-                .Where(x => CompareNames(x.groupName, groupName))
+                .Where(x => CompareNames(x.ItemName, groupName))
                 .ToArray();
 
             if (groups.Length != 1)

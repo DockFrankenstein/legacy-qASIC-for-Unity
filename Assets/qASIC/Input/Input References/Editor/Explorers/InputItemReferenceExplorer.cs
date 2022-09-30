@@ -112,7 +112,7 @@ namespace qASIC.InputManagement.Internal.ReferenceExplorers
 
             if (apply)
             {
-                BindingGuid = groupBar.GetSelectedGroup().items[_selectedItem].guid;
+                BindingGuid = groupBar.GetSelectedGroup().items[_selectedItem].Guid;
                 OnItemSelected?.Invoke(BindingGuid);
                 Close();
             }

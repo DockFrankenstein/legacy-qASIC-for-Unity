@@ -29,107 +29,12 @@ namespace qASIC.InputManagement.Map.Internal
             id = Guid.GetHashCode();
         }
 
-        public InputMapContentMapItem(InputMapItem item) : base(item.guid.GetHashCode())
+        public InputMapContentMapItem(InputMapItem item) : base(item.Guid.GetHashCode())
         {
             Item = item;
-            Guid = item.guid;
+            Guid = item.Guid;
             displayName = item?.ItemName ?? string.Empty;
         }
     }
-
-    //public abstract class InputMapContentEditableItemBase : InputMapContentItemBase
-    //{
-    //    public virtual bool Deletable => true;
-    //    public override bool CanDrag => true;
-
-    //    public abstract void Rename(string newName);
-    //    public abstract void Delete(InputGroup group);
-    //    public abstract bool CompareContent<t>(t item);
-    //}
-
-    //public class InputMapContentActionTreeItem : InputMapContentEditableItemBase
-    //{
-    //    public InputMapContentActionTreeItem(InputBinding binding, int id) : base()
-    //    {
-    //        Debug.Assert(binding != null, "Binding cannot be null");
-    //        Binding = binding;
-    //        displayName = Binding.itemName;
-    //        this.id = id;
-    //        depth = -1;
-    //    }
-
-    //    /// <summary>Renames item - you have to check if it's unique first</summary>
-    //    public override void Rename(string newName)
-    //    {
-    //        Binding.itemName = newName;
-    //        displayName = newName;
-    //    }
-
-    //    public override void Delete(InputGroup group) =>
-    //        group.items.Remove(Binding);
-
-    //    public override bool CompareContent<t>(t item) =>
-    //        item is InputBinding a && Binding == a;
-    //}
-
-    //public class InputMapContentOtherTreeItem : InputMapContentEditableItemBase
-    //{
-    //    public InputMapItem Item { get; }
-
-    //    //public override Texture GetIcon(InputGroup group) =>
-    //    //    HasErrors(group) ? qGUIEditorUtility.ErrorIcon : null;
-
-    //    //public override string GetTooltip(InputGroup group) =>
-    //    //    HasErrors(group) ? "Axis contains incorrect action names" : string.Empty;
-
-    //    public InputMapContentOtherTreeItem(InputMapItem item, int id)
-    //    {
-    //        Debug.Assert(item != null, "Axis cannot be null");
-    //        Item = item;
-    //        displayName = Item.itemName;
-    //        this.id = id;
-    //        depth = -1;
-    //    }
-
-    //    public override void Rename(string newName)
-    //    {
-    //        Item.itemName = newName;
-    //        displayName = newName;
-    //    }
-
-    //    public override void Delete(InputGroup group) =>
-    //        group.items.Remove(Item);
-
-    //    public override bool CompareContent<t>(t item) =>
-    //        item is Input1DAxis a && Item == a;
-    //}
-
-    ////This is just for recognition
-    //public abstract class InputMapContentHeaderItemBase : InputMapContentItemBase
-    //{
-    //    public InputMapContentHeaderItemBase() : base() { }
-    //    public InputMapContentHeaderItemBase(int id) : base(id) { }
-    //    public InputMapContentHeaderItemBase(int id, int depth) : base(id, depth) { }
-    //    public InputMapContentHeaderItemBase(int id, int depth, string displayName) : base(id, depth, displayName) { }
-    //    public InputMapContentHeaderItemBase(int id, int depth, string displayName, Color barColor) : base(id, depth, displayName, barColor) { }
-    //}
-
-    //public class InputMapTreeActionHeaderItem : InputMapContentHeaderItemBase
-    //{
-    //    public InputMapTreeActionHeaderItem() : base() { }
-    //    public InputMapTreeActionHeaderItem(int id) : base(id) { }
-    //    public InputMapTreeActionHeaderItem(int id, int depth) : base(id, depth) { }
-    //    public InputMapTreeActionHeaderItem(int id, int depth, string displayName) : base(id, depth, displayName) { }
-    //    public InputMapTreeActionHeaderItem(int id, int depth, string displayName, Color barColor) : base(id, depth, displayName, barColor) { }
-    //}
-
-    //public class InputMapTreeAxisHeaderItem : InputMapContentHeaderItemBase
-    //{
-    //    public InputMapTreeAxisHeaderItem() : base() { }
-    //    public InputMapTreeAxisHeaderItem(int id) : base(id) { }
-    //    public InputMapTreeAxisHeaderItem(int id, int depth) : base(id, depth) { }
-    //    public InputMapTreeAxisHeaderItem(int id, int depth, string displayName) : base(id, depth, displayName) { }
-    //    public InputMapTreeAxisHeaderItem(int id, int depth, string displayName, Color barColor) : base(id, depth, displayName, barColor) { }
-    //}
 }
 #endif

@@ -86,10 +86,10 @@ namespace qASIC.InputManagement.Map.Internal
             for (int i = scrollIndex; i < Map.groups.Count; i++)
             {
                 //calc width
-                EditorStyles.toolbarButton.CalcMinMaxWidth(new GUIContent(Map.groups[i].groupName), out float width, out _);
+                EditorStyles.toolbarButton.CalcMinMaxWidth(new GUIContent(Map.groups[i].ItemName), out float width, out _);
 
                 bool isSelected = SelectedGroupIndex == i;
-                bool pressed = Toggle(isSelected, Map.groups[i].groupName, EditorStyles.toolbarButton, Width(width)) != isSelected;
+                bool pressed = Toggle(isSelected, Map.groups[i].ItemName, EditorStyles.toolbarButton, Width(width)) != isSelected;
 
                 Event e = Event.current;
                 Rect buttonRect = GUILayoutUtility.GetLastRect();

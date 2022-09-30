@@ -6,7 +6,7 @@ using qASIC.InputManagement.Devices;
 namespace qASIC.InputManagement.Map
 {
     [Serializable] 
-    public abstract class InputMapItem : INonRepeatable, ICloneable
+    public abstract class InputMapItem : INonRepeatable, ICloneable, IMapItem
     {
         public InputMapItem() { }
 
@@ -15,16 +15,14 @@ namespace qASIC.InputManagement.Map
             itemName = name;
         }
 
-        public string itemName;
-        public string guid = Guid.NewGuid().ToString();
+        [SerializeField] string itemName;
+        [SerializeField] string guid = System.Guid.NewGuid().ToString();
 
         [NonSerialized] protected InputMap map;
 
-        public string ItemName 
-        { 
-            get => itemName;
-            set => itemName = value;
-        }
+        public string ItemName { get => itemName; set => itemName = value; }
+        public string Guid { get => guid; set => guid = value; }
+
 
         public abstract Type ValueType { get; }
 

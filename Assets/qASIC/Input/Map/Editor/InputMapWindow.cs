@@ -27,9 +27,9 @@ namespace qASIC.InputManagement.Map.Internal
             }
         }
 
-        InputMapWindowToolbar toolbar = new InputMapWindowToolbar();
-        InputMapWindowGroupBar groupBar = new InputMapWindowGroupBar();
-        InputMapWindowInspector inspector = new InputMapWindowInspector();
+        InputMapWindowToolbar _toolbar = new InputMapWindowToolbar();
+        InputMapWindowGroupBar _groupBar = new InputMapWindowGroupBar();
+        InputMapWindowInspector _inspector = new InputMapWindowInspector();
 
         InputMapWindowContentTree contentTree;
         TreeViewState contentTreeState;
@@ -225,7 +225,7 @@ namespace qASIC.InputManagement.Map.Internal
             var window = GetEditorWindow();
             if (window.Map != newMap)
             {
-                window.groupBar.SelectedGroupIndex = 0;
+                window._groupBar.SelectedGroupIndex = 0;
                 window.Map = newMap;
                 EditorPrefs.SetString(_MapPrefsKey, AssetDatabase.GetAssetPath(window.Map));
             }
@@ -271,7 +271,7 @@ namespace qASIC.InputManagement.Map.Internal
             InputMapWindow window = GetEditorWindow();
             if (window == null) return;
 
-            window.Map.defaultGroup = window.groupBar.SelectedGroupIndex;
+            window.Map.defaultGroup = window._groupBar.SelectedGroupIndex;
             window.SetMapDirty(); 
         }
         #endregion
@@ -322,22 +322,22 @@ namespace qASIC.InputManagement.Map.Internal
             SetWindowTitle();
 
             //Displayers
-            toolbar = new InputMapWindowToolbar();
-            groupBar = new InputMapWindowGroupBar();
-            inspector = new InputMapWindowInspector();
-            toolbar.window = this;
-            groupBar.window = this;
-            inspector.window = this;
+            _toolbar = new InputMapWindowToolbar();
+            _groupBar = new InputMapWindowGroupBar();
+            _inspector = new InputMapWindowInspector();
+            _toolbar.window = this;
+            _groupBar.window = this;
+            _inspector.window = this;
 
             //Trees
             InitTree();
 
             //Assigning maps
-            toolbar.map = Map;
-            inspector.map = Map;
+            _toolbar.map = Map;
+            _inspector.map = Map;
 
             //Events
-            groupBar.OnItemSelect += (g) =>
+            _groupBar.OnItemSelect += (g) =>
             {
                 if (contentTree != null)
                 {
@@ -345,12 +345,12 @@ namespace qASIC.InputManagement.Map.Internal
                     contentTree.Reload();
                 }
 
-                inspector.SetObject(null);
+                _inspector.SetObject(g);
             };
 
             contentTree.OnItemSelect += (o) =>
             {
-                inspector.SetObject(o);
+                _inspector.SetObject(o);
             };
         }
 
@@ -359,7 +359,7 @@ namespace qASIC.InputManagement.Map.Internal
             if (contentTreeState == null)
                 contentTreeState = new TreeViewState();
 
-            contentTree = new InputMapWindowContentTree(contentTreeState, Map ? Map.groups.ElementAtOrDefault(groupBar.SelectedGroupIndex) : null);
+            contentTree = new InputMapWindowContentTree(contentTreeState, Map ? Map.groups.ElementAtOrDefault(_groupBar.SelectedGroupIndex) : null);
             contentTree.window = this;
 
             if (contentTree.BindingsRoot != null)
@@ -398,10 +398,10 @@ namespace qASIC.InputManagement.Map.Internal
 
         private void OnGUI()
         {
-            groupBar.SetMap(Map);
+            _groupBar.SetMap(Map);
 
-            toolbar.OnGUI();
-            groupBar.OnGUI();
+            _toolbar.OnGUI();
+            _groupBar.OnGUI();
 
             GUILayout.BeginHorizontal();
 
@@ -410,7 +410,7 @@ namespace qASIC.InputManagement.Map.Internal
             HorizontalLine();
 
             GUILayout.BeginVertical(GUILayout.Width(Mathf.Min(Prefs_InspectorWidth, position.width * 0.8f)));
-            inspector.OnGUI();
+            _inspector.OnGUI();
             GUILayout.EndVertical();
 
             GUILayout.EndHorizontal();
@@ -607,10 +607,15 @@ namespace qASIC.InputManagement.Map.Internal
         #endregion
 
         #region Other
-        public void SelectInInspector(InputMapItem obj)
+        public void SelectInInspector(object obj)
         {
-            if (inspector == null) return;
-            inspector.SetObject(obj);
+            if (_inspector == null) return;
+            _inspector.SetObject(obj);
+        }
+
+        public void SetInspector(Inspectors.InputMapItemInspector inspector)
+        {
+            _inspector?.SetInspector(inspector);
         }
         #endregion
     }

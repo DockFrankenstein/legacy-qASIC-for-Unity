@@ -77,27 +77,12 @@ namespace qASIC.InputManagement.Map.Internal.Inspectors
             //}
         }
 
-        public override void OnGUI(OnGUIContext context)
+        protected override void OnGUI(OnGUIContext context)
         {
-            _binding.itemName = EditorGUILayout.DelayedTextField("Name", _binding.itemName);
-
             DisplayKeys();
 
             //DisplayKeys();
             //EditorGUILayout.Space();
-
-            _delete = DeleteButton(_delete, context);
-
-            //Debug
-            if (context.debug)
-            {
-                EditorGUILayout.Space();
-                qGUIInternalUtility.BeginGroup();
-
-                context.item.guid = EditorGUILayout.DelayedTextField("GUID", context.item.guid);
-
-                qGUIInternalUtility.EndGroup(false);
-            }
         }
 
         void DisplayKeys()
@@ -123,7 +108,7 @@ namespace qASIC.InputManagement.Map.Internal.Inspectors
                 .Where(x => x.items.Contains(context.item))
                 .First()
                 .items
-                .Remove(context.item);
+                .Remove(context.item as InputMapItem);
         }
     }
 }

@@ -83,7 +83,7 @@ namespace qASIC.InputManagement.Map.Internal
                 InputMapWindow window = InputMapWindow.GetEditorWindow();
 
                 menu.AddItem("Open project settings", false, () => SettingsService.OpenProjectSettings("Project/qASIC/Input"));
-                menu.AddItem("Window settings", false, () => window.SelectInInspector(null));
+                menu.AddItem("Window settings", false, () => window.SetInspector(new Inspectors.InputMapWindowSettingsInspector()));
                 menu.AddSeparator("");
                 menu.AddItem("Rebuild action key list", false, () => 
                 {

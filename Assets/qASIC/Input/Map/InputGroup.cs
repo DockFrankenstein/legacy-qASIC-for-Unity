@@ -6,31 +6,32 @@ using UnityEngine;
 namespace qASIC.InputManagement.Map
 {
     [Serializable]
-    public class InputGroup : INonRepeatable
+    public class InputGroup : INonRepeatable, IMapItem
     {
         public InputGroup() { }
 
         public InputGroup(string name)
         {
-            groupName = name;
+            itemName = name;
         }
 
-        public string groupName;
-        public string guid = Guid.NewGuid().ToString();
+        [SerializeField] string itemName;
+        [SerializeField] string guid = System.Guid.NewGuid().ToString();
 
         [SerializeReference] public List<InputMapItem> items = new List<InputMapItem>();
 
-        public string ItemName { get => groupName; set => groupName = value; }
+        public string ItemName { get => itemName; set => itemName = value; }
+        public string Guid { get => guid; set => guid = value; }
 
         public override string ToString() =>
-            groupName;
+            itemName;
 
         public bool TryGetItem(string itemName, out InputMapItem item, bool logError = false)
         {
             bool contains = NonRepeatableChecker.TryGetItem(items, itemName, out item);
 
             if (!contains && logError)
-                qDebug.LogError($"Group '{groupName}' does not contain action '{itemName}'");
+                qDebug.LogError($"Group '{this.itemName}' does not contain action '{itemName}'");
 
             return contains;
         }
@@ -47,7 +48,7 @@ namespace qASIC.InputManagement.Map
         }
 
         public bool NameEquals(string name) =>
-            groupName.ToLower() == name.ToLower();
+            itemName.ToLower() == name.ToLower();
 
         public bool ItemExists(string actionName)
         {

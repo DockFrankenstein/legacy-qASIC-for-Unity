@@ -22,7 +22,7 @@ namespace qASIC.InputManagement.Map.Internal
         public InputMap map;
         public InputMapWindow window;
 
-        InputMapItem _inspectionObject;
+        object _inspectionObject;
         bool _displayDeletePrompt;
 
         Vector2 _scroll;
@@ -37,6 +37,7 @@ namespace qASIC.InputManagement.Map.Internal
                 if (_inspectors == null)
                 {
                     _inspectors = TypeFinder.CreateConstructorsFromTypesList<InputMapItemInspector>(TypeFinder.FindAllTypes<InputMapItemInspector>())
+                        .Where(x => x.ItemType != null)
                         .ToDictionary(x => x.ItemType);
                 }
 
@@ -48,7 +49,7 @@ namespace qASIC.InputManagement.Map.Internal
         bool _editingNameField = false;
 
         InputMapItemInspector _currentInspector;
-        InputMapItemInspector.DefaultGUIData _currentInspectorDefaultGUIData;
+        InputMapItemInspector _defaultInspector = new InputMapItemInspector();
 
         string nameFieldValue;
 
@@ -61,15 +62,19 @@ namespace qASIC.InputManagement.Map.Internal
 
             _scroll = BeginScrollView(_scroll);
 
-            InputMapItemInspector.OnGUIContext context = new InputMapItemInspector.OnGUIContext()
+            if (_currentInspector != null)
             {
-                item = _inspectionObject,
-                debug = InputMapWindow.DebugMode,
-            };
-            //context.serializedObject = new SerializedObject(_inspectionObject);
 
-            _currentInspector?.DrawGUI(context);
+                InputMapItemInspector.OnGUIContext context = new InputMapItemInspector.OnGUIContext()
+                {
+                    item = _inspectionObject,
+                    debug = InputMapWindow.DebugMode,
+                };
 
+                _currentInspector?.DrawGUI(context);
+            }
+
+            EndScrollView();
 
             //switch (_inspectionObject)
             //{
@@ -171,7 +176,6 @@ namespace qASIC.InputManagement.Map.Internal
             //        break;
             //}
 
-            EndScrollView();
 
             if (OnNextRepaint != null && Event.current.type == EventType.Repaint)
             {
@@ -212,41 +216,10 @@ namespace qASIC.InputManagement.Map.Internal
                     break;
             }
         }
-
-
-        Dictionary<Type, ReorderableList> _keysReorderableLists;
-        void DisplayKeys(InputBinding action)
-        {
-            //EditorGUILayout.Space();
-            //BeginVertical(new GUIStyle() { margin = new RectOffset(4, 4, 0, 0) });
-            //EditorChangeChecker.BeginChangeCheck(InputMapWindow.SetMapDirty);
-
-
-            //Dictionary<Type, KeyTypeProvider> providers = InputMapEditorUtility.KeyTypeProvidersDictionary;
-
-            //foreach (InputBinding.KeyList list in action.keys)
-            //{
-            //    Type type = Type.GetType(list.keyType);
-
-            //    if (type == null || !providers.ContainsKey(type))
-            //    {
-            //        HelpBox($"Type '{list.keyType}' cannot be recognized!", MessageType.Error);
-            //        Space();
-            //        continue;
-            //    }
-
-            //    _keysReorderableLists[type].DoLayoutList();
-            //    Space();
-            //}
-
-
-            //EditorChangeChecker.EndChangeCheckAndCleanup();
-            //EndVertical();
-        }
         #endregion
 
         #region Control
-        public void SetObject(InputMapItem obj)
+        public void SetObject(object obj)
         {
             //If the object gets selected right now after the layout event
             //there could be a problem with instance IDs so in order to avoid
@@ -260,53 +233,27 @@ namespace qASIC.InputManagement.Map.Internal
                 _resetNameField = true;
 
                 Type type = obj?.GetType();
-                _currentInspector = null;
 
-                if (type != null && _Inspectors.ContainsKey(type))
-                {
-                    InputMapItemInspector.OnInitializeContext context = new InputMapItemInspector.OnInitializeContext()
-                    {
-                        item = obj,
-                    };
+                var inspector = type != null && _Inspectors.ContainsKey(type) ?
+                    _Inspectors[type] :
+                    _defaultInspector;
 
-                    _currentInspector = _Inspectors[type];
-                    _currentInspector.window = window;
-                    _currentInspector.map = map;
-                    _currentInspector.Initialize(context);
-                }
-
-                _currentInspectorDefaultGUIData = new InputMapItemInspector.DefaultGUIData()
-                {
-                    map = map,
-                    window = window,
-                };
-
-                //Initialize for specific types
-                //switch (obj)
-                //{
-                //    case InspectorInputAction action:
-                //        _keysReorderableLists = new Dictionary<Type, ReorderableList>();
-                //        Dictionary<Type, KeyTypeProvider> providers = InputMapEditorUtility.KeyTypeProvidersDictionary;
-
-                //        foreach (InputBinding.KeyList list in action.action.keys)
-                //        {
-                //            Type type = Type.GetType(list.keyType);
-
-                //            if (type == null || !providers.ContainsKey(type) || _keysReorderableLists.ContainsKey(type))
-                //                continue;
-
-                //            ReorderableList reorderableList = new ReorderableList(list.keys, typeof(int), true, true, true, true);
-                //            reorderableList.drawHeaderCallback += (rect) => EditorGUI.LabelField(rect, providers[type].DisplayName);
-                //            reorderableList.drawElementCallback += (rect, index, isActive, isFocused) =>
-                //            {
-                //                list.keys[index] = providers[type].OnPopupGUI(rect, list.keys[index], isActive, isFocused);
-                //            };
-
-                //            _keysReorderableLists.Add(type, reorderableList);
-                //        }
-                //        break;
-                //}
+                SetInspector(inspector, _inspectionObject);
             };
+        }
+
+        public void SetInspector(InputMapItemInspector inspector, object obj = null)
+        {
+            _inspectionObject = obj;
+            InputMapItemInspector.OnInitializeContext context = new InputMapItemInspector.OnInitializeContext()
+            {
+                item = _inspectionObject,
+            };
+
+            _currentInspector = inspector;
+            _currentInspector.window = window;
+            _currentInspector.map = map;
+            _currentInspector.Initialize(context);
         }
 
         public void ResetInspector()
