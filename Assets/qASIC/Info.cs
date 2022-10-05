@@ -4,7 +4,7 @@ namespace qASIC.Internal
 {
     public static class Info
     {
-        public const string Version = "0.3.0-dev";
+        public const string Version = "0.3.0-dev0";
         public const string ConsoleVersion = "1.1.4";
         public const string DisplayerVersion = "0.2.4";
         public const string OptionsVersion = "0.3.0";

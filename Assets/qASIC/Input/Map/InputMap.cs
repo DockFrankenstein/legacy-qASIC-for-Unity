@@ -42,6 +42,12 @@ namespace qASIC.InputManagement.Map
             }
         }
 
+        public void Initialize()
+        {
+            ItemsDictionary.ForEach(x => x.Value.map = this);
+            CheckForRepeating();
+        }
+
         public T GetItem<T>(string guid) where T : InputMapItem
         {
             if (ItemsDictionary.ContainsKey(guid))

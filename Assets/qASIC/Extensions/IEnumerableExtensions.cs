@@ -37,5 +37,13 @@ namespace qASIC
             source
             .Where(x => x is TResult)
             .Select(x => (TResult)x);
+
+        public static IEnumerable<TSource> ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> action) =>
+            source
+            .Select(x => 
+            {
+                action?.Invoke(x);
+                return x;
+            });
     }
 }

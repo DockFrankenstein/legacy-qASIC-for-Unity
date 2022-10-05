@@ -9,7 +9,7 @@ namespace qASIC.InputManagement.Map
     {
         public InputMapData() { }
 
-        public InputMapData(List<InputGroup> groups)
+        public InputMapData(List<InputGroup> groups) : this()
         {
             this.groups = groups;
         }

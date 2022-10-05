@@ -1,5 +1,5 @@
 ﻿using System;
-
+using UnityEngine;
 
 namespace qASIC.InputManagement.Map
 {
@@ -32,6 +32,6 @@ namespace qASIC.InputManagement.Map
         }
 
         public override float GetHighestValue(float a, float b) =>
-            a > b ? a : b;
+            Mathf.Abs(a) > Mathf.Abs(b) ? a : b;
     }
 }

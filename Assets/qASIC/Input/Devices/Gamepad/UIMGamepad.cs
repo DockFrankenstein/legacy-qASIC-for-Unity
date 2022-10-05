@@ -55,7 +55,7 @@ namespace qASIC.InputManagement.Devices
             if (!_buttons.ContainsKey(keyPath))
                 return type;
 
-            if (_buttons[keyPath] != 0)
+            if (_buttons[keyPath] > 0.5f)
                 type = InputEventType.Pressed;
 
             if (_buttonsUp[keyPath] != 0)

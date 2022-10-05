@@ -18,7 +18,7 @@ namespace qASIC.InputManagement.Map
         [SerializeField] string itemName;
         [SerializeField] string guid = System.Guid.NewGuid().ToString();
 
-        [NonSerialized] protected InputMap map;
+        [NonSerialized] internal InputMap map;
 
         public string ItemName { get => itemName; set => itemName = value; }
         public string Guid { get => guid; set => guid = value; }
