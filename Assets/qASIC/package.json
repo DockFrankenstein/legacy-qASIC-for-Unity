@@ -1,0 +1,14 @@
+{
+    "name": "com.DockFrankenstein.qASIC",
+    "version": "0.3.0-dev",
+    "displayName": "qASIC",
+    "Description": "qASIC is a collection of simple well integrated tools that allow you to make and debug games quicker",
+    "unity": "2019.4",
+    "documentationURL": "https://docs.qasictools.com",
+    "changelogUrl" : "https://docs.qasictools.com/general/changelog",
+    "author" : {
+        "name": "Dock Frankenstein",
+        "email": "dockfrankenstein@gmail.com",
+        "url": "https://qasictools.com"
+    }
+}
