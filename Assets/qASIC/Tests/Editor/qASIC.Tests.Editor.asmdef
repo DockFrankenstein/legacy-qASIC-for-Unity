@@ -3,7 +3,8 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "qASIC"
+        "qASIC",
+        "qASIC.Editor"
     ],
     "includePlatforms": [
         "Editor"

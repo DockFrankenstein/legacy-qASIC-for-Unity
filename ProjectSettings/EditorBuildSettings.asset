@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Local/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/qASIC/Scenes/qASIC Example Scene.unity
+    path: Assets/qASIC/Runtime/Scenes/qASIC Example Scene.unity
     guid: 3a82c5581e46e154d92b45a7f5944172
   m_configObjects: {}

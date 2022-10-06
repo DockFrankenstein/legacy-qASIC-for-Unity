@@ -7,7 +7,7 @@ using System.Linq;
 
 using UnityObject = UnityEngine.Object;
 
-namespace qASIC.InputManagement.UIM.Internal
+namespace qASIC.Input.UIM.Internal
 {
     [CustomEditor(typeof(UIMAxisMapper))]
     public class UIMAxisMapperInspector : Editor

@@ -5,9 +5,9 @@ using qASIC.EditorTools;
 using System.Linq;
 using System;
 
-using MapperAxis = qASIC.InputManagement.UIM.UIMAxisMapperPlatform.ButtonMapping;
+using MapperAxis = qASIC.Input.UIM.UIMAxisMapperPlatform.ButtonMapping;
 
-namespace qASIC.InputManagement.UIM.Internal
+namespace qASIC.Input.UIM.Internal
 {
     [CustomEditor(typeof(UIMAxisMapperPlatform))]
     public class UIMAxisMapperPlatformInspector : Editor, IHasCustomMenu

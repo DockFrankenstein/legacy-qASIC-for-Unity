@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
-using qASIC.Options;
+using qASIC.SettingsSystem;
 using UnityEngine;
 
 namespace qASIC.Tests.Runtime

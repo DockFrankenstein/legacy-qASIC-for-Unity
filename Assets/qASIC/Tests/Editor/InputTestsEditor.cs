@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using System;
-using qASIC.InputManagement;
-using qASIC.InputManagement.Map;
-using qASIC.InputManagement.Map.Internal;
+using qASIC.Input;
+using qASIC.Input.Map;
+using qASIC.Input.Map.Internal;
 
 namespace qASIC.Tests.Editor
 {

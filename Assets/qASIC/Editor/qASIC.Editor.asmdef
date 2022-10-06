@@ -1,0 +1,17 @@
+{
+    "name": "qASIC.Editor",
+    "references": [
+        "GUID:b1181113609d0ad43a27c0338145e93c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

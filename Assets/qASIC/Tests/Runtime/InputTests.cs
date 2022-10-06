@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
-using qASIC.InputManagement;
-using qASIC.InputManagement.Map;
+using qASIC.Input;
+using qASIC.Input.Map;
 using UnityEngine;
 
 namespace qASIC.Tests.Runtime

@@ -2,8 +2,8 @@
 using NUnit.Framework;
 using qASIC.Console;
 using System;
-using qASIC.InputManagement;
-using qASIC.InputManagement.Map;
+using qASIC.Input;
+using qASIC.Input.Map;
 using UnityEngine.TestTools;
 using UnityEngine.SceneManagement;
 using System.Collections;
