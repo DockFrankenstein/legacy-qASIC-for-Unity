@@ -69,6 +69,32 @@ namespace qASIC.EditorTools
         #endregion
 
         //TODO: Add other ignorable items
+
+        public class ChangeCheckPause : IDisposable
+        {
+            public ChangeCheckPause()
+            {
+                EndChangeCheck();
+            }
+
+            void IDisposable.Dispose()
+            {
+                BeginChangeCheck();
+            }
+        }
+
+        public class ChangeCheck : IDisposable
+        {
+            public ChangeCheck(Action onEndChangeGroup)
+            {
+                BeginChangeCheck(onEndChangeGroup);
+            }
+
+            void IDisposable.Dispose()
+            {
+                EndChangeCheckAndCleanup();
+            }
+        }
     }
 }
 

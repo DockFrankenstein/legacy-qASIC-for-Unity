@@ -451,14 +451,7 @@ namespace qASIC.Input.Map.Internal
 
         void HorizontalLine()
         {
-            GUIStyle style = new GUIStyle()
-            {
-                fixedWidth = 1f,
-                stretchHeight = true,
-            };
-
-            style.normal.background = qGUIEditorUtility.BorderTexture;
-            GUILayout.Box(GUIContent.none, style);
+            qGUIEditorUtility.VerticalLine();
 
             //TODO: add inspector resizing
 

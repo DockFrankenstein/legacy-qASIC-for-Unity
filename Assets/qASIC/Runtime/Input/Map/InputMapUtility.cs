@@ -52,5 +52,21 @@ namespace qASIC.Input.Map
                 .Select(x => x.First())
                 .ToArray();
         }
+
+        public static KeyTypeProvider GetProviderByRootPath(string rootPath)
+        {
+            var targets = KeyTypeProviders.Where(x => x.KeyName == rootPath);
+
+            if (targets.Count() == 1)
+                return targets.First();
+
+            return null;
+        }
+
+        public static KeyTypeProvider GetProviderFromPath(string path)
+        {
+            string rootPath = path.Split('/').FirstOrDefault();
+            return GetProviderByRootPath(rootPath);
+        }
     }
 }

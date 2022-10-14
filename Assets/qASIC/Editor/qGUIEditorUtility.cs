@@ -109,6 +109,30 @@ namespace qASIC.EditorTools
             Editor editor = Editor.CreateEditor(obj);
             editor.OnInspectorGUI();
         }
+
+        public static void VerticalLine()
+        {
+            GUIStyle style = new GUIStyle()
+            {
+                fixedWidth = 1f,
+                stretchHeight = true,
+            };
+
+            style.normal.background = BorderTexture;
+            GUILayout.Box(GUIContent.none, style);
+        }
+
+        public static void HorizontalLine()
+        {
+            GUIStyle style = new GUIStyle()
+            {
+                fixedHeight = 1f,
+                stretchWidth = true,
+            };
+
+            style.normal.background = BorderTexture;
+            GUILayout.Box(GUIContent.none, style);
+        }
     }
 }
 #endif
