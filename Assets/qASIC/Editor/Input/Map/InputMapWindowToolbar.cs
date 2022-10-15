@@ -14,6 +14,9 @@ namespace qASIC.Input.Map.Internal
     {
         public InputMap map;
         public InputMapWindow window;
+        public InputMapWindowInspector inspector;
+        public InputMapWindowGroupBar groupBar;
+        public InputMapWindowContentTree contentTree;
 
         public void OnGUI()
         {
@@ -118,6 +121,7 @@ namespace qASIC.Input.Map.Internal
 
                     menu.AddSeparator("");
                     menu.AddItem("Reset inspector", false, () => window.SelectInInspector(null));
+                    menu.AddItem("Rebuild inspectors", false, () => inspector.RebuildInspectors());
                     menu.AddSeparator("");
                     menu.AddToggableItem($"{(InputMapWindow.Prefs_AutoSave ? "*" : "")}Set dirty", false, window.SetMapDirty, map);
                     menu.AddToggableItem("Close map", false, window.CloseMap, map);

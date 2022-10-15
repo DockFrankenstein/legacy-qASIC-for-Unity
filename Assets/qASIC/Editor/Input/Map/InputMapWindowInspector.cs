@@ -4,16 +4,11 @@ using UnityEngine;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using qASIC.EditorTools;
-using qASIC.EditorTools.Internal;
-using UnityEditorInternal;
-using qASIC.Input.Internal.KeyProviders;
 using qASIC.Input.Map.Internal.Inspectors;
 using qASIC.Tools;
 
 using static qASIC.EditorTools.qGUIEditorUtility;
 using static UnityEditor.EditorGUILayout;
-using UnityEditor.PackageManager.UI;
 
 namespace qASIC.Input.Map.Internal
 {
@@ -35,11 +30,7 @@ namespace qASIC.Input.Map.Internal
             get
             {
                 if (_inspectors == null)
-                {
-                    _inspectors = TypeFinder.CreateConstructorsFromTypesList<InputMapItemInspector>(TypeFinder.FindAllTypes<InputMapItemInspector>())
-                        .Where(x => x.ItemType != null)
-                        .ToDictionary(x => x.ItemType);
-                }
+                    RebuildInspectors();
 
                 return _inspectors;
             }
@@ -184,38 +175,6 @@ namespace qASIC.Input.Map.Internal
                 InputMapWindow.GetEditorWindow().Repaint();
             }
         }
-
-        void HandleStringInspection(string s)
-        {
-            switch (s)
-            {
-                case "settings":
-                    GUILayout.Label("Settings", EditorStyles.whiteLargeLabel);
-
-                    InputMapWindow.Prefs_AutoSave = Toggle("Auto Save", InputMapWindow.Prefs_AutoSave);
-                    InputMapWindow.Prefs_AutoSaveTimeLimit = FloatField("Auto Save Time Limit", InputMapWindow.Prefs_AutoSaveTimeLimit);
-                    Space();
-                    InputMapWindow.Prefs_DefaultGroupColor = ColorField("Default Group Color", InputMapWindow.Prefs_DefaultGroupColor);
-                    Space();
-                    InputMapWindow.Prefs_ShowItemIcons = Toggle("Show Item Icons", InputMapWindow.Prefs_ShowItemIcons);
-
-                    if (InputMapWindow.DebugMode)
-                    {
-                        Space();
-                        GUILayout.Label("Debug", EditorStyles.largeLabel);
-                        InputMapWindow.Prefs_InspectorWidth = FloatField("Inspector Width", InputMapWindow.Prefs_InspectorWidth);
-                    }
-
-                    Space();
-
-                    if (DeleteButton("Reset preferences"))
-                        InputMapWindow.ResetPreferences();
-                    break;
-                default:
-                    HelpBox($"Message {s} not recognized!", MessageType.Error);
-                    break;
-            }
-        }
         #endregion
 
         #region Control
@@ -327,6 +286,15 @@ namespace qASIC.Input.Map.Internal
             }
             EndHorizontal();
             return state;
+        }
+        #endregion
+
+        #region Utility
+        public void RebuildInspectors()
+        {
+            _inspectors = TypeFinder.CreateConstructorsFromTypesList<InputMapItemInspector>(TypeFinder.FindAllTypes<InputMapItemInspector>())
+                        .Where(x => x.ItemType != null)
+                        .ToDictionary(x => x.ItemType);
         }
         #endregion
     }

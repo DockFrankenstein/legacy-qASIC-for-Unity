@@ -2,26 +2,61 @@
 using UnityEngine;
 using UnityEditor.IMGUI.Controls;
 using qASIC.EditorTools;
+using qASIC.Input.Map.Internal.Inspectors;
 
 namespace qASIC.Input.Map.Internal
 {
     public class InputMapContentItemBase : TreeViewItem
     {
+        public InputMapContentItemBase() : base() { }
+        public InputMapContentItemBase(int id) : base(id) { }
+        public InputMapContentItemBase(int id, int depth) : base(id, depth) { }
+
+
         public virtual Texture GetIcon(InputGroup group) => null;
         public virtual string GetTooltip(InputGroup group) => string.Empty;
         public virtual Color BarColor { get; set; } = Color.clear;
         public virtual bool CanDrag { get => false; }
 
+        public virtual void SelectInInspector(InputMapWindow window)
+        {
+            window.SelectInInspector(null);
+        }
+    }
 
-        public InputMapContentItemBase() : base() { }
-        public InputMapContentItemBase(int id) : base(id) { }
-        public InputMapContentItemBase(int id, int depth) : base(id, depth) { }
+    public class InputMapContentBindingHeader : InputMapContentItemBase
+    {
+        public InputMapContentBindingHeader() : base() { }
+        public InputMapContentBindingHeader(int id) : base(id) { }
+        public InputMapContentBindingHeader(int id, int depth) : base(id, depth) { }
+
+        public override void SelectInInspector(InputMapWindow window)
+        {
+            window.SetInspector(new BindingHeaderInspector());
+        }
+    }
+
+    public class InputMapContentOtherHeader : InputMapContentItemBase
+    {
+        public InputMapContentOtherHeader() : base() { }
+        public InputMapContentOtherHeader(int id) : base(id) { }
+        public InputMapContentOtherHeader(int id, int depth) : base(id, depth) { }
+
+        public override void SelectInInspector(InputMapWindow window)
+        {
+            window.SetInspector(new OtherHeaderInspector());
+        }
     }
 
     public class InputMapContentMapItem : InputMapContentItemBase
     {
         public string Guid { get; set; }
         public InputMapItem Item { get; set; }
+
+        public override void SelectInInspector(InputMapWindow window)
+        {
+            window.SelectInInspector(Item);
+        }
 
         public InputMapContentMapItem() : base()
         {

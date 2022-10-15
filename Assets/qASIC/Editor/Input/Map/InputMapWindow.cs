@@ -27,11 +27,14 @@ namespace qASIC.Input.Map.Internal
             }
         }
 
+        public int SelectedGroup =>
+            _groupBar.SelectedGroupIndex;
+
         InputMapWindowToolbar _toolbar = new InputMapWindowToolbar();
         InputMapWindowGroupBar _groupBar = new InputMapWindowGroupBar();
         InputMapWindowInspector _inspector = new InputMapWindowInspector();
 
-        InputMapWindowContentTree contentTree;
+        InputMapWindowContentTree _contentTree;
         TreeViewState contentTreeState;
 
         #region Preferences
@@ -300,7 +303,7 @@ namespace qASIC.Input.Map.Internal
 
         public void ReloadTrees()
         {
-            contentTree?.Reload();
+            _contentTree?.Reload();
         }
 
         bool _reloadTreesNextRepaint = false;
@@ -329,6 +332,10 @@ namespace qASIC.Input.Map.Internal
             _groupBar.window = this;
             _inspector.window = this;
 
+            _toolbar.groupBar = _groupBar;
+            _toolbar.inspector = _inspector;
+            _toolbar.contentTree = _contentTree;
+
             //Trees
             InitTree();
 
@@ -339,18 +346,13 @@ namespace qASIC.Input.Map.Internal
             //Events
             _groupBar.OnItemSelect += (g) =>
             {
-                if (contentTree != null)
+                if (_contentTree != null)
                 {
-                    contentTree.Group = g;
-                    contentTree.Reload();
+                    _contentTree.Group = g;
+                    _contentTree.Reload();
                 }
 
                 _inspector.SetObject(g);
-            };
-
-            contentTree.OnItemSelect += (o) =>
-            {
-                _inspector.SetObject(o);
             };
         }
 
@@ -359,20 +361,20 @@ namespace qASIC.Input.Map.Internal
             if (contentTreeState == null)
                 contentTreeState = new TreeViewState();
 
-            contentTree = new InputMapWindowContentTree(contentTreeState, Map ? Map.groups.ElementAtOrDefault(_groupBar.SelectedGroupIndex) : null);
-            contentTree.window = this;
+            _contentTree = new InputMapWindowContentTree(contentTreeState, Map ? Map.groups.ElementAtOrDefault(_groupBar.SelectedGroupIndex) : null);
+            _contentTree.window = this;
 
-            if (contentTree.BindingsRoot != null)
-                contentTree.SetExpanded(contentTree.BindingsRoot.id, PlayerPrefs.GetInt(prefsKey_treeActionsExpanded, 1) != 0);
+            if (_contentTree.BindingsRoot != null)
+                _contentTree.SetExpanded(_contentTree.BindingsRoot.id, PlayerPrefs.GetInt(prefsKey_treeActionsExpanded, 1) != 0);
 
-            if (contentTree.BindingsRoot != null)
-                contentTree.SetExpanded(contentTree.OthersRoot.id, PlayerPrefs.GetInt(prefsKey_treeAxesExpanded, 1) != 0);
+            if (_contentTree.BindingsRoot != null)
+                _contentTree.SetExpanded(_contentTree.OthersRoot.id, PlayerPrefs.GetInt(prefsKey_treeAxesExpanded, 1) != 0);
 
 
-            contentTree.OnExpand += () =>
+            _contentTree.OnExpand += () =>
             {
-                PlayerPrefs.SetInt(prefsKey_treeActionsExpanded, contentTree.IsExpanded(contentTree.BindingsRoot.id) ? 1 : 0);
-                PlayerPrefs.SetInt(prefsKey_treeAxesExpanded, contentTree.IsExpanded(contentTree.OthersRoot.id) ? 1 : 0);
+                PlayerPrefs.SetInt(prefsKey_treeActionsExpanded, _contentTree.IsExpanded(_contentTree.BindingsRoot.id) ? 1 : 0);
+                PlayerPrefs.SetInt(prefsKey_treeAxesExpanded, _contentTree.IsExpanded(_contentTree.OthersRoot.id) ? 1 : 0);
             };
         }
 
@@ -405,7 +407,7 @@ namespace qASIC.Input.Map.Internal
 
             GUILayout.BeginHorizontal();
 
-            DrawTreeView(contentTree);
+            DrawTreeView(_contentTree);
 
             HorizontalLine();
 
@@ -610,6 +612,12 @@ namespace qASIC.Input.Map.Internal
         {
             _inspector?.SetInspector(inspector);
         }
+
+        public void AddItem(InputMapItem item) =>
+            _contentTree.AddItem(item);
+
+        public void AddItem<T>() where T : InputMapItem =>
+           _contentTree.AddItem<T>();
         #endregion
     }
 }

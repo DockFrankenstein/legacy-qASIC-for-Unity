@@ -68,7 +68,7 @@ namespace qASIC.Input.Map.Internal
 
 		void CreateBindingItems(TreeViewItem root, IList<TreeViewItem> rows)
         {
-			BindingsRoot = new InputMapContentItemBase(BINDINGS_ROOT_ID, -1);
+			BindingsRoot = new InputMapContentBindingHeader(BINDINGS_ROOT_ID, -1);
 			BindingsRoot.displayName = "Bindings";
 
 			root.AddChild(BindingsRoot);
@@ -96,7 +96,7 @@ namespace qASIC.Input.Map.Internal
 
 		void CreateOtherItems(TreeViewItem root, IList<TreeViewItem> rows)
         {
-			OthersRoot = new InputMapContentItemBase(OTHERS_ROOT_ID, -1);
+			OthersRoot = new InputMapContentOtherHeader(OTHERS_ROOT_ID, -1);
 			OthersRoot.displayName = "Items";
 
             root.AddChild(OthersRoot);
@@ -124,17 +124,15 @@ namespace qASIC.Input.Map.Internal
 		#endregion
 
 		#region Selecting
-		public event Action<InputMapItem> OnItemSelect;
-
 		//TODO: Add multi select support. This will require rewriting how the
 		//context menu gets displayed and used.
 		protected override bool CanMultiSelect(TreeViewItem item) => false;
 
         protected override void SelectionChanged(IList<int> selectedIds)
         {
-			if(selectedIds.Count != 1)
+			if (selectedIds.Count != 1)
             {
-				OnItemSelect?.Invoke(null);
+				window.SelectInInspector(null);
 				return;
             }
 
@@ -175,7 +173,7 @@ namespace qASIC.Input.Map.Internal
 		void SelectItemInInspector(TreeViewItem item)
         {
 			SetSelection(new int[] { item.id });
-			OnItemSelect?.Invoke((item as InputMapContentMapItem)?.Item);
+			(item as InputMapContentItemBase)?.SelectInInspector(window);
 		}
 		#endregion
 
@@ -225,14 +223,14 @@ namespace qASIC.Input.Map.Internal
 		#endregion
 
 		#region Adding
-		void AddItem<T>() where T : InputMapItem
+		public void AddItem<T>() where T : InputMapItem
 		{
 			InputMapItem item = (InputMapItem)Activator.CreateInstance(typeof(T), new object[] { });
 			item.ItemName = WindowUtility.GenerateUniqueName("New item", s => NonRepeatableChecker.ContainsKey(Group.items, s));
             AddItem(item);
         }
 
-		void AddItem(InputMapItem item)
+		public void AddItem(InputMapItem item)
 		{
             var selectedItem = GetSelectedContentItem();
 
