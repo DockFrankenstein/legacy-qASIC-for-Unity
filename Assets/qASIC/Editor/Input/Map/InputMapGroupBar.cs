@@ -53,10 +53,14 @@ namespace qASIC.Input.Map.Internal
 
         void MoveButton(char character, int value, bool canScroll)
         {
-            EditorGUI.BeginDisabledGroup(!Map || !canScroll);
-            if (Button(character.ToString(), EditorStyles.toolbarButton, Width(EditorGUIUtility.singleLineHeight)))
-                scrollIndex += value;
-            EditorGUI.EndDisabledGroup();
+            using (new EditorGUI.DisabledGroupScope(!Map || !canScroll))
+            {
+                if (Button(character.ToString(), EditorStyles.toolbarButton, Width(EditorGUIUtility.singleLineHeight)))
+                {
+                    scrollIndex += value;
+                    GUI.FocusControl(null);
+                }
+            }
         }
 
         public void SelectPrevious()
@@ -122,7 +126,10 @@ namespace qASIC.Input.Map.Internal
 
                 //Handling group change
                 if (pressed)
+                {
                     Select(i);
+                    GUI.FocusControl(null);
+                }
             }
         }
         #endregion
@@ -187,7 +194,7 @@ namespace qASIC.Input.Map.Internal
             Add(index, new InputGroup(GenerateUniqueName()));
 
         public string GenerateUniqueName() =>
-            InputMapWindowEditorUtility.GenerateUniqueName("New group", Map.GroupExists);
+            InputMapWindowUtility.GenerateUniqueName("New group", Map.GroupExists);
 
         public void Add(InputGroup group) =>
             Add(-1, group);

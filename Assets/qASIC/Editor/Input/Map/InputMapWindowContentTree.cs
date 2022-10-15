@@ -8,7 +8,7 @@ using qASIC.Tools;
 using qASIC.EditorTools;
 using System.Linq;
 
-using WindowUtility = qASIC.Input.Map.Internal.InputMapWindowEditorUtility;
+using WindowUtility = qASIC.Input.Map.Internal.InputMapWindowUtility;
 
 namespace qASIC.Input.Map.Internal
 {
@@ -223,14 +223,17 @@ namespace qASIC.Input.Map.Internal
 		#endregion
 
 		#region Adding
-		public void AddItem<T>() where T : InputMapItem
-		{
-			InputMapItem item = (InputMapItem)Activator.CreateInstance(typeof(T), new object[] { });
-			item.ItemName = WindowUtility.GenerateUniqueName("New item", s => NonRepeatableChecker.ContainsKey(Group.items, s));
+		public void AddItem<T>() where T : InputMapItem =>
+			AddItem(typeof(T));
+
+        public void AddItem(Type type)
+        {
+            InputMapItem item = (InputMapItem)Activator.CreateInstance(type, new object[] { });
+            item.ItemName = WindowUtility.GenerateUniqueName("New item", s => NonRepeatableChecker.ContainsKey(Group.items, s));
             AddItem(item);
         }
 
-		public void AddItem(InputMapItem item)
+        public void AddItem(InputMapItem item)
 		{
             var selectedItem = GetSelectedContentItem();
 
@@ -245,6 +248,7 @@ namespace qASIC.Input.Map.Internal
 
 			Group.items.Insert(index + 1, item);
 			window.SetMapDirty();
+			window.Map.RebuildItemCache();
 			Reload();
 
 
@@ -385,6 +389,9 @@ namespace qASIC.Input.Map.Internal
 				case InputMapContentMapItem _:
 					buttonContent.image = qGUIEditorUtility.MinusIcon;
 					break;
+				case InputMapContentOtherHeader _:
+					buttonContent.image = qGUIEditorUtility.PlusIconMore;
+					break;
 				default:
 					buttonContent.image = qGUIEditorUtility.PlusIcon;
 					break;
@@ -406,7 +413,7 @@ namespace qASIC.Input.Map.Internal
 								AddItem<InputBinding>();
 								break;
 							default:
-                                AddItem<Input1DAxis>();
+								DisplayAddNewItemMenu();
                                 break;
 						}
 						break;
@@ -446,6 +453,17 @@ namespace qASIC.Input.Map.Internal
 
             CalcFoldoutOffset(rowRect.height);
 		}
+
+		void DisplayAddNewItemMenu()
+		{
+			var types = WindowUtility.GetOtherItemTypesWithNames();
+			GenericMenu menu = new GenericMenu();
+
+			foreach (var item in types)
+				menu.AddItem(item.name, false, () => AddItem(item.type));
+
+			menu.ShowAsContext();
+        }
 
 		//Centers foldout vertically
 		void CalcFoldoutOffset(float height) =>

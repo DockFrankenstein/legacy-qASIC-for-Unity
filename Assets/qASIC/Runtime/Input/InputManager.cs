@@ -111,7 +111,7 @@ namespace qASIC.Input
                 return;
             }
 
-            Map.CheckForRepeating();
+            Map.Initialize();
 
             for (int i = 0; i < Map.groups.Count; i++)
                 Map.groups[i].CheckForRepeating();

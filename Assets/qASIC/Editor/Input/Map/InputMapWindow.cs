@@ -613,11 +613,14 @@ namespace qASIC.Input.Map.Internal
             _inspector?.SetInspector(inspector);
         }
 
-        public void AddItem(InputMapItem item) =>
-            _contentTree.AddItem(item);
-
         public void AddItem<T>() where T : InputMapItem =>
            _contentTree.AddItem<T>();
+
+        public void AddItem(System.Type type) =>
+            _contentTree.AddItem(type);
+
+        public void AddItem(InputMapItem item) =>
+            _contentTree.AddItem(item);
         #endregion
     }
 }

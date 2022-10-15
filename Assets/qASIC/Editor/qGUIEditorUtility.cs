@@ -13,7 +13,9 @@ namespace qASIC.EditorTools
         public static Texture WarningIcon => EditorGUIUtility.IconContent("console.warnicon").image;
         public static Texture InfoIcon => EditorGUIUtility.IconContent("console.infoicon").image;
         public static Texture PlusIcon => EditorGUIUtility.IconContent("Toolbar Plus").image;
+        public static Texture PlusIconMore => EditorGUIUtility.IconContent("Toolbar Plus More").image;
         public static Texture MinusIcon => EditorGUIUtility.IconContent("Toolbar Minus").image;
+        public static Texture MinusIconMore => EditorGUIUtility.IconContent("Toolbar Minus More").image;
 
         public static Texture ConvertIconTypeToTexture(InspectorMessageIconType icon)
         {

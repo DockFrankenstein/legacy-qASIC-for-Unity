@@ -16,7 +16,6 @@ namespace qASIC.Input.Map.Internal.Inspectors
         public override Type ItemType => typeof(Input1DAxis);
 
         Input1DAxis _axis;
-        bool _delete;
 
         public override void Initialize(OnInitializeContext context)
         {

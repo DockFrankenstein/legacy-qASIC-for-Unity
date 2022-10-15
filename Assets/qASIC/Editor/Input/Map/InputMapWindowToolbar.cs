@@ -120,8 +120,10 @@ namespace qASIC.Input.Map.Internal
                         System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{InputMapWindow.GetUnmodifiedMapLocation().Replace('/', '\\')}\""));
 
                     menu.AddSeparator("");
-                    menu.AddItem("Reset inspector", false, () => window.SelectInInspector(null));
-                    menu.AddItem("Rebuild inspectors", false, () => inspector.RebuildInspectors());
+                    menu.AddItem("Window Inspector/Reset inspector", false, () => window.SelectInInspector(null));
+                    menu.AddItem("Window Inspector/Rebuild inspectors", false, () => inspector.RebuildInspectors());
+                    menu.AddSeparator("");
+                    menu.AddItem("Map/Rebuild Item Cache", false, () => map.RebuildItemCache());
                     menu.AddSeparator("");
                     menu.AddToggableItem($"{(InputMapWindow.Prefs_AutoSave ? "*" : "")}Set dirty", false, window.SetMapDirty, map);
                     menu.AddToggableItem("Close map", false, window.CloseMap, map);

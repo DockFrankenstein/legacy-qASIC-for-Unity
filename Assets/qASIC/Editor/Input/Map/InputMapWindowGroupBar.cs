@@ -93,7 +93,7 @@ namespace qASIC.Input.Map.Internal
             Debug.Assert(index >= 0 && index < Map.groups.Count, $"Cannot duplicate group {index}, index is out of range!");
 
             InputGroup group = JsonUtility.FromJson<InputGroup>(JsonUtility.ToJson(Map.groups[index]));
-            group.ItemName = InputMapWindowEditorUtility.GenerateUniqueName(group.ItemName, Map.GroupExists);
+            group.ItemName = InputMapWindowUtility.GenerateUniqueName(group.ItemName, Map.GroupExists);
 
             Map.groups.Insert(index + 1, group);
 

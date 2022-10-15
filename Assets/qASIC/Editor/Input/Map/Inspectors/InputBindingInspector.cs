@@ -310,7 +310,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
             if (GUILayout.Button("Select"))
             {
                 editorWindow.Close();
-                _OnApply?.Invoke(_targetItemIndex, _index == -1 ? string.Empty : _items[_index]);
+                _OnApply?.Invoke(_targetItemIndex, _index == -1 ? string.Empty : _currentItems[_index]);
             }
         }
 

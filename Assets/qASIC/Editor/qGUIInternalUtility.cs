@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
+using System;
 
 using static qASIC.qGUIUtility;
 
@@ -64,6 +65,24 @@ namespace qASIC.EditorTools.Internal
                 EditorGUILayout.PropertyField(serializedObject.FindProperty(properties[i]));
 
             EndGroup();
+        }
+
+        public class GroupScope : IDisposable
+        {
+            public GroupScope(bool space = true) : this("", space) { }
+
+            public GroupScope(string label, bool space = true)
+            {
+                _space = space;
+                BeginGroup(label);
+            }
+
+            bool _space;
+
+            void IDisposable.Dispose()
+            {
+                EndGroup(_space);
+            }
         }
 
         public static class Styles

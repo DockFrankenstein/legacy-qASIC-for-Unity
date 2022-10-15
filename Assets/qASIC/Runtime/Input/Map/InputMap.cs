@@ -17,10 +17,7 @@ namespace qASIC.Input.Map
             get
             {
                 if (_groupsDictionary == null)
-                {
-                    _groupsDictionary = groups
-                        .ToDictionary(x => x.Guid);
-                }
+                    RebuildItemCache();
 
                 return _groupsDictionary;
             }
@@ -32,30 +29,42 @@ namespace qASIC.Input.Map
             get
             {
                 if (_itemsDictionary == null)
-                {
-                    _itemsDictionary = groups
-                        .SelectMany(x => x.items)
-                        .ToDictionary(x => x.Guid);
-                }
+                    RebuildItemCache();
 
                 return _itemsDictionary;
             }
         }
 
+        /// <summary>Initializes the map. Call this before using the map.</summary>
         public void Initialize()
         {
             ItemsDictionary.ForEach(x => x.Value.map = this);
             CheckForRepeating();
         }
 
+        /// <summary>Rebuilds items and groups dictionary</summary>
+        public void RebuildItemCache()
+        {
+            _itemsDictionary = groups
+                        .SelectMany(x => x.items)
+                        .ToDictionary(x => x.Guid);
+
+            _groupsDictionary = groups
+                .ToDictionary(x => x.Guid);
+        }
+
+        ///<summary>Looks for an item of the specified guid from the items cache.</summary>
+        /// <typeparam name="T">Type of the item</typeparam>
+        /// <returns>The specified item</returns>
         public T GetItem<T>(string guid) where T : InputMapItem
         {
-            if (ItemsDictionary.ContainsKey(guid))
+            if (!ItemsDictionary.ContainsKey(guid))
                 return null;
 
             return (T)ItemsDictionary[guid];
         }
 
+        /// <summary>Creates a new data object</summary>
         public InputMapData GetData()
         {
             InputMapData data = new InputMapData(groups);
@@ -89,9 +98,12 @@ namespace qASIC.Input.Map
             return group;
         }
 
-        /// <summary>Checks if there are no duplicate groups</summary>
-        public void CheckForRepeating() =>
+        /// <summary>Checks if there are no duplicate groups or items</summary>
+        public void CheckForRepeating()
+        {
             NonRepeatableChecker.ContainsRepeatable(groups);
+            groups.ForEach(x => NonRepeatableChecker.ContainsRepeatable(x.items));
+        }
 
         public string[] GetGroupNames() =>
             groups
@@ -102,8 +114,5 @@ namespace qASIC.Input.Map
             groups
             .Select(x => x.NameEquals(groupName))
             .Contains(true);
-
-        public bool CanRenameGroup(string newName) =>
-            !string.IsNullOrWhiteSpace(newName) && !GroupExists(newName);
     }
 }
