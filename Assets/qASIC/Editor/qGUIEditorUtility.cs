@@ -175,6 +175,7 @@ namespace qASIC.EditorTools
                             return 0f;
 
                         percentage += (float)s.Length / keyword.Length;
+                        s = s.Replace(keyword, " ");
                     }
 
                     return percentage;

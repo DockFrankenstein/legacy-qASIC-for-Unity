@@ -9,6 +9,7 @@ using qASIC.EditorTools;
 using System.Linq;
 
 using WindowUtility = qASIC.Input.Map.Internal.InputMapWindowUtility;
+using UnityEngine.UIElements;
 
 namespace qASIC.Input.Map.Internal
 {
@@ -33,8 +34,6 @@ namespace qASIC.Input.Map.Internal
 		//for the item to get selected
 		bool showContextOnNextRepaint;
 
-		Color HeaderBarColor => Color.clear;
-
 		event Action OnNextRepaint;
 
         #region Creating
@@ -57,9 +56,27 @@ namespace qASIC.Input.Map.Internal
 			rows.Clear();
 
             if (Group != null)
-            {
-				CreateBindingItems(root, rows);
-				CreateOtherItems(root, rows);
+			{
+				switch (string.IsNullOrEmpty(searchString))
+				{
+					case true:
+						CreateBindingItems(root, rows);
+						CreateOtherItems(root, rows);
+						break;
+					case false:
+						List<InputMapItem> items = qGUIEditorUtility.SortSearchList(Group.items, x => x.ItemName, searchString);
+
+						foreach (var item in items)
+						{
+                            TreeViewItem treeItem = new InputMapContentMapItem(item);
+                            root.AddChild(treeItem);
+                            rows.Add(treeItem);
+                        }
+
+						BindingsRoot = null;
+						OthersRoot = null;
+						break;
+				}
 			}
 
             SetupDepthsFromParentsAndChildren(root);
@@ -78,6 +95,8 @@ namespace qASIC.Input.Map.Internal
 				.Where(x => x is InputBinding)
 				.Select(x => x as InputBinding)
 				.ToList();
+
+			bindings = qGUIEditorUtility.SortSearchList(bindings, x => x.ItemName, searchString);
 
 			if (IsExpanded(BindingsRoot.id))
 			{
@@ -106,8 +125,11 @@ namespace qASIC.Input.Map.Internal
 				.Where(x => !(x is InputBinding))
 				.ToList();
 
-            if (IsExpanded(OthersRoot.id))
-            {
+			items = qGUIEditorUtility.SortSearchList(items, x => x.ItemName, searchString);
+
+
+			if (IsExpanded(OthersRoot.id))
+			{
                 for (int i = 0; i < items.Count; i++)
                 {
 					TreeViewItem item = new InputMapContentMapItem(items[i]);
@@ -360,10 +382,10 @@ namespace qASIC.Input.Map.Internal
 			window.SetMapDirty();
 			Reload();
 		}
-		#endregion
+        #endregion
 
-		#region GUI
-		protected override void RowGUI(RowGUIArgs args)
+        #region GUI
+        protected override void RowGUI(RowGUIArgs args)
 		{
 			bool repaint = Event.current.type == EventType.Repaint;
 

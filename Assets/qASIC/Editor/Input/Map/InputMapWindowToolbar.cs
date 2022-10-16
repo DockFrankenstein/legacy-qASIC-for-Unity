@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 using qASIC.EditorTools;
+using UnityEditor.IMGUI.Controls;
 
 using UnityObject = UnityEngine.Object;
 
@@ -18,6 +19,7 @@ namespace qASIC.Input.Map.Internal
         public InputMapWindowGroupBar groupBar;
         public InputMapWindowContentTree contentTree;
 
+        #region GUI
         public void OnGUI()
         {
             BeginHorizontal(EditorStyles.toolbar);
@@ -28,13 +30,12 @@ namespace qASIC.Input.Map.Internal
 
             FlexibleSpace();
 
-            DisplayAutoSaveTime();
+            contentTree.searchString = EditorGUILayout.TextField(contentTree.searchString, EditorStyles.toolbarSearchField);
 
             if (Button("Show in folder", EditorStyles.toolbarButton))
                 ShowInFolder();
 
-            if (Toggle(map && InputMapWindow.Prefs_AutoSave, "Auto save", EditorStyles.toolbarButton) != InputMapWindow.Prefs_AutoSave)
-                InputMapWindow.Prefs_AutoSave = !InputMapWindow.Prefs_AutoSave;
+            AutoSaveButton();
 
             if (Button("Save", EditorStyles.toolbarButton))
                 window.Save();
@@ -43,19 +44,16 @@ namespace qASIC.Input.Map.Internal
             EndHorizontal();
         }
 
-        #region Auto Save Time
-        void DisplayAutoSaveTime()
+        void AutoSaveButton()
         {
-            switch (window.IsDirty && !InputMapWindow.CanAutoSave())
-            {
-                case true:
-                    Label($"Auto save delayed ({Mathf.Round((float)InputMapWindow.TimeToAutoSave + 0.5f)}s)");
-                    InputMapWindow.GetEditorWindow().Repaint();
-                    break;
-                case false:
-                    Label("");
-                    break;
-            }
+            bool isAutoSaving = window.IsDirty && !InputMapWindow.CanAutoSave();
+            string autosaveText = isAutoSaving ? $" ({Mathf.Round((float)InputMapWindow.TimeToAutoSave + 0.5f)}s)" : string.Empty;
+
+            if (Toggle(map && InputMapWindow.Prefs_AutoSave, $"Auto save{autosaveText}", EditorStyles.toolbarButton) != InputMapWindow.Prefs_AutoSave)
+                InputMapWindow.Prefs_AutoSave = !InputMapWindow.Prefs_AutoSave;
+
+            if (isAutoSaving)
+                window.Repaint();
         }
         #endregion
 

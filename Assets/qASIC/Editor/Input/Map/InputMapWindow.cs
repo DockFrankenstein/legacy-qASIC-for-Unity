@@ -332,12 +332,12 @@ namespace qASIC.Input.Map.Internal
             _groupBar.window = this;
             _inspector.window = this;
 
+            //Trees
+            InitTree();
+
             _toolbar.groupBar = _groupBar;
             _toolbar.inspector = _inspector;
             _toolbar.contentTree = _contentTree;
-
-            //Trees
-            InitTree();
 
             //Assigning maps
             _toolbar.map = Map;
