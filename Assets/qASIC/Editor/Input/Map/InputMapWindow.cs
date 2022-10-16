@@ -621,6 +621,14 @@ namespace qASIC.Input.Map.Internal
 
         public void AddItem(InputMapItem item) =>
             _contentTree.AddItem(item);
+
+        public void SetAsDefaultProjectMapDialogue()
+        {
+            if (!EditorUtility.DisplayDialog("Confirm map assignment", "Are you sure you want to set this as the default project map?", "Yes", "No"))
+                return;
+
+            ProjectSettings.InputProjectSettings.Instance.map = Map;
+        }
         #endregion
     }
 }

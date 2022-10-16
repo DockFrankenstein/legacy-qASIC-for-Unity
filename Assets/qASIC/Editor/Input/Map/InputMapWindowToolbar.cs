@@ -86,6 +86,7 @@ namespace qASIC.Input.Map.Internal
                 menu.AddItem("Open project settings", false, () => SettingsService.OpenProjectSettings("Project/qASIC/Input"));
                 menu.AddItem("Window settings", false, () => window.SetInspector(new Inspectors.InputMapWindowSettingsInspector()));
                 menu.AddSeparator("");
+                menu.AddToggableItem("Set map as default", false, window.SetAsDefaultProjectMapDialogue, ProjectSettings.InputProjectSettings.Instance.map != map);
             });
 
             DisplayMenu("Help", ref helpMenuRect, (GenericMenu menu) =>
