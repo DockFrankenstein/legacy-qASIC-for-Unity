@@ -3,6 +3,8 @@ using qASIC.Tools;
 using System;
 using System.Text.RegularExpressions;
 using System.Linq;
+using qASIC.EditorTools.Internal;
+using UnityEditor;
 
 namespace qASIC.Input.Map.Internal
 {
@@ -86,6 +88,33 @@ namespace qASIC.Input.Map.Internal
                 .ToArray();
 
             return items;
+        }
+
+        public static Axis DrawAxis(string label, Axis axis, InputMap map)
+        {
+            EditorGUILayout.Space();
+            using (new qGUIInternalUtility.GroupScope(label))
+            {
+                axis.axisGuid = EditorGUILayout.DelayedTextField("Axis", axis.axisGuid);
+                EditorGUILayout.Space();
+
+                bool isUsingAxis = axis.IsUsingAxis();
+                Input1DAxis targetAxis = axis.IsUsingAxis() ? map.GetItem<Input1DAxis>(axis.axisGuid) : null;
+
+                using (new EditorGUI.DisabledGroupScope(isUsingAxis))
+                {
+                    string newPositive = EditorGUILayout.DelayedTextField("Positive", targetAxis?.positiveAction ?? axis.positiveGuid);
+                    string newNegative = EditorGUILayout.DelayedTextField("Negative", targetAxis?.negativeAction ?? axis.negativeGuid);
+
+                    if (targetAxis == null)
+                    {
+                        axis.positiveGuid = newPositive;
+                        axis.negativeGuid = newNegative;
+                    }
+                }
+            }
+
+            return axis;
         }
 
         public struct ItemType
