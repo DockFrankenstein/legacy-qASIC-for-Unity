@@ -276,26 +276,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
             EditorGUILayout.Space(8f);
             qGUIEditorUtility.HorizontalLine();
 
-            _currentItems = _items
-                .Where(x =>
-                {
-                    if (string.IsNullOrWhiteSpace(_search))
-                        return true;
-
-                    string[] keywords = _search
-                        .ToLower()
-                        .Split(' ')
-                        .Where(s => s != string.Empty)
-                        .ToArray();
-
-                    x = x.ToLower();
-                    foreach (var item in keywords)
-                        if (!x.Contains(item))
-                            return false;
-
-                    return true;
-                })
-                .ToList();
+            _currentItems = qGUIEditorUtility.SortSearchList(_items, _search);
 
             using (var scrollView = new EditorGUILayout.ScrollViewScope(_scroll))
             {

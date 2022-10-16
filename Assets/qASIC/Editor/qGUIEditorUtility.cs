@@ -1,8 +1,12 @@
 #if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
+using System.Linq;
+using System;
 
 using static qASIC.qGUIUtility;
+using UnityObject = UnityEngine.Object;
 
 namespace qASIC.EditorTools
 {
@@ -106,7 +110,7 @@ namespace qASIC.EditorTools
 
         /// <summary>Draws object like it's being viewed in the inspector</summary>
         /// <param name="obj">Object to draw</param>
-        public static void DrawObjectsInspector(Object obj)
+        public static void DrawObjectsInspector(UnityObject obj)
         {
             Editor editor = Editor.CreateEditor(obj);
             editor.OnInspectorGUI();
@@ -134,6 +138,52 @@ namespace qASIC.EditorTools
 
             style.normal.background = BorderTexture;
             GUILayout.Box(GUIContent.none, style);
+        }
+
+        /// <summary>Sorts a list using the search string</summary>
+        /// <param name="list">List to sort</param>
+        /// <param name="search">Search bar value</param>
+        /// <returns>The sorted list</returns>
+        public static List<string> SortSearchList(List<string> list, string search) =>
+            SortSearchList(list, x => x, search);
+
+        /// <summary>Sorts a list using the search string</summary>
+        /// <param name="list">List to sort</param>
+        /// <param name="func">Select the string</param>
+        /// <param name="search">Search bar value</param>
+        /// <returns>The sorted list</returns>
+        public static List<T> SortSearchList<T>(List<T> list, Func<T, string> func, string search)
+        {
+            if (string.IsNullOrWhiteSpace(search))
+                    return list;
+
+            string[] keywords = search
+                .ToLower()
+                .Split(' ')
+                .Where(s => s != string.Empty)
+                .ToArray();
+
+            return list
+                .Select(x => new KeyValuePair<T, string>(x, func(x)))
+                .GroupBy(x =>
+                {
+                    string s = x.Value.ToLower();
+                    float percentage = 0f;
+                    foreach (var keyword in keywords)
+                    {
+                        if (!s.Contains(keyword))
+                            return 0f;
+
+                        percentage += (float)s.Length / keyword.Length;
+                    }
+
+                    return percentage;
+                })
+                .Where(x => x.Key > 0f)
+                .OrderBy(x => x.Key)
+                .SelectMany(x => x)
+                .Select(x => x.Key)
+                .ToList();
         }
     }
 }
