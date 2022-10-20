@@ -36,9 +36,11 @@ namespace qASIC.Input.Map.Internal
 
 		//The context menu has to be shown on next repaint in order
 		//for the item to get selected
-		bool showContextOnNextRepaint;
+		bool _showContextOnNextRepaint;
 
-		event Action OnNextRepaint;
+		bool _isSearching;
+
+		event Action _OnNextRepaint;
 
         #region Creating
         public InputMapWindowContentTree(TreeViewState state, InputGroup group)
@@ -55,19 +57,16 @@ namespace qASIC.Input.Map.Internal
 
 		protected override IList<TreeViewItem> BuildRows(TreeViewItem root)
 		{
-			var rows = GetRows() ?? new List<TreeViewItem>();
+			_isSearching = !string.IsNullOrEmpty(searchString);
+            var rows = GetRows() ?? new List<TreeViewItem>();
 
 			rows.Clear();
 
             if (Group != null)
 			{
-				switch (string.IsNullOrEmpty(searchString))
+				switch (_isSearching)
 				{
 					case true:
-						CreateBindingItems(root, rows);
-						CreateOtherItems(root, rows);
-						break;
-					case false:
 						List<InputMapItem> items = qGUIEditorUtility.SortSearchList(Group.items, x => x.ItemName, searchString);
 
 						foreach (var item in items)
@@ -79,6 +78,10 @@ namespace qASIC.Input.Map.Internal
 
 						BindingsRoot = null;
 						OthersRoot = null;
+						break;
+					case false:
+						CreateBindingItems(root, rows);
+						CreateOtherItems(root, rows);
 						break;
 				}
 			}
@@ -189,7 +192,7 @@ namespace qASIC.Input.Map.Internal
 
 		protected override void ContextClickedItem(int id)
 		{
-			showContextOnNextRepaint = true;
+			_showContextOnNextRepaint = true;
 			Repaint();
 		}
 
@@ -290,7 +293,7 @@ namespace qASIC.Input.Map.Internal
                     break;
 			}
 
-            OnNextRepaint += () =>
+            _OnNextRepaint += () =>
             {
                 var treeItem = GetItemByContent(item);
                 if (treeItem != null)
@@ -325,6 +328,9 @@ namespace qASIC.Input.Map.Internal
 			if (!(args.draggedItem is InputMapContentMapItem item))
 				return false;
 
+			if (_isSearching)
+				return false;
+
 			return item.CanDrag;
 		}
 
@@ -332,6 +338,9 @@ namespace qASIC.Input.Map.Internal
 		{
 			if (!(DragAndDrop.GetGenericData("tree") is InputMapWindowContentTree sourceTree) ||
 				sourceTree != this)
+				return DragAndDropVisualMode.Rejected;
+
+			if (_isSearching)
 				return DragAndDropVisualMode.Rejected;
 
 			int itemID = (int)DragAndDrop.GetGenericData("itemID");
@@ -437,16 +446,16 @@ namespace qASIC.Input.Map.Internal
 		{
 			bool repaint = Event.current.type == EventType.Repaint;
 
-			if (OnNextRepaint != null && repaint)
+			if (_OnNextRepaint != null && repaint)
             {
-				OnNextRepaint?.Invoke();
-				OnNextRepaint = null;
+				_OnNextRepaint?.Invoke();
+				_OnNextRepaint = null;
             }
 
-			if (showContextOnNextRepaint && repaint)
+			if (_showContextOnNextRepaint && repaint)
             {
 				ShowContextMenu();
-				showContextOnNextRepaint = false;
+				_showContextOnNextRepaint = false;
             }
 
 			//Button (either plus or minus)
