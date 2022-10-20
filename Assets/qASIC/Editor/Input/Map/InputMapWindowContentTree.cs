@@ -311,52 +311,93 @@ namespace qASIC.Input.Map.Internal
 			Reload();
         }
 
-        //TODO: maybe one day
-        //      protected override void SetupDragAndDrop(SetupDragAndDropArgs args)
-        //      {
-        //	DragAndDrop.PrepareStartDrag();
-        //	DragAndDrop.SetGenericData("itemID", args.draggedItemIDs[0]);
-        //	DragAndDrop.SetGenericData("tree", this);
-        //	DragAndDrop.StartDrag(FindItem(args.draggedItemIDs[0], rootItem).displayName);
-        //}
+		//Drag & drop
+		protected override void SetupDragAndDrop(SetupDragAndDropArgs args)
+		{
+			DragAndDrop.PrepareStartDrag();
+			DragAndDrop.SetGenericData("itemID", args.draggedItemIDs[0]);
+			DragAndDrop.SetGenericData("tree", this);
+			DragAndDrop.StartDrag(FindItem(args.draggedItemIDs[0], rootItem).displayName);
+		}
 
-        //protected override bool CanStartDrag(CanStartDragArgs args)
-        //{
-        //	if (!(args.draggedItem is InputMapContentItemBase item))
-        //		return false;
+		protected override bool CanStartDrag(CanStartDragArgs args)
+		{
+			if (!(args.draggedItem is InputMapContentMapItem item))
+				return false;
 
-        //	return item.CanDrag;
-        //}
+			return item.CanDrag;
+		}
 
-        //protected override DragAndDropVisualMode HandleDragAndDrop(DragAndDropArgs args)
-        //      {
-        //	if (!(DragAndDrop.GetGenericData("tree") is InputMapWindowContentTree sourceTree))
-        //		return DragAndDropVisualMode.Rejected;
+		protected override DragAndDropVisualMode HandleDragAndDrop(DragAndDropArgs args)
+		{
+			if (!(DragAndDrop.GetGenericData("tree") is InputMapWindowContentTree sourceTree) ||
+				sourceTree != this)
+				return DragAndDropVisualMode.Rejected;
 
-        //	int itemID = (int)DragAndDrop.GetGenericData("itemID");
-        //	var item = FindItem(itemID, rootItem);
+			int itemID = (int)DragAndDrop.GetGenericData("itemID");
 
-        //	if (!(args.parentItem is InputMapContentHeaderItemBase))
-        //		return DragAndDropVisualMode.Rejected;
+			if (!(FindItem(itemID, rootItem) is InputMapContentMapItem item))
+				return DragAndDropVisualMode.Rejected;
 
-        //	if (args.performDrop)
-        //          {
-        //		switch (item)
-        //              {
-        //			case InputMapContentActionTreeItem actionItem:
+			bool isBinding = item.Item is InputBinding;
 
-        //				break;
-        //			case InputMapContentAxisTreeItem axisItem:
-        //				break;
-        //              }
-        //          }				
+			if (args.performDrop)
+			{
+				var targetItem = GetDraggedItemTarget(args);
 
-        //	return DragAndDropVisualMode.Move;
-        //      }
-        #endregion
+				switch (targetItem)
+				{
+					case InputMapContentBindingHeader _:
+						if (!isBinding)
+							return DragAndDropVisualMode.Rejected;
 
-        #region Finding
-        InputMapContentMapItem GetItemByContent<t>(t item) where t : InputMapItem
+						Move(Group.items.IndexOf(item.Item), Group.items.Count);
+                        break;
+
+                    case InputMapContentOtherHeader _:
+                        if (isBinding)
+                            return DragAndDropVisualMode.Rejected;
+
+                        Move(Group.items.IndexOf(item.Item), Group.items.Count);
+                        break;
+
+					case InputMapContentMapItem targetMapItem:
+						if (targetMapItem.Item is InputBinding != isBinding)
+							return DragAndDropVisualMode.Rejected;
+
+						Move(Group.items.IndexOf(item.Item), Group.items.IndexOf(targetMapItem.Item));
+
+						break;
+                }
+			}
+
+			Reload();
+			return DragAndDropVisualMode.Move;
+		}
+
+		TreeViewItem GetDraggedItemTarget(DragAndDropArgs args)
+		{
+			if (!args.parentItem.children.IndexInRange(args.insertAtIndex))
+				return args.parentItem;
+
+			return args.parentItem.children[args.insertAtIndex];
+		}
+
+		public void Move(int oldIndex, int newIndex)
+		{
+			if (oldIndex == newIndex)
+				return;
+
+			var item = group.items[oldIndex];
+			group.items[oldIndex] = null;
+			group.items.Insert(newIndex, item);
+			group.RemoveItem(newIndex < oldIndex ? oldIndex + 1 : oldIndex);
+			SetSelection(new List<int>() { item.Guid.GetHashCode() });
+		}
+		#endregion
+
+		#region Finding
+		InputMapContentMapItem GetItemByContent<t>(t item) where t : InputMapItem
         {
 			IList<int> items = GetDescendantsThatHaveChildren(rootItem.id);
 

@@ -52,9 +52,11 @@ namespace qASIC.Input.Map
         {
             _itemsDictionary = groups
                         .SelectMany(x => x.items)
+                        .Where(x => x != null)
                         .ToDictionary(x => x.Guid);
 
             _groupsDictionary = groups
+                .Where(x => x != null)
                 .ToDictionary(x => x.Guid);
         }
 

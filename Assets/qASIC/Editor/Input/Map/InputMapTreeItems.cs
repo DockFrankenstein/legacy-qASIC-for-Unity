@@ -59,15 +59,15 @@ namespace qASIC.Input.Map.Internal
             id = Guid.GetHashCode();
         }
 
-        public InputMapContentMapItem(InputMapItem item) : base(item.Guid.GetHashCode())
+        public InputMapContentMapItem(InputMapItem item) : base((item?.Guid ?? System.Guid.NewGuid().ToString()).GetHashCode())
         {
             Item = item;
-            Guid = item.Guid;
             displayName = item?.ItemName ?? string.Empty;
         }
 
         public string Guid { get; set; }
         public InputMapItem Item { get; set; }
+        public override bool CanDrag => true;
 
         public override void SelectInInspector(InputMapWindow window)
         {
@@ -75,7 +75,7 @@ namespace qASIC.Input.Map.Internal
         }
 
         public override Texture GetIcon(InputGroup group) =>
-            Item.HasErrors() ? qGUIEditorUtility.ErrorIcon : null;
+            Item?.HasErrors() == true ? qGUIEditorUtility.ErrorIcon : null;
 
         public override void CreateGenericMenu(GenericMenu menu)
         {

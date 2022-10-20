@@ -451,7 +451,7 @@ namespace qASIC.Input.Map.Internal
             GUILayout.FlexibleSpace();
             GUILayout.EndVertical();
             Rect rect = GUILayoutUtility.GetLastRect();
-            tree.OnGUI(rect);
+            tree?.OnGUI(rect);
         }
 
         void HorizontalLine()

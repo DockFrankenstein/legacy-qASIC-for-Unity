@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 using System;
 using qASIC.Tools;
-using qASIC.Input.Devices;
 
 namespace qASIC.Input.Map
 {
     [Serializable] 
-    public abstract class InputMapItem : INonRepeatable, ICloneable, IMapItem
+    public abstract class InputMapItem : INonRepeatable, IMapItem
     {
         public InputMapItem() { }
 
@@ -30,15 +29,6 @@ namespace qASIC.Input.Map
 
         public override string ToString() =>
             itemName;
-
-        object ICloneable.Clone() =>
-            Clone();
-
-        public virtual InputMapItem Clone()
-        {
-            string json = JsonUtility.ToJson(this);
-            return JsonUtility.FromJson<InputMapItem>(json);
-        }
 
         public bool NameEquals(string name) =>
             NonRepeatableChecker.Compare(itemName, name);

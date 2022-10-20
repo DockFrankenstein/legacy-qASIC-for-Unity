@@ -30,7 +30,8 @@ namespace qASIC.Input.Map.Internal
 
             FlexibleSpace();
 
-            contentTree.searchString = EditorGUILayout.TextField(contentTree.searchString, EditorStyles.toolbarSearchField);
+            if (contentTree != null)
+                contentTree.searchString = EditorGUILayout.TextField(contentTree.searchString ?? string.Empty, EditorStyles.toolbarSearchField);
 
             if (Button("Show in folder", EditorStyles.toolbarButton))
                 ShowInFolder();
