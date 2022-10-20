@@ -393,6 +393,7 @@ namespace qASIC.Input.Map.Internal
 			group.items.Insert(newIndex, item);
 			group.RemoveItem(newIndex < oldIndex ? oldIndex + 1 : oldIndex);
 			SetSelection(new List<int>() { item.Guid.GetHashCode() });
+			window.SetMapDirty();
 		}
 		#endregion
 
