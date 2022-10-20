@@ -11,6 +11,9 @@ namespace qASIC.Input.Map
         public int defaultGroup = 0;
         public List<InputGroup> groups = new List<InputGroup>(new InputGroup[] { new InputGroup("Default") });
 
+        [System.NonSerialized] bool _initialized = false;
+        public bool Initialized => _initialized;
+
         [System.NonSerialized] private Dictionary<string, InputGroup> _groupsDictionary = null;
         public Dictionary<string, InputGroup> GroupsDictionary
         {
@@ -38,8 +41,10 @@ namespace qASIC.Input.Map
         /// <summary>Initializes the map. Call this before using the map.</summary>
         public void Initialize()
         {
+            RebuildItemCache();
             ItemsDictionary.ForEach(x => x.Value.map = this);
-            CheckForRepeating();
+            GroupsDictionary.ForEach(x => x.Value.map = this);
+            _initialized = true;
         }
 
         /// <summary>Rebuilds items and groups dictionary</summary>
@@ -53,11 +58,37 @@ namespace qASIC.Input.Map
                 .ToDictionary(x => x.Guid);
         }
 
+
+        public void AddItem(InputGroup group) =>
+            InsertItem(groups.Count, group);
+
+        public void InsertItem(int index, InputGroup group)
+        {
+            group.map = this;
+            groups.Insert(index, group);
+            RebuildItemCache();
+        }
+
+        public void RemoveItem(InputGroup group) =>
+            RemoveItem(groups.IndexOf(group));
+
+        public void RemoveItem(int index)
+        {
+            if (!groups.IndexInRange(index))
+                throw new System.IndexOutOfRangeException("Couldn't remove item");
+
+            groups.RemoveAt(index);
+            RebuildItemCache();
+        }
+
         ///<summary>Looks for an item of the specified guid from the items cache.</summary>
         /// <typeparam name="T">Type of the item</typeparam>
         /// <returns>The specified item</returns>
         public T GetItem<T>(string guid) where T : InputMapItem
         {
+            if (string.IsNullOrEmpty(guid))
+                return null;
+
             if (!ItemsDictionary.ContainsKey(guid))
                 return null;
 
@@ -71,13 +102,14 @@ namespace qASIC.Input.Map
             data = data.Duplicate();
             return data;
         }
-
+         
         public string DefaultGroupName
         { 
             get
             {
                 if (defaultGroup >= 0 && defaultGroup < groups.Count)
                     return groups[defaultGroup].ItemName;
+
                 return string.Empty;
             }
         }
@@ -96,13 +128,6 @@ namespace qASIC.Input.Map
         {
             TryGetGroup(groupName, out InputGroup group, true);
             return group;
-        }
-
-        /// <summary>Checks if there are no duplicate groups or items</summary>
-        public void CheckForRepeating()
-        {
-            NonRepeatableChecker.ContainsRepeatable(groups);
-            groups.ForEach(x => NonRepeatableChecker.ContainsRepeatable(x.items));
         }
 
         public string[] GetGroupNames() =>

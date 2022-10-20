@@ -78,6 +78,17 @@ namespace qASIC.Input.Map
             listKeys.ToList().ForEach(x => keys[x.index] = x.path);
         }
 
+        public override bool HasErrors() =>
+            HasUnassignedPaths().Count != 0;
+
+        /// <summary>Checks if there are any unassigned paths in the binding</summary>
+        /// <returns>A list of all unassigned item indexes</returns>
+        public List<int> HasUnassignedPaths() =>
+            keys
+            .Select((x, i) => InputMapUtility.GetProviderFromPath(x) == null ? i : -1)
+            .Where(x => x != -1)
+            .ToList();
+
         public struct KeyList
         {
             public KeyList(string keyName)

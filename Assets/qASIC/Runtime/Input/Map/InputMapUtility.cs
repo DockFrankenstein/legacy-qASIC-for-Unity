@@ -68,5 +68,8 @@ namespace qASIC.Input.Map
             string rootPath = path.Split('/').FirstOrDefault();
             return GetProviderByRootPath(rootPath);
         }
+
+        public static bool IsGuidBroken<T>(InputMap map, string guid) where T : InputMapItem =>
+            !string.IsNullOrWhiteSpace(guid) && map.GetItem<T>(guid) == null;
     }
 }

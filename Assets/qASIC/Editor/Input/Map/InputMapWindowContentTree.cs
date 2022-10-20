@@ -27,7 +27,11 @@ namespace qASIC.Input.Map.Internal
 		public InputGroup Group
 		{
 			get => group;
-			set => group = value;
+			set
+			{
+				Debug.Log(group);
+				group = value;
+			}
 		}
 
 		//The context menu has to be shown on next repaint in order
@@ -212,7 +216,7 @@ namespace qASIC.Input.Map.Internal
         #region Context menu
         void ShowContextMenu()
 		{
-			TreeViewItem item = GetSelectedContentItem();
+			InputMapContentItemBase item = GetSelectedContentItem();
 
 			GenericMenu menu = new GenericMenu();
 
@@ -230,7 +234,7 @@ namespace qASIC.Input.Map.Internal
 		//	menu.AddItem("Add", false, () => AddAxisItem(axis));
 		//}
 
-		void AddEditGenericMenuItems(GenericMenu menu, TreeViewItem item)
+		void AddEditGenericMenuItems(GenericMenu menu, InputMapContentItemBase item)
 		{
 			InputMapContentMapItem editableItem = item as InputMapContentMapItem;
 			bool editable = !(editableItem is null);
@@ -241,6 +245,8 @@ namespace qASIC.Input.Map.Internal
 			menu.AddSeparator("");
 			menu.AddItem("Expand all", false, ExpandAll);
 			menu.AddItem("Collapse all", false, CollapseAll);
+
+			item.CreateGenericMenu(menu);
 		}
 		#endregion
 
@@ -251,12 +257,13 @@ namespace qASIC.Input.Map.Internal
         public void AddItem(Type type)
         {
             InputMapItem item = (InputMapItem)Activator.CreateInstance(type, new object[] { });
-            item.ItemName = WindowUtility.GenerateUniqueName("New item", s => NonRepeatableChecker.ContainsKey(Group.items, s));
             AddItem(item);
         }
 
         public void AddItem(InputMapItem item)
 		{
+            item.ItemName = WindowUtility.GenerateUniqueName("New item", s => NonRepeatableChecker.ContainsKey(Group.items, s));
+
             var selectedItem = GetSelectedContentItem();
 
             int index = Group.items.Count - 1;
@@ -268,9 +275,8 @@ namespace qASIC.Input.Map.Internal
 					index = indexOf;
 			}
 
-			Group.items.Insert(index + 1, item);
+			Group.InsertItem(index + 1, item);
 			window.SetMapDirty();
-			window.Map.RebuildItemCache();
 			Reload();
 
 
@@ -298,7 +304,7 @@ namespace qASIC.Input.Map.Internal
         #region Copy&Paste&Move&Delete
 		void Delete(InputMapContentMapItem item)
         {
-			Group.items.Remove(item.Item);
+			Group.RemoveItem(item.Item);
 			window.SetMapDirty();
 			window.SelectInInspector(null);
 			SetSelection(new List<int>());
@@ -418,8 +424,6 @@ namespace qASIC.Input.Map.Internal
 					buttonContent.image = qGUIEditorUtility.PlusIcon;
 					break;
             }
-
-
 
 			if (GUI.Button(buttonRect, buttonContent, Styles.Label))
 			{

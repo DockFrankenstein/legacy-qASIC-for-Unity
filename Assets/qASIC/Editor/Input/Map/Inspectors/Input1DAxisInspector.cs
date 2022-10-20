@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static qASIC.Input.Map.InputBinding;
 using UnityEditor;
-using UnityEditorInternal;
-using UnityEngine.UIElements;
-using UnityEngine;
 
 namespace qASIC.Input.Map.Internal.Inspectors
 {
@@ -24,17 +17,16 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
         protected override void OnGUI(OnGUIContext context)
         {
-            _axis.positiveAction = EditorGUILayout.DelayedTextField("Positive", _axis.positiveAction);
-            _axis.negativeAction = EditorGUILayout.DelayedTextField("Negative", _axis.negativeAction);
+            _axis.positiveGuid = EditorGUILayout.DelayedTextField("Positive", _axis.positiveGuid);
+            _axis.negativeGuid = EditorGUILayout.DelayedTextField("Negative", _axis.negativeGuid);
         }
 
         protected override void HandleDeletion(OnGUIContext context)
         {
-            var group = map.groups
+            map.groups
                 .Where(x => x.items.Contains(context.item))
                 .First()
-                .items
-                .Remove(context.item as InputMapItem);
+                .RemoveItem(context.item as InputMapItem);
         }
     }
 }

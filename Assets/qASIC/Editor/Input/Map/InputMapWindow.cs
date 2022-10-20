@@ -244,7 +244,7 @@ namespace qASIC.Input.Map.Internal
             if (string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(mapPath))) return;
             Map = (InputMap)AssetDatabase.LoadAssetAtPath(mapPath, typeof(InputMap));
         }
-
+        
         public void CloseMap() 
         {
             Cleanup();
@@ -310,7 +310,7 @@ namespace qASIC.Input.Map.Internal
 
         public void ReloadTreesNextRepaint() =>
             _reloadTreesNextRepaint = true;
-
+        
         public void ResetEditor()
         {
             //Map
@@ -396,10 +396,13 @@ namespace qASIC.Input.Map.Internal
 
         #region GUI
         bool _resizingInspector;
-        float _inspectorLineCursorOffset;
-
+        float _inspectorLineCursorOffset; 
+         
         private void OnGUI()
         {
+            if (Map?.Initialized == false)
+                Map.Initialize();
+
             _groupBar.SetMap(Map);
 
             _toolbar.OnGUI();
@@ -408,7 +411,7 @@ namespace qASIC.Input.Map.Internal
             GUILayout.BeginHorizontal();
 
             DrawTreeView(_contentTree);
-
+            
             HorizontalLine();
 
             GUILayout.BeginVertical(GUILayout.Width(Mathf.Min(Prefs_InspectorWidth, position.width * 0.8f)));

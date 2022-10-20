@@ -26,11 +26,10 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
         protected override void HandleDeletion(OnGUIContext context)
         {
-            var group = map.groups
+            map.groups
                 .Where(x => x.items.Contains(context.item))
                 .First()
-                .items
-                .Remove(context.item as InputMapItem);
+                .RemoveItem(context.item as InputMapItem);
         }
     }
 }

@@ -9,8 +9,8 @@ namespace qASIC.Input.Map
         public Input2DAxis() : base() { }
         public Input2DAxis(string name) : base(name) { }
 
-        public Axis XAxis;
-        public Axis YAxis;
+        public Axis XAxis = new Axis();
+        public Axis YAxis = new Axis();
 
         public override Vector2 ReadValue(Func<string, float> func) =>
             new Vector2(XAxis.ReadValue(map, func), YAxis.ReadValue(map, func));
@@ -21,5 +21,9 @@ namespace qASIC.Input.Map
 
         public override Vector2 GetHighestValue(Vector2 a, Vector2 b) =>
             a.magnitude > b.magnitude ? a : b;
+
+        public override bool HasErrors() =>
+            XAxis.HasErrors(map) ||
+            YAxis.HasErrors(map);
     }
 }

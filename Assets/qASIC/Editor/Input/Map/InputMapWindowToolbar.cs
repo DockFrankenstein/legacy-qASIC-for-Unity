@@ -107,6 +107,7 @@ namespace qASIC.Input.Map.Internal
                     menu.AddItem("Reset editor", false, window.ResetEditor);
                     menu.AddItem("Reload trees", false, window.ReloadTrees);
                     menu.AddItem("Reset preferences", false, InputMapWindow.ResetPreferences);
+                    menu.AddItem("Reload map", false, () => window.Map?.Initialize());
                     menu.AddSeparator("");
                     menu.AddItem("Load current map", false, window.LoadMap);
                     menu.AddItem("Print current map", false, () => Debug.Log(InputMapWindow.GetMapPath()));

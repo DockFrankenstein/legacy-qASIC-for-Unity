@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using UnityEngine;
+using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using qASIC.EditorTools;
 using qASIC.Input.Map.Internal.Inspectors;
@@ -22,6 +23,8 @@ namespace qASIC.Input.Map.Internal
         {
             window.SelectInInspector(null);
         }
+
+        public virtual void CreateGenericMenu(GenericMenu menu) { }
     }
 
     public class InputMapContentBindingHeader : InputMapContentItemBase
@@ -50,14 +53,6 @@ namespace qASIC.Input.Map.Internal
 
     public class InputMapContentMapItem : InputMapContentItemBase
     {
-        public string Guid { get; set; }
-        public InputMapItem Item { get; set; }
-
-        public override void SelectInInspector(InputMapWindow window)
-        {
-            window.SelectInInspector(Item);
-        }
-
         public InputMapContentMapItem() : base()
         {
             Guid = System.Guid.NewGuid().ToString();
@@ -69,6 +64,23 @@ namespace qASIC.Input.Map.Internal
             Item = item;
             Guid = item.Guid;
             displayName = item?.ItemName ?? string.Empty;
+        }
+
+        public string Guid { get; set; }
+        public InputMapItem Item { get; set; }
+
+        public override void SelectInInspector(InputMapWindow window)
+        {
+            window.SelectInInspector(Item);
+        }
+
+        public override Texture GetIcon(InputGroup group) =>
+            Item.HasErrors() ? qGUIEditorUtility.ErrorIcon : null;
+
+        public override void CreateGenericMenu(GenericMenu menu)
+        {
+            menu.AddSeparator("");
+            menu.AddItem("Copy Guid", false, () => GUIUtility.systemCopyBuffer = Item?.Guid);
         }
     }
 }

@@ -103,8 +103,8 @@ namespace qASIC.Input.Map.Internal
 
                 using (new EditorGUI.DisabledGroupScope(isUsingAxis))
                 {
-                    string newPositive = EditorGUILayout.DelayedTextField("Positive", targetAxis?.positiveAction ?? axis.positiveGuid);
-                    string newNegative = EditorGUILayout.DelayedTextField("Negative", targetAxis?.negativeAction ?? axis.negativeGuid);
+                    string newPositive = EditorGUILayout.DelayedTextField("Positive", targetAxis?.positiveGuid ?? axis.positiveGuid);
+                    string newNegative = EditorGUILayout.DelayedTextField("Negative", targetAxis?.negativeGuid ?? axis.negativeGuid);
 
                     if (targetAxis == null)
                     {

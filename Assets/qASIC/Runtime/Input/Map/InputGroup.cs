@@ -20,11 +20,35 @@ namespace qASIC.Input.Map
 
         [SerializeReference] public List<InputMapItem> items = new List<InputMapItem>();
 
+        [NonSerialized] internal InputMap map;
+
         public string ItemName { get => itemName; set => itemName = value; }
         public string Guid { get => guid; set => guid = value; }
 
         public override string ToString() =>
             itemName;
+
+        public void AddItem(InputMapItem item) =>
+            InsertItem(items.Count, item);
+
+        public void InsertItem(int index, InputMapItem item)
+        {
+            item.map = map;
+            items.Insert(index, item);
+            map.RebuildItemCache();
+        }
+
+        public void RemoveItem(InputMapItem item) =>
+            RemoveItem(items.IndexOf(item));
+
+        public void RemoveItem(int index)
+        {
+            if (!items.IndexInRange(index))
+                throw new IndexOutOfRangeException("Couldn't remove item");
+
+            items.RemoveAt(index);
+            map.RebuildItemCache();
+        }
 
         public bool TryGetItem(string itemName, out InputMapItem item, bool logError = false)
         {

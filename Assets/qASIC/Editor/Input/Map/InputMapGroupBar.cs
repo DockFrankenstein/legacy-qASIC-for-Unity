@@ -149,8 +149,7 @@ namespace qASIC.Input.Map.Internal
         public virtual void DeleteGroup(int index)
         {
             if (!Map) return;
-            Debug.Assert(index >= 0 && index < Map.groups.Count, $"Cannot delete group {index}, index is out of range!");
-            Map.groups.RemoveAt(index);
+            Map.RemoveItem(index);
 
             HandleDeleteGroup(index);
 
@@ -207,10 +206,10 @@ namespace qASIC.Input.Map.Internal
             if (!Map) return;
 
             //If index is out of range, add the item at the end
-            if (index < 0 || index >= Map.groups.Count)
+            if (!Map.groups.IndexInRange(index))
                 index = Map.groups.Count - 1;
 
-            Map.groups.Insert(index + 1, group);
+            Map.InsertItem(index + 1, group);
             Select(index + 1);
         }
         #endregion

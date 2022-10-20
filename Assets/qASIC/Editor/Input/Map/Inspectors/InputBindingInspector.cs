@@ -125,7 +125,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
         protected override void OnGUI(OnGUIContext context)
         {
-            _pathsErrors = DoPathsHaveErrors();
+            _pathsErrors = _binding.HasUnassignedPaths().Count != 0;
 
             DisplayKeys();
         }
@@ -162,22 +162,12 @@ namespace qASIC.Input.Map.Internal.Inspectors
             }
         }
 
-        bool DoPathsHaveErrors()
-        {
-            bool hasErrors = _binding.keys
-                .Where(x => InputMapUtility.GetProviderFromPath(x) == null)
-                .Count() > 0;
-
-            return hasErrors;
-        }
-
         protected override void HandleDeletion(OnGUIContext context)
         {
-            var group = map.groups
+            map.groups
                 .Where(x => x.items.Contains(context.item))
                 .First()
-                .items
-                .Remove(context.item as InputMapItem);
+                .RemoveItem(context.item as InputMapItem);
         }
 
         private class KeyTypeList

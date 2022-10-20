@@ -65,12 +65,17 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
         protected virtual void OnDebugGUI(OnGUIContext context)
         {
-            IMapItem mapItem = context.item as IMapItem;
+            if (context.item is IMapItem genericItem)
+            {
+                genericItem.Guid = EditorGUILayout.DelayedTextField("GUID", genericItem.Guid);
+                if (GUILayout.Button("Generate new GUID"))
+                    genericItem.Guid = Guid.NewGuid().ToString();
+            }
 
-            if (mapItem == null) return;
-            mapItem.Guid = EditorGUILayout.DelayedTextField("GUID", mapItem.Guid);
-            if (GUILayout.Button("Generate new GUID"))
-                mapItem.Guid = Guid.NewGuid().ToString();
+            if (context.item is InputMapItem mapItem)
+            {
+                EditorGUILayout.LabelField("Map loaded", mapItem.MapLoaded.ToString());
+            }
         }
 
         protected virtual void HandleDeletion(OnGUIContext context)

@@ -20,8 +20,10 @@ namespace qASIC.Input.Map
 
         [NonSerialized] internal InputMap map;
 
+        /// <summary>Name of the item</summary>
         public string ItemName { get => itemName; set => itemName = value; }
         public string Guid { get => guid; set => guid = value; }
+        public bool MapLoaded => map != null;
 
 
         public abstract Type ValueType { get; }
@@ -44,6 +46,10 @@ namespace qASIC.Input.Map
         public abstract object ReadValueAsObject(Func<string, float> func);
         public abstract object GetHighestValueAsObject(object a, object b);
         public abstract InputEventType GetInputEvent(Func<string, InputEventType> func);
+
+        /// <summary>Checks if the item has any errors. This is used in the editor to signify if any changes are needed.</summary>
+        public virtual bool HasErrors() =>
+            false;
     }
 
     [Serializable]
@@ -57,12 +63,8 @@ namespace qASIC.Input.Map
         public override object ReadValueAsObject(Func<string, float> func) =>
             ReadValue(func);
 
-        public override object GetHighestValueAsObject(object a, object b)
-        {
-            T x = (T)a;
-            T y = (T)b;
-            return GetHighestValue(x, y);
-        }
+        public override object GetHighestValueAsObject(object a, object b) =>
+            GetHighestValue((T)a, (T)b);
 
         public abstract T ReadValue(Func<string, float> func);
         public abstract T GetHighestValue(T a, T b);

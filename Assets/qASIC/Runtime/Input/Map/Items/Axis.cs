@@ -51,5 +51,14 @@ namespace qASIC.Input.Map
             return positive?.GetInputEvent(func) ?? InputEventType.None |
                 negative?.GetInputEvent(func) ?? InputEventType.None;
         }
+
+        public bool HasErrors(InputMap map)
+        {
+            if (IsUsingAxis())
+                return InputMapUtility.IsGuidBroken<Input1DAxis>(map, axisGuid);
+
+            return InputMapUtility.IsGuidBroken<InputBinding>(map, positiveGuid) ||
+                InputMapUtility.IsGuidBroken<InputBinding>(map, negativeGuid);
+        }
     }
 }

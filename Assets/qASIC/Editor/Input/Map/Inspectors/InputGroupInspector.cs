@@ -40,7 +40,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
         protected override void HandleDeletion(OnGUIContext context)
         {
-            map.groups.Remove(_group);
+            map.RemoveItem(_group);
         }
     }
 }
