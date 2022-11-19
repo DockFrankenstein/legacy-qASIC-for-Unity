@@ -1,4 +1,5 @@
-﻿using System;
+﻿using qASIC.InternalTools;
+using System;
 using System.Collections.Generic;
 
 namespace qASIC.Input.Devices
@@ -16,5 +17,8 @@ namespace qASIC.Input.Devices
 
         void Initialize();
         void Update();
+
+        /// <summary>This method is used for displaying information in the device inspector</summary>
+        PropertiesList GetProperties();
     }
 }

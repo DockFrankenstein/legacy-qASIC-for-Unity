@@ -85,11 +85,16 @@ namespace qASIC.Input.DebugTools
             {
                 using (var scroll = new GUILayout.ScrollViewScope(_propertyScrollPosition))
                 {
+                    EditorGUILayout.LabelField("Properties", EditorStyles.whiteLargeLabel);
+                    EditorGUI.indentLevel++;
+
                     if (devices.IndexInRange(_selectedIndex))
                     {
-                        GUILayout.Label("Values");
+                        var device = devices[_selectedIndex];
+
+                        EditorGUILayout.LabelField("Values");
                         EditorGUI.indentLevel++;
-                        var values = devices[_selectedIndex].Values
+                        var values = device.Values
                             .Where(x => x.Value != 0f);
                         foreach (var item in values)
                         {
@@ -99,7 +104,15 @@ namespace qASIC.Input.DebugTools
                         if (values.Count() == 0)
                             EditorGUILayout.LabelField("EMPTY");
                         EditorGUI.indentLevel--;
+
+                        var properties = device.GetProperties();
+                        foreach (var item in properties)
+                        {
+                            EditorGUILayout.LabelField(item.Key, item.Value);
+                        }
                     }
+
+                    EditorGUI.indentLevel--;
                     _propertyScrollPosition = scroll.scrollPosition;
                 }
             }

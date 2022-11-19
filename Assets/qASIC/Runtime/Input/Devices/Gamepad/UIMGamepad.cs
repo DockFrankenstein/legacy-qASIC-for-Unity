@@ -4,6 +4,7 @@ using qASIC.Input.UIM;
 using qASIC.ProjectSettings;
 using UnityEngine;
 using System.Linq;
+using qASIC.InternalTools;
 
 namespace qASIC.Input.Devices
 {
@@ -148,5 +149,15 @@ namespace qASIC.Input.Devices
 
         string GetKeyPath(GamepadButton button) =>
             $"key_gamepad/{button}";
+
+        public override PropertiesList GetProperties()
+        {
+            var properties = base.GetProperties();
+
+            properties.Add("Deadzone.Min", DeadZone.x);
+            properties.Add("Deadzone.Max", DeadZone.y);
+
+            return properties;
+        }
     }
 }

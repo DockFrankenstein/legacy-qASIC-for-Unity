@@ -1,4 +1,5 @@
-﻿using System;
+﻿using qASIC.InternalTools;
+using System;
 using System.Collections.Generic;
 
 namespace qASIC.Input.Devices
@@ -27,6 +28,11 @@ namespace qASIC.Input.Devices
         public virtual void Update()
         {
 
+        }
+
+        public virtual PropertiesList GetProperties()
+        {
+            return new PropertiesList();
         }
     }
 
