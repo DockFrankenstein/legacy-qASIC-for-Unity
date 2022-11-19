@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1b33c3ee98b5a74d866b2ac1462f889, type: 3}
   m_Name: Console
   m_EditorClassIdentifier: 
-  config: {fileID: 11400000, guid: 67849b547219c6544b513c8321bd7756, type: 2}
+  config: {fileID: 11400000, guid: 7c2016750eefad74ea22add2c83d2402, type: 2}
+  startArgsDisableCommandInitialization: 1

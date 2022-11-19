@@ -12,5 +12,17 @@ namespace qASIC
             style.normal.background = background;
             return style;
         }
+
+        public static GUIStyle WithBorder(this GUIStyle style, RectOffset border)
+        {
+            style.border = border;
+            return style;
+        }
+
+        public static GUIStyle WithMargin(this GUIStyle style, RectOffset margin)
+        {
+            style.margin = margin;
+            return style;
+        }
     }
 }

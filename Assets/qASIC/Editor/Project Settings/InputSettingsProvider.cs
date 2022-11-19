@@ -41,16 +41,22 @@ namespace qASIC.ProjectSettings.Internal
                 Input.Map.Internal.InputMapWindow.OpenMapIfNotDirty(settings.map);
             qGUIInternalUtility.EndGroup();
 
+            qGUIInternalUtility.BeginGroup("Device structure");
+            using (var change = new EditorGUI.ChangeCheckScope())
+            {
+                DrawProperty(nameof(Settings.deviceStructure));
+                if (change.changed)
+                {
+                    serializedSettings.ApplyModifiedProperties();
+                    Input.Devices.DeviceManager.Reload();
+                }
+            }
+            qGUIInternalUtility.EndGroup();
+
             qGUIInternalUtility.BeginGroup("Saving");
             DrawProperty(nameof(Settings.serializationType));
             if (settings.serializationType == SerializationType.config)
                 DrawProperty(nameof(Settings.filePath));
-            qGUIInternalUtility.EndGroup();
-
-            qGUIInternalUtility.BeginGroup("UIM Settings");
-            qGUIEditorUtility.DrawPropertiesInRange(serializedSettings,
-                nameof(Settings.uimAxisMapper),
-                nameof(Settings.uimAxisMapper));
             qGUIInternalUtility.EndGroup();
 
             qGUIInternalUtility.BeginGroup("Starting arguments");

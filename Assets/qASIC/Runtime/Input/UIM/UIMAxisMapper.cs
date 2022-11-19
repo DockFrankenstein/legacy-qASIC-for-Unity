@@ -1,4 +1,4 @@
-﻿using qASIC.ProjectSettings;
+﻿using qASIC.Input.Devices;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,7 +17,7 @@ namespace qASIC.Input.UIM
         {
             get
             {
-                UIMAxisMapper mapper = InputProjectSettings.Instance.uimAxisMapper;
+                UIMAxisMapper mapper = UIMGamepadProvider.AxisMapper;
                 if (mapper == null)
                     return null;
 
@@ -49,6 +49,9 @@ namespace qASIC.Input.UIM
         {
             get
             {
+                if (CurrentMapper == null)
+                    return null;
+
                 if (_axisDictionary == null)
                 {
                     _axisDictionary = new Dictionary<GamepadButton, UIMAxisMapperPlatform.ButtonMapping>();

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Input
   m_EditorClassIdentifier: 
   map: {fileID: 0}
+  deviceStructure: {fileID: 11400000, guid: eb718c08d38bf894cb05c8f9b33b92a3, type: 2}
   serializationType: 2
   filePath:
     buildPath:

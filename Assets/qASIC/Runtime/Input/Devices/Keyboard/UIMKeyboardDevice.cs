@@ -5,18 +5,23 @@ using System.Linq;
 
 namespace qASIC.Input.Devices
 {
-    public class UIMKeyboardDevice : IKeyboardDevice
+    public class UIMKeyboardDevice : InputDevice, IKeyboardDevice
     {
-        public string DeviceName => "Keyboard";
-        public Type KeyType => typeof(KeyCode);
+        public override string DeviceName { get => "Keyboard"; set { } }
+
+        public override Type KeyType => typeof(KeyCode);
+        public override bool RuntimeOnly => false;
+
+        public override Dictionary<string, float> Values => _values;
 
         private Dictionary<string, bool> _keys = new Dictionary<string, bool>();
         private Dictionary<string, bool> _keysUp = new Dictionary<string, bool>();
         private Dictionary<string, bool> _keysDown = new Dictionary<string, bool>();
+        private Dictionary<string, float> _values = new Dictionary<string, float>();
         private Vector2 mousePosition;
         private Vector2 mouseMove;
 
-        public float GetInputValue(string keyPath)
+        public override float GetInputValue(string keyPath)
         {
             if (!_keys.ContainsKey(keyPath))
                 return 0f;
@@ -24,7 +29,7 @@ namespace qASIC.Input.Devices
             return _keys[keyPath] ? 1f : 0f;
         }
 
-        public InputEventType GetInputEvent(string keyPath)
+        public override InputEventType GetInputEvent(string keyPath)
         {
             InputEventType type = InputEventType.None;
 
@@ -43,7 +48,7 @@ namespace qASIC.Input.Devices
             return type;
         }
 
-        public string GetAnyKeyDown()
+        public override string GetAnyKeyDown()
         {
             var downButtons = _keysDown
                 .Where(x => x.Value);
@@ -74,7 +79,7 @@ namespace qASIC.Input.Devices
             get
             {
                 if (_avaliableKeys == null)
-                    _avaliableKeys = KeyboardManager.AllKeyCodes
+                    _avaliableKeys = UIMKeyboardProvider.AllKeyCodes
                         .Where(x => !KeysToIgnore.Contains(x))
                         .ToArray();
 
@@ -83,18 +88,24 @@ namespace qASIC.Input.Devices
         }
 
 
-        public void Initialize()
+        public override void Initialize()
         {
+            _keys.Clear();
+            _keysUp.Clear();
+            _keysDown.Clear();
+            _values.Clear();
+
             foreach (KeyCode key in _AvaliableKeys)
             {
                 string keyName = GetKeyName(key);
                 _keys.Add(keyName, false);
                 _keysUp.Add(keyName, false);
                 _keysDown.Add(keyName, false);
+                _values.Add(keyName, 0f);
             }
         }
 
-        public void Update()
+        public override void Update()
         {
             foreach (var key in _AvaliableKeys)
             {
@@ -104,6 +115,7 @@ namespace qASIC.Input.Devices
                 _keysUp[keyName] = previousValue && !keyValue;
                 _keysDown[keyName] = !previousValue && keyValue;
                 _keys[keyName] = keyValue;
+                _values[keyName] = _keys[keyName] ? 1f : 0f;
             }
 
             Vector2 newMousePosition = UnityEngine.Input.mousePosition;

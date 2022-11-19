@@ -99,8 +99,9 @@ namespace qASIC.Console
         {
             logs.Add(log);
 
-            if (_config != null && 
-                _config.logToUnity && 
+            GameConsoleConfig config = GetConfig();
+
+            if (config.logToUnity && 
                 log.Type != GameConsoleLog.LogType.User && 
                 !log.UnityHidden)
                 Debug.Log($"[qASIC] {log.Message}");
@@ -173,8 +174,12 @@ namespace qASIC.Console
         public static GameConsoleConfig GetConfig()
         {
             if (_config == null)
+                _config = ConsoleProjectSettings.Instance.config;
+
+            if (_config == null)
             {
-                GameConsoleConfig defaultConfig = Resources.Load<GameConsoleConfig>("Console/DefaultConfig");
+                GameConsoleConfig defaultConfig = 
+                    Resources.Load<GameConsoleConfig>("Console/DefaultConfig");
 
                 if (defaultConfig == null)
                 {

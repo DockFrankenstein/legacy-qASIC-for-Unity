@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine;
 using System.Linq;
 
 namespace qASIC.Input.Devices
 {
-    public static class KeyboardManager
+    public class UIMKeyboardProvider : DeviceProvider
     {
         private static KeyCode[] _allKeyCodes = null;
         /// <summary>A list of all existing KeyCodes</summary>
@@ -13,7 +13,9 @@ namespace qASIC.Input.Devices
             get
             {
                 if (_allKeyCodes == null)
-                    _allKeyCodes = ((KeyCode[])Enum.GetValues(typeof(KeyCode))).Distinct().ToArray();
+                    _allKeyCodes = ((KeyCode[])Enum.GetValues(typeof(KeyCode)))
+                        .Distinct()
+                        .ToArray();
 
                 return _allKeyCodes;
             }
@@ -21,10 +23,12 @@ namespace qASIC.Input.Devices
 
         private static UIMKeyboardDevice keyboard = new UIMKeyboardDevice();
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
-        static void Initialize()
+        public override string DefaultItemName => "New UIM Keyboard Provider";
+
+        public override void Initialize()
         {
             DeviceManager.RegisterDevice(keyboard);
         }
     }
 }
+ 

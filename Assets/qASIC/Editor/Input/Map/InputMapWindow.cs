@@ -458,8 +458,6 @@ namespace qASIC.Input.Map.Internal
         {
             qGUIEditorUtility.VerticalLine();
 
-            //TODO: add inspector resizing
-
             Rect lineRect = GUILayoutUtility.GetLastRect();
             Rect mouseAreaRect = new Rect(lineRect).Border(-2f, 0f);
 

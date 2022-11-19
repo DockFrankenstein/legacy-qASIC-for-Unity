@@ -25,7 +25,7 @@ namespace qASIC.Input.Internal.KeyProviders
             {
                 if (_keyNameMap == null)
                 {
-                    _keyNameMap = new Map<string, KeyCode>(KeyboardManager.AllKeyCodes
+                    _keyNameMap = new Map<string, KeyCode>(UIMKeyboardProvider.AllKeyCodes
                         .ToDictionary(x => x.ToString()));
                 }
 

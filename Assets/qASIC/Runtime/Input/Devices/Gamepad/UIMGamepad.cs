@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace qASIC.Input.Devices
 {
-    public class UIMGamepad : IGamepadDevice, IDeadZone
+    public class UIMGamepad : GamepadDevice, IDeadZone
     {
         public UIMGamepad() { }
 
@@ -22,9 +22,12 @@ namespace qASIC.Input.Devices
             ManagerJoystickIndex = managerJoystickIndex;
         }
 
-        public string DeviceName => _deviceName;
+        public override string DeviceName => _deviceName;
         string _deviceName;
-        public Type KeyType => typeof(GamepadButton);
+
+        public override bool RuntimeOnly => true;
+
+        public override Dictionary<string, float> Values => _buttons;
 
         public Vector2 DeadZone { get; set; } = new Vector2(0.1f, 0.9f);
 
@@ -35,12 +38,7 @@ namespace qASIC.Input.Devices
         private Dictionary<string, float> _buttonsUp = new Dictionary<string, float>();
         private Dictionary<string, float> _buttonsDown = new Dictionary<string, float>();
 
-        public void SetName(string name)
-        {
-            _deviceName = name;
-        }
-
-        public float GetInputValue(string keyPath)
+        public override float GetInputValue(string keyPath)
         {
             if (!_buttons.ContainsKey(keyPath))
                 return 0f;
@@ -48,7 +46,7 @@ namespace qASIC.Input.Devices
             return _buttons[keyPath];
         }
 
-        public InputEventType GetInputEvent(string keyPath)
+        public override InputEventType GetInputEvent(string keyPath)
         {
             InputEventType type = InputEventType.None;
 
@@ -67,7 +65,7 @@ namespace qASIC.Input.Devices
             return type;
         }
 
-        public string GetAnyKeyDown()
+        public override string GetAnyKeyDown()
         {
             var downButtons = _buttonsDown
                 .Where(x => x.Value != 0);
@@ -75,7 +73,7 @@ namespace qASIC.Input.Devices
             return downButtons.FirstOrDefault().Key;
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             _buttons.Clear();
             _buttonsUp.Clear();
@@ -91,7 +89,7 @@ namespace qASIC.Input.Devices
             }
         }
 
-        public void Update()
+        public override void Update()
         {
             foreach (var button in InputManager.GamepadButtons)
             {
@@ -107,10 +105,6 @@ namespace qASIC.Input.Devices
 
         float GetButtonValue(GamepadButton button)
         {
-            UIMAxisMapper mapper = InputProjectSettings.Instance?.uimAxisMapper;
-            if (mapper == null)
-                return 0f;
-
             UIMAxisMapperPlatform.ButtonMapping mapping = UIMAxisMapper.GetButtonMapping(button);
 
             switch (mapping.type)
@@ -129,9 +123,9 @@ namespace qASIC.Input.Devices
                     KeyCode key = (KeyCode)((int)mapping.uimKey + ManagerJoystickIndex * 20f);
 
                     return UnityEngine.Input.GetKey(key) ? 1f : 0f;
+                default:
+                    return 0f;
             }
-
-            return 0f;
         }
 
         bool HasDeadZone(GamepadButton button)

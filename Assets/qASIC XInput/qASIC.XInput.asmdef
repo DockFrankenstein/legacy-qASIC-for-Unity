@@ -1,0 +1,15 @@
+{
+    "name": "qASIC.XInput",
+    "references": [
+        "GUID:b1181113609d0ad43a27c0338145e93c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

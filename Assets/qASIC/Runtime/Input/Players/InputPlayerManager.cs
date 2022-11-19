@@ -17,9 +17,14 @@ namespace qASIC.Input.Players
         public static event Action<InputPlayer> OnPlayerCreated;
         public static event Action<InputPlayer> OnPlayerRemoved;
 
+        static bool _initialized;
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
         static void Initialize()
         {
+            if (_initialized)
+                return;
+
             DeviceManager.OnDeviceConnected += HandleDeviceConnected;
             DeviceManager.OnDeviceDisconnected += (_, device) =>
             {
@@ -28,7 +33,7 @@ namespace qASIC.Input.Players
                         player.CurrentDevices.Remove(device);
             };
 
-            InputUpdateManager.OnUpdate += UpdatePlayers;
+            _initialized = true;
         }
 
         static void HandleDeviceConnected(int index, IInputDevice device)
@@ -90,16 +95,6 @@ namespace qASIC.Input.Players
                 player.MapData = map.GetData();
             }
         }
-
-        #region Logic
-        private static void UpdatePlayers()
-        {
-            foreach (var player in Players)
-                if (player != null)
-                    foreach (var device in player.CurrentDevices)
-                        device.Update();
-        }
-        #endregion
 
         #region Removing
         public static void RemovePlayerByID(string id) =>

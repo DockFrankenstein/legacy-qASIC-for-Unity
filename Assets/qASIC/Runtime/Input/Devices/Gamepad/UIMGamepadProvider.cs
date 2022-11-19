@@ -1,32 +1,42 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using qASIC.Input.Update;
+using qASIC.Input.UIM;
+
+using UInput = UnityEngine.Input;
 
 namespace qASIC.Input.Devices
 {
-    public static class UIMGamepadManager
+    public class UIMGamepadProvider : DeviceProvider
     {
+        public UIMAxisMapper mapper;
+
         static string[] _joystickNames;
 
         static List<UIMGamepad> _gamepads = new List<UIMGamepad>();
 
-        [RuntimeInitializeOnLoadMethod]
-        static void Initialize()
-        {
-            InputUpdateManager.OnUpdate += Update;
+        public override string DefaultItemName => "New UIM Gamepad Provider";
+        public static UIMAxisMapper AxisMapper { get; private set; } = null;
 
-            _joystickNames = UnityEngine.Input.GetJoystickNames();
+        public override void Initialize()
+        {
+            AxisMapper = mapper;
+            _joystickNames = UInput.GetJoystickNames();
 
             for (int i = 0; i < _joystickNames.Length; i++)
                 if (!string.IsNullOrEmpty(_joystickNames[i]))
                     AddGamepad(_joystickNames[i], i);
         }
 
-        private static void Update()
+        public override void Cleanup()
         {
-#if !qASIC_CABLEBOX_DISABLE_UIM_GAMEPADS
-            string[] joysticks = Input.GetJoystickNames();
+            AxisMapper = null;
+            _gamepads.Clear();
+            _joystickNames = new string[0];
+        }
+
+        public override void Update()
+        {
+            string[] joysticks = UInput.GetJoystickNames();
 
             //Return if nothing changed
             if (joysticks.SequenceEqual(_joystickNames))
@@ -59,7 +69,6 @@ namespace qASIC.Input.Devices
             }
 
             _joystickNames = joysticks;
-#endif
         }
 
         private static void AddGamepad(string name, int id)
@@ -73,7 +82,7 @@ namespace qASIC.Input.Devices
         private static void UpdateGamepadList()
         {
             int gamepadCount = _gamepads.Count;
-            int joystickCount = UnityEngine.Input.GetJoystickNames().Length;
+            int joystickCount = UInput.GetJoystickNames().Length;
 
             //Do nothing if the count is the same
             if (gamepadCount == joystickCount) return;

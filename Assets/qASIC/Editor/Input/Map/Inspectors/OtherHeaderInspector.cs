@@ -1,9 +1,5 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System;
-using qASIC.Tools;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace qASIC.Input.Map.Internal.Inspectors
 {

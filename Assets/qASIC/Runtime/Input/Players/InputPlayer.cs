@@ -27,7 +27,7 @@ namespace qASIC.Input.Players
         }
 
         public string ID { get; set; }
-        public InputMapData MapData { get; set; }
+        public InputMapData MapData { get; set; } = new InputMapData();
         public InputMap Map { get; set; }
 
         private List<IInputDevice> _devices = new List<IInputDevice>();

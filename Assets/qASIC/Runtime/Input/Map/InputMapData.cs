@@ -14,7 +14,7 @@ namespace qASIC.Input.Map
             this.groups = groups;
         }
 
-        public List<InputGroup> groups;
+        public List<InputGroup> groups = new List<InputGroup>();
 
         [System.NonSerialized] private Dictionary<string, InputGroup> _groupsDictionary = null;
         public Dictionary<string, InputGroup> GroupsDictionary

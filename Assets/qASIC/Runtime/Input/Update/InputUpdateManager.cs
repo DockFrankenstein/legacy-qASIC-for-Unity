@@ -13,6 +13,18 @@ namespace qASIC.Input.Update
             new GameObject("[qASIC] Input Update", typeof(InputBehaviorUpdate), typeof(AddToDontDestroy));
         }
 
+#if UNITY_EDITOR
+        [UnityEditor.InitializeOnLoadMethod]
+        private static void EditorInitialize()
+        {
+            UnityEditor.EditorApplication.update += () =>
+            {
+                if (!Application.isPlaying)
+                    Update();
+            };
+        }
+#endif
+
         public static void Update()
         {
             OnUpdate?.Invoke();
