@@ -12,6 +12,7 @@ namespace qASIC.Input.Map
         public InputMapData(List<InputGroup> groups) : this()
         {
             this.groups = groups;
+            AssignMapDataToItems();
         }
 
         public List<InputGroup> groups = new List<InputGroup>();
@@ -58,11 +59,15 @@ namespace qASIC.Input.Map
                 if (groupIndex == -1)
                     continue;
 
+                groupToLoad.mapData = this;
+
                 foreach (var itemToLoad in groupToLoad.items)
                 {
                     int itemIndex = groups[groupIndex].items.IndexOf(groups[groupIndex].items
                     .Where(x => x.Guid == itemToLoad.Guid)
                     .FirstOrDefault());
+
+                    itemToLoad.mapData = this;
 
                     if (itemIndex == -1)
                         continue;
@@ -75,7 +80,33 @@ namespace qASIC.Input.Map
         public InputMapData Duplicate()
         {
             string json = JsonUtility.ToJson(this);
-            return JsonUtility.FromJson<InputMapData>(json);
+            var data = JsonUtility.FromJson<InputMapData>(json);
+            data.AssignMapDataToItems();
+            return data;
+        }
+
+        void AssignMapDataToItems()
+        {
+            foreach (var group in this.groups)
+            {
+                group.mapData = this;
+                foreach (var item in group.items)
+                    item.mapData = this;
+            }
+        }
+
+        ///<summary>Looks for an item of the specified guid from the items cache.</summary>
+        /// <typeparam name="T">Type of the item</typeparam>
+        /// <returns>The specified item</returns>
+        public T GetItem<T>(string guid) where T : InputMapItem
+        {
+            if (string.IsNullOrEmpty(guid))
+                return null;
+
+            if (!ItemsDictionary.ContainsKey(guid))
+                return null;
+
+            return (T)ItemsDictionary[guid];
         }
     }
 }

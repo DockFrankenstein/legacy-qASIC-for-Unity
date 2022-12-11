@@ -13,10 +13,10 @@ namespace qASIC.Input.Map
         public string negativeGuid = string.Empty;
 
         public override float ReadValue(Func<string, float> func) =>
-            new Axis(positiveGuid, negativeGuid).ReadValue(map, func);
+            new Axis(positiveGuid, negativeGuid).ReadValue(mapData, func);
 
         public override InputEventType GetInputEvent(Func<string, InputEventType> func) =>
-            new Axis(positiveGuid, negativeGuid).GetInputEvent(map, func);
+            new Axis(positiveGuid, negativeGuid).GetInputEvent(mapData, func);
 
         public override float GetHighestValue(float a, float b) =>
             Mathf.Abs(a) > Mathf.Abs(b) ? a : b;

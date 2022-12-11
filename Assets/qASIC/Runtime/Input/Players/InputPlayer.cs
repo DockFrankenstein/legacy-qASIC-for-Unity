@@ -86,11 +86,17 @@ namespace qASIC.Input.Players
             if (!InputMapDataUtility.TryGetItem(MapData, groupName, itemName, out InputMapItem item))
                 return default;
 
-            object value = default;
+            object value = null;
 
             foreach (IInputDevice device in _devices)
             {
                 object readValue = item.ReadValueAsObject(device.GetInputValue);
+                if (value == null)
+                {
+                    value = readValue;
+                    continue;
+                }
+
                 value = item.GetHighestValueAsObject(value, readValue);
             }
 

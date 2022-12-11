@@ -21,6 +21,7 @@ namespace qASIC.Input.Map
         [SerializeReference] public List<InputMapItem> items = new List<InputMapItem>();
 
         [NonSerialized] internal InputMap map;
+        [NonSerialized] internal InputMapData mapData;
 
         public string ItemName { get => itemName; set => itemName = value; }
         public string Guid { get => guid; set => guid = value; }

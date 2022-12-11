@@ -23,7 +23,7 @@ namespace qASIC.Input.Map
         public bool IsUsingAxis() =>
             !string.IsNullOrWhiteSpace(axisGuid);
 
-        public float ReadValue(InputMap map, Func<string, float> func)
+        public float ReadValue(InputMapData map, Func<string, float> func)
         {
             if (IsUsingAxis())
             {
@@ -34,10 +34,10 @@ namespace qASIC.Input.Map
             InputBinding positive = map.GetItem<InputBinding>(positiveGuid);
             InputBinding negative = map.GetItem<InputBinding>(negativeGuid);
 
-            return positive?.ReadValue(func) ?? 0f - negative?.ReadValue(func) ?? 0f;
+            return (positive?.ReadValue(func) ?? 0f) - (negative?.ReadValue(func) ?? 0f);
         }
 
-        public InputEventType GetInputEvent(InputMap map, Func<string, InputEventType> func)
+        public InputEventType GetInputEvent(InputMapData map, Func<string, InputEventType> func)
         {
             if (IsUsingAxis())
             {

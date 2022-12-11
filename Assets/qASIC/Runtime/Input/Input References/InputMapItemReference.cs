@@ -24,9 +24,13 @@ namespace qASIC.Input
         public InputGroup GetGroup()
         {
             var item = GetItem();
-            return InputManager.Map?.groups
-            .Where(x => x.items.Contains(item))
-            .First();
+            if (!InputManager.MapLoaded)
+                return null;
+
+            var targets = InputManager.Map.groups
+            .Where(x => x.items.Contains(item));
+
+            return targets.Count() == 1 ? targets.First() : null;
         }
 
         public InputMapItem GetItem()

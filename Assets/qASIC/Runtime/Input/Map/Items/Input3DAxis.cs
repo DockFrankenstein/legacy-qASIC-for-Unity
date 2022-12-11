@@ -14,11 +14,11 @@ namespace qASIC.Input.Map
         public Axis ZAxis = new Axis();
 
         public override Vector3 ReadValue(Func<string, float> func) =>
-            new Vector3(XAxis.ReadValue(map, func), YAxis.ReadValue(map, func), ZAxis.ReadValue(map, func));
+            new Vector3(XAxis.ReadValue(mapData, func), YAxis.ReadValue(mapData, func), ZAxis.ReadValue(mapData, func));
 
         public override InputEventType GetInputEvent(Func<string, InputEventType> func) =>
-            XAxis.GetInputEvent(map, func) |
-            YAxis.GetInputEvent(map, func);
+            XAxis.GetInputEvent(mapData, func) |
+            YAxis.GetInputEvent(mapData, func);
 
         public override Vector3 GetHighestValue(Vector3 a, Vector3 b) =>
             a.magnitude > b.magnitude ? a : b;
