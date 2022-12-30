@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using qASIC.Tools;
+using System.Collections.Generic;
 
 namespace qASIC.Input.Map
 {
@@ -18,7 +19,6 @@ namespace qASIC.Input.Map
         [SerializeField] string guid = System.Guid.NewGuid().ToString();
 
         [NonSerialized] internal InputMap map;
-        [NonSerialized] internal InputMapData mapData;
 
         /// <summary>Name of the item</summary>
         public string ItemName { get => itemName; set => itemName = value; }
@@ -34,9 +34,9 @@ namespace qASIC.Input.Map
         public bool NameEquals(string name) =>
             NonRepeatableChecker.Compare(itemName, name);
 
-        public abstract object ReadValueAsObject(Func<string, float> func);
+        public abstract object ReadValueAsObject(InputMapData data, Func<string, float> func);
+        public abstract InputEventType GetInputEvent(InputMapData data, Func<string, InputEventType> func);
         public abstract object GetHighestValueAsObject(object a, object b);
-        public abstract InputEventType GetInputEvent(Func<string, InputEventType> func);
 
         /// <summary>Checks if the item has any errors. This is used in the editor to signify if any changes are needed.</summary>
         public virtual bool HasErrors() =>
@@ -51,13 +51,14 @@ namespace qASIC.Input.Map
 
         public override Type ValueType => typeof(T);
 
-        public override object ReadValueAsObject(Func<string, float> func) =>
-            ReadValue(func);
+        public override object ReadValueAsObject(InputMapData data, Func<string, float> func) =>
+            ReadValue(data, func);
+
+        public abstract T ReadValue(InputMapData data, Func<string, float> func);
+
 
         public override object GetHighestValueAsObject(object a, object b) =>
             GetHighestValue((T)a, (T)b);
-
-        public abstract T ReadValue(Func<string, float> func);
         public abstract T GetHighestValue(T a, T b);
     }
 }

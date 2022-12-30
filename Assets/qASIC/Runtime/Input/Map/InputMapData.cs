@@ -1,112 +1,74 @@
 ﻿using System.Collections.Generic;
+using qASIC.Input.Serialization;
+using System;
 using UnityEngine;
-using System.Linq;
 
 namespace qASIC.Input.Map
 {
-    [System.Serializable]
+    [Serializable]
     public class InputMapData
     {
         public InputMapData() { }
-
-        public InputMapData(List<InputGroup> groups) : this()
+        public InputMapData(InputMap map)
         {
-            this.groups = groups;
-            AssignMapDataToItems();
-        }
-
-        public List<InputGroup> groups = new List<InputGroup>();
-
-        [System.NonSerialized] private Dictionary<string, InputGroup> _groupsDictionary = null;
-        public Dictionary<string, InputGroup> GroupsDictionary
-        {
-            get
+            foreach (var item in map.ItemsDictionary)
             {
-                if (_groupsDictionary == null)
+                SerializableValues.Add(item.Key, new Dictionary<string, object>());
+                var typeData = InputSerializationManager.ItemData[item.Value.GetType()];
+                
+                foreach (var field in typeData.fields)
                 {
-                    _groupsDictionary = groups
-                        .ToDictionary(x => x.Guid);
-                }
-
-                return _groupsDictionary;
-            }
-        }
-
-        [System.NonSerialized] Dictionary<string, InputMapItem> _itemsDictionary = null;
-        public Dictionary<string, InputMapItem> ItemsDictionary
-        {
-            get
-            {
-                if (_itemsDictionary == null)
-                {
-                    _itemsDictionary = groups
-                        .SelectMany(x => x.items)
-                        .ToDictionary(x => x.Guid);
-                }
-
-                return _itemsDictionary;
-            }
-        }
-
-        public void LoadFromData(InputMapData dataToLoad)
-        {
-            foreach (var groupToLoad in dataToLoad.groups)
-            {
-                int groupIndex = groups.IndexOf(groups
-                    .Where(x => x.Guid == groupToLoad.Guid)
-                    .FirstOrDefault());
-
-                if (groupIndex == -1)
-                    continue;
-
-                groupToLoad.mapData = this;
-
-                foreach (var itemToLoad in groupToLoad.items)
-                {
-                    int itemIndex = groups[groupIndex].items.IndexOf(groups[groupIndex].items
-                    .Where(x => x.Guid == itemToLoad.Guid)
-                    .FirstOrDefault());
-
-                    itemToLoad.mapData = this;
-
-                    if (itemIndex == -1)
-                        continue;
-
-                    groups[groupIndex].items[itemIndex] = itemToLoad;
+                    var value = field.Value.GetValue(item.Value);
+                    SerializableValues[item.Key].Add(field.Key, value);
                 }
             }
         }
 
-        public InputMapData Duplicate()
+        public Dictionary<string, Dictionary<string, object>> SerializableValues { get; set; } = new Dictionary<string, Dictionary<string, object>>();
+
+        public SerializableInputMapData CreateSerializableData()
         {
-            string json = JsonUtility.ToJson(this);
-            var data = JsonUtility.FromJson<InputMapData>(json);
-            data.AssignMapDataToItems();
+            var data = new SerializableInputMapData();
+
+            //foreach (var item in SerializableValues)
+            //{
+            //    var itemValue = new SerializableInputMapData.ItemValues();
+
+            //    foreach (var value in item.Value)
+            //    {
+            //        System.Text.
+            //    }
+
+            //    data.values.Add(new Tuple<string, SerializableInputMapData.ItemValues>(item.Key, itemValue));
+            //}
+
             return data;
         }
 
-        void AssignMapDataToItems()
+        public T GetSerializableValue<T>(InputMapItem item, string name) =>
+            GetSerializableValue<T>(item.Guid, name);
+
+        public object GetSerializableValue(InputMapItem item, string name) =>
+            GetSerializableValue(item.Guid, name);
+
+        public T GetSerializableValue<T>(string guid, string name)
         {
-            foreach (var group in this.groups)
-            {
-                group.mapData = this;
-                foreach (var item in group.items)
-                    item.mapData = this;
-            }
+            return (T)SerializableValues[guid][name];
         }
 
-        ///<summary>Looks for an item of the specified guid from the items cache.</summary>
-        /// <typeparam name="T">Type of the item</typeparam>
-        /// <returns>The specified item</returns>
-        public T GetItem<T>(string guid) where T : InputMapItem
+        public object GetSerializableValue(string guid, string name) =>
+            SerializableValues[guid][name];
+
+        [Serializable]
+        public class SerializableInputMapData
         {
-            if (string.IsNullOrEmpty(guid))
-                return null;
+            public List<Tuple<string, ItemValues>> values = new List<Tuple<string, ItemValues>>();
 
-            if (!ItemsDictionary.ContainsKey(guid))
-                return null;
-
-            return (T)ItemsDictionary[guid];
+            public class ItemValues
+            {
+                public List<Tuple<string, string>> values = new List<Tuple<string, string>>();
+                public List<Tuple<string, List<string>>> lists = new List<Tuple<string, List<string>>>();
+            }
         }
     }
 }

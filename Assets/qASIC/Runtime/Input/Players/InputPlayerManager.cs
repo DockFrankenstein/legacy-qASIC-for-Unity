@@ -71,11 +71,11 @@ namespace qASIC.Input.Players
                 newPlayer = new InputPlayer(CreateNewPlayerName(), device);
 
                 if (InputManager.Map != null)
-                    newPlayer.MapData = InputManager.Map.GetData();
+                    newPlayer.MapData = new InputMapData(InputManager.Map);
             }
 
             if (InputManager.MapLoaded)
-                newPlayer.MapData = InputManager.Map.GetData();
+                newPlayer.MapData = new InputMapData(InputManager.Map);
 
             Players[playerIndex] = newPlayer;
             PlayerNames[playerIndex] = newPlayer.ID;
@@ -92,7 +92,7 @@ namespace qASIC.Input.Players
             {
                 if (player == null) continue;
                 player.Map = map;
-                player.MapData = map.GetData();
+                player.MapData = new InputMapData(map);
             }
         }
 

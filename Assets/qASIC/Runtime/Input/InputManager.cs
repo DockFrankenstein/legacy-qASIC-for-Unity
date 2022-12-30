@@ -74,6 +74,8 @@ namespace qASIC.Input
             _initialized = true;
 
             LoadStartingArguments();
+            Serialization.InputSerializationManager.Initialize();
+
             InputProjectSettings settings = InputProjectSettings.Instance;
 
             SavePath = settings.filePath.GetFullPath();
@@ -121,15 +123,16 @@ namespace qASIC.Input
             qDebug.Log("Input map has been assigned", "input");
         }
 
-        /// <summary>Loads user key preferences using Config Controller</summary>
+        /// <summary>Loads map data</summary>
         public static void LoadPreferences()
         {
-            InputMapData saveData = new InputMapData();
-            if (!FileManager.TryReadFileJSON(SavePath, saveData))
-                return;
+            //InputMapData saveData = new InputMapData();
+            //if (!FileManager.TryReadFileJSON(SavePath, saveData))
+            //    return;
 
-            Players[0].MapData.LoadFromData(saveData);
-            qDebug.Log("[Cablebox] Player preferences have been loaded", "input");
+            //Players[0].MapData.LoadFromData(saveData);
+            //qDebug.Log("[Cablebox] Player preferences have been loaded", "input");
+            qDebug.Log("[Cablebox] Player preferences loading has not been implemented yet!", "input");
         }
         #endregion
 

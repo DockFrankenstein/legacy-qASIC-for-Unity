@@ -25,7 +25,7 @@ namespace qASIC.Input.Devices
             Shutdown();
 #endif
 
-            qDebug.Log("[Device Manager] Initializing...");
+            qDebug.LogInternal("[Device Manager] Initializing...");
             Providers.Clear();
             var newProviders = InputProjectSettings.Instance?.deviceStructure?.providers;
             if (newProviders != null)
@@ -50,12 +50,12 @@ namespace qASIC.Input.Devices
 #endif
             }
 
-            qDebug.Log("[Device Manager] Initialization complete");
+            qDebug.LogInternal("[Device Manager] Initialization complete");
         }
 
         public static void Shutdown()
         {
-            qDebug.Log("[Device Manager] Shutdown initiated...");
+            qDebug.LogInternal("[Device Manager] Shutdown initiated...");
             foreach (var item in Providers)
             {
                 item.Cleanup();
@@ -72,7 +72,7 @@ namespace qASIC.Input.Devices
                 DeregisterDevice(item);
             }
 
-            qDebug.Log("[Device Manager] Shutdown complete");
+            qDebug.LogInternal("[Device Manager] Shutdown complete");
         }
 
         public static void Reload()

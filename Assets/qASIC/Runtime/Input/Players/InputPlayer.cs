@@ -13,16 +13,13 @@ namespace qASIC.Input.Players
             ID = id;
         }
 
-        public InputPlayer(string id, IInputDevice device)
+        public InputPlayer(string id, IInputDevice device) : this(id)
         {
-            ID = id;
             _devices = new List<IInputDevice>(new IInputDevice[] { device });
         }
 
-        public InputPlayer(string id, IInputDevice device, InputMapData mapData)
+        public InputPlayer(string id, IInputDevice device, InputMapData mapData) : this(id, device)
         {
-            ID = id;
-            _devices = new List<IInputDevice>(new IInputDevice[] { device });
             MapData = mapData;
         }
 
@@ -83,14 +80,14 @@ namespace qASIC.Input.Players
         /// <returns>Returns the unclamped value of an item</returns>
         public object GetInputValue(string groupName, string itemName)
         {
-            if (!InputMapDataUtility.TryGetItem(MapData, groupName, itemName, out InputMapItem item))
+            if (!InputMapUtility.TryGetItemFromPath(Map, groupName, itemName, out InputMapItem item))
                 return default;
 
             object value = null;
 
             foreach (IInputDevice device in _devices)
             {
-                object readValue = item.ReadValueAsObject(device.GetInputValue);
+                object readValue = item.ReadValueAsObject(MapData, device.GetInputValue);
                 if (value == null)
                 {
                     value = readValue;
@@ -106,14 +103,14 @@ namespace qASIC.Input.Players
         /// <returns>Returns the unclamped value of an item</returns>
         public T GetInputValue<T>(string groupName, string itemName)
         {
-            if (!InputMapDataUtility.TryGetItem<T>(MapData, groupName, itemName, out InputMapItem<T> item))
+            if (!InputMapUtility.TryGetItemFromPath(Map, groupName, itemName, out InputMapItem<T> item))
                 return default;
 
             T value = default;
 
             foreach (IInputDevice device in _devices)
             {
-                T readValue = item.ReadValue(device.GetInputValue);
+                T readValue = item.ReadValue(MapData, device.GetInputValue);
                 value = item.GetHighestValue(value, readValue);
             }
 
@@ -125,13 +122,13 @@ namespace qASIC.Input.Players
 
         public InputEventType GetInputEvent(string groupName, string itemName)
         {
-            if (!InputMapDataUtility.TryGetItem(MapData, groupName, itemName, out InputMapItem item))
+            if (!InputMapUtility.TryGetItemFromPath(Map, groupName, itemName, out InputMapItem item))
                 return InputEventType.None;
 
             InputEventType type = InputEventType.None;
 
             foreach (IInputDevice device in _devices)
-                type |= item.GetInputEvent(keyPath => device.GetInputEvent(keyPath));
+                type |= item.GetInputEvent(MapData, keyPath => device.GetInputEvent(keyPath));
 
             return type;
         }
@@ -143,7 +140,7 @@ namespace qASIC.Input.Players
 
         public void ChangeInput(string groupName, string itemName, int index, string key, bool save = true, bool log = true)
         {
-            if (!InputMapDataUtility.TryGetItem(MapData, groupName, itemName, out InputMapItem item))
+            if (!InputMapUtility.TryGetItemFromPath(Map, groupName, itemName, out InputMapItem item))
             {
                 qDebug.LogError($"[Input Player] Couldn't remap item {groupName}/{itemName}:{index}, item doesn't exist!");
                 return;

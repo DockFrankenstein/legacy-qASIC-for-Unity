@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using qASIC.Tools;
 using System.Linq;
+using qASIC.Input.Serialization;
 
 namespace qASIC.Input.Map
 {
+    [System.Serializable]
     [CreateAssetMenu(fileName = "NewInputMap", menuName = "qASIC/Input/Input Map")]
     public class InputMap : ScriptableObject
     {
@@ -44,8 +46,8 @@ namespace qASIC.Input.Map
             RebuildItemCache();
             ItemsDictionary.ForEach(x => x.Value.map = this);
             GroupsDictionary.ForEach(x => x.Value.map = this);
-            _initialized = true;
 
+            _initialized = true;
             qDebug.Log($"[Cablebox] Initialized Input Map '{name}:{GetInstanceID()}'", "input");
         }
 
@@ -97,14 +99,6 @@ namespace qASIC.Input.Map
                 return null;
 
             return (T)ItemsDictionary[guid];
-        }
-
-        /// <summary>Creates a new data object</summary>
-        public InputMapData GetData()
-        {
-            InputMapData data = new InputMapData(groups);
-            data = data.Duplicate();
-            return data;
         }
          
         public string DefaultGroupName

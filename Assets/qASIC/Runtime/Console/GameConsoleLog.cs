@@ -6,7 +6,7 @@ namespace qASIC.Console
 {
     public class GameConsoleLog
     {
-        public enum LogType { User, Game, Clear };
+        public enum LogType { User, Game, Clear, Internal };
         public LogType Type { get; }
         public DateTime Time { get; }
         public string Message { get; }
@@ -16,53 +16,29 @@ namespace qASIC.Console
         /// <summary>If the log should be hidden in Unity console</summary>
         public bool UnityHidden { get; }
 
-        public GameConsoleLog(string message, DateTime time, string color, LogType logType)
+        public GameConsoleLog(string message, DateTime time, string color, LogType logType, bool unityHidden = false)
         {
-            if (message == null) message = string.Empty;
-
             Type = logType;
             Time = time;
-            Message = message;
-            LogColor = new Color();
-            ColorName = color;
-            UnityHidden = false;
-        }
-
-        public GameConsoleLog(string message, DateTime time, Color color, LogType logType)
-        {
-            if (message == null) message = string.Empty;
-
-            Type = logType;
-            Time = time;
-            Message = message;
-            LogColor = color;
-            ColorName = string.Empty;
-            UnityHidden = false;
-        }
-
-        public GameConsoleLog(string message, DateTime time, string color, LogType logType, bool unityHidden)
-        {
-            if (message == null) message = string.Empty;
-
-            Type = logType;
-            Time = time;
-            Message = message;
-            LogColor = new Color();
+            Message = message ?? string.Empty;
             ColorName = color;
             UnityHidden = unityHidden;
         }
 
-        public GameConsoleLog(string message, DateTime time, Color color, LogType logType, bool unityHidden)
+        public GameConsoleLog(string message, DateTime time, Color color, LogType logType, bool unityHidden = false)
         {
-            if (message == null) message = string.Empty;
-
             Type = logType;
             Time = time;
-            Message = message;
+            Message = message ?? string.Empty;
             LogColor = color;
-            ColorName = string.Empty;
             UnityHidden = unityHidden;
         }
+
+        public static GameConsoleLog CreateNow(string message, string color, LogType logType, bool unityHidden = false) =>
+            new GameConsoleLog(message, DateTime.Now, color, logType, unityHidden);
+
+        public static GameConsoleLog CreateNow(string message, Color color, LogType logType, bool unityHidden = false) =>
+            new GameConsoleLog(message, DateTime.Now, color, logType, unityHidden);
 
         public string ToText()
         {
@@ -77,6 +53,9 @@ namespace qASIC.Console
                     break;
                 case LogType.Clear:
                     log = " !clear";
+                    break;
+                case LogType.Internal:
+                    log = " !internal";
                     break;
                 default:
                     log = $"?{log}";

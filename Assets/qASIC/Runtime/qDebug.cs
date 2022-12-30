@@ -2,6 +2,7 @@
 using qASIC.Console;
 using qASIC.Displayer;
 using qASIC.ProjectSettings;
+using System;
 
 namespace qASIC
 {
@@ -22,6 +23,25 @@ namespace qASIC
 
         public static void LogError(object message) =>
             GameConsoleController.Log(message?.ToString() ?? "null", "error");
+
+
+        #region Internal
+        internal static void LogInternal(object message) =>
+            GameConsoleController.Log(GameConsoleLog.CreateNow(message?.ToString() ?? "null", "default", GameConsoleLog.LogType.Internal, true));
+
+        internal static void LogInternal(object message, string color) =>
+            GameConsoleController.Log(GameConsoleLog.CreateNow(message?.ToString() ?? "null", color, GameConsoleLog.LogType.Internal, true));
+
+        internal static void LogInternal(object message, Color color) =>
+            GameConsoleController.Log(GameConsoleLog.CreateNow(message?.ToString() ?? "null", color, GameConsoleLog.LogType.Internal, true));
+
+
+        internal static void LogWarningInternal(object message) =>
+            GameConsoleController.Log(GameConsoleLog.CreateNow(message?.ToString() ?? "null", "warning", GameConsoleLog.LogType.Internal, true));
+
+        internal static void LogErrorInternal(object message) =>
+            GameConsoleController.Log(GameConsoleLog.CreateNow(message?.ToString() ?? "null", "error", GameConsoleLog.LogType.Internal, true));
+        #endregion
 
         public static void DisplayValue(string tag, object value)
         {

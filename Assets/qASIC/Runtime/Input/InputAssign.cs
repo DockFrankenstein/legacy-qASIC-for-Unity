@@ -66,10 +66,11 @@ namespace qASIC.Input.Menu
         public string GetLabel()
         {
             string currentKey = "UNKNOWN";
-            if (InputManager.TryGetPlayer(playerIndex, out Players.InputPlayer player) &&
-                player.MapData.ItemsDictionary.TryGetValue(inputAction.Guid, out InputMapItem item) &&
-                item is InputBinding binding)
-                currentKey = binding.keys[keyIndex].Split('/').Last(); 
+            //FIXME
+            //if (InputManager.TryGetPlayer(playerIndex, out Players.InputPlayer player) &&
+            //    player.MapData.(inputAction.Guid, out InputMapItem item) &&
+            //    item is InputBinding binding)
+            //    currentKey = binding.keys[keyIndex].Split('/').Last();
 
             return $"{optionLabelName}{currentKey}";
         }

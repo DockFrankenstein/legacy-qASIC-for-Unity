@@ -21,12 +21,55 @@ namespace qASIC.Tools
                 .Where(t => t != type && type.IsAssignableFrom(t));
         }
 
-        public static IEnumerable<MethodInfo> FindAllAttributes<T>(BindingFlags bindingFlags = defaultFlags) =>
+        public static IEnumerable<MethodInfo> FindAllAttributes<T>(BindingFlags bindingFlags = defaultFlags)
+            where T : Attribute =>
+            FindAllAttributes(typeof(Type), bindingFlags);
+
+        public static IEnumerable<MethodInfo> FindAllAttributes(Type type, BindingFlags bindingFlags = defaultFlags) =>
             AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes())
                 .Where(x => x.IsClass)
                 .SelectMany(x => x.GetMethods(bindingFlags))
-                .Where(x => x.GetCustomAttributes(typeof(T), false).FirstOrDefault() != null);
+                .Where(x => x.GetCustomAttributes(type, false).FirstOrDefault() != null);
+
+        public static IEnumerable<FieldInfo> FindAllFieldAttributesInClass<TClass, TAttribute>(BindingFlags bindingFlags = defaultFlags)
+            where TClass : class
+            where TAttribute : Attribute =>
+            FindAllFieldAttributesInClass(typeof(TClass), typeof(TAttribute), bindingFlags);
+
+        public static IEnumerable<FieldInfo> FindAllFieldAttributesInClass(Type classType, Type attributeType, BindingFlags bindingFlags = defaultFlags) =>
+            classType.GetFields(bindingFlags)
+                .Where(x => x.GetCustomAttributes(attributeType, false).Count() > 0);
+
+        public static IEnumerable<PropertyInfo> FindAllPropertyAttributesInClass<TClass, TAttribute>(BindingFlags bindingFlags = defaultFlags)
+            where TClass : class
+            where TAttribute : Attribute =>
+            typeof(TClass).GetProperties(bindingFlags)
+                .Where(x => x.GetCustomAttributes<TAttribute>(false).Count() > 0);
+
+        public static IEnumerable<PropertyInfo> FindAllPropertyAttributesInClass(Type classType, Type attributeType, BindingFlags bindingFlags = defaultFlags) =>
+            classType.GetProperties(bindingFlags)
+                .Where(x => x.GetCustomAttributes(attributeType, false).Count() > 0);
+
+        public static List<FieldInfo> FindAllFieldAttributesInClassList<TClass, TAttribute>(BindingFlags bindingFlags = defaultFlags)
+            where TClass : class
+            where TAttribute : Attribute =>
+            FindAllFieldAttributesInClassList(typeof(TClass), typeof(TAttribute), bindingFlags)
+                .ToList();
+
+        public static List<FieldInfo> FindAllFieldAttributesInClassList(Type classType, Type attributeType, BindingFlags bindingFlags = defaultFlags) =>
+            FindAllFieldAttributesInClass(classType, attributeType, bindingFlags)
+                .ToList();
+
+        public static List<PropertyInfo> FindAllPropertyAttributesInClassList<TClass, TAttribute>()
+            where TClass : class
+            where TAttribute : Attribute =>
+            FindAllPropertyAttributesInClassList(typeof(TClass), typeof(TAttribute))
+                .ToList();
+
+        public static List<PropertyInfo> FindAllPropertyAttributesInClassList(Type classType, Type attributeType) =>
+            FindAllPropertyAttributesInClass(classType, attributeType)
+                .ToList();
 
         public static IEnumerable<T> CreateConstructorsFromTypes<T>(IEnumerable<Type> types) =>
             types.SelectMany(x =>

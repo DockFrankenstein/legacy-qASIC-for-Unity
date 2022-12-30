@@ -23,33 +23,33 @@ namespace qASIC.Input.Map
         public bool IsUsingAxis() =>
             !string.IsNullOrWhiteSpace(axisGuid);
 
-        public float ReadValue(InputMapData map, Func<string, float> func)
+        public float ReadValue(InputMap map, InputMapData data, Func<string, float> func)
         {
             if (IsUsingAxis())
             {
                 Input1DAxis axis = map.GetItem<Input1DAxis>(axisGuid);
-                return axis?.ReadValue(func) ?? 0f;
+                return axis?.ReadValue(data, func) ?? 0f;
             }
 
             InputBinding positive = map.GetItem<InputBinding>(positiveGuid);
             InputBinding negative = map.GetItem<InputBinding>(negativeGuid);
 
-            return (positive?.ReadValue(func) ?? 0f) - (negative?.ReadValue(func) ?? 0f);
+            return (positive?.ReadValue(data, func) ?? 0f) - (negative?.ReadValue(data, func) ?? 0f);
         }
 
-        public InputEventType GetInputEvent(InputMapData map, Func<string, InputEventType> func)
+        public InputEventType GetInputEvent(InputMap map, InputMapData data, Func<string, InputEventType> func)
         {
             if (IsUsingAxis())
             {
                 Input1DAxis axis = map.GetItem<Input1DAxis>(axisGuid);
-                return axis?.GetInputEvent(func) ?? InputEventType.None;
+                return axis?.GetInputEvent(data, func) ?? InputEventType.None;
             }
 
             InputBinding positive = map.GetItem<InputBinding>(positiveGuid);
             InputBinding negative = map.GetItem<InputBinding>(negativeGuid);
 
-            return positive?.GetInputEvent(func) ?? InputEventType.None |
-                negative?.GetInputEvent(func) ?? InputEventType.None;
+            return positive?.GetInputEvent(data, func) ?? InputEventType.None |
+                negative?.GetInputEvent(data, func) ?? InputEventType.None;
         }
 
         public bool HasErrors(InputMap map)

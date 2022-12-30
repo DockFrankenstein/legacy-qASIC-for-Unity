@@ -12,12 +12,12 @@ namespace qASIC.Input.Map
         public Axis XAxis = new Axis();
         public Axis YAxis = new Axis();
 
-        public override Vector2 ReadValue(Func<string, float> func) =>
-            new Vector2(XAxis.ReadValue(mapData, func), YAxis.ReadValue(mapData, func));
+        public override Vector2 ReadValue(InputMapData data, Func<string, float> func) =>
+            new Vector2(XAxis.ReadValue(map, data, func), YAxis.ReadValue(map, data, func));
 
-        public override InputEventType GetInputEvent(Func<string, InputEventType> func) =>
-            XAxis.GetInputEvent(mapData, func) |
-            YAxis.GetInputEvent(mapData, func);
+        public override InputEventType GetInputEvent(InputMapData data, Func<string, InputEventType> func) =>
+            XAxis.GetInputEvent(map, data, func) |
+            YAxis.GetInputEvent(map, data, func);
 
         public override Vector2 GetHighestValue(Vector2 a, Vector2 b) =>
             a.magnitude > b.magnitude ? a : b;
