@@ -54,6 +54,15 @@ namespace qASIC.Input.Players
 
         public bool GetInputDown(string groupName, string itemName) =>
             GetInputEvent(groupName, itemName).HasFlag(InputEventType.Down);
+
+        public bool GetInputFromGUID(string guid) =>
+            GetInputEventFromGUID(guid).HasFlag(InputEventType.Pressed);
+
+        public bool GetInputUpFromGUID(string guid) =>
+            GetInputEventFromGUID(guid).HasFlag(InputEventType.Up);
+
+        public bool GetInputDownFromGUID(string guid) =>
+            GetInputEventFromGUID(guid).HasFlag(InputEventType.Down);
         #endregion
 
         #region Get Custom Item Input
@@ -74,14 +83,32 @@ namespace qASIC.Input.Players
 
         public Vector3 GetVector3Input(string groupName, string itemName) =>
             GetInputValue<Vector3>(groupName, itemName);
+
+        public float GetFloatInputFromGUID(string guid) =>
+            GetInputValueFromGUID<float>(guid);
+
+        public Vector2 GetVector2InputFromGUID(string guid) =>
+            GetInputValueFromGUID<Vector2>(guid);
+
+        public Vector3 GetVector3InputFromGUID(string guid) =>
+            GetInputValueFromGUID<Vector3>(guid);
         #endregion
 
         #region Get Input Value
         /// <returns>Returns the unclamped value of an item</returns>
-        public object GetInputValue(string groupName, string itemName)
+        public object GetInputValue(string groupName, string itemName) =>
+            InputMapUtility.TryGetItemFromPath(Map, groupName, itemName, out InputMapItem item) ?
+            GetInputValueFromItem(item) :
+            null;
+
+        public object GetInputValueFromGUID(string guid) =>
+            Map != null && Map.ItemsDictionary.ContainsKey(guid) ?
+            GetInputValueFromItem(Map.ItemsDictionary[guid]) :
+            null;
+
+        public object GetInputValueFromItem(InputMapItem item)
         {
-            if (!InputMapUtility.TryGetItemFromPath(Map, groupName, itemName, out InputMapItem item))
-                return default;
+            if (item == null) return default;
 
             object value = null;
 
@@ -101,10 +128,19 @@ namespace qASIC.Input.Players
         }
 
         /// <returns>Returns the unclamped value of an item</returns>
-        public T GetInputValue<T>(string groupName, string itemName)
+        public T GetInputValue<T>(string groupName, string itemName) =>
+            InputMapUtility.TryGetItemFromPath(Map, groupName, itemName, out InputMapItem<T> item) ?
+            GetInputValueFromItem(item) :
+            default;
+
+        public T GetInputValueFromGUID<T>(string guid) =>
+            Map != null && Map.ItemsDictionary.ContainsKey(guid) ?
+            GetInputValueFromItem(Map.ItemsDictionary[guid] as InputMapItem<T>) :
+            default;
+
+        public T GetInputValueFromItem<T>(InputMapItem<T> item)
         {
-            if (!InputMapUtility.TryGetItemFromPath(Map, groupName, itemName, out InputMapItem<T> item))
-                return default;
+            if (item == null) return default;
 
             T value = default;
 
@@ -120,10 +156,19 @@ namespace qASIC.Input.Players
         public InputEventType GetInputEvent(string itemName) =>
             GetInputEvent(Map?.DefaultGroupName, itemName);
 
-        public InputEventType GetInputEvent(string groupName, string itemName)
+        public InputEventType GetInputEvent(string groupName, string itemName) =>
+            InputMapUtility.TryGetItemFromPath(Map, groupName, itemName, out InputMapItem item) ?
+            GetInputEventFromItem(item) :
+            InputEventType.None;
+
+        public InputEventType GetInputEventFromGUID(string guid) =>
+            Map != null && Map.ItemsDictionary.ContainsKey(guid) ?
+            GetInputEventFromItem(Map.ItemsDictionary[guid]) :
+            InputEventType.None;
+
+        public InputEventType GetInputEventFromItem(InputMapItem item)
         {
-            if (!InputMapUtility.TryGetItemFromPath(Map, groupName, itemName, out InputMapItem item))
-                return InputEventType.None;
+            if (item == null) return default;
 
             InputEventType type = InputEventType.None;
 

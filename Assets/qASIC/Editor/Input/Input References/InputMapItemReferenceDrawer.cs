@@ -114,7 +114,7 @@ namespace qASIC.Input.Internal
             return target;
         }
 
-        class Styles
+        protected class Styles
         {
             public static GUIStyle DefaultGroupField => new GUIStyle(EditorStyles.textField) { fontStyle = FontStyle.Italic };
             public static GUIStyle Background => new GUIStyle("HelpBox");

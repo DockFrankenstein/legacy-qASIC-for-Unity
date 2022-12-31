@@ -225,6 +225,15 @@ namespace qASIC.Input
 
         public static bool GetInputDown(string groupName, string itemName) =>
             Players[0].GetInputDown(groupName, itemName);
+
+        public static bool GetInputFromGUID(string guid) =>
+            Players[0].GetInputFromGUID(guid);
+
+        public static bool GetInputUpFromGUID(string guid) =>
+            Players[0].GetInputUpFromGUID(guid);
+
+        public static bool GetInputDownFromGUID(string guid) =>
+            Players[0].GetInputDownFromGUID(guid);
         #endregion
 
         #region Get Custom Item Input
@@ -245,6 +254,15 @@ namespace qASIC.Input
 
         public static Vector3 GetVector3Input(string groupName, string itemName) =>
             Players[0].GetVector3Input(groupName, itemName);
+
+        public static float GetFloatInputFromGUID(string guid) =>
+            Players[0].GetFloatInputFromGUID(guid);
+
+        public static Vector2 GetVector2InputFromGUID(string guid) =>
+            Players[0].GetVector2InputFromGUID(guid);
+
+        public static Vector3 GetVector3InputFromGUID(string guid) =>
+            Players[0].GetVector3InputFromGUID(guid);
         #endregion
 
         #region Get Input Value
@@ -259,6 +277,15 @@ namespace qASIC.Input
 
         public static InputEventType GetInputEvent(string groupName, string itemName) =>
             Players[0].GetInputEvent(groupName, itemName);
+
+        public static object GetInputValueFromGUID(string guid) =>
+            Players[0].GetInputValueFromGUID(guid);
+
+        public static T GetInputValueFromGUID<T>(string guid) =>
+            Players[0].GetInputValueFromGUID<T>(guid);
+
+        public static InputEventType GetInputEventFromGUID(string guid) =>
+            Players[0].GetInputEvent(guid);
         #endregion
     }
 }

@@ -7,7 +7,7 @@ namespace qASIC.Input
     [System.Serializable]
     public class InputMapItemReference
     {
-        [SerializeField] string guid;
+        [SerializeField] protected string guid;
 
         public string Guid => guid;
 
@@ -46,5 +46,39 @@ namespace qASIC.Input
 
         public string GetItemName() =>
             GetItem()?.ItemName ?? string.Empty;
+
+        #region Getting Input From Manager
+        public bool GetInput() =>
+            InputManager.GetInputFromGUID(guid);
+
+        public bool GetInputUp() =>
+            InputManager.GetInputUpFromGUID(guid);
+
+        public bool GetInputDown() =>
+            InputManager.GetInputDownFromGUID(guid);
+
+        public T GetInputValue<T>() =>
+            InputManager.GetInputValueFromGUID<T>(guid);
+
+        public object GetInputValue() =>
+            InputManager.GetInputValueFromGUID(guid);
+        #endregion
+
+        #region Getting Input From Players
+        public bool GetInputFromPlayer(int playerIndex) =>
+            InputManager.Players.IndexInRange(playerIndex) ? InputManager.Players[playerIndex].GetInputFromGUID(guid) : false;
+
+        public bool GetInputUpFromPlayer(int playerIndex) =>
+            InputManager.Players.IndexInRange(playerIndex) ? InputManager.Players[playerIndex].GetInputUpFromGUID(guid) : false;
+
+        public bool GetInputDownFromPlayer(int playerIndex) =>
+            InputManager.Players.IndexInRange(playerIndex) ? InputManager.Players[playerIndex].GetInputDownFromGUID(guid) : false;
+
+        public T GetInputValueFromPlayer<T>(int playerIndex) =>
+            InputManager.Players.IndexInRange(playerIndex) ? InputManager.Players[playerIndex].GetInputValueFromGUID<T>(guid) : default;
+
+        public object GetInputValueFromPlayer(int playerIndex) =>
+            InputManager.Players.IndexInRange(playerIndex) ? InputManager.Players[playerIndex].GetInputValueFromGUID(guid) : default;
+        #endregion
     }
 }

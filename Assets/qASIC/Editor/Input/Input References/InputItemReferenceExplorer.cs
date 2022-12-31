@@ -143,9 +143,7 @@ namespace qASIC.Input.Internal.ReferenceExplorers
             _selectedItemIndex = DisplayList(items, "Others", _selectedItemIndex - bindings.Count) + bindings.Count;
 
             if (content.IndexInRange(_selectedItemIndex))
-                _selectedItem = _selectedItemIndex < bindings.Count ? bindings[_selectedItemIndex] : items[_selectedItemIndex + bindings.Count];
-
-            Debug.Log(_selectedItemIndex);
+                _selectedItem = _selectedItemIndex < bindings.Count ? bindings[_selectedItemIndex] : items[_selectedItemIndex - bindings.Count];
 
             EndScrollView();
         }
