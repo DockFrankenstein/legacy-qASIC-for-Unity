@@ -48,7 +48,7 @@ namespace qASIC.Input.Map
             GroupsDictionary.ForEach(x => x.Value.map = this);
 
             _initialized = true;
-            qDebug.Log($"[Cablebox] Initialized Input Map '{name}:{GetInstanceID()}'", "input");
+            qDebug.LogInternal($"[Cablebox] Initialized Input Map '{name}:{GetInstanceID()}'", "input");
         }
 
         /// <summary>Rebuilds items and groups dictionary</summary>

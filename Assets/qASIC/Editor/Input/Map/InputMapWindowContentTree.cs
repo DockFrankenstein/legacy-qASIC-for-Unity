@@ -24,15 +24,7 @@ namespace qASIC.Input.Map.Internal
 		public InputMapContentItemBase OthersRoot { get; private set; }
 
 		private InputGroup group;
-		public InputGroup Group
-		{
-			get => group;
-			set
-			{
-				Debug.Log(group);
-				group = value;
-			}
-		}
+		public InputGroup Group { get => group; set => group = value; }
 
 		//The context menu has to be shown on next repaint in order
 		//for the item to get selected

@@ -250,6 +250,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
         List<string> _currentItems;
         Action<int, string> _OnApply;
         int _targetItemIndex;
+        bool _keyDown;
 
         SearchField _searchField = new SearchField();
 
@@ -283,6 +284,34 @@ namespace qASIC.Input.Map.Internal.Inspectors
                 editorWindow.Close();
                 _OnApply?.Invoke(_targetItemIndex, _index == -1 ? string.Empty : _currentItems[_index]);
             }
+
+            if (Event.current.rawType == EventType.Used)
+            {
+                if (_keyDown)
+                    return;
+
+                _keyDown = true;
+
+                switch (Event.current.keyCode)
+                {
+                    case KeyCode.DownArrow:
+                        _index = Mathf.Clamp(_index + 1, 0, _currentItems.Count - 1);
+                        if (_index != 0)
+                            _scroll.y += 20f;
+
+                        editorWindow.Repaint();
+                        break;
+                    case KeyCode.UpArrow:
+                        _index = Mathf.Clamp(_index - 1, 0, _currentItems.Count - 1);
+                        _scroll.y = Mathf.Max(_scroll.y - 20f, 0f);
+                        editorWindow.Repaint();
+                        break;
+                }
+
+                return;
+            }
+
+            _keyDown = false;
         }
 
         void DrawTopBar()
