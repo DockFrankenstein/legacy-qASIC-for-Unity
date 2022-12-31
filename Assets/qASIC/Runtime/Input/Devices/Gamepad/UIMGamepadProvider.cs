@@ -6,6 +6,7 @@ using UInput = UnityEngine.Input;
 
 namespace qASIC.Input.Devices
 {
+    [System.Serializable]
     public class UIMGamepadProvider : DeviceProvider
     {
         public UIMAxisMapper mapper;
@@ -14,7 +15,7 @@ namespace qASIC.Input.Devices
 
         static List<UIMGamepad> _gamepads = new List<UIMGamepad>();
 
-        public override string DefaultItemName => "New UIM Gamepad Provider";
+        public override string DefaultItemName => "UIM Gamepad Provider";
         public static UIMAxisMapper AxisMapper { get; private set; } = null;
 
         public override void Initialize()

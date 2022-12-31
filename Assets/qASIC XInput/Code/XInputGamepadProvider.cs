@@ -1,12 +1,11 @@
-﻿using qASIC.Input.Update;
-using qASIC.Input.Devices;
+﻿using qASIC.Input.Devices;
 using System.Collections.Generic;
 using XInputDotNetPure;
-using UnityEngine;
 using System;
 
 namespace qASIC.XInput.Devices
 {
+    [Serializable]
     public class XInputGamepadProvider : DeviceProvider
     {
         const int DEVICE_LIMIT = 4;
@@ -23,6 +22,8 @@ namespace qASIC.XInput.Devices
         static bool[] _slotConnectionStates = new bool[DEVICE_LIMIT];
 
         static List<XInputGamepad> _gamepads = new List<XInputGamepad>(new XInputGamepad[DEVICE_LIMIT]);
+
+        public override string DefaultItemName => "XInput Gamepad Provider";
 
         public override void Update()
         {

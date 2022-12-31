@@ -21,7 +21,8 @@ namespace qASIC.Input.Internal.ReferenceExplorers
         protected InputMapGroupBar groupBar = new InputMapGroupBar();
 
         Vector2 _contentScroll;
-        int _selectedItem;
+        int _selectedItemIndex;
+        InputMapItem _selectedItem;
 
         Action<string> OnItemSelected { get; set; }
         string BindingGuid { get; set; }
@@ -39,7 +40,7 @@ namespace qASIC.Input.Internal.ReferenceExplorers
             window.OnItemSelected = onItemSelect;
             window.BindingGuid = currentGuid;
             window.ResetEditor();
-        }    
+        }
 
         protected static void OpenWindow(EditorWindow window)
         {
@@ -57,7 +58,7 @@ namespace qASIC.Input.Internal.ReferenceExplorers
 
             groupBar.OnItemSelect += g =>
             {
-                _selectedItem = -1;
+                _selectedItemIndex = -1;
             };
 
             SelectCurrentProperties();
@@ -65,7 +66,7 @@ namespace qASIC.Input.Internal.ReferenceExplorers
 
         void SelectCurrentProperties()
         {
-            if (!Manager.Map|| Manager.Map.groups.Count == 0) return;
+            if (!Manager.Map || Manager.Map.groups.Count == 0) return;
 
             int index = 0;
             if (Manager.Map.ItemsDictionary.ContainsKey(BindingGuid))
@@ -76,7 +77,7 @@ namespace qASIC.Input.Internal.ReferenceExplorers
 
             groupBar.Select(index);
 
-            _selectedItem = groupBar.GetSelectedGroup()?.items.IndexOf(Manager.Map.ItemsDictionary[BindingGuid]) ?? -1;
+            _selectedItemIndex = groupBar.GetSelectedGroup()?.items.IndexOf(Manager.Map.ItemsDictionary[BindingGuid]) ?? -1;
         }
 
         public void OnGUI()
@@ -96,23 +97,23 @@ namespace qASIC.Input.Internal.ReferenceExplorers
             DisplayContent();
 
             Space();
-            EditorGUI.BeginDisabledGroup(_selectedItem == -1);
+            EditorGUI.BeginDisabledGroup(_selectedItemIndex == -1);
             bool apply = GUILayout.Button("Apply");
             EditorGUI.EndDisabledGroup();
 
             Event e = Event.current;
 
-            if (e.isKey && e.keyCode == KeyCode.Return && _selectedItem != -1)
+            if (e.isKey && e.keyCode == KeyCode.Return && _selectedItemIndex != -1)
                 apply = true;
 
-            KeyEvent(KeyCode.UpArrow, _selectedItem - 1 >= 0, () => { _selectedItem--; });
-            KeyEvent(KeyCode.DownArrow, _selectedItem + 1 < groupBar.GetSelectedGroup().items.Count(), () => { _selectedItem++; });
+            KeyEvent(KeyCode.UpArrow, _selectedItemIndex - 1 >= 0, () => { _selectedItemIndex--; });
+            KeyEvent(KeyCode.DownArrow, _selectedItemIndex + 1 < groupBar.GetSelectedGroup().items.Count(), () => { _selectedItemIndex++; });
             KeyEvent(KeyCode.LeftArrow, true, groupBar.SelectPrevious);
             KeyEvent(KeyCode.RightArrow, true, groupBar.SelectNext);
 
             if (apply)
             {
-                BindingGuid = groupBar.GetSelectedGroup().items[_selectedItem].Guid;
+                BindingGuid = _selectedItem.Guid;
                 OnItemSelected?.Invoke(BindingGuid);
                 Close();
             }
@@ -138,8 +139,13 @@ namespace qASIC.Input.Internal.ReferenceExplorers
 
             _contentScroll = BeginScrollView(_contentScroll);
 
-            _selectedItem = DisplayList(bindings, "Bindings", _selectedItem);
-            _selectedItem = DisplayList(items, "Others", _selectedItem - bindings.Count) + bindings.Count;
+            _selectedItemIndex = DisplayList(bindings, "Bindings", _selectedItemIndex);
+            _selectedItemIndex = DisplayList(items, "Others", _selectedItemIndex - bindings.Count) + bindings.Count;
+
+            if (content.IndexInRange(_selectedItemIndex))
+                _selectedItem = _selectedItemIndex < bindings.Count ? bindings[_selectedItemIndex] : items[_selectedItemIndex + bindings.Count];
+
+            Debug.Log(_selectedItemIndex);
 
             EndScrollView();
         }

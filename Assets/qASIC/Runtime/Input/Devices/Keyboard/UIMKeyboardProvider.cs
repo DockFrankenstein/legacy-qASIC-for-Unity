@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace qASIC.Input.Devices
 {
+    [Serializable]
     public class UIMKeyboardProvider : DeviceProvider
     {
         private static KeyCode[] _allKeyCodes = null;
@@ -23,7 +24,7 @@ namespace qASIC.Input.Devices
 
         private static UIMKeyboardDevice keyboard = new UIMKeyboardDevice();
 
-        public override string DefaultItemName => "New UIM Keyboard Provider";
+        public override string DefaultItemName => "UIM Keyboard Provider";
 
         public override void Initialize()
         {

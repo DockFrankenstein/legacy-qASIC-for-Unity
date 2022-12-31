@@ -4,11 +4,9 @@ using UnityEngine;
 
 namespace qASIC.Input.Devices
 {
-    [CreateAssetMenu(fileName = "NewUIMAxisMapper", menuName = "qASIC/Input/Device Structure")]
+    [CreateAssetMenu(fileName = "NewDeviceStructure", menuName = "qASIC/Input/Device Structure")]
     public class DeviceStructure : ScriptableObject
     {
         [SerializeReference] public List<DeviceProvider> providers = new List<DeviceProvider>();
-
-
     }
 }

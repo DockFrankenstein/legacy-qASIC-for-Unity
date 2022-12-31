@@ -25,7 +25,13 @@ namespace qASIC.Input.Players
             if (_initialized)
                 return;
 
-            DeviceManager.OnDeviceConnected += HandleDeviceConnected;
+            //Device manager gets initialized later, so there is theoretically no reason to do this
+            //However in Unity 2021.3.15f1 this seems to fix the problem of devices not getting
+            //registered to the player
+            foreach (var device in DeviceManager.Devices)
+                HandleDeviceConnected(device);
+
+            DeviceManager.OnDeviceConnected += (_, device) => HandleDeviceConnected(device);
             DeviceManager.OnDeviceDisconnected += (_, device) =>
             {
                 foreach (InputPlayer player in Players)
@@ -36,7 +42,7 @@ namespace qASIC.Input.Players
             _initialized = true;
         }
 
-        static void HandleDeviceConnected(int index, IInputDevice device)
+        static void HandleDeviceConnected(IInputDevice device)
         {
             if (Players.Count == 0)
             {

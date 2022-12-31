@@ -103,13 +103,14 @@ namespace qASIC.Input.Devices.Internal
         {
             GenericMenu menu = new GenericMenu();
 
-            menu.AddToggableItem("Move Up", false, () => p_handlers.MoveArrayElement(index, index - 1), index > 0);
-            menu.AddToggableItem("Move Down", false, () => p_handlers.MoveArrayElement(index, index + 1), index < p_handlers.arraySize - 1);
+            menu.AddToggableItem("Move Up", false, () => { p_handlers.MoveArrayElement(index, index - 1); SaveAssetDatabase(); }, index > 0);
+            menu.AddToggableItem("Move Down", false, () => { p_handlers.MoveArrayElement(index, index + 1); SaveAssetDatabase(); }, index < p_handlers.arraySize - 1);
             menu.AddSeparator("");
             menu.AddItem("Delete", false, () =>
             {
                 p_handlers.DeleteArrayElementAtIndex(index);
                 _reloadDeviceManager = true;
+                SaveAssetDatabase();
             });
 
             menu.ShowAsContext();
@@ -121,8 +122,17 @@ namespace qASIC.Input.Devices.Internal
             provider.Name = provider.DefaultItemName;
 
             _structure.providers.Add(provider);
-            serializedObject.ApplyModifiedProperties();
             serializedObject.UpdateIfRequiredOrScript();
+            SaveAssetDatabase(false);
+        }
+
+        void SaveAssetDatabase(bool applySerializableObject = true)
+        {
+            if (applySerializableObject)
+                serializedObject.ApplyModifiedProperties();
+
+            EditorUtility.SetDirty(_structure);
+            AssetDatabase.SaveAssets();
         }
 
         private static class Styles
