@@ -277,13 +277,10 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
             qGUIEditorUtility.HorizontalLine();
             GUILayout.Space(16f);
-            
+
 
             if (GUILayout.Button("Select"))
-            {
-                editorWindow.Close();
-                _OnApply?.Invoke(_targetItemIndex, _index == -1 ? string.Empty : _currentItems[_index]);
-            }
+                Apply();
 
             if (Event.current.rawType == EventType.Used)
             {
@@ -306,12 +303,21 @@ namespace qASIC.Input.Map.Internal.Inspectors
                         _scroll.y = Mathf.Max(_scroll.y - 20f, 0f);
                         editorWindow.Repaint();
                         break;
+                    case KeyCode.Return:
+                        Apply();
+                        break;
                 }
 
                 return;
             }
 
             _keyDown = false;
+        }
+
+        void Apply()
+        {
+            editorWindow.Close();
+            _OnApply?.Invoke(_targetItemIndex, _index == -1 ? string.Empty : _currentItems[_index]);
         }
 
         void DrawTopBar()
