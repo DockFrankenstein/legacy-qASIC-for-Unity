@@ -106,6 +106,9 @@ namespace qASIC.Input.Devices
 
         private static void RemoveGamepad(int id)
         {
+            if (_gamepads[id] == null)
+                return;
+
             DeviceManager.DeregisterDevice(_gamepads[id]);
             _gamepads[id] = null;
         }

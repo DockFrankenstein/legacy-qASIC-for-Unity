@@ -94,26 +94,30 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
         protected static bool DeleteButton(bool state, string text = "Delete", Action OnDelete = null)
         {
-            EditorGUILayout.BeginHorizontal();
-            switch (state)
+            using (new EditorChangeChecker.ChangeCheckPause())
             {
-                case true:
-                    if (GUILayout.Button("Cancel"))
-                        state = false;
+                EditorGUILayout.BeginHorizontal();
+                switch (state)
+                {
+                    case true:
+                        if (GUILayout.Button("Cancel"))
+                            state = false;
 
-                    if (GUILayout.Button("Confirm"))
-                    {
-                        state = false;
-                        OnDelete?.Invoke();
-                    }
-                    break;
-                case false:
-                    if (GUILayout.Button(text))
-                        state = true;
-                    break;
+                        if (GUILayout.Button("Confirm"))
+                        {
+                            state = false;
+                            OnDelete?.Invoke();
+                        }
+                        break;
+                    case false:
+                        if (GUILayout.Button(text))
+                            state = true;
+                        break;
+                }
+
+                EditorGUILayout.EndHorizontal();
             }
 
-            EditorGUILayout.EndHorizontal();
             return state;
         }
 

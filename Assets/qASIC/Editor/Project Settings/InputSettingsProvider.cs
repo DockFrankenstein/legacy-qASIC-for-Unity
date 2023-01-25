@@ -59,6 +59,10 @@ namespace qASIC.ProjectSettings.Internal
                 DrawProperty(nameof(Settings.filePath));
             qGUIInternalUtility.EndGroup();
 
+            qGUIInternalUtility.BeginGroup("Saving (experimental)");
+            DrawProperty(nameof(Settings.serializationProvider));
+            qGUIInternalUtility.EndGroup();
+
             qGUIInternalUtility.BeginGroup("Starting arguments");
             qGUIEditorUtility.DrawPropertiesInRange(serializedSettings,
                 nameof(Settings.startArgsDisableLoad),

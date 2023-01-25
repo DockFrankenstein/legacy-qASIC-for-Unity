@@ -11,20 +11,27 @@ namespace qASIC.EditorTools
         static Action _onEndChangeCheck;
         public static Action OnEndChangeCheck { get => _onEndChangeCheck; }
 
+        public static int CheckStackCount { get; private set; } = 0;
+
         public static void BeginChangeCheck(Action onEndChangeGroup)
         {
             _onEndChangeCheck = onEndChangeGroup;
             BeginChangeCheck();
         }
 
-        public static void BeginChangeCheck() =>
+        public static void BeginChangeCheck()
+        {
             EditorGUI.BeginChangeCheck();
+            CheckStackCount++;
+        }
 
         public static bool EndChangeCheck()
         {
             bool value = EditorGUI.EndChangeCheck();
             if (value)
                 InvokeChangeCheckAction();
+
+            CheckStackCount = Mathf.Max(CheckStackCount - 1, 0);
             return value;
         }
 
@@ -72,14 +79,20 @@ namespace qASIC.EditorTools
 
         public class ChangeCheckPause : IDisposable
         {
+            bool pause;
+
             public ChangeCheckPause()
             {
-                EndChangeCheck();
+                pause = CheckStackCount > 0;
+
+                if (pause)
+                    EndChangeCheck();
             }
 
             void IDisposable.Dispose()
             {
-                BeginChangeCheck();
+                if (pause)
+                    BeginChangeCheck();
             }
         }
 

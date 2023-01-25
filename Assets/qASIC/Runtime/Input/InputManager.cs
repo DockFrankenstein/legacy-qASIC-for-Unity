@@ -45,7 +45,8 @@ namespace qASIC.Input
         {
             if (DisableSaving) return;
             
-            FileManager.SaveFileJSON(SavePath, Players[0].MapData, true);
+            //FileManager.SaveFileJSON(SavePath, Players[0].MapData.CreateSerializableData(), true);
+
             qDebug.Log("[Cablebox] Player preferences saved", "input");
         }
         #endregion

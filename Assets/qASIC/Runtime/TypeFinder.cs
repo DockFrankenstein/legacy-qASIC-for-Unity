@@ -23,7 +23,7 @@ namespace qASIC.Tools
 
         public static IEnumerable<MethodInfo> FindAllAttributes<T>(BindingFlags bindingFlags = defaultFlags)
             where T : Attribute =>
-            FindAllAttributes(typeof(Type), bindingFlags);
+            FindAllAttributes(typeof(T), bindingFlags);
 
         public static IEnumerable<MethodInfo> FindAllAttributes(Type type, BindingFlags bindingFlags = defaultFlags) =>
             AppDomain.CurrentDomain.GetAssemblies()

@@ -15,18 +15,29 @@ namespace qASIC.Input.Devices
         public static event Action<int, IInputDevice> OnDeviceConnected;
         public static event Action<int, IInputDevice> OnDeviceDisconnected;
 
+        public static IInputDevice LastUsedDevice { get; private set; }
+
+        static bool _initialized;
+
 #if UNITY_EDITOR
         [UnityEditor.InitializeOnLoadMethod]
 #endif
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
         public static void Initialize()
         {
+            if (_initialized)
 #if UNITY_EDITOR
-            Shutdown();
+                Shutdown();
+#else
+                return;
 #endif
 
+            _initialized = true;
             qDebug.LogInternal("[Device Manager] Initializing...");
+
+            Devices.Clear();
             Providers.Clear();
+
             var newProviders = InputProjectSettings.Instance?.deviceStructure?.providers;
             if (newProviders != null)
                 Providers = new List<DeviceProvider>(newProviders);
@@ -34,20 +45,7 @@ namespace qASIC.Input.Devices
             foreach (var item in Providers)
             {
                 item.Initialize();
-#if UNITY_EDITOR
-                UnityEditor.EditorApplication.update += item.Update;
-#else
                 InputUpdateManager.OnUpdate += item.Update;
-#endif
-            }
-
-            foreach (var item in Devices)
-            {
-#if UNITY_EDITOR
-                UnityEditor.EditorApplication.update += item.Update;
-#else
-                InputUpdateManager.OnUpdate += item.Update;
-#endif
             }
 
             qDebug.LogInternal("[Device Manager] Initialization complete");
@@ -55,15 +53,16 @@ namespace qASIC.Input.Devices
 
         public static void Shutdown()
         {
+            if (!_initialized)
+                return;
+
+            _initialized = false;
             qDebug.LogInternal("[Device Manager] Shutdown initiated...");
+
             foreach (var item in Providers)
             {
                 item.Cleanup();
-#if UNITY_EDITOR
-                UnityEditor.EditorApplication.update -= item.Update;
-#else
                 InputUpdateManager.OnUpdate -= item.Update;
-#endif
             }
 
             var devices = new List<IInputDevice>(Devices);
@@ -88,25 +87,22 @@ namespace qASIC.Input.Devices
             Devices.Add(device);
             device.Initialize();
 
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.update += device.Update;
-#else
             InputUpdateManager.OnUpdate += device.Update;
-#endif
 
             OnDeviceConnected?.Invoke(Devices.Count - 1, device);
         }
 
         public static void DeregisterDevice(IInputDevice device)
         {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.update -= device.Update;
-#else
+            if (device == null)
+                return;
+
             InputUpdateManager.OnUpdate -= device.Update;
-#endif
 
             int deviceIndex = Devices.IndexOf(device);
-            Devices.RemoveAt(deviceIndex);
+            if (deviceIndex != -1)
+                Devices.RemoveAt(deviceIndex);
+
             OnDeviceDisconnected?.Invoke(deviceIndex, device);
         }
     }

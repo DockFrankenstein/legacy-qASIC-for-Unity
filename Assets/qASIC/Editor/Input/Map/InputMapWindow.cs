@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using qASIC.EditorTools;
 using System.Linq;
+using System.Collections.Generic;
 using UnityEditor.IMGUI.Controls;
 using UnityEditor.Callbacks;
 using qASIC.FileManagement;
@@ -48,6 +49,7 @@ namespace qASIC.Input.Map.Internal
         const string prefsKey_inspectorWidth = "qASIC_input_map_editor_inspector_width";
         const string prefsKey_defaultGroupColor = "qASIC_input_map_editor_defaultgroup_color";
         const string prefsKey_showItemIcons = "qASIC_input_map_editor_showitemicons";
+        const string prefsKey_defaultBindingKeys = "qASIC_input_map_editor_default_binding_keys";
 
 
         private static bool? _debugMode = null;
@@ -61,6 +63,9 @@ namespace qASIC.Input.Map.Internal
             }
             set
             {
+                if (value == _debugMode)
+                    return;
+
                 EditorPrefs.SetBool(prefsKey_debug, value);
                 _debugMode = value;
             }
@@ -78,6 +83,9 @@ namespace qASIC.Input.Map.Internal
             }
             set
             {
+                if (value == Prefs_AutoSave)
+                    return;
+
                 EditorPrefs.SetBool(prefsKey_autoSave, value);
 
                 var window = GetEditorWindow();
@@ -100,6 +108,9 @@ namespace qASIC.Input.Map.Internal
             }
             set
             {
+                if (value == prefs_inspectorWidth)
+                    return;
+
                 EditorPrefs.SetFloat(prefsKey_inspectorWidth, value);
                 prefs_inspectorWidth = value;
             }
@@ -117,6 +128,9 @@ namespace qASIC.Input.Map.Internal
             }
             set
             {
+                if (value == prefs_autoSaveTimeLimit)
+                    return;
+
                 value = Mathf.Max(0f, value);
                 EditorPrefs.SetFloat(prefskey_autoSaveTimeLimit, value);
                 prefs_autoSaveTimeLimit = value;
@@ -135,6 +149,9 @@ namespace qASIC.Input.Map.Internal
             }
             set
             {
+                if (value == prefs_defaultGroupColor)
+                    return;
+
                 AdvancedEditorPrefs.SetColorWithAlpha(prefsKey_defaultGroupColor, value);
                 prefs_defaultGroupColor = value;
             }
@@ -152,8 +169,34 @@ namespace qASIC.Input.Map.Internal
             }
             set
             {
+                if (value == prefs_showItemIcons)
+                    return;
+
                 EditorPrefs.SetBool(prefsKey_showItemIcons, value);
                 prefs_showItemIcons = value;
+            }
+        }
+
+        private static List<string> prefs_defaultBindingKeys = null;
+        public static List<string> Prefs_DefaultBindingKeys
+        {
+            get
+            {
+                if (prefs_defaultBindingKeys == null)
+                {
+                    prefs_defaultBindingKeys = new List<string>(EditorPrefs.GetString(prefsKey_defaultBindingKeys, "key_keyboard/\nkey_gamepad/\n").Split('\n'));
+                    prefs_defaultBindingKeys.RemoveAt(prefs_defaultBindingKeys.Count - 1);
+                }
+
+                return prefs_defaultBindingKeys ?? new List<string>();
+            }
+            set
+            {
+                if (value == prefs_defaultBindingKeys)
+                    return;
+
+                EditorPrefs.SetString(prefsKey_defaultBindingKeys, $"{string.Join("\n", value)}\n");
+                prefs_defaultBindingKeys = value;
             }
         }
 
@@ -163,11 +206,13 @@ namespace qASIC.Input.Map.Internal
             EditorPrefs.DeleteKey(prefskey_autoSaveTimeLimit);
             EditorPrefs.DeleteKey(prefsKey_inspectorWidth);
             AdvancedEditorPrefs.DeleteColorKey(prefsKey_defaultGroupColor);
+            EditorPrefs.DeleteKey(prefsKey_defaultBindingKeys);
 
             prefs_autoSave = null;
             prefs_autoSaveTimeLimit = null;
             prefs_inspectorWidth = null;
             prefs_defaultGroupColor = null;
+            prefs_defaultBindingKeys = null;
         }
         #endregion
 
@@ -197,7 +242,7 @@ namespace qASIC.Input.Map.Internal
             });
         }
 
-        [MenuItem("Window/qASIC/Input Map Editor")]
+        [MenuItem("Window/qASIC/Input/Map Editor")]
         public static InputMapWindow OpenWindow()
         {
             InputMapWindow window = SetupWindowForOpen();

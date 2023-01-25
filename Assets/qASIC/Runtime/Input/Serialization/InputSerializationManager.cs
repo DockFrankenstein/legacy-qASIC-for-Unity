@@ -28,6 +28,13 @@ namespace qASIC.Input.Serialization
                     if (dictionary.ContainsKey(attr.Name))
                         throw new AmbiguousMatchException($"Input Map Item of type '{item}' has multiple serializable map values of the same name!");
 
+                    //if (!field.FieldType.IsAssignableFrom(typeof(ICloneable)))
+                    //{
+                    //    Debug.Log(field.FieldType);
+                    //    qDebug.LogError($"Input Map Item of type '{item}' contains a serializable map value ({attr.Name}) on field '{field.Name}' that does not implement the IClonable interface");
+                    //    continue;
+                    //}
+
                     dictionary.Add(attr.Name, field);
                 }
 

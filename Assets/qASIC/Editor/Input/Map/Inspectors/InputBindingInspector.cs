@@ -1,5 +1,4 @@
-﻿using qASIC.EditorTools.Internal;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 using UnityEditor;
 using System.Collections.Generic;
@@ -188,11 +187,15 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
             public void Initialize()
             {
-                reorderableList = new ReorderableList(this.keys, typeof(string), true, true, true, true);
+                reorderableList = new ReorderableList(keys, typeof(string), true, true, true, true);
 
-                List<string> keys = this.keys;
                 reorderableList.drawHeaderCallback += List_DrawHeaderCallback;
                 reorderableList.drawElementCallback += List_DrawElementCallback;
+            }
+
+            void ShowMenu(Rect rect, int index)
+            {
+                PopupWindow.Show(rect, new InputBindingSearchPopupContent(provider, index, Popup_OnApply, new Vector2(rect.width, 200f)));
             }
 
             void List_DrawHeaderCallback(Rect rect)
@@ -204,7 +207,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
             {
                 if (GUI.Button(rect, keys[index].Split('/').LastOrDefault(), EditorStyles.popup))
                 {
-                    PopupWindow.Show(rect, new InputBindingSearchPopupContent(provider, index, Popup_OnApply, new Vector2(rect.width, 200f)));
+                    ShowMenu(rect, index);
                 }
             }
 
@@ -241,7 +244,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
         Vector2 _scroll;
         string _search = string.Empty;
-        int _index = -1;
+        int _index = 0;
 
         public override Vector2 GetWindowSize() =>
             _size;

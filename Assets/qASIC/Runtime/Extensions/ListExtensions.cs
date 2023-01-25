@@ -5,12 +5,12 @@ namespace qASIC
 {
     public static class ListExtensions
     {
-        public static bool IndexInRange<TSource>(this List<TSource> source, int index) =>
+        public static bool IndexInRange<TSource>(this IList<TSource> source, int index) =>
             index >= 0 && index < source.Count;
 
-        public static List<TSource> Where<TSource>(this List<TSource> source, Func<int, TSource, bool> func)
+        public static IList<TSource> Where<TSource>(this IList<TSource> source, Func<int, TSource, bool> func)
         {
-            List<TSource> result = new List<TSource>();
+            IList<TSource> result = new List<TSource>();
             int count = source.Count;
             for (int i = 0; i < count; i++)
             {

@@ -34,6 +34,8 @@ namespace qASIC.Input.Map
         public bool NameEquals(string name) =>
             NonRepeatableChecker.Compare(itemName, name);
 
+        public virtual void OnCreated() { }
+
         public abstract object ReadValueAsObject(InputMapData data, Func<string, float> func);
         public abstract InputEventType GetInputEvent(InputMapData data, Func<string, InputEventType> func);
         public abstract object GetHighestValueAsObject(object a, object b);

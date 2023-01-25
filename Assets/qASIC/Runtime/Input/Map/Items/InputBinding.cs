@@ -1,8 +1,5 @@
-﻿using qASIC.Input.Devices;
-using qASIC.Input.Internal.KeyProviders;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using qASIC.Input.Serialization;
 
@@ -18,9 +15,14 @@ namespace qASIC.Input.Map
 
         [SerializableMapValue(KEYS_SERIALIZABLE_MAP_VALUE_NAME)] public List<string> keys = new List<string>();
 
+        public override void OnCreated()
+        {
+
+        }
+
         public override float ReadValue(InputMapData data, Func<string, float> func)
         {
-            var keys = data.GetSerializableValue<List<string>>(this, KEYS_SERIALIZABLE_MAP_VALUE_NAME);
+            var keys = data.GetValue<List<string>>(this, KEYS_SERIALIZABLE_MAP_VALUE_NAME);
             float value = 0f;
 
             foreach (string key in keys)
@@ -35,7 +37,7 @@ namespace qASIC.Input.Map
 
         public override InputEventType GetInputEvent(InputMapData data, Func<string, InputEventType> func)
         {
-            var keys = data.GetSerializableValue<List<string>>(this, KEYS_SERIALIZABLE_MAP_VALUE_NAME);
+            var keys = data.GetValue<List<string>>(this, KEYS_SERIALIZABLE_MAP_VALUE_NAME);
 
             InputEventType type = InputEventType.None;
             foreach (string key in keys)

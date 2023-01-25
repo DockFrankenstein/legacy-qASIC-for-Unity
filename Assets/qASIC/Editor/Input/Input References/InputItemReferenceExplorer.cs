@@ -27,7 +27,6 @@ namespace qASIC.Input.Internal.ReferenceExplorers
         Action<string> OnItemSelected { get; set; }
         string BindingGuid { get; set; }
 
-        [MenuItem("Window/qASIC/Input Reference Explorer")]
         static void OpenWindowDebug()
         {
             GetEditorWindow().Show();

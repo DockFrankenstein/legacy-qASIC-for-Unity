@@ -259,6 +259,13 @@ namespace qASIC.Input.Map.Internal
 		{
             item.ItemName = WindowUtility.GenerateUniqueName("New item", s => NonRepeatableChecker.ContainsKey(Group.items, s));
 
+            switch (item)
+            {
+                case InputBinding binding:
+                    binding.keys = InputMapWindow.Prefs_DefaultBindingKeys;
+                    break;
+            }
+
             var selectedItem = GetSelectedContentItem();
 
             int index = Group.items.Count - 1;
@@ -271,7 +278,6 @@ namespace qASIC.Input.Map.Internal
 			}
 
 			Group.InsertItem(index + 1, item);
-			window.SetMapDirty();
 			Reload();
 
 
@@ -284,6 +290,8 @@ namespace qASIC.Input.Map.Internal
                     SetExpanded(OthersRoot.id, true);
                     break;
 			}
+
+            item.OnCreated();
 
             _OnNextRepaint += () =>
             {

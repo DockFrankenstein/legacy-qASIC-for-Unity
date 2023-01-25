@@ -191,19 +191,22 @@ namespace qASIC.Input.Players
                 return;
             }
 
-            if (!(item is InputBinding binding))
+            if (!MapData.ValueExists(item, InputBinding.KEYS_SERIALIZABLE_MAP_VALUE_NAME))
             {
                 qDebug.LogError($"[Input Player] Couldn't remap item {groupName}/{itemName}:{index}, item is not a binding!");
                 return;
             }
 
-            if (index < 0 || binding.keys.Count <= index)
+            var list = MapData.GetValue<List<string>>(item, InputBinding.KEYS_SERIALIZABLE_MAP_VALUE_NAME);
+
+            if (!list.IndexInRange(index))
             {
                 qDebug.LogError($"[Input Player] Couldn't remap item {groupName}/{itemName}:{index}, key index is out of range!");
                 return;
             }
 
-            binding.keys[index] = key;
+            list[index] = key;
+            MapData.SetValue(item, InputBinding.KEYS_SERIALIZABLE_MAP_VALUE_NAME, list);
 
             if (log)
                 qDebug.Log($"[Input Player] Changed key {groupName}/{itemName}:{index} to '{key}'", "input");
