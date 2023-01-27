@@ -13,7 +13,7 @@ namespace qASIC.Input.Map
 
         public const string KEYS_SERIALIZABLE_MAP_VALUE_NAME = "keys";
 
-        [SerializableMapValue(KEYS_SERIALIZABLE_MAP_VALUE_NAME)] public List<string> keys = new List<string>();
+        public List<string> keys = new List<string>();
 
         public override void OnCreated()
         {

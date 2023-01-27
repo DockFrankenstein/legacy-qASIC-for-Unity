@@ -262,7 +262,7 @@ namespace qASIC.Input.Map.Internal
             switch (item)
             {
                 case InputBinding binding:
-                    binding.keys = InputMapWindow.Prefs_DefaultBindingKeys;
+                    binding.keys = new List<string>(InputMapWindow.Prefs_DefaultBindingKeys);
                     break;
             }
 

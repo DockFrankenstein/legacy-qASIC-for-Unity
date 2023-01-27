@@ -9,7 +9,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
         {
             GUILayout.Label("Create", EditorStyles.whiteLargeLabel);
             if (GUILayout.Button("Create New Binding"))
-                window.AddItem<InputBinding>();
+                window.AddItem(new InputBinding());
         }
     }
 }

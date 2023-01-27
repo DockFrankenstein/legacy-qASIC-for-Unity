@@ -175,7 +175,8 @@ namespace qASIC.Input
             }
         }
 
-        /// <summary>Generates a list of keys being used in the Input Manager</summary>
+        /// <summary>Generates a list of 
+        /// being used in the Input Manager</summary>
         public static List<KeyData> GenerateKeyList()
         {
             List<KeyData> keys = new List<KeyData>();

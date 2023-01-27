@@ -35,6 +35,8 @@ namespace qASIC.Input.Devices
             _initialized = true;
             qDebug.LogInternal("[Device Manager] Initializing...");
 
+            InputUpdateManager.OnUpdate += Update;
+
             Devices.Clear();
             Providers.Clear();
 
@@ -58,6 +60,8 @@ namespace qASIC.Input.Devices
 
             _initialized = false;
             qDebug.LogInternal("[Device Manager] Shutdown initiated...");
+
+            InputUpdateManager.OnUpdate -= Update;
 
             foreach (var item in Providers)
             {
@@ -104,6 +108,18 @@ namespace qASIC.Input.Devices
                 Devices.RemoveAt(deviceIndex);
 
             OnDeviceDisconnected?.Invoke(deviceIndex, device);
+        }
+
+        static void Update()
+        {
+            foreach (var device in Devices)
+            {
+                if (string.IsNullOrEmpty(device.GetAnyKeyDown()))
+                    continue;
+
+                LastUsedDevice = device;
+                break;
+            }
         }
     }
 }
