@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using qASIC.Input.UIM;
+using UnityEngine;
 
 using UInput = UnityEngine.Input;
 
@@ -10,6 +11,7 @@ namespace qASIC.Input.Devices
     public class UIMGamepadProvider : DeviceProvider
     {
         public UIMAxisMapper mapper;
+        public Vector2 deadzone;
 
         static string[] _joystickNames;
 

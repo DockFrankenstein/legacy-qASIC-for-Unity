@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace qASIC.FileManagement
+namespace qASIC.Files
 {
     [Serializable]
     public struct GenericFilePath

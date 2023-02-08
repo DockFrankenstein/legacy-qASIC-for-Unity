@@ -1,28 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using qASIC.Input.Serialization;
+using qASIC.Input.Map.ItemData;
 
 namespace qASIC.Input.Map
 {
     [Serializable]
-    public class InputBinding : InputMapItem<float>
+    public class InputBinding : InputMapItem<float>, ISerializableMapItem
     {
         public InputBinding() : base() { }
         public InputBinding(string name) : base(name) { }
 
-        public const string KEYS_SERIALIZABLE_MAP_VALUE_NAME = "keys";
+        public Type DataHolderType => typeof(InputBindingData);
 
         public List<string> keys = new List<string>();
 
-        public override void OnCreated()
+        public virtual InputMapItemData CreateDataHolder()
         {
-
+            return new InputBindingData()
+            {
+                keys = new List<string>(keys),
+            };
         }
 
         public override float ReadValue(InputMapData data, Func<string, float> func)
         {
-            var keys = data.GetValue<List<string>>(this, KEYS_SERIALIZABLE_MAP_VALUE_NAME);
+            var keys = data.GetItemData<InputBindingData>(Guid).keys;
             float value = 0f;
 
             foreach (string key in keys)
@@ -37,7 +40,7 @@ namespace qASIC.Input.Map
 
         public override InputEventType GetInputEvent(InputMapData data, Func<string, InputEventType> func)
         {
-            var keys = data.GetValue<List<string>>(this, KEYS_SERIALIZABLE_MAP_VALUE_NAME);
+            var keys = data.GetItemData<InputBindingData>(Guid).keys;
 
             InputEventType type = InputEventType.None;
             foreach (string key in keys)

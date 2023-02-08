@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.UIElements;
 
 using Settings = qASIC.ProjectSettings.OptionsProjectSettings;
+using qASIC.Files;
 
 namespace qASIC.ProjectSettings.Internal
 {
@@ -33,7 +34,7 @@ namespace qASIC.ProjectSettings.Internal
 
             qGUIInternalUtility.BeginGroup("Saving");
             DrawProperty(nameof(Settings.serializationType));
-            if (settings.serializationType == FileManagement.SerializationType.config)
+            if (settings.serializationType == SerializationType.config)
                 DrawProperty(nameof(Settings.savePath));
             qGUIInternalUtility.EndGroup();
 

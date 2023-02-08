@@ -1,7 +1,7 @@
 ﻿using qASIC.Input.Map;
-using qASIC.FileManagement;
-using qASIC.Input.UIM;
 using qASIC.Input.Devices;
+using qASIC.Files.Serialization;
+using qASIC.Files;
 
 namespace qASIC.ProjectSettings
 {
@@ -13,7 +13,7 @@ namespace qASIC.ProjectSettings
         public InputMap map;
         public DeviceStructure deviceStructure;
 
-        [UnityEngine.SerializeReference] public Serialization.SerializationProvider serializationProvider;
+        public ObjectSerializer serializer;
 
         public SerializationType serializationType = SerializationType.playerPrefs;
         public AdvancedGenericFilePath filePath = new AdvancedGenericFilePath(GenericFolder.PersistentDataPath, "input.txt", "input-editor.txt");

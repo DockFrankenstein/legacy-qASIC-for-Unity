@@ -14,14 +14,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   map: {fileID: 11400000, guid: 8d13456ecc79cf245beded4d54a45e7f, type: 2}
   deviceStructure: {fileID: 11400000, guid: eb718c08d38bf894cb05c8f9b33b92a3, type: 2}
+  serializer:
+    provider:
+      id: 0
+    filepath:
+      buildPath:
+        genericFolder: 0
+        filePath: input.txt
+      separateEditorPath: 0
+      editorPath:
+        genericFolder: 0
+        filePath: input-editor.txt
   serializationType: 2
   filePath:
     buildPath:
       genericFolder: 62
       filePath: input.txt
-    separateEditorPath: 1
+    separateEditorPath: 0
     editorPath:
       genericFolder: 62
       filePath: input-editor.txt
   startArgsDisableLoad: 1
   startArgsDisableSave: 1
+  references:
+    version: 1
+    00000000:
+      type: {class: JSONSerializationProvider, ns: qASIC.Files.Serialization, asm: qASIC}
+      data:
+        prettyPrint: 1

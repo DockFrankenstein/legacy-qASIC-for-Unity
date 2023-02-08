@@ -3,7 +3,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using System;
 
-namespace qASIC.FileManagement
+namespace qASIC.Files
 {
     public enum GenericFolder
     {
@@ -83,7 +83,7 @@ namespace qASIC.FileManagement
                     return GetCustomFolderPath(Environment.SpecialFolder.MyDocuments);
                 case GenericFolder.Personal:
                     return GetCustomFolderPath(Environment.SpecialFolder.Personal);
-                
+
                 //Unity application paths
                 case GenericFolder.ConsoleLogPath:
                     return Application.consoleLogPath;
@@ -104,7 +104,7 @@ namespace qASIC.FileManagement
         #region Trim
         /// <summary>Trims paths end by specified amount of folders</summary>
         /// <param name="amount">Amount of folders to trim</param>
-        public static string TrimPathEnd(string path, int amount) 
+        public static string TrimPathEnd(string path, int amount)
         {
             path = path.Replace('\\', '/');
             amount = Mathf.Abs(amount);
@@ -142,7 +142,7 @@ namespace qASIC.FileManagement
         {
             path = path.Replace('\\', '/');
             if (!DirectoryExists(TrimPathEnd(path, 1))) Directory.CreateDirectory(TrimPathEnd(path, 1));
-            FileStream fileStream = File.Create(path);
+            var fileStream = File.Create(path);
             if (data != null)
             {
                 BinaryFormatter binFormater = new BinaryFormatter();
@@ -153,7 +153,7 @@ namespace qASIC.FileManagement
 
         private static void LoadBinary(string path, out object data)
         {
-            FileStream fileStream = File.Open(path, FileMode.Open);
+            var fileStream = File.Open(path, FileMode.Open);
             BinaryFormatter formater = new BinaryFormatter();
             data = formater.Deserialize(fileStream);
             fileStream.Close();
@@ -233,7 +233,7 @@ namespace qASIC.FileManagement
         {
             //try
             //{
-                SaveJSON(path, data, preattyPrint);
+            SaveJSON(path, data, preattyPrint);
             //}
             //catch (Exception e)
             //{

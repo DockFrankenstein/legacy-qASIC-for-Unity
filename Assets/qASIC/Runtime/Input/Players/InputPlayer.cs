@@ -3,6 +3,8 @@ using qASIC.Input.Map;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using qASIC.Input.Map.ItemData;
+using qASIC.ProjectSettings;
 
 namespace qASIC.Input.Players
 {
@@ -35,6 +37,19 @@ namespace qASIC.Input.Players
         public List<IInputDevice> CurrentDevices =>
             _devices;
 
+
+        #region Serialization
+        public void Save()
+        {
+            InputProjectSettings.Instance.serializer.Serialize(MapData.PrepareForSerialization());
+        }
+
+        public void Load()
+        {
+            var data = InputProjectSettings.Instance.serializer.Deserialize<InputMapData.SerializableMapData>();
+            MapData.LoadSerialization(data);
+        }
+        #endregion
 
         #region Get Input
         public bool GetInput(string itemName) =>
@@ -191,13 +206,13 @@ namespace qASIC.Input.Players
                 return;
             }
 
-            if (!MapData.ValueExists(item, InputBinding.KEYS_SERIALIZABLE_MAP_VALUE_NAME))
+            if (!(item is InputBinding))
             {
                 qDebug.LogError($"[Input Player] Couldn't remap item {groupName}/{itemName}:{index}, item is not a binding!");
                 return;
             }
 
-            var list = MapData.GetValue<List<string>>(item, InputBinding.KEYS_SERIALIZABLE_MAP_VALUE_NAME);
+            var list = MapData.GetItemData<InputBindingData>(item.Guid).keys;
 
             if (!list.IndexInRange(index))
             {
@@ -206,7 +221,6 @@ namespace qASIC.Input.Players
             }
 
             list[index] = key;
-            MapData.SetValue(item, InputBinding.KEYS_SERIALIZABLE_MAP_VALUE_NAME, list);
 
             if (log)
                 qDebug.Log($"[Input Player] Changed key {groupName}/{itemName}:{index} to '{key}'", "input");

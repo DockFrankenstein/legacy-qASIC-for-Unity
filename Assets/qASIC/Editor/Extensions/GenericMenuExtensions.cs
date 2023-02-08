@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace qASIC.EditorTools
+namespace qASIC
 {
     public static class GenericMenuExtensions
     {

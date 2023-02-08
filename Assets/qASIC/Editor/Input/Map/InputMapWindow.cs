@@ -6,9 +6,9 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEditor.IMGUI.Controls;
 using UnityEditor.Callbacks;
-using qASIC.FileManagement;
 using qASIC.EditorTools.Internal;
 using UnityEditor.ShortcutManagement;
+using qASIC.Files;
 
 //FIXME: For some reason when recompiling Unity flashes when this window is oppened
 namespace qASIC.Input.Map.Internal

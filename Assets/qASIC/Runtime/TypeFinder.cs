@@ -2,6 +2,7 @@
 using System;
 using System.Reflection;
 using System.Linq;
+using UnityEngine;
 
 namespace qASIC.Tools
 {
@@ -71,11 +72,27 @@ namespace qASIC.Tools
             FindAllPropertyAttributesInClass(classType, attributeType)
                 .ToList();
 
+        public static object CreateConstructorFromType(Type type) =>
+            CreateConstructorFromType(type, null);
+
+        public static object CreateConstructorFromType(Type type, params object[] parameters)
+        {
+            if (type == null)
+                return null;
+
+            ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
+            if (constructor == null || constructor.IsAbstract) return null;
+            return constructor.Invoke(parameters);
+        }
+
         public static IEnumerable<T> CreateConstructorsFromTypes<T>(IEnumerable<Type> types) =>
             types.SelectMany(x =>
             {
+                if (x == null)
+                    return new T[] { default };
+
                 ConstructorInfo constructor = x.GetConstructor(Type.EmptyTypes);
-                if (constructor == null || constructor.IsAbstract) return null;
+                if (constructor == null || constructor.IsAbstract) return new T[0];
                 return new T[] { (T)constructor.Invoke(null) };
             });
 

@@ -6,9 +6,9 @@ using static UnityEditor.EditorGUIUtility;
 using static UnityEngine.GUI;
 using static UnityEditor.EditorGUI;
 
-using Property = qASIC.FileManagement.AdvancedGenericFilePath;
+using Property = qASIC.Files.AdvancedGenericFilePath;
 
-namespace qASIC.FileManagement.Internal
+namespace qASIC.Files.Internal
 {
     [CustomPropertyDrawer(typeof(Property))]
     public class AdvancedGenericFilePathDrawer : PropertyDrawer

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace qASIC.FileManagement
+namespace qASIC.Files
 {
     public static class ConfigController
     {
@@ -100,7 +100,7 @@ namespace qASIC.FileManagement
         public static List<string> CreateOptionList(string content)
         {
             List<string> stringList = new List<string>();
-            List<KeyValuePair<string, string>> list = CreateList(content);
+            var list = CreateList(content);
 
             for (int i = 0; i < list.Count; i++)
                 stringList.Add($"{list[i].Key}:{list[i].Value}");
@@ -146,7 +146,7 @@ namespace qASIC.FileManagement
         public static Dictionary<string, string> CreateDictionary(string content)
         {
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
-            List<KeyValuePair<string, string>> list = CreateList(content);
+            var list = CreateList(content);
 
             for (int i = 0; i < list.Count; i++)
                 if (!dictionary.ContainsKey(list[i].Key))
@@ -166,7 +166,7 @@ namespace qASIC.FileManagement
 
         public static Dictionary<string, string> CreateDictionaryFromFile(string path)
         {
-            if (!TryCreateDictionaryFromFile(path, out Dictionary<string, string> dictionary))
+            if (!TryCreateDictionaryFromFile(path, out var dictionary))
                 throw new System.Exception("Couldn't generate config dictionary from file: file does not exist!");
 
             return dictionary;

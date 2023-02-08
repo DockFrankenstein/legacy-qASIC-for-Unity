@@ -75,6 +75,47 @@ namespace qASIC.EditorTools
         public static void DrawPropertiesInRange(SerializedObject obj, string startProperty, string endProperty) =>
             DrawPropertiesInRangeIfSpecified(obj, true, startProperty, true, endProperty);
 
+        public static Rect DrawProperty(Rect rect, SerializedProperty property)
+        {
+            property = property.Copy();
+            int startDepth = property.depth;
+            float height = 0f;
+
+            Rect r = rect.SetHeight(EditorGUIUtility.singleLineHeight);
+
+            if (property.NextVisible(true) && property.depth > startDepth)
+            {
+                DrawCurrent();
+                while (property.NextVisible(false) && property.depth > startDepth)
+                    DrawCurrent();
+            }
+
+            return rect.SetHeight(height);
+
+            void DrawCurrent()
+            {
+                var p = property.Copy();
+                EditorGUI.PropertyField(r, p);
+
+                height += EditorGUI.GetPropertyHeight(p);
+                r = r.MoveY(EditorGUI.GetPropertyHeight(p) + EditorGUIUtility.standardVerticalSpacing);
+            }
+        }
+
+        public static void DrawPropertyLayout(SerializedProperty property)
+        {
+            property = property.Copy();
+
+            int startDepth = property.depth;
+
+            if (property.NextVisible(true) && property.depth > startDepth)
+            {
+                EditorGUILayout.PropertyField(property.Copy());
+                while (property.NextVisible(false) && property.depth > startDepth)
+                    EditorGUILayout.PropertyField(property.Copy());
+            }
+        }
+
 
         private static void DrawPropertiesInRangeIfSpecified(SerializedObject obj, bool useStartProperty, string startProperty, bool useEndProperty, string endProperty)
         {

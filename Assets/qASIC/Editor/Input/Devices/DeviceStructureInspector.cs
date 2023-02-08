@@ -39,14 +39,15 @@ namespace qASIC.Input.Devices.Internal
 
                 if (foldout)
                 {
-                    int startIndent = EditorGUI.indentLevel;
-                    int startDepth = item.depth;
-                    while (item.NextVisible(true) && item.depth > startDepth)
-                    {
-                        EditorGUI.indentLevel = item.depth - startDepth + startIndent;
-                        EditorGUILayout.PropertyField(item);
-                    }
-                    EditorGUI.indentLevel = startIndent;
+                    qGUIEditorUtility.DrawPropertyLayout(item);
+                    //int startIndent = EditorGUI.indentLevel;
+                    //int startDepth = item.depth;
+                    //while (item.NextVisible(true) && item.depth > startDepth)
+                    //{
+                    //    EditorGUI.indentLevel = item.depth - startDepth + startIndent;
+                    //    EditorGUILayout.PropertyField(item);
+                    //}
+                    //EditorGUI.indentLevel = startIndent;
                 }
 
                 GUI.Box(StreachRectToSides(GUILayoutUtility.GetRect(GUIContent.none, Styles.s_lineStyle)), GUIContent.none, Styles.s_lineStyle);

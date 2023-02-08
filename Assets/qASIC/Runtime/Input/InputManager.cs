@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
-using qASIC.FileManagement;
 using qASIC.Input.Map;
 using qASIC.ProjectSettings;
 using qASIC.Input.Players;
 using UnityEditor.Graphs;
+using qASIC.Files;
 
 namespace qASIC.Input
 {
@@ -44,8 +44,8 @@ namespace qASIC.Input
         public static void SavePreferences()
         {
             if (DisableSaving) return;
-            
-            //FileManager.SaveFileJSON(SavePath, Players[0].MapData.CreateSerializableData(), true);
+
+            Players[0].Save();
 
             qDebug.Log("[Cablebox] Player preferences saved", "input");
         }
@@ -75,7 +75,6 @@ namespace qASIC.Input
             _initialized = true;
 
             LoadStartingArguments();
-            Serialization.InputSerializationManager.Initialize();
 
             InputProjectSettings settings = InputProjectSettings.Instance;
 
@@ -127,12 +126,7 @@ namespace qASIC.Input
         /// <summary>Loads map data</summary>
         public static void LoadPreferences()
         {
-            //InputMapData saveData = new InputMapData();
-            //if (!FileManager.TryReadFileJSON(SavePath, saveData))
-            //    return;
-
-            //Players[0].MapData.LoadFromData(saveData);
-            //qDebug.Log("[Cablebox] Player preferences have been loaded", "input");
+            Players[0].Load();
             qDebug.Log("[Cablebox] Player preferences loading has not been implemented yet!", "input");
         }
         #endregion
