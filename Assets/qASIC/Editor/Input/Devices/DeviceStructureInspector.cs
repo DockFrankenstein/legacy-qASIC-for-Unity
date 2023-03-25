@@ -50,7 +50,7 @@ namespace qASIC.Input.Devices.Internal
                     //EditorGUI.indentLevel = startIndent;
                 }
 
-                GUI.Box(StreachRectToSides(GUILayoutUtility.GetRect(GUIContent.none, Styles.s_lineStyle)), GUIContent.none, Styles.s_lineStyle);
+                GUI.Box(StreachRectToSides(GUILayoutUtility.GetRect(GUIContent.none, Styles.LineStyle)), GUIContent.none, Styles.LineStyle);
             }
 
             if (GUILayout.Button("Add provider"))
@@ -68,12 +68,12 @@ namespace qASIC.Input.Devices.Internal
 
         private static Rect CreateFoldout(ref bool foldout)
         {
-            var rect = GUILayoutUtility.GetRect(GUIContent.none, Styles.s_foldoutBackgroundStyle);
+            var rect = GUILayoutUtility.GetRect(GUIContent.none, Styles.FoldoutBackgroundStyle);
             var backgroundRect = StreachRectToSides(rect).Border(0f, -1f);
-            EditorGUI.LabelField(backgroundRect, GUIContent.none, Styles.s_foldoutBackgroundStyle);
+            EditorGUI.LabelField(backgroundRect, GUIContent.none, Styles.FoldoutBackgroundStyle);
             var foldoutRect = rect;
             foldoutRect.xMax -= 20;
-            foldout = EditorGUI.Foldout(foldoutRect, foldout, GUIContent.none, true, Styles.s_foldoutStyle);
+            foldout = EditorGUI.Foldout(foldoutRect, foldout, GUIContent.none, true, Styles.FoldoutStyle);
 
             return rect;
         }
@@ -138,10 +138,10 @@ namespace qASIC.Input.Devices.Internal
 
         private static class Styles
         {
-            public static GUIStyle s_foldoutBackgroundStyle = new GUIStyle("Label")
+            public static GUIStyle FoldoutBackgroundStyle => new GUIStyle("Label")
                 .WithBackground(qGUIUtility.GenerateColorTexture(EditorGUIUtility.isProSkin ? new Color(0.161f, 0.161f, 0.161f) : new Color(0.824f, 0.824f, 0.824f)));
-            public static GUIStyle s_foldoutStyle = new GUIStyle("foldout");
-            public static GUIStyle s_lineStyle = new GUIStyle()
+            public static GUIStyle FoldoutStyle => new GUIStyle("foldout");
+            public static GUIStyle LineStyle => new GUIStyle()
             {
                 fixedHeight = 1f,
                 stretchWidth = true,
