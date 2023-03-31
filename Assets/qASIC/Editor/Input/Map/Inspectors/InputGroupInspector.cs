@@ -38,6 +38,10 @@ namespace qASIC.Input.Map.Internal.Inspectors
             GUILayout.Label($"Is Default: {isDefault}");
         }
 
+        protected override bool CanDelete(OnGUIContext context) =>
+            map.groups.Count > 1 &&
+            map.groups.IndexOf(context.item as InputGroup) != map.defaultGroup;
+
         protected override void HandleDeletion(OnGUIContext context)
         {
             map.RemoveItem(_group);

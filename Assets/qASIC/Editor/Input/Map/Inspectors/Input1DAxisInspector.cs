@@ -17,8 +17,14 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
         protected override void OnGUI(OnGUIContext context)
         {
-            _axis.positiveGuid = EditorGUILayout.DelayedTextField("Positive", _axis.positiveGuid);
-            _axis.negativeGuid = EditorGUILayout.DelayedTextField("Negative", _axis.negativeGuid);
+            EditorGUILayout.Space();
+
+            InputMapWindowUtility.DrawAxis(string.Empty, map, _axis.positiveGuid, _axis.negativeGuid, (a, b) =>
+            {
+                _axis.positiveGuid = a;
+                _axis.negativeGuid = b;
+                window.SetMapDirty();
+            });
         }
 
         protected override void HandleDeletion(OnGUIContext context)

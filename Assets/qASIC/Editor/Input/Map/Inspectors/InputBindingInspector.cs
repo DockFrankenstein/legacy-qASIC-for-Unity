@@ -8,6 +8,7 @@ using System.Linq;
 using UnityEditor.IMGUI.Controls;
 using qASIC.EditorTools;
 using static qASIC.EditorTools.EditorChangeChecker;
+using static UnityEditorInternal.VersionControl.ListControl;
 
 namespace qASIC.Input.Map.Internal.Inspectors
 {
@@ -140,24 +141,25 @@ namespace qASIC.Input.Map.Internal.Inspectors
             };
 
             using (new ChangeCheckPause())
-            {
                 _keyViewMode = GUILayout.Toolbar(_keyViewMode, toolbarContent, GUILayout.Height(20f));
-            }
 
             EditorGUILayout.Space();
 
-            switch (_keyViewMode)
+            using (new GUILayout.VerticalScope(Styles.ListSpace))
             {
-                default:
-                    foreach (var list in _keyLists)
-                    {
-                        list.Draw();
-                        EditorGUILayout.Space();
-                    }
-                    break;
-                case 1:
-                    _keyPathReorderableList.DoLayoutList();
-                    break;
+                switch (_keyViewMode)
+                {
+                    default:
+                        foreach (var list in _keyLists)
+                        {
+                            list.Draw();
+                            EditorGUILayout.Space();
+                        }
+                        break;
+                    case 1:
+                        _keyPathReorderableList.DoLayoutList();
+                        break;
+                }
             }
         }
 
@@ -226,6 +228,14 @@ namespace qASIC.Input.Map.Internal.Inspectors
             {
 
             }
+        }
+
+        static class Styles
+        {
+            public static GUIStyle ListSpace => new GUIStyle()
+            {
+                margin = new RectOffset(4, 4, 0, 0),
+            };
         }
     }
 

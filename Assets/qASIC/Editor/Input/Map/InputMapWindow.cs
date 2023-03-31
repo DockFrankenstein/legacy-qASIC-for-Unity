@@ -92,6 +92,9 @@ namespace qASIC.Input.Map.Internal
                 if (window.IsDirty)
                     window.Save();
 
+                _lastSaveTime = (float)EditorApplication.timeSinceStartup;
+                _waitForAutoSave = false;
+
                 prefs_autoSave = value;
             }
         }
@@ -465,13 +468,6 @@ namespace qASIC.Input.Map.Internal
 
             GUILayout.EndHorizontal();
 
-#if !ENABLE_LEGACY_INPUT_MANAGER
-            EditorGUILayout.HelpBox("qASIC input doesn't support the New Input System. Please go to Edit/Project Settings/Player and change Active Input Handling to Input Manager or Both.", MessageType.Warning);
-            if (GUILayout.Button("Open Project Settings"))
-                SettingsService.OpenProjectSettings("Project/Player");
-            EditorGUILayout.Space(16f);
-#endif
-
             if (Event.current.type != EventType.Repaint) return;
 
             if (_reloadTreesNextRepaint)
@@ -564,7 +560,7 @@ namespace qASIC.Input.Map.Internal
         {
             _isDirty = true;
             EditorUtility.SetDirty(Map);
-            GetEditorWindow().SetWindowTitle();
+            SetWindowTitle();
 
             if (!Prefs_AutoSave) return;
 
@@ -582,7 +578,7 @@ namespace qASIC.Input.Map.Internal
             _isDirty = false;
             _waitForAutoSave = false;
             EditorUtility.ClearDirty(Map);
-            GetEditorWindow().SetWindowTitle();
+            SetWindowTitle();
         }
 
         private void SaveUnmodifiedMap(InputMap map) =>
@@ -591,10 +587,11 @@ namespace qASIC.Input.Map.Internal
         public void Save()
         {
             _lastSaveTime = (float)EditorApplication.timeSinceStartup;
+            _waitForAutoSave = false;
             _isDirty = false;
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            GetEditorWindow().SetWindowTitle();
+            SetWindowTitle();
             SaveUnmodifiedMap(Map);
         }
 

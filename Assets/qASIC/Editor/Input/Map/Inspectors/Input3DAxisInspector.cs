@@ -1,8 +1,5 @@
-﻿using qASIC.EditorTools.Internal;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using UnityEditor;
 
 namespace qASIC.Input.Map.Internal.Inspectors
 {
@@ -19,9 +16,9 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
         protected override void OnGUI(OnGUIContext context)
         {
-            _axis.XAxis = InputMapWindowUtility.DrawAxis("X Axis", _axis.XAxis, map);
-            _axis.YAxis = InputMapWindowUtility.DrawAxis("Y Axis", _axis.YAxis, map);
-            _axis.ZAxis = InputMapWindowUtility.DrawAxis("Z Axis", _axis.ZAxis, map);
+            InputMapWindowUtility.DrawAxis("X Axis", window, _axis.XAxis);
+            InputMapWindowUtility.DrawAxis("Y Axis", window, _axis.YAxis);
+            InputMapWindowUtility.DrawAxis("Z Axis", window, _axis.ZAxis);
         }
 
         protected override void HandleDeletion(OnGUIContext context)

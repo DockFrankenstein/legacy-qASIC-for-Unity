@@ -47,7 +47,7 @@ namespace qASIC.Input.Map.Internal
 
         void AutoSaveButton()
         {
-            bool isAutoSaving = window.IsDirty && !InputMapWindow.CanAutoSave();
+            bool isAutoSaving = window.IsDirty && !InputMapWindow.CanAutoSave() && InputMapWindow.Prefs_AutoSave;
             string autosaveText = isAutoSaving ? $" ({Mathf.Round((float)InputMapWindow.TimeToAutoSave + 0.5f)}s)" : string.Empty;
 
             if (Toggle(map && InputMapWindow.Prefs_AutoSave, $"Auto save{autosaveText}", EditorStyles.toolbarButton) != InputMapWindow.Prefs_AutoSave)

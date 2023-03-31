@@ -51,7 +51,7 @@ namespace qASIC.Input.Map.Internal
         {
             if (!map) return;
 
-            _scroll = BeginScrollView(_scroll);
+            _scroll = BeginScrollView(_scroll, Styles.Inspector);
 
             if (_currentInspector != null)
             {
@@ -66,107 +66,6 @@ namespace qASIC.Input.Map.Internal
             }
 
             EndScrollView();
-
-            //switch (_inspectionObject)
-            //{
-            //    case InputGroup group:
-            //        int groupIndex = map.groups.IndexOf(group);
-            //        if (groupIndex == -1) break;
-
-            //        group.groupName = NameField(group.groupName, (string newName) => { return map.CanRenameGroup(newName); });
-
-            //        using (new EditorGUI.DisabledScope(map.defaultGroup == groupIndex))
-            //        {
-            //            if (GUILayout.Button("Set as default"))
-            //            {
-            //                map.defaultGroup = groupIndex;
-            //                _displayDeletePrompt = false;
-            //                InputMapWindow.SetMapDirty();
-            //            }
-
-            //            Space();
-            //            if (DeleteButton())
-            //                OnDeleteGroup?.Invoke(group);
-            //        }
-
-
-            //        //Debug
-            //        if (InputMapWindow.DebugMode)
-            //        {
-            //            Space();
-            //            qGUIInternalUtility.BeginGroup();
-            //            EditorChangeChecker.BeginChangeCheck(InputMapWindow.SetMapDirty);
-
-            //            group.guid = DelayedTextField("GUID", group.guid);
-
-            //            EditorChangeChecker.EndChangeCheckAndCleanup();
-            //            qGUIInternalUtility.EndGroup(false);
-            //        }
-            //        break;
-            //    case InspectorInputAction action:
-            //        action.action.actionName = NameField(action.action.actionName, (string newName) => { return action.group.CanRenameItem(newName); });
-
-            //        DisplayKeys(action.action);
-            //        Space();
-
-            //        if (DeleteButton())
-            //            OnDeleteAction?.Invoke(action);
-
-            //        //Debug
-            //        if (InputMapWindow.DebugMode)
-            //        {
-            //            Space();
-            //            qGUIInternalUtility.BeginGroup();
-            //            EditorChangeChecker.BeginChangeCheck(InputMapWindow.SetMapDirty);
-
-            //            action.action.guid = DelayedTextField("GUID", action.action.guid);
-
-            //            EditorChangeChecker.EndChangeCheckAndCleanup();
-            //            qGUIInternalUtility.EndGroup(false);
-            //        }
-            //        break;
-            //    case InspectorInputAxis axis:
-            //        axis.axis.axisName = NameField(axis.axis.axisName, (string newName) => { return axis.group.CanRenameAxis(newName); });
-
-            //        Space();
-
-            //        EditorChangeChecker.BeginChangeCheck(InputMapWindow.SetMapDirty);
-            //        axis.axis.positiveAction = AxisField(axis.group, "Positive", axis.axis.positiveAction);
-            //        axis.axis.negativeAction = AxisField(axis.group, "Negative", axis.axis.negativeAction);
-            //        EditorChangeChecker.EndChangeCheckAndCleanup();
-
-            //        Space();
-
-            //        if (DeleteButton())
-            //            OnDeleteAxis?.Invoke(axis);
-
-            //        //Debug
-            //        if (InputMapWindow.DebugMode)
-            //        {
-            //            Space();
-            //            qGUIInternalUtility.BeginGroup();
-            //            EditorChangeChecker.BeginChangeCheck(InputMapWindow.SetMapDirty);
-
-            //            axis.axis.guid = DelayedTextField("GUID", axis.axis.guid);
-
-            //            EditorChangeChecker.EndChangeCheckAndCleanup();
-            //            qGUIInternalUtility.EndGroup(false);
-            //        }
-            //        break;
-            //    case InputBinding _:
-            //        HelpBox(new GUIContent($"Use '{nameof(InspectorInputAction)}' instead of '{nameof(InputBinding)}'!"));
-            //        break;
-            //    case Input1DAxis _:
-            //        HelpBox(new GUIContent($"Use '{nameof(InspectorInputAxis)}' instead of '{nameof(Input1DAxis)}'!"));
-            //        break;
-            //    case string s:
-            //        HandleStringInspection(s);
-            //        break;
-            //    default:
-            //        GUILayout.Label(DefaultText);
-            //        break;
-            //}
-
 
             if (OnNextRepaint != null && Event.current.type == EventType.Repaint)
             {
@@ -297,6 +196,14 @@ namespace qASIC.Input.Map.Internal
                         .ToDictionary(x => x.ItemType);
         }
         #endregion
+
+        static class Styles
+        {
+            public static GUIStyle Inspector => new GUIStyle()
+            {
+                padding = new RectOffset(4, 4, 8, 8),
+            };
+        }
     }
 }
 #endif

@@ -278,6 +278,7 @@ namespace qASIC.Input.Map.Internal
 			}
 
 			Group.InsertItem(index + 1, item);
+            window.SetMapDirty();
 			Reload();
 
 

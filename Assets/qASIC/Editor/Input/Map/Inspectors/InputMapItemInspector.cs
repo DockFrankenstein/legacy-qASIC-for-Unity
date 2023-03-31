@@ -41,7 +41,14 @@ namespace qASIC.Input.Map.Internal.Inspectors
             EditorGUILayout.Space();
 
             if (mapItem != null)
-                defaultGUIData.delete = DeleteButton(defaultGUIData.delete);
+            {
+                bool canDelete = CanDelete(context);
+
+                using (new EditorGUI.DisabledScope(!canDelete))
+                {
+                    defaultGUIData.delete = DeleteButton(defaultGUIData.delete, context) && canDelete;
+                }
+            }
 
             //Debug
             if (context.debug)
@@ -82,6 +89,9 @@ namespace qASIC.Input.Map.Internal.Inspectors
         {
             
         }
+
+        protected virtual bool CanDelete(OnGUIContext context) =>
+            true;
 
         protected bool DeleteButton(bool state, OnGUIContext context, string text = "Delete") =>
             DeleteButton(state, OnDelete:() =>

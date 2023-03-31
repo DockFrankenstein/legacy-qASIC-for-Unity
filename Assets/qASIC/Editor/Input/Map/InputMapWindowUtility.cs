@@ -5,6 +5,9 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using qASIC.EditorTools.Internal;
 using UnityEditor;
+using UnityEngine;
+using qASIC.Input.Internal.ReferenceExplorers;
+using qASIC.EditorTools;
 
 namespace qASIC.Input.Map.Internal
 {
@@ -90,31 +93,45 @@ namespace qASIC.Input.Map.Internal
             return items;
         }
 
-        public static Axis DrawAxis(string label, Axis axis, InputMap map)
+        public static void DrawAxis(string label, InputMapWindow window, Axis axis)
         {
-            EditorGUILayout.Space();
-            using (new qGUIInternalUtility.GroupScope(label))
+            DrawAxis(label, window.Map, axis.positiveGuid, axis.negativeGuid, (a, b) =>
             {
-                axis.axisGuid = EditorGUILayout.DelayedTextField("Axis", axis.axisGuid);
+                axis.positiveGuid = a;
+                axis.negativeGuid = b;
+                window.SetMapDirty();
+            });
+        }
+
+        public static void DrawAxis(string label, InputMap map, string positiveGUID, string negativeGUID, Action<string, string> onValueChanged)
+        {
+            if (!string.IsNullOrEmpty(label))
+            {
                 EditorGUILayout.Space();
-
-                bool isUsingAxis = axis.IsUsingAxis();
-                Input1DAxis targetAxis = axis.IsUsingAxis() ? map.GetItem<Input1DAxis>(axis.axisGuid) : null;
-
-                using (new EditorGUI.DisabledGroupScope(isUsingAxis))
-                {
-                    string newPositive = EditorGUILayout.DelayedTextField("Positive", targetAxis?.positiveGuid ?? axis.positiveGuid);
-                    string newNegative = EditorGUILayout.DelayedTextField("Negative", targetAxis?.negativeGuid ?? axis.negativeGuid);
-
-                    if (targetAxis == null)
-                    {
-                        axis.positiveGuid = newPositive;
-                        axis.negativeGuid = newNegative;
-                    }
-                }
+                GUILayout.Label(label, EditorStyles.whiteLargeLabel);
             }
 
-            return axis;
+            using (new EditorChangeChecker.ChangeCheckPause())
+            {
+                DrawItemReference("Positive", map, positiveGUID, a => onValueChanged?.Invoke(a, negativeGUID));
+                DrawItemReference("Negative", map, negativeGUID, a => onValueChanged?.Invoke(positiveGUID, a));
+            }
+        }
+
+        public static void DrawItemReference(string label, InputMap map, string guid, Action<string> onChangeValue)
+        {
+            using (new GUILayout.HorizontalScope())
+            {
+                EditorGUILayout.PrefixLabel(label);
+
+                string itemName = map.ItemsDictionary.TryGetValue(guid, out var item) ?
+                    item.ItemName :
+                    "None";
+
+                if (GUILayout.Button(itemName, EditorStyles.popup))
+                    InputItemReferenceExplorer.OpenSelectWindow(guid, onChangeValue);
+
+            }
         }
 
         public struct ItemType
