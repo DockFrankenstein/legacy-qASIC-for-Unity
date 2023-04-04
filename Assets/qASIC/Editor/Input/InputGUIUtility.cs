@@ -91,22 +91,19 @@ namespace qASIC.Input.Map.Internal
                 $"{item.ItemName} ({map.groups.Where(x => x.items.Contains(item)).FirstOrDefault()})" :
                 "None";
 
-            Rect buttonRect = new Rect(rect);
-
-
             buttonStyle.normal.background = qGUIUtility.GenerateColorTexture(EditorGUIUtility.isProSkin ?
                 new Color(0.345098f, 0.345098f, 0.345098f) :
                 new Color(0.8941177f, 0.8941177f, 0.8941177f));
 
-            if (GUI.Button(buttonRect, itemName, buttonStyle))
+            if (GUI.Button(rect, itemName, buttonStyle))
                 InputItemReferenceExplorer.OpenSelectWindow(map, guid, onChangeValue, type);
 
             if (Event.current.type == EventType.Repaint)
             {
-                verticalLine.Draw(buttonRect.ResizeToLeft(0f), GUIContent.none, false, false, false, false);
-                verticalLine.Draw(buttonRect.ResizeToRight(0f), GUIContent.none, false, false, false, false);
-                horizontalLine.Draw(buttonRect.ResizeToTop(0f), GUIContent.none, false, false, false, false);
-                horizontalLine.Draw(buttonRect.ResizeToBottom(0f), GUIContent.none, false, false, false, false);
+                verticalLine.Draw(rect.ResizeToLeft(0f), GUIContent.none, false, false, false, false);
+                verticalLine.Draw(rect.ResizeToRight(0f), GUIContent.none, false, false, false, false);
+                horizontalLine.Draw(rect.ResizeToTop(0f), GUIContent.none, false, false, false, false);
+                horizontalLine.Draw(rect.ResizeToBottom(0f), GUIContent.none, false, false, false, false);
             }
         }
     }
