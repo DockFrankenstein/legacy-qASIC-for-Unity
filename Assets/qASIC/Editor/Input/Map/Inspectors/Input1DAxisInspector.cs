@@ -19,7 +19,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
         {
             EditorGUILayout.Space();
 
-            InputMapWindowUtility.DrawAxis(string.Empty, map, _axis.positiveGuid, _axis.negativeGuid, (a, b) =>
+            InputGUIUtility.DrawAxis(string.Empty, map, _axis.positiveGuid, _axis.negativeGuid, (a, b) =>
             {
                 _axis.positiveGuid = a;
                 _axis.negativeGuid = b;

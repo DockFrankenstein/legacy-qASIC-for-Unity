@@ -16,8 +16,8 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
         protected override void OnGUI(OnGUIContext context)
         {
-            InputMapWindowUtility.DrawAxis("X Axis", window, _axis.XAxis);
-            InputMapWindowUtility.DrawAxis("Y Axis", window, _axis.YAxis);
+            InputGUIUtility.DrawAxis("X Axis", window, _axis.XAxis);
+            InputGUIUtility.DrawAxis("Y Axis", window, _axis.YAxis);
         }
 
         protected override void HandleDeletion(OnGUIContext context)
