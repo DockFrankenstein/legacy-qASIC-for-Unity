@@ -462,8 +462,13 @@ namespace qASIC.Input.Map.Internal
             
             HorizontalLine();
 
-            GUILayout.BeginVertical(GUILayout.Width(Mathf.Min(Prefs_InspectorWidth, position.width * 0.8f)));
-            _inspector.OnGUI();
+            float width = Mathf.Min(Prefs_InspectorWidth, position.width * 0.8f);
+            GUILayout.BeginVertical(GUILayout.Width(width));
+            using (new GUILayout.VerticalScope())
+            {
+                _inspector.Width = width;
+                _inspector.OnGUI();
+            }
             GUILayout.EndVertical();
 
             GUILayout.EndHorizontal();

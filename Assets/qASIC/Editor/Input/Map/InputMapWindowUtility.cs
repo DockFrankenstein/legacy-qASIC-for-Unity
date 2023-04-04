@@ -8,6 +8,7 @@ using UnityEditor;
 using UnityEngine;
 using qASIC.Input.Internal.ReferenceExplorers;
 using qASIC.EditorTools;
+using UnityEngine.UIElements;
 
 namespace qASIC.Input.Map.Internal
 {
@@ -113,24 +114,75 @@ namespace qASIC.Input.Map.Internal
 
             using (new EditorChangeChecker.ChangeCheckPause())
             {
-                DrawItemReference("Positive", map, positiveGUID, a => onValueChanged?.Invoke(a, negativeGUID));
-                DrawItemReference("Negative", map, negativeGUID, a => onValueChanged?.Invoke(positiveGUID, a));
+                DrawItemReference<InputBinding>("Positive", map, positiveGUID, a => onValueChanged?.Invoke(a, negativeGUID));
+                DrawItemReference<InputBinding>("Negative", map, negativeGUID, a => onValueChanged?.Invoke(positiveGUID, a));
             }
         }
 
-        public static void DrawItemReference(string label, InputMap map, string guid, Action<string> onChangeValue)
+        public static void DrawItemReference(string label, InputMap map, string guid, Action<string> onChangeValue) =>
+            DrawItemReference(label, map, guid, onChangeValue, typeof(InputMapItem));
+
+        public static void DrawItemReference<T>(string label, InputMap map, string guid, Action<string> onChangeValue) =>
+            DrawItemReference(label, map, guid, onChangeValue, typeof(T));
+
+        public static void DrawItemReference(string label, InputMap map, string guid, Action<string> onChangeValue, Type type)
         {
+            GUIStyle buttonStyle = new GUIStyle()
+            {
+                wordWrap = false,
+                alignment = TextAnchor.MiddleLeft,
+                clipping = TextClipping.Clip,
+                padding = new RectOffset(4, 4, 0, 0),
+                normal = new GUIStyleState()
+                {
+                    textColor = EditorStyles.miniButton.normal.textColor,
+                }
+            };
+
+            GUIStyle horizontalLine = new GUIStyle()
+            {
+                fixedHeight = 1f,
+            }
+            .WithBackground(qGUIEditorUtility.BorderTexture);
+
+            GUIStyle verticalLine = new GUIStyle()
+            {
+                fixedWidth = 1f,
+            }
+            .WithBackground(qGUIEditorUtility.BorderTexture);
+
             using (new GUILayout.HorizontalScope())
             {
                 EditorGUILayout.PrefixLabel(label);
 
                 string itemName = map.ItemsDictionary.TryGetValue(guid, out var item) ?
-                    item.ItemName :
+                    $"{item.ItemName} ({map.groups.Where(x => x.items.Contains(item)).FirstOrDefault()})" :
                     "None";
 
-                if (GUILayout.Button(itemName, EditorStyles.popup))
-                    InputItemReferenceExplorer.OpenSelectWindow(guid, onChangeValue);
+                GUILayout.FlexibleSpace();
 
+                Rect buttonRect = GUILayoutUtility.GetLastRect()
+                    .SetHeight(18f)
+                    .MoveY(2f)
+                    .BorderLeft(4f);
+
+                buttonStyle.normal.background = qGUIUtility.GenerateColorTexture(EditorGUIUtility.isProSkin ?
+                    new Color(0.345098f, 0.345098f, 0.345098f) :
+                    new Color(0.8941177f, 0.8941177f, 0.8941177f));
+                    //buttonRect.Contains(Event.current.mousePosition) ?
+                    //qGUIUtility.GenerateColorTexture(new Color(0.454902f, 0.454902f, 0.454902f)) :
+                    //qGUIUtility.GenerateColorTexture(new Color(0.345098f, 0.345098f, 0.345098f));
+
+                if (GUI.Button(buttonRect, itemName, buttonStyle))
+                    InputItemReferenceExplorer.OpenSelectWindow(map, guid, onChangeValue, type);
+
+                if (Event.current.type == EventType.Repaint)
+                {
+                    verticalLine.Draw(buttonRect.ResizeToLeft(0f), GUIContent.none, false, false, false, false);
+                    verticalLine.Draw(buttonRect.ResizeToRight(0f), GUIContent.none, false, false, false, false);
+                    horizontalLine.Draw(buttonRect.ResizeToTop(0f), GUIContent.none, false, false, false, false);
+                    horizontalLine.Draw(buttonRect.ResizeToBottom(0f), GUIContent.none, false, false, false, false);
+                }
             }
         }
 
@@ -144,6 +196,16 @@ namespace qASIC.Input.Map.Internal
 
             public string name;
             public Type type;
+        }
+
+        static class Styles
+        {
+            public static GUIStyle ItemReferenceButton => new GUIStyle(EditorStyles.popup)
+            {
+                wordWrap = false,
+                alignment = TextAnchor.MiddleLeft,
+                clipping = TextClipping.Clip,
+            };
         }
     }
 }

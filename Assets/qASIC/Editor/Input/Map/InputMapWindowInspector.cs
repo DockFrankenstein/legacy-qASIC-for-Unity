@@ -23,6 +23,7 @@ namespace qASIC.Input.Map.Internal
         Vector2 _scroll;
 
         public string DefaultText { get; set; }
+        public float Width { get; set; }
 
         private Dictionary<Type, InputMapItemInspector> _inspectors = null;
         public Dictionary<Type, InputMapItemInspector> _Inspectors
@@ -51,21 +52,34 @@ namespace qASIC.Input.Map.Internal
         {
             if (!map) return;
 
-            _scroll = BeginScrollView(_scroll, Styles.Inspector);
-
-            if (_currentInspector != null)
+            GUIStyle inspectorStyle = new GUIStyle()
             {
+                padding = new RectOffset(4, 4, 8, 8),
+                fixedWidth = Width,
+            };
 
-                InputMapItemInspector.OnGUIContext context = new InputMapItemInspector.OnGUIContext()
+            var labelWidth = EditorGUIUtility.labelWidth;
+            EditorGUIUtility.labelWidth = 100f;
+
+            _scroll = BeginScrollView(_scroll);
+
+            using (new GUILayout.VerticalScope(inspectorStyle))
+            {
+                if (_currentInspector != null)
                 {
-                    item = _inspectionObject,
-                    debug = InputMapWindow.DebugMode,
-                };
+                    InputMapItemInspector.OnGUIContext context = new InputMapItemInspector.OnGUIContext()
+                    {
+                        item = _inspectionObject,
+                        debug = InputMapWindow.DebugMode,
+                    };
 
-                _currentInspector?.DrawGUI(context);
+                    _currentInspector?.DrawGUI(context);
+                }
             }
 
             EndScrollView();
+
+            EditorGUIUtility.labelWidth = labelWidth;
 
             if (OnNextRepaint != null && Event.current.type == EventType.Repaint)
             {
@@ -196,14 +210,6 @@ namespace qASIC.Input.Map.Internal
                         .ToDictionary(x => x.ItemType);
         }
         #endregion
-
-        static class Styles
-        {
-            public static GUIStyle Inspector => new GUIStyle()
-            {
-                padding = new RectOffset(4, 4, 8, 8),
-            };
-        }
     }
 }
 #endif
