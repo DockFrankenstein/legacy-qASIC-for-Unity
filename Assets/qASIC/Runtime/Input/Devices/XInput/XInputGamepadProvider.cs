@@ -1,23 +1,12 @@
-﻿using qASIC.Input.Devices;
-using System.Collections.Generic;
-using XInputDotNetPure;
+﻿using System.Collections.Generic;
 using System;
 
-namespace qASIC.XInput.Devices
+namespace qASIC.Input.Devices
 {
     [Serializable]
     public class XInputGamepadProvider : DeviceProvider
     {
-        const int DEVICE_LIMIT = 4;
-
-        static readonly PlayerIndex[] _avaliableIndexes = new PlayerIndex[DEVICE_LIMIT]
-        {
-            PlayerIndex.One,
-            PlayerIndex.Two,
-            PlayerIndex.Three,
-            PlayerIndex.Four,
-        };
-
+        const uint DEVICE_LIMIT = 4;
 
         static bool[] _slotConnectionStates = new bool[DEVICE_LIMIT];
 
@@ -27,18 +16,17 @@ namespace qASIC.XInput.Devices
 
         public override void Update()
         {
-            for (int i = 0; i < DEVICE_LIMIT; i++)
+            for (uint i = 0; i < DEVICE_LIMIT; i++)
             {
-                PlayerIndex index = _avaliableIndexes[i];
-                bool isConnected = GamePad.GetState(index).IsConnected;
+                bool isConnected = XInput.IsControllerConnected(i);
 
                 //Device connected
                 if (isConnected && !_slotConnectionStates[i])
-                    OnDeviceConnected(index);
+                    OnDeviceConnected(i);
 
                 //Device disconnected
                 if (!isConnected && _slotConnectionStates[i])
-                    OnDeviceDisconnected(index);
+                    OnDeviceDisconnected(i);
 
                 _slotConnectionStates[i] = isConnected;
             }
@@ -50,18 +38,18 @@ namespace qASIC.XInput.Devices
             _slotConnectionStates = new bool[DEVICE_LIMIT];
         }
 
-        static void OnDeviceConnected(PlayerIndex index)
+        static void OnDeviceConnected(uint index)
         {
-            _slotConnectionStates[Array.IndexOf(_avaliableIndexes, index)] = true;
+            _slotConnectionStates[index] = true;
             XInputGamepad gamepad = new XInputGamepad($"Gamepad {index}", index);
             _gamepads[(int)index] = gamepad;
             DeviceManager.RegisterDevice(gamepad);
             qDebug.Log($"[XInput] Device connected: {gamepad.DeviceName}", "xinput");
         }
 
-        static void OnDeviceDisconnected(PlayerIndex index)
+        static void OnDeviceDisconnected(uint index)
         {
-            _slotConnectionStates[Array.IndexOf(_avaliableIndexes, index)] = false;
+            _slotConnectionStates[index] = false;
             XInputGamepad gamepad = _gamepads[(int)index];
             DeviceManager.DeregisterDevice(gamepad);
             qDebug.Log($"[XInput] Device disconnected: {gamepad.DeviceName}", "xinput");

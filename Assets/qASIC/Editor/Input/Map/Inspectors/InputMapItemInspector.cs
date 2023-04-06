@@ -31,10 +31,18 @@ namespace qASIC.Input.Map.Internal.Inspectors
             IMapItem mapItem = context.item as IMapItem;
 
             if (AutoSave)
-                EditorChangeChecker.BeginChangeCheck(() => window.SetMapDirty());
+            {
+                EditorChangeChecker.BeginChangeCheck(() =>
+                {
+                    window.SetMapDirty();
+                    window.ReloadTrees();
+                });
+            }
 
             if (mapItem != null)
-                mapItem.ItemName = EditorGUILayout.DelayedTextField("Name", mapItem.ItemName);
+            {
+                mapItem.ItemName = EditorGUILayout.DelayedTextField("Name", mapItem.ItemName);               
+            }
 
             OnGUI(context);
 

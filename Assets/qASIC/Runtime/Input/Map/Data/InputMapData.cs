@@ -16,7 +16,7 @@ namespace qASIC.Input.Map
             foreach (var item in map.ItemsDictionary)
             {
                 if (!(item.Value is ISerializableMapItem serializableItem))
-                    return;
+                    continue;
 
                 SerializableValues.Add(item.Key, serializableItem.CreateDataHolder());
             }
@@ -63,6 +63,8 @@ namespace qASIC.Input.Map
 
         public void LoadSerialization(SerializableMapData data)
         {
+            if (data == null) return;
+
             Dictionary<string, InputMapItemData> dataValues = new Dictionary<string, InputMapItemData>();
 
             foreach (var item in data.items)
@@ -85,7 +87,7 @@ namespace qASIC.Input.Map
                     SerializableValues[key] = dataValues[key];
         }
 
-        public struct SerializableMapData
+        public class SerializableMapData
         {
             public List<SerializableItem> items;
         }

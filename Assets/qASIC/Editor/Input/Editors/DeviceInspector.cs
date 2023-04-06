@@ -97,19 +97,16 @@ namespace qASIC.Input.DebugTools
                         var values = device.Values
                             .Where(x => x.Value != 0f);
                         foreach (var item in values)
-                        {
-                            EditorGUILayout.LabelField(item.Key, item.Value.ToString());
-                        }
+                            EditorGUILayout.LabelField($"{item.Key}: {item.Value}");
 
                         if (values.Count() == 0)
                             EditorGUILayout.LabelField("EMPTY");
+
                         EditorGUI.indentLevel--;
 
                         var properties = device.GetProperties();
                         foreach (var item in properties)
-                        {
-                            EditorGUILayout.LabelField(item.Key, item.Value);
-                        }
+                            EditorGUILayout.LabelField($"{item.Key}: {item.Value}");
                     }
 
                     EditorGUI.indentLevel--;

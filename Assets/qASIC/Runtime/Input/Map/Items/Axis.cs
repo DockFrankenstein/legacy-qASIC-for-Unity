@@ -3,8 +3,10 @@
 namespace qASIC.Input.Map
 {
     [Serializable]
-    public struct Axis
+    public class Axis
     {
+        public Axis() { }
+
         public Axis(string positiveGuid, string negativeGuid) : this()
         {
             this.positiveGuid = positiveGuid;

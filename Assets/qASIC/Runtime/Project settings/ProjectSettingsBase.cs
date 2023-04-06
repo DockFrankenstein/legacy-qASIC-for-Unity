@@ -20,7 +20,12 @@ namespace qASIC.ProjectSettings
                 t settings = Resources.Load<t>($"{instanceLocation}/{assetName}");
 
                 if (settings == null)
+                {
                     settings = CreateNewInstance<t>(assetName);
+#if UNITY_EDITOR && !qASIC_DEV
+                    settings.OnImport();
+#endif
+                }
 
                 instance = settings;
             }
@@ -65,5 +70,10 @@ namespace qASIC.ProjectSettings
             return asset;
         }
 #endif
+
+        public virtual void OnImport()
+        {
+
+        }
     }
 }

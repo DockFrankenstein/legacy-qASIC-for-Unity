@@ -58,6 +58,8 @@ namespace qASIC.Input.Map.Internal
 
         public static void DrawItemReference(Rect rect, GUIContent label, InputMap map, string guid, Action<string> onChangeValue, Type type)
         {
+            guid = guid ?? string.Empty;
+
             GUIStyle buttonStyle = new GUIStyle()
             {
                 wordWrap = false,

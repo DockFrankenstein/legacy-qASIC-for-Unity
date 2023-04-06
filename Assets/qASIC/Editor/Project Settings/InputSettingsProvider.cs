@@ -54,12 +54,6 @@ namespace qASIC.ProjectSettings.Internal
             qGUIInternalUtility.EndGroup();
 
             qGUIInternalUtility.BeginGroup("Saving");
-            DrawProperty(nameof(Settings.serializationType));
-            if (settings.serializationType == SerializationType.config)
-                DrawProperty(nameof(Settings.filePath));
-            qGUIInternalUtility.EndGroup();
-
-            qGUIInternalUtility.BeginGroup("Saving (experimental)");
             DrawProperty(nameof(Settings.serializer));
             qGUIInternalUtility.EndGroup();
 

@@ -88,13 +88,20 @@ namespace qASIC.Input.Devices.Internal
             var types = TypeFinder.FindAllTypes<DeviceProvider>()
                 .Where(x => !x.ContainsGenericParameters);
 
+            var addedProviderTypes = _structure.providers
+                .Select(x => x.GetType())
+                .ToList();
+
             foreach (var type in types)
             {
-                menu.AddItem(type.Name.Split('.').Last(), false, () =>
+                menu.AddToggableItem(type.Name.Split('.').Last(), false, () =>
                 {
-                    AddHandler(type);
+                    _structure.AddHandler(type);
+
+                    serializedObject.Update();
+                    SaveAssetDatabase();
                     _reloadDeviceManager = true;
-                });
+                }, !addedProviderTypes.Contains(type));
             }
 
             menu.ShowAsContext();
@@ -115,16 +122,6 @@ namespace qASIC.Input.Devices.Internal
             });
 
             menu.ShowAsContext();
-        }
-
-        void AddHandler(Type type)
-        {
-            var provider = (DeviceProvider)Activator.CreateInstance(type, new object[] { });
-            provider.Name = provider.DefaultItemName;
-
-            _structure.providers.Add(provider);
-            serializedObject.UpdateIfRequiredOrScript();
-            SaveAssetDatabase(false);
         }
 
         void SaveAssetDatabase(bool applySerializableObject = true)

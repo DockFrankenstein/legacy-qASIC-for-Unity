@@ -10,6 +10,12 @@ namespace qASIC.Files.Serialization
     [Serializable]
     public class ObjectSerializer
     {
+        public ObjectSerializer() { }
+        public ObjectSerializer(SerializationProvider provider) : this()
+        {
+            this.provider = provider;
+        }
+
         public SerializationProvider Provider => provider;
 
         [SerializeReference] SerializationProvider provider;
@@ -84,7 +90,13 @@ namespace qASIC.Files.Serialization
             string txt = string.Empty;
 
             if (provider.SavesToFile)
-                txt = File.ReadAllText(filepath.GetFullPath());
+            {
+                string path = filepath.GetFullPath();
+                if (!File.Exists(path))
+                    return null;
+
+                txt = File.ReadAllText(path);
+            }
 
             return provider.DeserializeObject(txt, type);
         }

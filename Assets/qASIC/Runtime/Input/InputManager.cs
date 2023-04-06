@@ -38,9 +38,6 @@ namespace qASIC.Input
         #endregion
 
         #region Saving
-        public static string SavePath { get; set; }
-        private static SerializationType SaveType { get; set; } = SerializationType.playerPrefs;
-
         public static void SavePreferences()
         {
             if (DisableSaving) return;
@@ -78,27 +75,12 @@ namespace qASIC.Input
 
             InputProjectSettings settings = InputProjectSettings.Instance;
 
-            SavePath = settings.filePath.GetFullPath();
             if (settings.map == null) return;
 
             qDebug.Log($"Initializing Cablebox Input System v{qASIC.Internal.Info.InputVersion}...", "init");
             LoadMap(settings.map);
 
-
             LoadPreferences();
-
-            //switch (settings.serializationType)
-            //{
-            //    case SerializationType.playerPrefs:
-            //        LoadUserKeysPrefs();
-            //        break;
-            //    case SerializationType.config:
-            //        LoadUserKeysConfig(settings.filePath.GetFullPath());
-            //        break;
-            //    default:
-            //        qDebug.LogError($"Serialization type '{settings.serializationType}' is not supported by the input system!");
-            //        break;
-            //}
 
             qDebug.Log($"Cablebox initialization complete!", "input");
         }

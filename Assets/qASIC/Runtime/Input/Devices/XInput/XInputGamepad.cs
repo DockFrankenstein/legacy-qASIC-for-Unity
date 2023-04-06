@@ -1,12 +1,8 @@
-﻿using qASIC.Input;
-using qASIC.Input.Devices;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using XInputDotNetPure;
 
-namespace qASIC.XInput.Devices
+namespace qASIC.Input.Devices
 {
     public class XInputGamepad : GamepadDevice, IDeadZone
     {
@@ -17,7 +13,7 @@ namespace qASIC.XInput.Devices
             _deviceName = deviceName;
         }
 
-        public XInputGamepad(string deviceName, PlayerIndex playerIndex)
+        public XInputGamepad(string deviceName, uint playerIndex)
         {
             _deviceName = deviceName;
             PlayerIndex = playerIndex;
@@ -32,9 +28,7 @@ namespace qASIC.XInput.Devices
 
         public Vector2 DeadZone { get; set; } = new Vector2(0.1f, 0.9f);
 
-        public PlayerIndex PlayerIndex { get; set; }
-
-        private GamePadState _state;
+        public uint PlayerIndex { get; set; }
 
         private Dictionary<string, float> _buttons = new Dictionary<string, float>();
         private Dictionary<string, float> _buttonsUp = new Dictionary<string, float>();
@@ -98,8 +92,6 @@ namespace qASIC.XInput.Devices
 
         public override void Update()
         {
-            _state = GamePad.GetState(PlayerIndex);
-
             foreach (var button in InputManager.GamepadButtons)
             {
                 string path = GetKeyPath(button);
@@ -119,76 +111,76 @@ namespace qASIC.XInput.Devices
             switch (button)
             {
                 case GamepadButton.A:
-                    value = _state.Buttons.A == ButtonState.Pressed ? 1f : 0f;
+                    value = XInput.GetButton(PlayerIndex, XInputButton.A) ? 1f : 0f;
                     break;
                 case GamepadButton.B:
-                    value = _state.Buttons.B == ButtonState.Pressed ? 1f : 0f;
+                    value = XInput.GetButton(PlayerIndex, XInputButton.B) ? 1f : 0f;
                     break;
                 case GamepadButton.X:
-                    value = _state.Buttons.X == ButtonState.Pressed ? 1f : 0f;
+                    value = XInput.GetButton(PlayerIndex, XInputButton.X) ? 1f : 0f;
                     break;
                 case GamepadButton.Y:
-                    value = _state.Buttons.Y == ButtonState.Pressed ? 1f : 0f;
+                    value = XInput.GetButton(PlayerIndex, XInputButton.Y) ? 1f : 0f;
                     break;
                 case GamepadButton.LeftBumper:
-                    value = _state.Buttons.LeftShoulder == ButtonState.Pressed ? 1f : 0f;
+                    value = XInput.GetButton(PlayerIndex, XInputButton.LeftShoulder) ? 1f : 0f;
                     break;
                 case GamepadButton.RightBumper:
-                    value = _state.Buttons.RightShoulder == ButtonState.Pressed ? 1f : 0f;
+                    value = XInput.GetButton(PlayerIndex, XInputButton.RightShoulder) ? 1f : 0f;
                     break;
                 case GamepadButton.LeftTrigger:
-                    value = _state.Triggers.Left;
+                    value = XInput.GetTriggerLeft(PlayerIndex);
                     break;
                 case GamepadButton.RightTrigger:
-                    value = _state.Triggers.Right;
+                    value = XInput.GetTriggerRight(PlayerIndex);
                     break;
                 case GamepadButton.LeftStickButton:
-                    value = _state.Buttons.LeftStick == ButtonState.Pressed ? 1f : 0f;
+                    value = XInput.GetButton(PlayerIndex, XInputButton.LeftThumb) ? 1f : 0f;
                     break;
                 case GamepadButton.RightStickButton:
-                    value = _state.Buttons.RightStick == ButtonState.Pressed ? 1f : 0f;
+                    value = XInput.GetButton(PlayerIndex, XInputButton.RightThumb) ? 1f : 0f;
                     break;
                 case GamepadButton.LeftStickUp:
-                    value = Mathf.Clamp(_state.ThumbSticks.Left.Y, 0f, 1f);
+                    value = Mathf.Clamp(XInput.GetThumbStickLeft(PlayerIndex).y, 0f, 1f);
                     break;
                 case GamepadButton.LeftStickRight:
-                    value = Mathf.Clamp(_state.ThumbSticks.Left.X, 0f, 1f);
+                    value = Mathf.Clamp(XInput.GetThumbStickLeft(PlayerIndex).x, 0f, 1f);
                     break;
                 case GamepadButton.LeftStickDown:
-                    value = Mathf.Clamp(_state.ThumbSticks.Left.Y, -1f, 0f);
+                    value = Mathf.Clamp(XInput.GetThumbStickLeft(PlayerIndex).y, -1f, 0f);
                     break;
                 case GamepadButton.LeftStickLeft:
-                    value = Mathf.Clamp(_state.ThumbSticks.Left.X, -1f, 0f);
+                    value = Mathf.Clamp(XInput.GetThumbStickLeft(PlayerIndex).x, -1f, 0f);
                     break;
                 case GamepadButton.RightStickUp:
-                    value = Mathf.Clamp(_state.ThumbSticks.Right.Y, 0f, 1f);
+                    value = Mathf.Clamp(XInput.GetThumbStickRight(PlayerIndex).y, 0f, 1f);
                     break;
                 case GamepadButton.RightStickRight:
-                    value = Mathf.Clamp(_state.ThumbSticks.Right.X, 0f, 1f);
+                    value = Mathf.Clamp(XInput.GetThumbStickRight(PlayerIndex).x, 0f, 1f);
                     break;
                 case GamepadButton.RightStickDown:
-                    value = Mathf.Clamp(_state.ThumbSticks.Right.Y, -1f, 0f);
+                    value = Mathf.Clamp(XInput.GetThumbStickRight(PlayerIndex).y, -1f, 0f);
                     break;
                 case GamepadButton.RightStickLeft:
-                    value = Mathf.Clamp(_state.ThumbSticks.Right.X, -1f, 0f);
+                    value = Mathf.Clamp(XInput.GetThumbStickRight(PlayerIndex).x, -1f, 0f);
                     break;
                 case GamepadButton.DPadUp:
-                    value = _state.DPad.Up == ButtonState.Pressed ? 1f : 0f;
+                    value = XInput.GetButton(PlayerIndex, XInputButton.DPadUp) ? 1f : 0f;
                     break;
                 case GamepadButton.DPadRight:
-                    value = _state.DPad.Right == ButtonState.Pressed ? 1f : 0f;
+                    value = XInput.GetButton(PlayerIndex, XInputButton.DPadRight) ? 1f : 0f;
                     break;
                 case GamepadButton.DPadDown:
-                    value = _state.DPad.Down == ButtonState.Pressed ? 1f : 0f;
+                    value = XInput.GetButton(PlayerIndex, XInputButton.DPadDown) ? 1f : 0f;
                     break;
                 case GamepadButton.DPadLeft:
-                    value = _state.DPad.Left == ButtonState.Pressed ? 1f : 0f;
+                    value = XInput.GetButton(PlayerIndex, XInputButton.DPadLeft) ? 1f : 0f;
                     break;
                 case GamepadButton.Back:
-                    value = _state.Buttons.Back == ButtonState.Pressed ? 1f : 0f;
+                    value = XInput.GetButton(PlayerIndex, XInputButton.Back) ? 1f : 0f;
                     break;
                 case GamepadButton.Start:
-                    value = _state.Buttons.Start == ButtonState.Pressed ? 1f : 0f;
+                    value = XInput.GetButton(PlayerIndex, XInputButton.Start) ? 1f : 0f;
                     break;
                 default:
                     value = 0;
