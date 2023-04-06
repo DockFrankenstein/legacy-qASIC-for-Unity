@@ -28,7 +28,7 @@ namespace qASIC.Input.Map
             {
                 if (_keyTypeProvidersDictionary == null)
                     _keyTypeProvidersDictionary = KeyTypeProviders
-                        .ToDictionary(x => x.KeyName);
+                        .ToDictionary(x => x.RootPath);
 
                 return _keyTypeProvidersDictionary;
             }
@@ -53,9 +53,24 @@ namespace qASIC.Input.Map
                 .ToArray();
         }
 
+        static string[] _keyList = null;
+        public static string[] KeyList
+        {
+            get
+            {
+                if (_keyList == null)
+                    _keyList = KeyTypeProviders
+                        .SelectMany(x => x.GetKeyList()
+                            .Select(y => $"{x.RootPath}/{y}"))
+                        .ToArray();
+
+                return _keyList;
+            }
+        }
+
         public static KeyTypeProvider GetProviderByRootPath(string rootPath)
         {
-            var targets = KeyTypeProviders.Where(x => x.KeyName == rootPath);
+            var targets = KeyTypeProviders.Where(x => x.RootPath == rootPath);
 
             if (targets.Count() == 1)
                 return targets.First();

@@ -47,7 +47,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
             _keyPathReorderableList.drawElementCallback += (rect, index, isActive, isFocused) =>
             {
                 string rootPath = _binding.keys[index].Split('/').FirstOrDefault();
-                if (InputMapUtility.KeyTypeProviders.Where(x => x.KeyName == rootPath).Count() == 0)
+                if (InputMapUtility.KeyTypeProviders.Where(x => x.RootPath == rootPath).Count() == 0)
                 {
                     Rect errorRect = rect.SetWidth(rect.height);
                     rect = rect.BorderLeft(rect.height + 2f);
@@ -60,7 +60,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
         KeyTypeList GenerateList(KeyTypeProvider provider)
         {
-            string keyName = $"{provider.KeyName}/";
+            string keyName = $"{provider.RootPath}/";
 
             List<int> indexes = new List<int>();
             List<string> keys = _binding.keys
@@ -89,7 +89,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
         #region List callbacks
         void List_OnChangeItem(KeyTypeList list, int index, string path)
         {
-            _binding.keys[index] = $"{list.provider.KeyName}/{path}";
+            _binding.keys[index] = $"{list.provider.RootPath}/{path}";
             SetMapDirty();
         }
         #endregion
@@ -97,7 +97,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
         #region Reorderable Lists callbacks
         void ReorderableList_OnAddCallback(KeyTypeList list, ReorderableList reorderableList)
         {
-            string item = $"{list.provider.KeyName}/";
+            string item = $"{list.provider.RootPath}/";
             _binding.keys.Add(item);
             list.indexes.Add(_binding.keys.Count - 1);
             list.keys.Add(item);
@@ -197,7 +197,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
             void ShowMenu(Rect rect, int index)
             {
-                PopupWindow.Show(rect, new InputBindingSearchPopupContent(provider, index, Popup_OnApply, new Vector2(rect.width, 200f)));
+                PopupWindow.Show(rect, new InputBindingSearchPopupContent(provider, a => Popup_OnApply(index, a), new Vector2(rect.width, 200f)));
             }
 
             void List_DrawHeaderCallback(Rect rect)
@@ -241,16 +241,20 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
     public class InputBindingSearchPopupContent : PopupWindowContent
     {
-        public InputBindingSearchPopupContent(KeyTypeProvider provider, int index, Action<int, string> onApply, Vector2 size) : base()
+        public InputBindingSearchPopupContent(KeyTypeProvider provider, Action<string> onApply, Vector2 size) : this(provider.RootPath, onApply, size) { }
+        public InputBindingSearchPopupContent(string rootPath, Action<string> onApply, Vector2 size) : base()
         {
             _size = size;
-            _targetItemIndex = index;
             _OnApply = onApply;
-            _provider = provider;
+
+            if (rootPath.EndsWith("/"))
+                rootPath = rootPath.Remove(rootPath.Length - 1, 1);
+
+            _rootPath = rootPath;
         }
 
         Vector2 _size;
-        KeyTypeProvider _provider;
+        string _rootPath;
 
         Vector2 _scroll;
         string _search = string.Empty;
@@ -261,8 +265,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
         List<string> _items;
         List<string> _currentItems;
-        Action<int, string> _OnApply;
-        int _targetItemIndex;
+        Action<string> _OnApply;
         bool _keyDown;
 
         SearchField _searchField = new SearchField();
@@ -270,7 +273,12 @@ namespace qASIC.Input.Map.Internal.Inspectors
         public override void OnOpen()
         {
             base.OnOpen();
-            _items = _provider.GetKeyList().ToList();
+
+            _items = InputMapUtility.KeyList
+                .Where(x => string.IsNullOrEmpty(_rootPath) || x.Split('/').First() == _rootPath)
+                .Select(x => x.Split('/').Last())
+                .ToList();
+
             _currentItems = _items;
         }
 
@@ -280,7 +288,8 @@ namespace qASIC.Input.Map.Internal.Inspectors
             EditorGUILayout.Space(8f);
             qGUIEditorUtility.HorizontalLine();
 
-            _currentItems = qGUIEditorUtility.SortSearchList(_items, _search);
+            _currentItems = qGUIEditorUtility.SortSearchList(_items, _search)
+                .ToList();
 
             using (var scrollView = new EditorGUILayout.ScrollViewScope(_scroll))
             {
@@ -330,7 +339,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
         void Apply()
         {
             editorWindow.Close();
-            _OnApply?.Invoke(_targetItemIndex, _index == -1 ? string.Empty : _currentItems[_index]);
+            _OnApply?.Invoke(_index == -1 ? string.Empty : _currentItems[_index]);
         }
 
         void DrawTopBar()

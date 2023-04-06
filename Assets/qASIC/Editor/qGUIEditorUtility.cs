@@ -185,7 +185,7 @@ namespace qASIC.EditorTools
         /// <param name="list">List to sort</param>
         /// <param name="search">Search bar value</param>
         /// <returns>The sorted list</returns>
-        public static List<string> SortSearchList(List<string> list, string search) =>
+        public static IEnumerable<string> SortSearchList(IEnumerable<string> list, string search) =>
             SortSearchList(list, x => x, search);
 
         /// <summary>Sorts a list using the search string</summary>
@@ -193,7 +193,7 @@ namespace qASIC.EditorTools
         /// <param name="func">Select the string</param>
         /// <param name="search">Search bar value</param>
         /// <returns>The sorted list</returns>
-        public static List<T> SortSearchList<T>(List<T> list, Func<T, string> func, string search)
+        public static IEnumerable<T> SortSearchList<T>(IEnumerable<T> list, Func<T, string> func, string search)
         {
             if (string.IsNullOrWhiteSpace(search))
                     return list;

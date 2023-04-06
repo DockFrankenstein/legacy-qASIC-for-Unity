@@ -9,7 +9,7 @@ namespace qASIC.Input.Internal.KeyProviders
 {
     public class GamepadButtonKeyProvider : KeyTypeProvider
     {
-        public override string KeyName => "key_gamepad";
+        public override string RootPath => "key_gamepad";
         public override string DisplayName => "Gamepad Button";
         public override Type KeyType => typeof(GamepadButton);
 

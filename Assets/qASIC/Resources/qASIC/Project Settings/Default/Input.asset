@@ -19,11 +19,11 @@ MonoBehaviour:
       id: 0
     filepath:
       buildPath:
-        genericFolder: 0
+        genericFolder: 62
         filePath: input.txt
-      separateEditorPath: 0
+      separateEditorPath: 1
       editorPath:
-        genericFolder: 0
+        genericFolder: 62
         filePath: input-editor.txt
   serializationType: 2
   filePath:

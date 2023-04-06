@@ -2,13 +2,15 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using System.Collections;
 
 namespace qASIC.Input.Map
 {
     [Serializable]
-    public class InputMapData
+    public class InputMapData : IEnumerable<KeyValuePair<string, InputMapItemData>>
     {
         public InputMapData() { }
+
         public InputMapData(InputMap map)
         {
             foreach (var item in map.ItemsDictionary)
@@ -21,6 +23,12 @@ namespace qASIC.Input.Map
         }
 
         private Dictionary<string, InputMapItemData> SerializableValues { get; set; } = new Dictionary<string, InputMapItemData>();
+
+        public IEnumerator<KeyValuePair<string, InputMapItemData>> GetEnumerator() =>
+            SerializableValues.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() =>
+            GetEnumerator();
 
         public T GetItemData<T>(string itemGUID) where T : InputMapItemData =>
             (T)GetItemData(itemGUID);

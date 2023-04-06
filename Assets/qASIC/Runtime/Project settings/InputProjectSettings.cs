@@ -13,7 +13,7 @@ namespace qASIC.ProjectSettings
         public InputMap map;
         public DeviceStructure deviceStructure;
 
-        public ObjectSerializer serializer;
+        public ObjectSerializer serializer = new ObjectSerializer();
 
         public SerializationType serializationType = SerializationType.playerPrefs;
         public AdvancedGenericFilePath filePath = new AdvancedGenericFilePath(GenericFolder.PersistentDataPath, "input.txt", "input-editor.txt");

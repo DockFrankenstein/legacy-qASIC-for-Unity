@@ -13,19 +13,26 @@ namespace qASIC.Input.Menu
     public class InputAssign : MonoBehaviour
     {
         [Header("Updating name")]
-        [SerializeField] TextMeshProUGUI nameText;
-        [SerializeField] string optionLabelName;
-        [SerializeField] string listeningForKeyText = "Listening for key";
+        public TextMeshProUGUI nameText;
+        public bool autoLabel = true;
+        public string optionLabelName;
+        public string listeningForKeyText = "Press any key";
+
+        [Header("Target")]
+        public int playerIndex;
+        public InputMapItemReference inputAction;
+        public int keyIndex;
 
         [Header("Options")]
-        [SerializeField] int playerIndex;
-        [SerializeField] InputMapItemReference inputAction;
-        [SerializeField] int keyIndex;
-        [SerializeField] string keyRootPath = "key_keyboard";
+        public string keyRootPath = "key_keyboard";
+        [InputKey] public List<string> stopListeningKeys = new List<string>()
+        { 
+            "key_keyboard/Escape",
+        };
 
         [Header("Events")]
-        [SerializeField] UnityEvent OnStartListening;
-        [SerializeField] UnityEvent OnAssign;
+        public UnityEvent OnStartListening;
+        public UnityEvent OnAssign;
 
         bool isListening = false;
 
@@ -55,8 +62,17 @@ namespace qASIC.Input.Menu
             foreach (var device in devices)
             {
                 string key = device.GetAnyKeyDown();
+
                 if (string.IsNullOrEmpty(key)) continue;
-                if (key.StartsWith(keyRootPath)) continue;
+                key = key.ToLower();
+
+                if (!key.StartsWith(keyRootPath.ToLower())) continue;
+
+                if (stopListeningKeys.Select(x => x.ToLower()).Contains(key))
+                {
+                    StopListening();
+                    break;
+                }
 
                 Assign(key);
                 break;
@@ -66,11 +82,14 @@ namespace qASIC.Input.Menu
         public string GetLabel()
         {
             string currentKey = "UNKNOWN";
-            //FIXME
-            //if (InputManager.TryGetPlayer(playerIndex, out Players.InputPlayer player) &&
-            //    player.MapData.(inputAction.Guid, out InputMapItem item) &&
-            //    item is InputBinding binding)
-            //    currentKey = binding.keys[keyIndex].Split('/').Last();
+            if (InputManager.TryGetPlayer(playerIndex, out Players.InputPlayer player))
+            {
+                var binding = player.MapData.GetItemData<Map.ItemData.InputBindingData>(inputAction.Guid);
+                currentKey = binding.keys[keyIndex].Split('/').Last();
+
+                if (autoLabel)
+                    return $"{player.Map.GetItem<InputBinding>(inputAction.Guid).ItemName}: {currentKey}";
+            }
 
             return $"{optionLabelName}{currentKey}";
         }
@@ -81,10 +100,15 @@ namespace qASIC.Input.Menu
             OnStartListening.Invoke();
         }
 
+        public void StopListening()
+        {
+            isListening = false;
+        }
+
         public void Assign(string key)
         {
             InputManager.ChangeInput(inputAction.GetGroupName(), inputAction.GetItemName(), keyIndex, key);
-            isListening = false;
+            StopListening();
             OnAssign.Invoke();
         }
     }

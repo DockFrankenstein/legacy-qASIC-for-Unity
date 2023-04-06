@@ -9,7 +9,7 @@ namespace qASIC.Input.Internal.KeyProviders
 {
     public class KeyCodeKeyProvider : KeyTypeProvider
     {
-        public override string KeyName => "key_keyboard";
+        public override string RootPath => "key_keyboard";
         public override string DisplayName => "Key";
         public override Type KeyType => typeof(KeyCode);
 

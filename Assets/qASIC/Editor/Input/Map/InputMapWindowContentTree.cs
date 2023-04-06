@@ -59,7 +59,8 @@ namespace qASIC.Input.Map.Internal
 				switch (_isSearching)
 				{
 					case true:
-						List<InputMapItem> items = qGUIEditorUtility.SortSearchList(Group.items, x => x.ItemName, searchString);
+                        List<InputMapItem> items = qGUIEditorUtility.SortSearchList(Group.items, x => x.ItemName, searchString)
+                            .ToList();
 
 						foreach (var item in items)
 						{
@@ -95,7 +96,8 @@ namespace qASIC.Input.Map.Internal
 				.Select(x => x as InputBinding)
 				.ToList();
 
-			bindings = qGUIEditorUtility.SortSearchList(bindings, x => x.ItemName, searchString);
+			bindings = qGUIEditorUtility.SortSearchList(bindings, x => x.ItemName, searchString)
+                .ToList();
 
 			if (IsExpanded(BindingsRoot.id))
 			{
@@ -124,7 +126,8 @@ namespace qASIC.Input.Map.Internal
 				.Where(x => !(x is InputBinding))
 				.ToList();
 
-			items = qGUIEditorUtility.SortSearchList(items, x => x.ItemName, searchString);
+			items = qGUIEditorUtility.SortSearchList(items, x => x.ItemName, searchString)
+                .ToList();
 
 
 			if (IsExpanded(OthersRoot.id))

@@ -15,6 +15,7 @@ namespace qASIC.Input.Devices
             {
                 if (_allKeyCodes == null)
                     _allKeyCodes = ((KeyCode[])Enum.GetValues(typeof(KeyCode)))
+                        .Where(x => !(KeyCode.JoystickButton0 <= x && x <= KeyCode.Joystick8Button19))
                         .Distinct()
                         .ToArray();
 

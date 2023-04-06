@@ -5,6 +5,9 @@ namespace qASIC.Tools
     [System.Serializable]
     public class TextTreeStyle
     {
+        public static TextTreeStyle Basic => new TextTreeStyle(Preset.basic);
+        public static TextTreeStyle Fancy => new TextTreeStyle(Preset.fancy);
+
         public enum Preset { custom, fancy, basic }
 
         [SerializeField] private string middle;

@@ -49,6 +49,11 @@ namespace qASIC.Input.Players
             var data = InputProjectSettings.Instance.serializer.Deserialize<InputMapData.SerializableMapData>();
             MapData.LoadSerialization(data);
         }
+
+        public void ResetData()
+        {
+            MapData = new InputMapData(Map);
+        }
         #endregion
 
         #region Get Input
