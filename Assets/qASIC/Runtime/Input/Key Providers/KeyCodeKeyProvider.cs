@@ -1,9 +1,7 @@
-﻿#if UNITY_EDITOR
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 using System.Linq;
 using qASIC.Input.Devices;
-using UnityEditor;
 
 namespace qASIC.Input.Internal.KeyProviders
 {
@@ -34,4 +32,3 @@ namespace qASIC.Input.Internal.KeyProviders
         }
     }
 }
-#endif
