@@ -129,7 +129,7 @@ namespace qASIC.Input.Devices
             //    _buttons[path] = value;
             //}
 
-            XInputGetState(PlayerIndex, out XINPUT_STATE_GAMEPAD state);
+            XInputGetState(PlayerIndex, out XInputGamepadState state);
 
             var previousButtons = new Dictionary<string, float>(_buttons);
 
@@ -184,19 +184,19 @@ namespace qASIC.Input.Devices
         public static bool IsPlayerConnected(uint playerIndex) =>
             XInputGetState(playerIndex, out var state) == 0;
 
-        static float XInputIsButtonPressed(XINPUT_STATE_GAMEPAD state, XInputButton button)
+        static float XInputIsButtonPressed(XInputGamepadState state, XInputButton button)
         {
             return ((state.buttons & (ushort)button) == 0) ? 0f : 1f;
         }
 
         [DllImport("XINPUT9_1_0.DLL")]
-        private static extern uint XInputGetState(uint playerIndex, out XINPUT_STATE_GAMEPAD state);
+        private static extern uint XInputGetState(uint playerIndex, out XInputGamepadState state);
 
         [DllImport("XINPUT9_1_0.DLL")]
         private static extern uint XInputSetState(uint playerIndex, ref XInputVibrationData data);
 
         [StructLayout(LayoutKind.Sequential)]
-        private struct XINPUT_STATE_GAMEPAD
+        private struct XInputGamepadState
         {
             public uint packetNumber;
             public ushort buttons;
@@ -213,30 +213,6 @@ namespace qASIC.Input.Devices
         {
             public ushort LeftMotorSpeed;
             public ushort RightMotorSpeed;
-        }
-
-        private class GamepadState
-        {
-            public bool start;
-            public bool back;
-
-            public bool a;
-            public bool b;
-            public bool x;
-            public bool y;
-
-            public bool dPadUp;
-            public bool dPadDown;
-            public bool dPadLeft;
-            public bool dPadRight;
-
-            public bool leftStickButton;
-            public bool rightStickButton;
-
-            public float leftTrigger;
-            public float rightTrigger;
-            public Vector2 leftStick;
-            public Vector2 rightStick;
         }
         #endregion
     }
