@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace qASIC.Tools
+namespace qASIC
 {
     public class TextTree
     {

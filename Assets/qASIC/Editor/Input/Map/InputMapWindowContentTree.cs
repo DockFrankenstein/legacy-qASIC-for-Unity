@@ -4,12 +4,12 @@ using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using System;
 using UnityEditor;
-using qASIC.Tools;
 using qASIC.EditorTools;
 using System.Linq;
 
 using WindowUtility = qASIC.Input.Map.Internal.InputMapWindowUtility;
 using UnityEngine.UIElements;
+using qASIC;
 
 namespace qASIC.Input.Map.Internal
 {

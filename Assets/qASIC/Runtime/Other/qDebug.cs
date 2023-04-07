@@ -3,6 +3,7 @@ using qASIC.Console;
 using qASIC.Displayer;
 using qASIC.ProjectSettings;
 using System;
+using qASIC.Internal;
 
 namespace qASIC
 {
@@ -48,7 +49,7 @@ namespace qASIC
             DisplayerProjectSettings settings = DisplayerProjectSettings.Instance;
             if (settings.CreateDebugDisplayer && !InfoDisplayer.DisplayerExists(settings.debugDisplayerName))
             {
-                Tools.qASICObjectCreator.CreateDebugDisplyer();
+                qASICObjectCreator.CreateDebugDisplyer();
                 if (settings.displayDebugGenerationMessage)
                     GameConsoleController.Log(settings.debugGenerationMessage, settings.debugGenerationMessageColor);
             }
@@ -61,7 +62,7 @@ namespace qASIC
             DisplayerProjectSettings settings = DisplayerProjectSettings.Instance;
             if (settings.CreateDebugDisplayer && !InfoDisplayer.DisplayerExists(settings.debugDisplayerName))
             {
-                Tools.qASICObjectCreator.CreateDebugDisplyer();
+                qASICObjectCreator.CreateDebugDisplyer();
                 if (settings.displayDebugGenerationMessage)
                     GameConsoleController.Log(settings.debugGenerationMessage, settings.debugGenerationMessageColor);
             }

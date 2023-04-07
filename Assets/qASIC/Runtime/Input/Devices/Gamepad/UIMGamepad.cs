@@ -4,7 +4,7 @@ using qASIC.Input.UIM;
 using qASIC.ProjectSettings;
 using UnityEngine;
 using System.Linq;
-using qASIC.InternalTools;
+using qASIC.Internal;
 
 namespace qASIC.Input.Devices
 {

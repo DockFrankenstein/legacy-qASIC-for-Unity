@@ -2,11 +2,11 @@
 using UnityEngine;
 using qASIC.Input.Devices;
 using qASIC.EditorTools;
-using qASIC.Tools;
 using System.Linq;
 using System.Collections;
 
 using UInput = UnityEngine.Input;
+using qASIC;
 
 namespace qASIC.Input.DebugTools
 {
@@ -75,7 +75,7 @@ namespace qASIC.Input.DebugTools
 
         void MenuSelectionGUI()
         {
-            Page = GUILayout.SelectionGrid(Page, new string[] { "Utility", "UIM", "Map Data", "Key List" }, 1, Styles.MenuSelection);
+            Page = GUILayout.SelectionGrid(Page, new string[] { "Utility", "UIM", "Map Data", "Key List", "Cursor" }, 1, Styles.MenuSelection);
         }
 
         void ContentGUI()
@@ -162,6 +162,14 @@ namespace qASIC.Input.DebugTools
                         keyTextTreeRootItem.Add(key);
 
                     GUILayout.Label(keyTextTree.GenerateTree(keyTextTreeRootItem), Styles.TextTree);
+                    break;
+                case 4:
+                    using (new GUILayout.HorizontalScope())
+                    {
+                        if (GUILayout.Button("Unlock cursor")) Cursor.lockState = CursorLockMode.None;
+                        if (GUILayout.Button("Lock cursor")) Cursor.lockState = CursorLockMode.Locked;
+                        if (GUILayout.Button("Confine")) Cursor.lockState = CursorLockMode.Confined;
+                    }
                     break;
             }
         }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using qASIC.Internal;
 using qASIC.Toggling;
-using qASIC.Tools;
 
 namespace qASIC.Console.Commands
 {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
 
-namespace qASIC.InternalTools
+namespace qASIC.Internal
 {
     /// <summary>Contains a list of properties. Normally it's used for displaying debug information</summary>
     public class PropertiesList : IEnumerable<KeyValuePair<string, string>>

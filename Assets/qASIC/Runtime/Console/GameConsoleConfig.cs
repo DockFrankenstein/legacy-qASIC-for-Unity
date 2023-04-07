@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using qASIC.Tools;
 
 namespace qASIC.Console.Internal
 {

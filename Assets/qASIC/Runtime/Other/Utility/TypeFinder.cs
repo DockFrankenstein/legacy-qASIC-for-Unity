@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Linq;
 using UnityEngine;
 
-namespace qASIC.Tools
+namespace qASIC
 {
     public static class TypeFinder
     {

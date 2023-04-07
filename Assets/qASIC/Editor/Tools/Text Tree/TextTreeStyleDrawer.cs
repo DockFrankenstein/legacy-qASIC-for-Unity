@@ -5,7 +5,7 @@ using qASIC.EditorTools;
 
 using static UnityEditor.EditorGUIUtility;
 
-namespace qASIC.Tools.Internal
+namespace qASIC.Internal
 {
     [CustomPropertyDrawer(typeof(TextTreeStyle))]
     public class TextTreeStyleDrawer : PropertyDrawer
@@ -15,11 +15,11 @@ namespace qASIC.Tools.Internal
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            SerializedProperty presetProperty = property.FindPropertyRelative("preset");
-            SerializedProperty middleProperty = property.FindPropertyRelative("middle");
-            SerializedProperty lastProperty = property.FindPropertyRelative("last");
-            SerializedProperty spaceProperty = property.FindPropertyRelative("space");
-            SerializedProperty verticalProperty = property.FindPropertyRelative("vertical");
+            var presetProperty = property.FindPropertyRelative("preset");
+            var middleProperty = property.FindPropertyRelative("middle");
+            var lastProperty = property.FindPropertyRelative("last");
+            var spaceProperty = property.FindPropertyRelative("space");
+            var verticalProperty = property.FindPropertyRelative("vertical");
 
             GUIStyle borderStyle = new GUIStyle();
             borderStyle.normal.background = qGUIEditorUtility.BorderTexture;
@@ -31,7 +31,7 @@ namespace qASIC.Tools.Internal
             position = position.Border(standardVerticalSpacing, 0f);
 
             Rect labelRect = new Rect(position);
-            Rect labelLineRect = new Rect(position)
+            var labelLineRect = new Rect(position)
                 .MoveY(singleLineHeight)
                 .SetHeight(1f);
 
@@ -43,17 +43,17 @@ namespace qASIC.Tools.Internal
 
             float fieldWidth = (position.width - standardVerticalSpacing) / 4f;
 
-            Rect middleTextRect = new Rect(position).SetWidth(fieldWidth).MoveRight(standardVerticalSpacing);
-            Rect lastTextRect = new Rect(middleTextRect).MoveX(fieldWidth);
-            Rect spaceTextRect = new Rect(lastTextRect).MoveX(fieldWidth);
-            Rect verticalTextRect = new Rect(spaceTextRect).MoveX(fieldWidth);
+            var middleTextRect = new Rect(position).SetWidth(fieldWidth).MoveRight(standardVerticalSpacing);
+            var lastTextRect = new Rect(middleTextRect).MoveX(fieldWidth);
+            var spaceTextRect = new Rect(lastTextRect).MoveX(fieldWidth);
+            var verticalTextRect = new Rect(spaceTextRect).MoveX(fieldWidth);
 
             position.y += singleLineHeight + standardVerticalSpacing;
 
-            Rect middleRect = new Rect(middleTextRect).MoveY(singleLineHeight + standardVerticalSpacing);
-            Rect lastRect = new Rect(lastTextRect).MoveY(singleLineHeight + standardVerticalSpacing);
-            Rect spaceRect = new Rect(spaceTextRect).MoveY(singleLineHeight + standardVerticalSpacing);
-            Rect verticalRect = new Rect(verticalTextRect).MoveY(singleLineHeight + standardVerticalSpacing);
+            var middleRect = new Rect(middleTextRect).MoveY(singleLineHeight + standardVerticalSpacing);
+            var lastRect = new Rect(lastTextRect).MoveY(singleLineHeight + standardVerticalSpacing);
+            var spaceRect = new Rect(spaceTextRect).MoveY(singleLineHeight + standardVerticalSpacing);
+            var verticalRect = new Rect(verticalTextRect).MoveY(singleLineHeight + standardVerticalSpacing);
 
             GUI.Box(backgroundRect, GUIContent.none, EditorStyles.helpBox);
             GUI.Label(labelRect, label);

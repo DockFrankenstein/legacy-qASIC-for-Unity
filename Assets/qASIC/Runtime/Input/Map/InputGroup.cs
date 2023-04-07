@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using qASIC.Tools;
 using UnityEngine;
 
 namespace qASIC.Input.Map

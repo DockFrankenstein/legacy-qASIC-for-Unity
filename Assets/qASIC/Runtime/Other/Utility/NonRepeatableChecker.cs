@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using qASIC;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace qASIC.Tools
+namespace qASIC
 {
     public static class NonRepeatableChecker
     {
@@ -62,7 +63,7 @@ namespace qASIC.Tools
 
         public static T GetItem<T>(List<T> list, string itemName)
         {
-            TryGetItem(list, itemName, out T item);
+            TryGetItem(list, itemName, out var item);
             return item;
         }
 

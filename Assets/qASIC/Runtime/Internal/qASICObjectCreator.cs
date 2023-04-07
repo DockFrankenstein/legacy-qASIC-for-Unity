@@ -10,64 +10,30 @@ using qASIC.Input.Menu;
 using qASIC.Input.DebugTools;
 using qASIC.ProjectSettings;
 
-namespace qASIC.Tools
+namespace qASIC.Internal
 {
     public static class qASICObjectCreator
     {
         #region Menu Items
-        [System.Obsolete]
-        public static GameObject CreateInputWindow(string newKeyName)
-        {
-            Canvas canvas = CreateCanvas(null, "Input assign", 20, false);
-
-            InputAssign assign = canvas.gameObject.AddComponent<InputAssign>();
-            //assign.keyName = newKeyName;
-
-            //back color
-            Image backColor = CreateImageObject(canvas.transform, Color.black, "Color");
-
-            HorizontalLayoutGroup backColorGroup = backColor.gameObject.AddComponent<HorizontalLayoutGroup>();
-            backColorGroup.padding = new RectOffset(5, 5, 5, 5);
-            backColorGroup.childForceExpandHeight = false;
-            backColorGroup.childForceExpandWidth = false;
-            backColorGroup.childAlignment = TextAnchor.MiddleCenter;
-
-            ContentSizeFitter backColorContentFit = backColor.gameObject.AddComponent<ContentSizeFitter>();
-            backColorContentFit.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-            backColorContentFit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            //text
-            TextMeshProUGUI text = CreateTextObject(backColor.transform);
-            text.text = "Assign the new key";
-            text.color = new Color(1f, 1f, 1f);
-
-            ContentSizeFitter textContentFit = text.gameObject.AddComponent<ContentSizeFitter>();
-            textContentFit.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-            textContentFit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-
-            text.transform.position = new Vector2(0f, 0f);
-
-            return canvas.gameObject;
-        }
-
         public static void CreateDebugDisplyer()
         {
-            DisplayerProjectSettings settings = DisplayerProjectSettings.Instance;
+            var settings = DisplayerProjectSettings.Instance;
 
             GameObject displayerObject = new GameObject(settings.debugObjectName);
             displayerObject.SetActive(false);
-            GameObject canvasObject = CreateCanvas(displayerObject.transform, "Canvas", settings.debugCanvasOrder, false).gameObject;
+            var canvasObject = CreateCanvas(displayerObject.transform, "Canvas", settings.debugCanvasOrder, false).gameObject;
 
-            TextMeshProUGUI text = CreateTextObject(canvasObject.transform, "Text", settings.debugFontSize);
+            var text = CreateTextObject(canvasObject.transform, "Text", settings.debugFontSize);
             text.alignment = TextAlignmentOptions.TopLeft;
             text.color = Color.white;
             text.margin = new Vector4(10f, 10f, 10f, 10f);
 
-            InfoDisplayer displayer = CreateDisplayer(displayerObject, text);
+            var displayer = CreateDisplayer(displayerObject, text);
             displayer.displayerName = settings.debugDisplayerName;
             displayer.defaultLines = new DisplayerLine[0];
             displayer.acceptUnknown = true;
 
-            StaticTogglerBasic toggler = displayer.gameObject.AddComponent<StaticTogglerBasic>();
+            var toggler = displayer.gameObject.AddComponent<StaticTogglerBasic>();
             toggler.togglerTag = settings.debugTogglerName;
             toggler.key = settings.DebugTogglerKey;
             toggler.toggleObject = canvasObject;
@@ -76,8 +42,8 @@ namespace qASIC.Tools
 
         public static void CreateInputInfo()
         {
-            GameObject canvasObject = CreateCanvas(null, "Input Info", 9, false).gameObject;
-            InputList list = canvasObject.AddComponent<InputList>();
+            var canvasObject = CreateCanvas(null, "Input Info", 9, false).gameObject;
+            var list = canvasObject.AddComponent<InputList>();
             list.SetupText(CreateTextObject(canvasObject.transform, "Text", 12));
         }
 
@@ -86,24 +52,24 @@ namespace qASIC.Tools
         static void CreateConsole()
         {
             GameObject consoleObject = new GameObject("Game console");
-            GameObject canvasObject = CreateCanvas(consoleObject.transform, "Canvas", 10).gameObject;
+            var canvasObject = CreateCanvas(consoleObject.transform, "Canvas", 10).gameObject;
             CreateImageObject(canvasObject.transform, new Color(0f, 0f, 0f, 0.5f), "Fade");
 
-            RectTransform body = CreateImageObject(canvasObject.transform, new Color(0f, 0f, 0f), "Body").rectTransform;
+            var body = CreateImageObject(canvasObject.transform, new Color(0f, 0f, 0f), "Body").rectTransform;
             body.offsetMin = new Vector2(100f, 100f);
             body.offsetMax = new Vector2(-100f, -100f);
 
-            TextMeshProUGUI text = CreateTextObject(null, "Text", 40);
+            var text = CreateTextObject(null, "Text", 40);
             text.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            ScrollRect scroll = CreateScroll(body, text.rectTransform);
-            RectTransform scrollTrans = scroll.GetComponent<RectTransform>();
+            var scroll = CreateScroll(body, text.rectTransform);
+            var scrollTrans = scroll.GetComponent<RectTransform>();
             text.rectTransform.offsetMin = new Vector2(10f, 0f);
             text.rectTransform.offsetMax = new Vector2(-10f, 0f);
             scrollTrans.offsetMin = new Vector2(scrollTrans.offsetMin.x, 100f);
 
-            TMP_InputField field = CreateInputField(body, Color.white);
-            RectTransform fieldTrans = field.GetComponent<RectTransform>();
+            var field = CreateInputField(body, Color.white);
+            var fieldTrans = field.GetComponent<RectTransform>();
             SetAnchors(fieldTrans, new Vector2(0f, 0f), new Vector2(1f, 0f));
 
             fieldTrans.sizeDelta = new Vector2(fieldTrans.sizeDelta.x, 100f);
@@ -116,7 +82,7 @@ namespace qASIC.Tools
                 KeyCode.BackQuote;
 #endif
 
-            GameConsoleInterface consoleScript = CreateInterface(consoleObject, text, field, scroll);
+            var consoleScript = CreateInterface(consoleObject, text, field, scroll);
 
             field.onValueChanged.AddListener(_ => consoleScript.DiscardPreviousCommand());
 
@@ -131,12 +97,12 @@ namespace qASIC.Tools
         static void CreateDisplayer()
         {
             GameObject displayerObject = new GameObject("Info displayer");
-            GameObject canvasObject = CreateCanvas(displayerObject.transform, "Canvas", 9, false).gameObject;
+            var canvasObject = CreateCanvas(displayerObject.transform, "Canvas", 9, false).gameObject;
 
-            RectTransform image = CreateImageObject(canvasObject.transform, new Color(0f, 0f, 0f, 0.5f)).rectTransform;
+            var image = CreateImageObject(canvasObject.transform, new Color(0f, 0f, 0f, 0.5f)).rectTransform;
             SetAnchors(image, Vector2.zero, new Vector2(0.5f, 1f));
 
-            TextMeshProUGUI text = CreateTextObject(image.transform, "Text", 48);
+            var text = CreateTextObject(image.transform, "Text", 48);
             text.alignment = TextAlignmentOptions.Top;
             text.color = Color.white;
 
@@ -188,7 +154,7 @@ namespace qASIC.Tools
         {
             GameObject go = new GameObject(name);
             go.transform.SetParent(parent);
-            Canvas canvas = go.AddComponent<Canvas>();
+            var canvas = go.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = order;
 
@@ -201,8 +167,8 @@ namespace qASIC.Tools
         {
             GameObject go = new GameObject(name);
             go.transform.SetParent(parent);
-            RectTransform trans = go.AddComponent<RectTransform>();
-            Image image = go.AddComponent<Image>();
+            var trans = go.AddComponent<RectTransform>();
+            var image = go.AddComponent<Image>();
             image.color = color;
             SetAnchors(trans, Vector2.zero, Vector2.one);
             StretchToAnchors(trans);
@@ -213,8 +179,8 @@ namespace qASIC.Tools
         {
             GameObject go = new GameObject(name);
             go.transform.SetParent(parent);
-            RectTransform trans = go.AddComponent<RectTransform>();
-            TextMeshProUGUI text = go.AddComponent<TextMeshProUGUI>();
+            var trans = go.AddComponent<RectTransform>();
+            var text = go.AddComponent<TextMeshProUGUI>();
             text.color = Color.black;
             text.fontSize = fontSize;
             SetAnchors(trans, Vector2.zero, Vector2.one);
@@ -224,11 +190,11 @@ namespace qASIC.Tools
 
         static TMP_InputField CreateInputField(Transform parent, Color color, string name = "Input field", int fontSize = 40)
         {
-            Image image = CreateImageObject(parent, color, name);
-            TMP_InputField field = image.gameObject.AddComponent<TMP_InputField>();
+            var image = CreateImageObject(parent, color, name);
+            var field = image.gameObject.AddComponent<TMP_InputField>();
 
             GameObject mask = new GameObject("Text");
-            RectTransform maskTrans = mask.AddComponent<RectTransform>();
+            var maskTrans = mask.AddComponent<RectTransform>();
             mask.transform.SetParent(field.transform);
             SetAnchors(maskTrans, Vector2.zero, Vector2.one);
             StretchToAnchors(maskTrans);
@@ -236,8 +202,8 @@ namespace qASIC.Tools
             maskTrans.offsetMin = new Vector2(10f, 5f);
             maskTrans.offsetMax = new Vector2(-10f, -5f);
 
-            TextMeshProUGUI placeholder = CreateTextObject(mask.transform);
-            TextMeshProUGUI text = CreateTextObject(mask.transform);
+            var placeholder = CreateTextObject(mask.transform);
+            var text = CreateTextObject(mask.transform);
 
             SetAnchors(placeholder.rectTransform, Vector2.zero, Vector2.one);
             StretchToAnchors(placeholder.rectTransform);
@@ -257,23 +223,23 @@ namespace qASIC.Tools
 
             return field;
         }
-        
+
         static ScrollRect CreateScroll(Transform parent, RectTransform content, string name = "Scroll View")
         {
             GameObject obj = new GameObject(name);
             obj.transform.SetParent(parent);
-            RectTransform trans = obj.AddComponent<RectTransform>();
+            var trans = obj.AddComponent<RectTransform>();
 
-            ScrollRect scroll = obj.AddComponent<ScrollRect>();
+            var scroll = obj.AddComponent<ScrollRect>();
             scroll.horizontal = false;
             scroll.movementType = ScrollRect.MovementType.Clamped;
             scroll.scrollSensitivity = 30f;
             scroll.verticalScrollbarSpacing = 0f;
             scroll.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
 
-            Scrollbar scrollbar = CreateScrollbar(scroll.transform, new Color(0.01f, 0.01f, 0.01f), Color.white);
+            var scrollbar = CreateScrollbar(scroll.transform, new Color(0.01f, 0.01f, 0.01f), Color.white);
 
-            RectTransform viewPort = CreateImageObject(scroll.transform, Color.white, "Viewport").rectTransform;
+            var viewPort = CreateImageObject(scroll.transform, Color.white, "Viewport").rectTransform;
             viewPort.gameObject.AddComponent<Mask>().showMaskGraphic = false;
             viewPort.pivot = new Vector2(0f, 1f);
             scroll.viewport = viewPort;
@@ -283,7 +249,7 @@ namespace qASIC.Tools
             content.pivot = new Vector2(0.5f, 1f);
             SetAnchors(content, new Vector2(0f, 1f), new Vector2(1f, 1f));
 
-            RectTransform scrollbarTrans = scrollbar.GetComponent<RectTransform>();
+            var scrollbarTrans = scrollbar.GetComponent<RectTransform>();
             SetAnchors(scrollbarTrans, new Vector2(1f, 0f), new Vector2(1f, 1f));
             StretchToAnchors(scrollbarTrans);
 
@@ -299,19 +265,19 @@ namespace qASIC.Tools
         static Scrollbar CreateScrollbar(Transform parent, Color backColor, Color handleColor, string name = "Scrollbar")
         {
             //scrollbar
-            RectTransform trans = CreateImageObject(parent, backColor, name).rectTransform;
-            Scrollbar scroll = trans.gameObject.AddComponent<Scrollbar>();
+            var trans = CreateImageObject(parent, backColor, name).rectTransform;
+            var scroll = trans.gameObject.AddComponent<Scrollbar>();
 
             scroll.direction = Scrollbar.Direction.BottomToTop;
 
             //sliding area
-            RectTransform slidingArea = new GameObject("Sliding Area").AddComponent<RectTransform>();
+            var slidingArea = new GameObject("Sliding Area").AddComponent<RectTransform>();
             slidingArea.transform.SetParent(trans);
             SetAnchors(slidingArea, Vector2.zero, Vector2.one);
             StretchToAnchors(slidingArea);
 
             //handle
-            Image handle = CreateImageObject(parent, handleColor, "Handle");
+            var handle = CreateImageObject(parent, handleColor, "Handle");
             handle.transform.SetParent(slidingArea);
             SetAnchors(handle.rectTransform, Vector2.zero, Vector2.one);
             StretchToAnchors(handle.rectTransform);
@@ -327,7 +293,7 @@ namespace qASIC.Tools
         #region qASIC Scripts
         public static StaticTogglerBasic CreateToggler(GameObject target, string tag, GameObject toggleObject = null)
         {
-            StaticTogglerBasic toggler = target.AddComponent<StaticTogglerBasic>();
+            var toggler = target.AddComponent<StaticTogglerBasic>();
             toggler.addToDontDestroy = true;
             toggler.togglerTag = tag;
             toggler.toggleObject = toggleObject;
@@ -337,7 +303,7 @@ namespace qASIC.Tools
 
         public static InfoDisplayer CreateDisplayer(GameObject target, TextMeshProUGUI text)
         {
-            InfoDisplayer displayer = target.AddComponent<InfoDisplayer>();
+            var displayer = target.AddComponent<InfoDisplayer>();
 
             displayer.text = text;
             displayer.acceptUnknown = false;
@@ -347,7 +313,7 @@ namespace qASIC.Tools
 
         public static GameConsoleInterface CreateInterface(GameObject target, TextMeshProUGUI text, TMP_InputField input, ScrollRect scroll)
         {
-            GameConsoleInterface console = target.AddComponent<GameConsoleInterface>();
+            var console = target.AddComponent<GameConsoleInterface>();
 
             console.logText = text;
             console.inputField = input;

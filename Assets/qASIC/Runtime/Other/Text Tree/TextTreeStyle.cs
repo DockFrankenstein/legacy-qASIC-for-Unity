@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace qASIC.Tools
+namespace qASIC
 {
     [System.Serializable]
     public class TextTreeStyle

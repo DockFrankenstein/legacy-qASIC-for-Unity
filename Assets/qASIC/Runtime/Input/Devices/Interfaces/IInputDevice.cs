@@ -1,4 +1,4 @@
-﻿using qASIC.InternalTools;
+﻿using qASIC.Internal;
 using System;
 using System.Collections.Generic;
 

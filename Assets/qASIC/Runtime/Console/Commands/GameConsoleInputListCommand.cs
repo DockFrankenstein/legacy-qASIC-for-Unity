@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using qASIC.Input;
 using qASIC.Input.Map;
-using qASIC.Tools;
 
 namespace qASIC.Console.Commands
 {

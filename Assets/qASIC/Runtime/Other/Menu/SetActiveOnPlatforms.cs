@@ -7,11 +7,11 @@ namespace qASIC
     public class SetActiveOnPlatforms : MonoBehaviour
     {
         [SerializeField] bool state = false;
-        [SerializeField] RuntimePlatform[] platforms = new RuntimePlatform[] { RuntimePlatform.WebGLPlayer };
+        [SerializeField] RuntimePlatformFlags platform = RuntimePlatformFlags.WebGLPlayer;
 
         private void Awake()
         {
-            gameObject.SetActive(Array.IndexOf(platforms, qApplication.Platform) != -1 == state);
+            gameObject.SetActive(platform.HasFlag(qApplication.Platform) == state);
         }
     }
 }
