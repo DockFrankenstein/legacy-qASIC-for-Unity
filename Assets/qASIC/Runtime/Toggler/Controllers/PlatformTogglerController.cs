@@ -22,7 +22,7 @@ namespace qASIC.Toggling.Controllers
             for (int i = 0; i < platformTogglers.Length; i++)
             {
                 if (platformTogglers == null) continue;
-                if (platformTogglers[i].platform != qApplication.Platform) continue;
+                if (platformTogglers[i].platform.ToRuntimePlatformFlags() != qApplication.Platform) continue;
                 ChangeToggler(platformTogglers[i].toggler);
                 return;
             }

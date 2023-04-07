@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace qASIC.Input.Devices
 {
@@ -6,7 +7,7 @@ namespace qASIC.Input.Devices
     public abstract class DeviceProvider
     {
         public string name;
-        public RuntimePlatformFlags platforms = RuntimePlatformFlags.Everything;
+        [HideInInspector] public RuntimePlatformFlags platforms = RuntimePlatformFlags.Everything;
 
         public string Name { get => name; set => name = value; }
 

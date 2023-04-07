@@ -4,7 +4,7 @@ using qASIC.Tools;
 using System.Linq;
 using System;
 using qASIC.EditorTools;
-using qASIC.Input.Map;
+using System.Collections.Generic;
 
 namespace qASIC.Input.Devices.Internal
 {
@@ -30,25 +30,19 @@ namespace qASIC.Input.Devices.Internal
                 SerializedProperty item = p_handlers.GetArrayElementAtIndex(i);
                 bool foldout = true;
                 Rect rect = CreateFoldout(ref foldout);
-                Rect labelRect = new Rect(rect).BorderRight(18f);
+                Rect labelRect = new Rect(rect).BorderRight(36f);
                 Rect menuRect = new Rect(rect).ResizeToRight(16f);
+                Rect platformRect = new Rect(menuRect).MoveX(-18f);
                 GUI.Label(labelRect, item.FindPropertyRelative("name").stringValue);
+
+                if (GUI.Button(platformRect, EditorGUIUtility.IconContent("d_BuildSettings.Standalone"), EditorStyles.label))
+                    OpenPlatformMenu(i);
 
                 if (GUI.Button(menuRect, GUIContent.none, EditorStyles.foldoutHeaderIcon))
                     OpenProviderMenu(i);
 
                 if (foldout)
-                {
                     qGUIEditorUtility.DrawPropertyLayout(item);
-                    //int startIndent = EditorGUI.indentLevel;
-                    //int startDepth = item.depth;
-                    //while (item.NextVisible(true) && item.depth > startDepth)
-                    //{
-                    //    EditorGUI.indentLevel = item.depth - startDepth + startIndent;
-                    //    EditorGUILayout.PropertyField(item);
-                    //}
-                    //EditorGUI.indentLevel = startIndent;
-                }
 
                 GUI.Box(StreachRectToSides(GUILayoutUtility.GetRect(GUIContent.none, Styles.LineStyle)), GUIContent.none, Styles.LineStyle);
             }
@@ -72,7 +66,7 @@ namespace qASIC.Input.Devices.Internal
             var backgroundRect = StreachRectToSides(rect).Border(0f, -1f);
             EditorGUI.LabelField(backgroundRect, GUIContent.none, Styles.FoldoutBackgroundStyle);
             var foldoutRect = rect;
-            foldoutRect.xMax -= 20;
+            foldoutRect.xMax -= 38;
             foldout = EditorGUI.Foldout(foldoutRect, foldout, GUIContent.none, true, Styles.FoldoutStyle);
 
             return rect;
@@ -100,7 +94,6 @@ namespace qASIC.Input.Devices.Internal
 
                     serializedObject.Update();
                     SaveAssetDatabase();
-                    _reloadDeviceManager = true;
                 }, !addedProviderTypes.Contains(type));
             }
 
@@ -117,27 +110,87 @@ namespace qASIC.Input.Devices.Internal
             menu.AddItem("Delete", false, () =>
             {
                 p_handlers.DeleteArrayElementAtIndex(index);
-                _reloadDeviceManager = true;
                 SaveAssetDatabase();
             });
 
             menu.ShowAsContext();
         }
 
-        void SaveAssetDatabase(bool applySerializableObject = true)
+        void OpenPlatformMenu(int index)
+        {
+            var provider = _structure.Providers[index];
+
+            var allFlagValues = (RuntimePlatformFlags[])Enum.GetValues(typeof(RuntimePlatformFlags));
+
+            var supportedPlatforms = allFlagValues
+                .Where(x => provider.SupportedPlatforms.HasFlag(x))
+                .ToList();
+
+            var everythingPlatform = (RuntimePlatformFlags)supportedPlatforms
+                .Cast<int>()
+                .Sum();
+
+            GenericMenu menu = new GenericMenu();
+
+            menu.AddItem("None", provider.platforms == RuntimePlatformFlags.None, () =>
+            {
+                provider.platforms = RuntimePlatformFlags.None;
+                SaveAssetDatabase();
+            });
+
+            menu.AddItem("Everything", provider.platforms.HasFlag(everythingPlatform), () =>
+            {
+                provider.platforms = everythingPlatform;
+                SaveAssetDatabase();
+            });
+
+            foreach (var item in supportedPlatforms)
+            {
+                if (item == RuntimePlatformFlags.None || item == RuntimePlatformFlags.Everything)
+                    continue;
+
+                bool hasFlag = provider.platforms.HasFlag(item);
+
+                menu.AddItem(item.ToString(), hasFlag, () =>
+                {
+                    switch (hasFlag)
+                    {
+                        case true:
+                            provider.platforms &= ~item;
+                            break;
+                        case false:
+                            provider.platforms |= item;
+                            break;
+                    }
+
+                    SaveAssetDatabase();
+                });
+            }
+
+            menu.ShowAsContext();
+        }
+
+        void SaveAssetDatabase(bool applySerializableObject = true, bool reloadDeviceManager = true)
         {
             if (applySerializableObject)
                 serializedObject.ApplyModifiedProperties();
 
+            if (reloadDeviceManager)
+                _reloadDeviceManager = true;
+
             EditorUtility.SetDirty(_structure);
             AssetDatabase.SaveAssets();
+
+            serializedObject.Update();
         }
 
         private static class Styles
         {
             public static GUIStyle FoldoutBackgroundStyle => new GUIStyle("Label")
                 .WithBackground(qGUIUtility.GenerateColorTexture(EditorGUIUtility.isProSkin ? new Color(0.161f, 0.161f, 0.161f) : new Color(0.824f, 0.824f, 0.824f)));
+            
             public static GUIStyle FoldoutStyle => new GUIStyle("foldout");
+            
             public static GUIStyle LineStyle => new GUIStyle()
             {
                 fixedHeight = 1f,
