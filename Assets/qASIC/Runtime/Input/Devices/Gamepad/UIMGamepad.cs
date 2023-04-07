@@ -8,7 +8,7 @@ using qASIC.InternalTools;
 
 namespace qASIC.Input.Devices
 {
-    public class UIMGamepad : GamepadDevice, IDeadZone
+    public class UIMGamepad : GamepadDevice, ILeftTriggerDeadZone
     {
         public UIMGamepad() { }
 
@@ -30,7 +30,7 @@ namespace qASIC.Input.Devices
 
         public override Dictionary<string, float> Values => _buttons;
 
-        public Vector2 DeadZone { get; set; } = new Vector2(0.1f, 0.9f);
+        public Vector2 LeftTriggerDeadZone { get; set; } = new Vector2(0.1f, 0.9f);
 
         public int ManagerJoystickIndex { get; set; }
 
@@ -116,7 +116,7 @@ namespace qASIC.Input.Devices
                     value = mapping.negative ? (Mathf.Clamp(value, -1f, 0f) * -1f) : Mathf.Clamp(value, 0f, 1f);
 
                     if (HasDeadZone(button))
-                        value = GamepadUtility.CalculateDeadZone(value, DeadZone.x, DeadZone.y);
+                        value = GamepadUtility.CalculateDeadZone(value, LeftTriggerDeadZone.x, LeftTriggerDeadZone.y);
 
                     return value;
                 case UIMAxisMapperPlatform.UIMInputType.Button:
@@ -154,8 +154,8 @@ namespace qASIC.Input.Devices
         {
             var properties = base.GetProperties();
 
-            properties.Add("Deadzone.Min", DeadZone.x);
-            properties.Add("Deadzone.Max", DeadZone.y);
+            properties.Add("Deadzone.Min", LeftTriggerDeadZone.x);
+            properties.Add("Deadzone.Max", LeftTriggerDeadZone.y);
 
             return properties;
         }

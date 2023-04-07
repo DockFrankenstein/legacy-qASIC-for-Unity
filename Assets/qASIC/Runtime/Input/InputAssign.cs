@@ -85,10 +85,14 @@ namespace qASIC.Input.Menu
             if (InputManager.TryGetPlayer(playerIndex, out Players.InputPlayer player))
             {
                 var binding = player.MapData.GetItemData<Map.ItemData.InputBindingData>(inputAction.Guid);
-                currentKey = binding.keys[keyIndex].Split('/').Last();
 
-                if (autoLabel)
-                    return $"{player.Map.GetItem<InputBinding>(inputAction.Guid).ItemName}: {currentKey}";
+                if (binding != null && binding.keys.IndexInRange(keyIndex))
+                {
+                    currentKey = binding.keys[keyIndex].Split('/').Last();
+
+                    if (autoLabel)
+                        return $"{player.Map.GetItem<InputBinding>(inputAction.Guid).ItemName}: {currentKey}";
+                }
             }
 
             return $"{optionLabelName}{currentKey}";
