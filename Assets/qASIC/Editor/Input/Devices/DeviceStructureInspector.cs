@@ -20,7 +20,7 @@ namespace qASIC.Input.Devices.Internal
         private void OnEnable()
         {
             _structure = (DeviceStructure)target;
-            p_handlers = serializedObject.FindProperty(nameof(DeviceStructure.providers));
+            p_handlers = serializedObject.FindProperty("providers");
         }
         
         public override void OnInspectorGUI()
@@ -88,7 +88,7 @@ namespace qASIC.Input.Devices.Internal
             var types = TypeFinder.FindAllTypes<DeviceProvider>()
                 .Where(x => !x.ContainsGenericParameters);
 
-            var addedProviderTypes = _structure.providers
+            var addedProviderTypes = _structure.Providers
                 .Select(x => x.GetType())
                 .ToList();
 

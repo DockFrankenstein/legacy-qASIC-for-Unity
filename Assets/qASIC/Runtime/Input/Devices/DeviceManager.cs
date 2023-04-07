@@ -40,7 +40,7 @@ namespace qASIC.Input.Devices
             Devices.Clear();
             Providers.Clear();
 
-            var newProviders = InputProjectSettings.Instance?.deviceStructure?.providers;
+            var newProviders = InputProjectSettings.Instance?.deviceStructure?.GetActiveProviders();
             if (newProviders != null)
                 Providers = new List<DeviceProvider>(newProviders);
 

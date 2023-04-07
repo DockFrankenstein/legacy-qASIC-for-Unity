@@ -22,6 +22,8 @@ namespace qASIC.Input.Devices
         [InspectorLabel("Right Trigger")] public Vector2 rightTriggerDeadzone = new Vector2(0.05f, 1f);
 
         public override string DefaultItemName => "XInput Gamepad Provider";
+        public override RuntimePlatformFlags SupportedPlatforms => RuntimePlatformFlags.WindowsPlayer |
+            RuntimePlatformFlags.WindowsEditor;
 
         public override void Update()
         {
