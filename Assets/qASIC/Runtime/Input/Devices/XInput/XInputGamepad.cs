@@ -7,6 +7,19 @@ namespace qASIC.Input.Devices
 {
     public class XInputGamepad : GamepadDevice, IStickDeadZone, ITriggerDeadZone
     {
+        public XInputGamepad() { }
+
+        public XInputGamepad(string deviceName)
+        {
+            _deviceName = deviceName;
+        }
+
+        public XInputGamepad(string deviceName, uint playerIndex)
+        {
+            _deviceName = deviceName;
+            PlayerIndex = playerIndex;
+        }
+
         enum XInputButton : ushort
         {
             None = 0x0000,
@@ -26,21 +39,10 @@ namespace qASIC.Input.Devices
             Y = 0x8000,
         }
 
-        public XInputGamepad() { }
-
-        public XInputGamepad(string deviceName)
-        {
-            _deviceName = deviceName;
-        }
-
-        public XInputGamepad(string deviceName, uint playerIndex)
-        {
-            _deviceName = deviceName;
-            PlayerIndex = playerIndex;
-        }
-
         public override string DeviceName => _deviceName;
         string _deviceName;
+        public uint PlayerIndex { get; set; }
+        public override bool RuntimeOnly => false;
 
         //Deadzones
         public Vector2 LeftStickDeadZone { get; set; }
@@ -48,15 +50,10 @@ namespace qASIC.Input.Devices
         public Vector2 LeftTriggerDeadZone { get; set; }
         public Vector2 RightTriggerDeadZone { get; set; }
 
-        public override bool RuntimeOnly => false;
-        public override Dictionary<string, float> Values => _buttons;
-
-
-        public uint PlayerIndex { get; set; }
-
         private Dictionary<string, float> _buttons = new Dictionary<string, float>();
         private Dictionary<string, float> _buttonsUp = new Dictionary<string, float>();
         private Dictionary<string, float> _buttonsDown = new Dictionary<string, float>();
+        public override Dictionary<string, float> Values => _buttons;
 
         public void SetName(string name)
         {
@@ -116,19 +113,6 @@ namespace qASIC.Input.Devices
 
         public override void Update()
         {
-            //XInputGetState(PlayerIndex, out XINPUT_STATE_GAMEPAD state);
-
-            //foreach (var button in InputManager.GamepadButtons)
-            //{
-            //    string path = GetKeyPath(button);
-            //    float value = GetButtonValue(state, button);
-            //    float previousValue = _buttons[path];
-
-            //    _buttonsUp[path] = previousValue != 0f && value == 0f ? 1f : 0f;
-            //    _buttonsDown[path] = previousValue == 0f && value != 0f ? 1f : 0f;
-            //    _buttons[path] = value;
-            //}
-
             XInputGetState(PlayerIndex, out XInputGamepadState state);
 
             var previousButtons = new Dictionary<string, float>(_buttons);
@@ -182,7 +166,7 @@ namespace qASIC.Input.Devices
 
         #region XInput
         public static bool IsPlayerConnected(uint playerIndex) =>
-            XInputGetState(playerIndex, out var state) == 0;
+            XInputGetState(playerIndex, out _) == 0;
 
         static float XInputIsButtonPressed(XInputGamepadState state, XInputButton button)
         {

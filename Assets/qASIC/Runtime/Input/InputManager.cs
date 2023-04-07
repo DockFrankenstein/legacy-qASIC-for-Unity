@@ -4,8 +4,6 @@ using System;
 using qASIC.Input.Map;
 using qASIC.ProjectSettings;
 using qASIC.Input.Players;
-using UnityEditor.Graphs;
-using qASIC.Files;
 
 namespace qASIC.Input
 {

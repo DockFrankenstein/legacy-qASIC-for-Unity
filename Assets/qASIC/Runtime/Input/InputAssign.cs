@@ -25,8 +25,9 @@ namespace qASIC.Input.Menu
 
         [Header("Options")]
         public string keyRootPath = "key_keyboard";
-        [InputKey] public List<string> stopListeningKeys = new List<string>()
-        { 
+        [InputKey]
+        public List<string> stopListeningKeys = new List<string>()
+        {
             "key_keyboard/Escape",
         };
 
@@ -38,10 +39,12 @@ namespace qASIC.Input.Menu
 
         private void Reset()
         {
+#if UNITY_EDITOR
             Button button = GetComponent<Button>();
 
             if (button != null)
                 UnityEditor.Events.UnityEventTools.AddPersistentListener(button.onClick, StartListening);
+#endif
 
             nameText = GetComponentInChildren<TextMeshProUGUI>();
         }
