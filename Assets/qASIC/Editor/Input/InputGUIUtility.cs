@@ -89,9 +89,12 @@ namespace qASIC.Input.Map.Internal
 
             rect = EditorGUI.PrefixLabel(rect, label);
 
-            string itemName = map.ItemsDictionary.TryGetValue(guid, out var item) ?
-                $"{item.ItemName} ({map.groups.Where(x => x.items.Contains(item)).FirstOrDefault()})" :
-                "None";
+            string itemName = "Map Not Loaded";
+
+            if (map != null)
+                itemName = map.ItemsDictionary.TryGetValue(guid, out var item) ?
+                    $"{item.ItemName} ({map.groups.Where(x => x.items.Contains(item)).FirstOrDefault()})" :
+                    "None";
 
             buttonStyle.normal.background = qGUIUtility.GenerateColorTexture(EditorGUIUtility.isProSkin ?
                 new Color(0.345098f, 0.345098f, 0.345098f) :

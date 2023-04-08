@@ -10,7 +10,7 @@ namespace qASIC.Displayer.Displayers
         [Header("Settings")]
         public DisplayerValueAssigner project = new DisplayerValueAssigner("version");
         public DisplayerValueAssigner unity = new DisplayerValueAssigner("unity version");
-        public DisplayerValueAssigner qASIC = new DisplayerValueAssigner("qasic version");
+        [InspectorLabel("qASIC")] public DisplayerValueAssigner qASIC = new DisplayerValueAssigner("qasic version");
 
         private void Start()
         {

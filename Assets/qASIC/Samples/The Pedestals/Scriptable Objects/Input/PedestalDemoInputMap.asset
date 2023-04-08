@@ -13,28 +13,92 @@ MonoBehaviour:
   m_Name: PedestalDemoInputMap
   m_EditorClassIdentifier: 
   defaultGroup: 0
-  Groups:
-  - groupName: Game
-    actions:
-    - actionName: Up
-      keys: 7700000011010000
-    - actionName: Down
-      keys: 7300000012010000
-    - actionName: Left
-      keys: 6100000014010000
-    - actionName: Right
-      keys: 6400000013010000
-    - actionName: Interact
-      keys: 65000000
-    axes:
-    - axisName: Horizontal
-      positiveAction: Right
-      negativeAction: Left
-    - axisName: Vertical
-      positiveAction: Up
-      negativeAction: Down
-  - groupName: UI
-    actions:
-    - actionName: Console
-      keys: 6000000009000000
-    axes: []
+  groups:
+  - itemName: Game
+    guid: 7bb17c45-2e06-4615-9006-ea09538d7e8b
+    items:
+    - id: 0
+    - id: 1
+    - id: 2
+    - id: 3
+    - id: 4
+    - id: 5
+  - itemName: Debug
+    guid: 897c106a-e58a-4056-8adb-ce4523139757
+    items:
+    - id: 6
+    - id: 7
+  references:
+    version: 1
+    00000000:
+      type: {class: InputBinding, ns: qASIC.Input.Map, asm: qASIC}
+      data:
+        itemName: Forward
+        guid: 2723556b-4590-4db5-8b86-19b74e65c32c
+        keys:
+        - key_keyboard/W
+        - key_gamepad/LeftStickUp
+        - key_keyboard/UpArrow
+    00000001:
+      type: {class: InputBinding, ns: qASIC.Input.Map, asm: qASIC}
+      data:
+        itemName: Backward
+        guid: b22a7aa1-dfa1-4954-a3ab-885fb00e7b75
+        keys:
+        - key_keyboard/S
+        - key_gamepad/LeftStickDown
+        - key_keyboard/DownArrow
+    00000002:
+      type: {class: InputBinding, ns: qASIC.Input.Map, asm: qASIC}
+      data:
+        itemName: Left
+        guid: fd1aa0bc-6256-4b98-8f8b-e41bd2ea5540
+        keys:
+        - key_keyboard/A
+        - key_gamepad/LeftStickLeft
+        - key_keyboard/LeftArrow
+    00000003:
+      type: {class: InputBinding, ns: qASIC.Input.Map, asm: qASIC}
+      data:
+        itemName: Right
+        guid: d0e0d598-7e56-4fb2-99bc-639fc599f717
+        keys:
+        - key_keyboard/D
+        - key_gamepad/LeftStickRight
+        - key_keyboard/RightArrow
+    00000004:
+      type: {class: InputBinding, ns: qASIC.Input.Map, asm: qASIC}
+      data:
+        itemName: Interact
+        guid: 5359a92f-3528-4866-be6c-231cca6779fc
+        keys:
+        - key_keyboard/E
+        - key_gamepad/X
+    00000005:
+      type: {class: Input2DAxis, ns: qASIC.Input.Map, asm: qASIC}
+      data:
+        itemName: Movement
+        guid: d31d17b0-48b9-448b-a390-cc217e440d4f
+        XAxis:
+          axisGuid: 
+          positiveGuid: d0e0d598-7e56-4fb2-99bc-639fc599f717
+          negativeGuid: fd1aa0bc-6256-4b98-8f8b-e41bd2ea5540
+        YAxis:
+          axisGuid: 
+          positiveGuid: 2723556b-4590-4db5-8b86-19b74e65c32c
+          negativeGuid: b22a7aa1-dfa1-4954-a3ab-885fb00e7b75
+    00000006:
+      type: {class: InputBinding, ns: qASIC.Input.Map, asm: qASIC}
+      data:
+        itemName: Console
+        guid: dec8ca88-aa4a-44e0-8170-1c659d07cc7f
+        keys:
+        - key_keyboard/BackQuote
+        - key_keyboard/Tilde
+    00000007:
+      type: {class: InputBinding, ns: qASIC.Input.Map, asm: qASIC}
+      data:
+        itemName: Displayer
+        guid: 2ef8834a-2ee5-40fe-855f-3fc486689ce2
+        keys:
+        - key_keyboard/F3

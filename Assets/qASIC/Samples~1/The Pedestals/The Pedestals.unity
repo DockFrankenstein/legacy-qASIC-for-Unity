@@ -9360,7 +9360,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1154105936}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e75bbe96523a2e547bcbc72e3780bae5, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b67d99c8fdd9314a82dc367d7cfd6f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   toggleObject: {fileID: 1690943428}
@@ -9372,7 +9372,8 @@ MonoBehaviour:
   togglerTag: 
   addToDontDestroy: 1
   removeDuplicates: 1
-  key: 284
+  item:
+    guid: 2ef8834a-2ee5-40fe-855f-3fc486689ce2
 --- !u!4 &1154105941
 Transform:
   m_ObjectHideFlags: 0
@@ -17254,7 +17255,7 @@ MonoBehaviour:
   addToDontDestroy: 1
   removeDuplicates: 1
   item:
-    guid: 
+    guid: dec8ca88-aa4a-44e0-8170-1c659d07cc7f
 --- !u!4 &2045916094
 Transform:
   m_ObjectHideFlags: 0
