@@ -13,13 +13,11 @@ namespace qASIC.Displayer
         [Tooltip("Decides if a line should be displayed if it isn't created by default")]
         public bool acceptUnknown = true;
 
-        [Space]
         [Tooltip("If the text of a line is empty, the separator will be removed from it")]
         public bool removeSeparatorText = true;
         [Tooltip("If the value of a line is empty, the separator will be removed from it")]
         public bool removeSeparatorValue = false;
 
-        [Space]
         public DisplayerLine[] defaultLines = new DisplayerLine[]
                 {
                     new DisplayerLine("fps", "Framerate"),
@@ -35,7 +33,6 @@ namespace qASIC.Displayer
                     new DisplayerLine("qasic version", "qASIC version"),
                 };
 
-        [Space]
         public string startText;
         public string endText;
         public TextMeshProUGUI text;

@@ -1,54 +1,69 @@
-#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 
-namespace qASIC.Displayer.Tools
+namespace qASIC.Displayer.Internal
 {
     [CustomPropertyDrawer(typeof(DisplayerLine))]
     public class DisplayerLineDrawer : PropertyDrawer
     {
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-        {
-            return base.GetPropertyHeight(property, label) * 2f;
-        }
+        const float _TAG_RECT_WIDTH = 90f;
+        const float _VALUE_RECT_WIDTH = 128f;
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) =>
+            EditorGUIUtility.singleLineHeight * 2f +
+            EditorGUIUtility.standardVerticalSpacing;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            position = EditorGUI.IndentedRect(position);
+
             EditorGUI.BeginProperty(position, label, property);
             position.height = EditorGUIUtility.singleLineHeight;
 
-            position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Keyboard), label);
+            //position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Keyboard), label);
 
-            int indent = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 0;
+            var tagProperty = property.FindPropertyRelative("tag");
+            var textProperty = property.FindPropertyRelative("text");
+            var valueProperty = property.FindPropertyRelative("value");
+            var showProperty = property.FindPropertyRelative("show");
 
-            Vector2 show = new Vector2(0, 18);
-            Vector2 tag = new Vector2(22, 71);
-            Vector2 text = new Vector2(101, position.width - 165);
-            Vector2 value = new Vector2(position.width - 60, 60);
+            Rect showRect = new Rect(position)
+                .ResizeToLeft(EditorGUIUtility.singleLineHeight);
 
-            DrawLabel(position, "tag", tag);
-            DrawLabel(position, "text", text);
-            DrawLabel(position, "value", value);
-            position.y += position.height;
+            Rect tagTextRect = new Rect(position)
+                .BorderLeft(EditorGUIUtility.singleLineHeight)
+                .ResizeToLeft(_TAG_RECT_WIDTH);
 
-            DrawProperty(position, property, "show", show);
-            DrawProperty(position, property, "tag", tag);
-            DrawProperty(position, property, "text", text);
-            DrawProperty(position, property, "value", value);
+            Rect tagRect = new Rect(tagTextRect)
+                .NextLine(false);
 
-            EditorGUI.indentLevel = indent;
+            Rect textTextRect = new Rect(position)
+                .BorderLeft(_TAG_RECT_WIDTH + EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing)
+                .BorderRight(_VALUE_RECT_WIDTH + EditorGUIUtility.standardVerticalSpacing);
+
+            Rect textRect = new Rect(textTextRect)
+                .NextLine(false);
+
+            Rect valueTextRect = new Rect(position)
+                .ResizeToRight(_VALUE_RECT_WIDTH);
+
+            Rect valueRect = new Rect(valueTextRect)
+                .NextLine(false);
+
+            showRect = showRect
+                .NextLine(false);
+
+
+            EditorGUI.LabelField(tagTextRect, "Tag");
+            EditorGUI.LabelField(textTextRect, "Text");
+            EditorGUI.LabelField(valueTextRect, "Value");
+
+            EditorGUI.PropertyField(showRect, showProperty, GUIContent.none);
+            EditorGUI.PropertyField(tagRect, tagProperty, GUIContent.none);
+            EditorGUI.PropertyField(textRect, textProperty, GUIContent.none);
+            EditorGUI.PropertyField(valueRect, valueProperty, GUIContent.none);
+
             EditorGUI.EndProperty();
         }
-
-        void DrawProperty(Rect position, SerializedProperty property, string propertyName, Vector2 localPosition) =>
-            EditorGUI.PropertyField(CalculateRect(position, localPosition), property.FindPropertyRelative(propertyName), GUIContent.none);
-
-        void DrawLabel(Rect position, string label, Vector2 localPosition) =>
-            EditorGUI.PrefixLabel(CalculateRect(position, localPosition), GUIUtility.GetControlID(FocusType.Passive), new GUIContent(label));
-
-        Rect CalculateRect(Rect position, Vector2 localPosition) =>
-            new Rect(position.x + localPosition.x, position.y, localPosition.y, position.height);
     }
 }
-#endif
