@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using qASIC.Input.Map.ItemData;
+using UnityEngine;
 
 namespace qASIC.Input.Map
 {
@@ -10,6 +11,8 @@ namespace qASIC.Input.Map
     {
         public InputBinding() : base() { }
         public InputBinding(string name) : base(name) { }
+
+        public override Color ItemColor => qASIC.Internal.Info.CableboxColor;
 
         public Type DataHolderType => typeof(InputBindingData);
 

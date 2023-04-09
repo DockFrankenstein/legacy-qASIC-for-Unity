@@ -10,7 +10,7 @@ namespace qASIC.EditorTools.Internal
     public static class qGUIInternalUtility
     {
         public static Texture2D qASICBackgroundTexture => GenerateColorTexture(new Color(0f, 0f, 0f, 0.2f));
-        public static Color qASICColor => new Color(0f, 0.7019607843137255f, 1f);
+        public static Color qASICColor => qASIC.Internal.Info.qASICColor;
         public static Texture2D qASICColorTexture => GenerateColorTexture(qASICColor);
 
         public static void DrawqASICBanner(string bannerLocation = "qASIC/Sprites/qASIC banner", string docs = "https://docs.qasictools.com")

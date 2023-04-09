@@ -13,5 +13,6 @@ namespace qASIC.Internal
         public const string FileVersion = "1.1.1";
 
         public static Color CableboxColor => new Color(1f, 0.1882352941176471f, 0.3450980392156863f);
+        public static Color qASICColor => new Color(0f, 0.7019607843137255f, 1f);
     }
 }

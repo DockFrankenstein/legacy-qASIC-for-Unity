@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System;
-using qASIC.Input.Serialization;
 
 namespace qASIC.Input.Map
 {
-    [Serializable] 
+    [Serializable]
     public abstract class InputMapItem : INonRepeatable, IMapItem
     {
         public InputMapItem() { }
@@ -23,6 +22,7 @@ namespace qASIC.Input.Map
         public string ItemName { get => itemName; set => itemName = value; }
         public string Guid { get => guid; set => guid = value; }
         public bool MapLoaded => map != null;
+        public virtual Color ItemColor => qASIC.Internal.Info.qASICColor;
 
 
         public abstract Type ValueType { get; }

@@ -9,6 +9,8 @@ namespace qASIC.Input.Map.Internal
 {
     public static partial class InputGUIUtility
     {
+        const float _ITEM_REFERENCE_COLOR_WIDTH = 4f;
+
         public static void DrawAxis(string label, InputMapWindow window, Axis axis)
         {
             DrawAxis(label, window.Map, axis.positiveGuid, axis.negativeGuid, (a, b) =>
@@ -60,7 +62,16 @@ namespace qASIC.Input.Map.Internal
         {
             guid = guid ?? string.Empty;
 
+            Color itemColor = new Color(0f, 0f, 0f, 0f);
+            if (map != null && map.ItemsDictionary.ContainsKey(guid))
+                itemColor = map.ItemsDictionary[guid].ItemColor;
+
             GUIStyle buttonStyle = new GUIStyle()
+            {
+
+            };
+
+            GUIStyle itemNameStyle = new GUIStyle()
             {
                 wordWrap = false,
                 alignment = TextAnchor.MiddleLeft,
@@ -84,10 +95,19 @@ namespace qASIC.Input.Map.Internal
             }
             .WithBackground(qGUIEditorUtility.BorderTexture);
 
+            GUIStyle colorStyle = new GUIStyle()
+                .WithBackgroundColor(itemColor);
+
             rect = rect
                 .SetHeight(18f);
 
             rect = EditorGUI.PrefixLabel(rect, label);
+
+            Rect itemNameRect = new Rect(rect)
+                .BorderLeft(_ITEM_REFERENCE_COLOR_WIDTH);
+
+            Rect colorRect = new Rect(rect)
+                .ResizeToLeft(_ITEM_REFERENCE_COLOR_WIDTH);
 
             string itemName = "Map Not Loaded";
 
@@ -100,12 +120,16 @@ namespace qASIC.Input.Map.Internal
                 new Color(0.345098f, 0.345098f, 0.345098f) :
                 new Color(0.8941177f, 0.8941177f, 0.8941177f));
 
-            if (GUI.Button(rect, itemName, buttonStyle))
+            if (GUI.Button(rect, string.Empty, buttonStyle))
                 InputItemReferenceExplorer.OpenSelectWindow(map, guid, onChangeValue, type);
 
             if (Event.current.type == EventType.Repaint)
             {
+                itemNameStyle.Draw(itemNameRect, itemName, false, false, false, false);
+                colorStyle.Draw(colorRect, GUIContent.none, false, false, false, false);
+
                 verticalLine.Draw(rect.ResizeToLeft(0f), GUIContent.none, false, false, false, false);
+                verticalLine.Draw(itemNameRect.ResizeToLeft(0f), GUIContent.none, false, false, false, false);
                 verticalLine.Draw(rect.ResizeToRight(0f), GUIContent.none, false, false, false, false);
                 horizontalLine.Draw(rect.ResizeToTop(0f), GUIContent.none, false, false, false, false);
                 horizontalLine.Draw(rect.ResizeToBottom(0f), GUIContent.none, false, false, false, false);
