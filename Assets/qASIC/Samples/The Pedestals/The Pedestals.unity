@@ -2051,12 +2051,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 1728625461}
+  autoLabel: 1
   optionLabelName: 'Up: '
+  listeningForKeyText: Press any key
+  playerIndex: 0
   inputAction:
-    groupName: Game
-    useDefaultGroup: 1
-    actionName: Up
+    guid: 
   keyIndex: 0
+  keyRootPath: key_keyboard
+  stopListeningKeys:
+  - key_keyboard/Escape
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -3297,12 +3301,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 2022365670}
+  autoLabel: 1
   optionLabelName: 'Interact: '
+  listeningForKeyText: Press any key
+  playerIndex: 0
   inputAction:
-    groupName: Game
-    useDefaultGroup: 1
-    actionName: Interact
+    guid: 
   keyIndex: 0
+  keyRootPath: key_keyboard
+  stopListeningKeys:
+  - key_keyboard/Escape
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -4555,15 +4563,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 11400000, guid: ffcabac4cc9d9db4cabe73d1163f2a79, type: 2}
-  serializationType: 2
-  filePath:
-    buildPath:
-      genericFolder: 62
-      filePath: qASIC demo/pedestal/input.txt
-    separateEditorPath: 0
-    editorPath:
-      genericFolder: 62
-      filePath: qASIC demo/pedestal/input-editor.txt
 --- !u!4 &520468626
 Transform:
   m_ObjectHideFlags: 0
@@ -5463,12 +5462,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 1464753235}
+  autoLabel: 1
   optionLabelName: 'Console: '
+  listeningForKeyText: Press any key
+  playerIndex: 0
   inputAction:
-    groupName: UI
-    useDefaultGroup: 0
-    actionName: Console
+    guid: 
   keyIndex: 0
+  keyRootPath: key_keyboard
+  stopListeningKeys:
+  - key_keyboard/Escape
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -9357,7 +9360,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1154105936}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e75bbe96523a2e547bcbc72e3780bae5, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b67d99c8fdd9314a82dc367d7cfd6f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   toggleObject: {fileID: 1690943428}
@@ -9369,7 +9372,8 @@ MonoBehaviour:
   togglerTag: 
   addToDontDestroy: 1
   removeDuplicates: 1
-  key: 284
+  item:
+    guid: 2ef8834a-2ee5-40fe-855f-3fc486689ce2
 --- !u!4 &1154105941
 Transform:
   m_ObjectHideFlags: 0
@@ -11678,12 +11682,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 683230934}
+  autoLabel: 1
   optionLabelName: 'Right: '
+  listeningForKeyText: Press any key
+  playerIndex: 0
   inputAction:
-    groupName: Game
-    useDefaultGroup: 1
-    actionName: Right
+    guid: 
   keyIndex: 0
+  keyRootPath: key_keyboard
+  stopListeningKeys:
+  - key_keyboard/Escape
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -11957,12 +11965,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 1291388893}
+  autoLabel: 1
   optionLabelName: 'Down: '
+  listeningForKeyText: Press any key
+  playerIndex: 0
   inputAction:
-    groupName: Game
-    useDefaultGroup: 1
-    actionName: Down
+    guid: 
   keyIndex: 0
+  keyRootPath: key_keyboard
+  stopListeningKeys:
+  - key_keyboard/Escape
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -14871,12 +14883,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 1705672479}
+  autoLabel: 1
   optionLabelName: 'Left: '
+  listeningForKeyText: Press any key
+  playerIndex: 0
   inputAction:
-    groupName: Game
-    useDefaultGroup: 1
-    actionName: Left
+    guid: 
   keyIndex: 0
+  keyRootPath: key_keyboard
+  stopListeningKeys:
+  - key_keyboard/Escape
   OnStartListening:
     m_PersistentCalls:
       m_Calls:
@@ -17211,10 +17227,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logLimit: 64
+  ignoreReselectPlatforms: 080000000b000000
   logText: {fileID: 1903444012}
   inputField: {fileID: 1642712388}
   scrollRect: {fileID: 548043582}
-  ignoreReselectPlatforms: 080000000b000000
+  toggler: {fileID: 0}
   ConsoleConfig: {fileID: 11400000, guid: 67849b547219c6544b513c8321bd7756, type: 2}
 --- !u!114 &2045916093
 MonoBehaviour:
@@ -17237,10 +17254,8 @@ MonoBehaviour:
   togglerTag: console
   addToDontDestroy: 1
   removeDuplicates: 1
-  action:
-    groupName: UI
-    useDefaultGroup: 0
-    actionName: Console
+  item:
+    guid: dec8ca88-aa4a-44e0-8170-1c659d07cc7f
 --- !u!4 &2045916094
 Transform:
   m_ObjectHideFlags: 0
