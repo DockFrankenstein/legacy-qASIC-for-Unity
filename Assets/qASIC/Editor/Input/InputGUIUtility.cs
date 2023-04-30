@@ -101,7 +101,7 @@ namespace qASIC.Input.Map.Internal
             rect = rect
                 .SetHeight(18f);
 
-            rect = EditorGUI.PrefixLabel(rect, label);
+            rect = EditorGUI.PrefixLabel(rect, GUIUtility.GetControlID(FocusType.Keyboard), label);
 
             Rect itemNameRect = new Rect(rect)
                 .BorderLeft(_ITEM_REFERENCE_COLOR_WIDTH);

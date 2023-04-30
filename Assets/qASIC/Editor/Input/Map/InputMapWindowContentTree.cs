@@ -222,16 +222,6 @@ namespace qASIC.Input.Map.Internal
 			menu.ShowAsContext();
 		}
 
-		//void AddActionGenericMenuItems(GenericMenu menu, InputMapContentActionTreeItem action)
-		//      {
-		//	menu.AddItem("Add", false, () => AddActionItem(action));
-		//}
-
-		//void AddAxisGenericMenuItems(GenericMenu menu, InputMapContentOtherTreeItem axis)
-		//{
-		//	menu.AddItem("Add", false, () => AddAxisItem(axis));
-		//}
-
 		void AddEditGenericMenuItems(GenericMenu menu, InputMapContentItemBase item)
 		{
 			InputMapContentMapItem editableItem = item as InputMapContentMapItem;
@@ -244,7 +234,7 @@ namespace qASIC.Input.Map.Internal
 			menu.AddItem("Expand all", false, ExpandAll);
 			menu.AddItem("Collapse all", false, CollapseAll);
 
-			item.CreateGenericMenu(menu);
+            item.CreateGenericMenu(menu, this);
 		}
 		#endregion
 

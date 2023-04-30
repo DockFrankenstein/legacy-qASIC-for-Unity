@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using qASIC.EditorTools;
 using qASIC.Input.Map.Internal.Inspectors;
+using UnityEditor.PackageManager.UI;
 
 namespace qASIC.Input.Map.Internal
 {
@@ -24,7 +25,7 @@ namespace qASIC.Input.Map.Internal
             window.SelectInInspector(null);
         }
 
-        public virtual void CreateGenericMenu(GenericMenu menu) { }
+        public virtual void CreateGenericMenu(GenericMenu menu, InputMapWindowContentTree contentTree) { }
     }
 
     public class InputMapContentBindingHeader : InputMapContentItemBase
@@ -77,9 +78,21 @@ namespace qASIC.Input.Map.Internal
         public override Texture GetIcon(InputGroup group) =>
             Item?.HasErrors() == true ? qGUIEditorUtility.ErrorIcon : null;
 
-        public override void CreateGenericMenu(GenericMenu menu)
+        public override void CreateGenericMenu(GenericMenu menu, InputMapWindowContentTree contentTree)
         {
             menu.AddSeparator("");
+            foreach (var group in contentTree.window.Map.groups)
+                menu.AddItem($"Move to group/{group.ItemName}", group.items.Contains(Item), () => 
+                {
+                    if (group.items.Contains(Item))
+                        return;
+
+                    contentTree.Group.RemoveItem(Item);
+                    group.AddItem(Item);
+                    contentTree.Reload();
+                    contentTree.window.SetMapDirty();
+                });
+
             menu.AddItem("Copy Guid", false, () => GUIUtility.systemCopyBuffer = Item?.Guid);
         }
     }

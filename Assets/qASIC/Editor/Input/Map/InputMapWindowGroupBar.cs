@@ -21,6 +21,9 @@ namespace qASIC.Input.Map.Internal
                 if (_selectedGroupIndex == null)
                     _selectedGroupIndex = EditorPrefs.GetInt(SELECTED_GROUP_PREFS_KEY, 0);
 
+                if (Map != null)
+                    _selectedGroupIndex = Mathf.Clamp(_selectedGroupIndex ?? 0, 0, Map.groups.Count - 1);
+
                 return _selectedGroupIndex ?? 0;
             }
             set
