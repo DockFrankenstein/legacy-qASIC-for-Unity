@@ -4,7 +4,7 @@ using UnityEngine;
 using qASIC.Input.Map;
 using qASIC.Input.Map.Internal;
 using System.Collections.Generic;
-using qASIC.Tools;
+using qASIC.EditorTools;
 using System;
 using System.Linq;
 
@@ -57,6 +57,8 @@ namespace qASIC.Input.Internal.ReferenceExplorers
             window.BindingGuid = currentGuid;
             window.Map = map;
             window.ItemType = type;
+            window.groupBar.SetMap(map);
+
             window.ResetEditor();
         }
 
@@ -84,18 +86,15 @@ namespace qASIC.Input.Internal.ReferenceExplorers
 
         void SelectCurrentProperties()
         {
-            if (!Map || Map.groups.Count == 0) return;
+            if (Map == null || Map.groups.Count == 0) return;
 
-            int index = 0;
-            if (Map.ItemsDictionary.ContainsKey(BindingGuid))
-            {
-                var item = Map.ItemsDictionary[BindingGuid];
-                index = Map.groups.IndexOf(x => x.items.Contains(item));
-            }
+            _selectedItem = Map.GetItem<InputMapItem>(BindingGuid);
 
-            groupBar.Select(index);
+            groupBar.Select(_selectedItem == null ?
+                0 :
+                Map.groups.IndexOf(x => x.items.Contains(_selectedItem)));
 
-            _selectedItemIndex = groupBar.GetSelectedGroup()?.items.IndexOf(Map.ItemsDictionary[BindingGuid]) ?? -1;
+            _selectedItemIndex = groupBar.GetSelectedGroup()?.items.IndexOf(_selectedItem) ?? -1;
         }
 
         public void OnGUI()
@@ -114,10 +113,14 @@ namespace qASIC.Input.Internal.ReferenceExplorers
 
             DisplayContent();
 
-            Space();
-            EditorGUI.BeginDisabledGroup(_selectedItemIndex == -1);
-            bool apply = GUILayout.Button("Apply");
-            EditorGUI.EndDisabledGroup();
+            qGUIEditorUtility.HorizontalLineLayout();
+            if (GUILayout.Button("Add Items"))
+            {
+                InputMapWindow.OpenMap(Map);
+                Close();
+            }
+
+            bool apply = GUILayout.Button("Apply", GUILayout.Height(26f));
 
             Event e = Event.current;
 
@@ -131,7 +134,7 @@ namespace qASIC.Input.Internal.ReferenceExplorers
 
             if (apply)
             {
-                BindingGuid = _selectedItem.Guid;
+                BindingGuid = _selectedItemIndex == -1 ? string.Empty : _selectedItem.Guid;
                 OnItemSelected?.Invoke(BindingGuid);
                 Close();
             }
@@ -152,43 +155,51 @@ namespace qASIC.Input.Internal.ReferenceExplorers
                 .ToList() 
                 ?? new List<InputMapItem>();
             
-            List<InputMapItem> bindings = content
+            var bindings = content
                 .Where(x => x is InputBinding)
-                .ToList();
+                .ToArray();
 
-            List<InputMapItem> items = content
+            var items = content
                 .Except(bindings)
-                .ToList();
+                .ToArray();
 
             _contentScroll = BeginScrollView(_contentScroll);
+
+            if (DisplayList(new GUIContent[] { new GUIContent("None") }, string.Empty, _selectedItemIndex + 1) == 0)
+                _selectedItemIndex = -1;
 
             if (ItemType.IsAssignableFrom(typeof(InputBinding)))
                 _selectedItemIndex = DisplayList(bindings, "Bindings", _selectedItemIndex);
 
             if (!typeof(InputBinding).IsAssignableFrom(ItemType))
-                _selectedItemIndex = DisplayList(items, "Others", _selectedItemIndex - bindings.Count) + bindings.Count;
+                _selectedItemIndex = DisplayList(items, "Others", _selectedItemIndex - bindings.Length) + bindings.Length;
 
             if (content.IndexInRange(_selectedItemIndex))
-                _selectedItem = _selectedItemIndex < bindings.Count ? bindings[_selectedItemIndex] : items[_selectedItemIndex - bindings.Count];
+                _selectedItem = _selectedItemIndex < bindings.Length ? bindings[_selectedItemIndex] : items[_selectedItemIndex - bindings.Length];
 
             EndScrollView();
         }
 
-        int DisplayList(List<InputMapItem> list, string header, int index)
-        {
-            GUILayout.Label(header);
-            using (new GUILayout.VerticalScope(Styles.ItemsGroupStyle))
-            {
-                GUIContent[] names = list
-                    .Select(x => new GUIContent(x.ItemName))
-                    .ToArray();
+        int DisplayList(InputMapItem[] list, string header, int index) =>
+            DisplayList(list
+                .Select(x => new GUIContent(x.ItemName))
+                .ToArray(), header, index);
 
-                using (new GUILayout.VerticalScope(GUILayout.Height((EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing) * list.Count)))
+        int DisplayList(GUIContent[] list, string header, int index)
+        {
+            bool containsHeader = !string.IsNullOrEmpty(header);
+
+            if (containsHeader)
+                GUILayout.Label(header);
+
+            using (new GUILayout.VerticalScope(containsHeader ? Styles.ItemsHeaderGroupStyle : Styles.ItemsGroupStyle))
+            {
+                using (new GUILayout.VerticalScope(GUILayout.Height((EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing) * list.Length)))
                     GUILayout.FlexibleSpace();
 
                 Rect listRect = GUILayoutUtility.GetLastRect();
 
-                int newIndex = GUI.SelectionGrid(listRect, index, names, 1, Styles.ListItemStyle);
+                int newIndex = GUI.SelectionGrid(listRect, index, list.ToArray(), 1, Styles.ListItemStyle);
 
                 if (newIndex != -1)
                     index = newIndex;
@@ -201,7 +212,8 @@ namespace qASIC.Input.Internal.ReferenceExplorers
         {
             public static GUIStyle ListItemStyle => new GUIStyle(EditorStyles.toolbarButton) { alignment = TextAnchor.MiddleLeft, };
 
-            public static GUIStyle ItemsGroupStyle => new GUIStyle() { margin = new RectOffset(16, 0, 0, 0), };
+            public static GUIStyle ItemsHeaderGroupStyle => new GUIStyle() { margin = new RectOffset(16, 0, 0, 0), };
+            public static GUIStyle ItemsGroupStyle => new GUIStyle() { margin = new RectOffset(0, 0, 0, 0), };
         }
     }
 }

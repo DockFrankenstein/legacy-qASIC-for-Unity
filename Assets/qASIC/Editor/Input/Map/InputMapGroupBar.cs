@@ -28,6 +28,18 @@ namespace qASIC.Input.Map.Internal
         public void SetMap(InputMap map) =>
             Map = map;
 
+        public void CheckRange()
+        {
+            if (SelectedGroupIndex < 0)
+            {
+                SelectedGroupIndex = 0;
+                return;
+            }
+
+            if (SelectedGroupIndex >= Map.groups.Count)
+                SelectedGroupIndex = Map.groups.Count - 1;
+        }
+
         #region GUI
         public void OnGUI()
         {

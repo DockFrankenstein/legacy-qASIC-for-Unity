@@ -677,6 +677,9 @@ namespace qASIC.Input.Map.Internal
 
             ProjectSettings.InputProjectSettings.Instance.map = Map;
         }
+
+        public void DeleteGroup(InputGroup group) =>
+            _groupBar.DeleteGroup(group);
         #endregion
     }
 }
