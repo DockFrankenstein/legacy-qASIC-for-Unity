@@ -502,7 +502,7 @@ namespace qASIC.Input.Map.Internal
 
         void HorizontalLine()
         {
-            qGUIEditorUtility.VerticalLine();
+            qGUIEditorUtility.VerticalLineLayout();
 
             Rect lineRect = GUILayoutUtility.GetLastRect();
             Rect mouseAreaRect = new Rect(lineRect).Border(-2f, 0f);

@@ -63,7 +63,7 @@ namespace qASIC.Input.DebugTools
                     MenuSelectionGUI();
                 }
 
-                qGUIEditorUtility.VerticalLine();
+                qGUIEditorUtility.VerticalLineLayout();
 
                 using (var scroll = new GUILayout.ScrollViewScope(_contentScroll))
                 {

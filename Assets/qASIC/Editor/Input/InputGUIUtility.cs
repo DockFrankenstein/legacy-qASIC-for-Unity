@@ -116,9 +116,7 @@ namespace qASIC.Input.Map.Internal
                     $"{item.ItemName} ({map.groups.Where(x => x.items.Contains(item)).FirstOrDefault()})" :
                     "None";
 
-            buttonStyle.normal.background = qGUIUtility.GenerateColorTexture(EditorGUIUtility.isProSkin ?
-                new Color(0.345098f, 0.345098f, 0.345098f) :
-                new Color(0.8941177f, 0.8941177f, 0.8941177f));
+            buttonStyle.normal.background = qGUIEditorUtility.ButtonColorTexture;
 
             if (GUI.Button(rect, string.Empty, buttonStyle))
                 InputItemReferenceExplorer.OpenSelectWindow(map, guid, onChangeValue, type);
@@ -128,11 +126,8 @@ namespace qASIC.Input.Map.Internal
                 itemNameStyle.Draw(itemNameRect, itemName, false, false, false, false);
                 colorStyle.Draw(colorRect, GUIContent.none, false, false, false, false);
 
-                verticalLine.Draw(rect.ResizeToLeft(0f), GUIContent.none, false, false, false, false);
+                qGUIEditorUtility.BorderAround(rect);
                 verticalLine.Draw(itemNameRect.ResizeToLeft(0f), GUIContent.none, false, false, false, false);
-                verticalLine.Draw(rect.ResizeToRight(0f), GUIContent.none, false, false, false, false);
-                horizontalLine.Draw(rect.ResizeToTop(0f), GUIContent.none, false, false, false, false);
-                horizontalLine.Draw(rect.ResizeToBottom(0f), GUIContent.none, false, false, false, false);
             }
         }
     }

@@ -286,7 +286,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
         {
             DrawTopBar();
             EditorGUILayout.Space(8f);
-            qGUIEditorUtility.HorizontalLine();
+            qGUIEditorUtility.HorizontalLineLayout();
 
             _currentItems = qGUIEditorUtility.SortSearchList(_items, _search)
                 .ToList();
@@ -297,7 +297,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
                 DrawTree(_currentItems);
             }
 
-            qGUIEditorUtility.HorizontalLine();
+            qGUIEditorUtility.HorizontalLineLayout();
             GUILayout.Space(16f);
 
 
