@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using qASIC.Input.Devices;
 using qASIC.Input.Map.ItemData;
 using UnityEngine;
 
 namespace qASIC.Input.Map
 {
     [Serializable]
-    public class InputBinding : InputMapItem<float>, ISerializableMapItem
+    public sealed class InputBinding : InputMapItem<float>, ISerializableMapItem
     {
         public InputBinding() : base() { }
         public InputBinding(string name) : base(name) { }
@@ -18,7 +19,7 @@ namespace qASIC.Input.Map
 
         public List<string> keys = new List<string>();
 
-        public virtual InputMapItemData CreateDataHolder()
+        public InputMapItemData CreateDataHolder()
         {
             return new InputBindingData()
             {
@@ -26,14 +27,14 @@ namespace qASIC.Input.Map
             };
         }
 
-        public override float ReadValue(InputMapData data, Func<string, float> func)
+        public override float ReadValue(InputMapData data, IInputDevice device)
         {
             var keys = data.GetItemData<InputBindingData>(Guid).keys;
             float value = 0f;
 
             foreach (string key in keys)
             {
-                float keyValue = func(key);
+                float keyValue = device.GetInputValue(key);
                 if (keyValue > value)
                     value = keyValue;
             }
@@ -41,13 +42,13 @@ namespace qASIC.Input.Map
             return value;
         }
 
-        public override InputEventType GetInputEvent(InputMapData data, Func<string, InputEventType> func)
+        public override InputEventType GetInputEvent(InputMapData data, IInputDevice device)
         {
             var keys = data.GetItemData<InputBindingData>(Guid).keys;
 
             InputEventType type = InputEventType.None;
             foreach (string key in keys)
-                type |= func.Invoke(key);
+                type |= device.GetInputEvent(key);
 
             return type;
         }

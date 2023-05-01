@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Linq;
-using qASIC.Input.Map.Internal.Inspectors;
+using qASIC.Input.Map.Internal;
 
 namespace qASIC.Input.Internal
 {

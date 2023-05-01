@@ -134,7 +134,7 @@ namespace qASIC.Input.Players
 
             foreach (IInputDevice device in _devices)
             {
-                object readValue = item.ReadValueAsObject(MapData, device.GetInputValue);
+                object readValue = item.ReadValueAsObject(MapData, device);
                 if (value == null)
                 {
                     value = readValue;
@@ -166,7 +166,7 @@ namespace qASIC.Input.Players
 
             foreach (IInputDevice device in _devices)
             {
-                T readValue = item.ReadValue(MapData, device.GetInputValue);
+                T readValue = item.ReadValue(MapData, device);
                 value = item.GetHighestValue(value, readValue);
             }
 
@@ -193,7 +193,7 @@ namespace qASIC.Input.Players
             InputEventType type = InputEventType.None;
 
             foreach (IInputDevice device in _devices)
-                type |= item.GetInputEvent(MapData, keyPath => device.GetInputEvent(keyPath));
+                type |= item.GetInputEvent(MapData, device);
 
             return type;
         }

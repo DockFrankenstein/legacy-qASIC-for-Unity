@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using qASIC.Input.Devices;
 
 namespace qASIC.Input.Map
 {
@@ -35,8 +36,8 @@ namespace qASIC.Input.Map
 
         public virtual void OnCreated() { }
 
-        public abstract object ReadValueAsObject(InputMapData data, Func<string, float> func);
-        public abstract InputEventType GetInputEvent(InputMapData data, Func<string, InputEventType> func);
+        public abstract object ReadValueAsObject(InputMapData data, IInputDevice device);
+        public abstract InputEventType GetInputEvent(InputMapData data, IInputDevice device);
         public abstract object GetHighestValueAsObject(object a, object b);
 
         /// <summary>Checks if the item has any errors. This is used in the editor to signify if any changes are needed.</summary>
@@ -52,10 +53,10 @@ namespace qASIC.Input.Map
 
         public override Type ValueType => typeof(T);
 
-        public override object ReadValueAsObject(InputMapData data, Func<string, float> func) =>
-            ReadValue(data, func);
+        public override object ReadValueAsObject(InputMapData data, IInputDevice device) =>
+            ReadValue(data, device);
 
-        public abstract T ReadValue(InputMapData data, Func<string, float> func);
+        public abstract T ReadValue(InputMapData data, IInputDevice device);
 
 
         public override object GetHighestValueAsObject(object a, object b) =>

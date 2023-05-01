@@ -1,4 +1,5 @@
-﻿using System;
+﻿using qASIC.Input.Devices;
+using System;
 
 namespace qASIC.Input.Map
 {
@@ -25,33 +26,33 @@ namespace qASIC.Input.Map
         public bool IsUsingAxis() =>
             !string.IsNullOrWhiteSpace(axisGuid);
 
-        public float ReadValue(InputMap map, InputMapData data, Func<string, float> func)
+        public float ReadValue(InputMap map, InputMapData data, IInputDevice device)
         {
             if (IsUsingAxis())
             {
                 Input1DAxis axis = map.GetItem<Input1DAxis>(axisGuid);
-                return axis?.ReadValue(data, func) ?? 0f;
+                return axis?.ReadValue(data, device) ?? 0f;
             }
 
             InputBinding positive = map.GetItem<InputBinding>(positiveGuid);
             InputBinding negative = map.GetItem<InputBinding>(negativeGuid);
 
-            return (positive?.ReadValue(data, func) ?? 0f) - (negative?.ReadValue(data, func) ?? 0f);
+            return (positive?.ReadValue(data, device) ?? 0f) - (negative?.ReadValue(data, device) ?? 0f);
         }
 
-        public InputEventType GetInputEvent(InputMap map, InputMapData data, Func<string, InputEventType> func)
+        public InputEventType GetInputEvent(InputMap map, InputMapData data, IInputDevice device)
         {
             if (IsUsingAxis())
             {
                 Input1DAxis axis = map.GetItem<Input1DAxis>(axisGuid);
-                return axis?.GetInputEvent(data, func) ?? InputEventType.None;
+                return axis?.GetInputEvent(data, device) ?? InputEventType.None;
             }
 
             InputBinding positive = map.GetItem<InputBinding>(positiveGuid);
             InputBinding negative = map.GetItem<InputBinding>(negativeGuid);
 
-            return positive?.GetInputEvent(data, func) ?? InputEventType.None |
-                negative?.GetInputEvent(data, func) ?? InputEventType.None;
+            return positive?.GetInputEvent(data, device) ?? InputEventType.None |
+                negative?.GetInputEvent(data, device) ?? InputEventType.None;
         }
 
         public bool HasErrors(InputMap map)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using qASIC.Input.Devices;
+using System;
 using UnityEngine;
 
 namespace qASIC.Input.Map
@@ -12,11 +13,11 @@ namespace qASIC.Input.Map
         public string positiveGuid = string.Empty;
         public string negativeGuid = string.Empty;
 
-        public override float ReadValue(InputMapData data, Func<string, float> func) =>
-            new Axis(positiveGuid, negativeGuid).ReadValue(map, data, func);
+        public override float ReadValue(InputMapData data, IInputDevice device) =>
+            new Axis(positiveGuid, negativeGuid).ReadValue(map, data, device);
 
-        public override InputEventType GetInputEvent(InputMapData data, Func<string, InputEventType> func) =>
-            new Axis(positiveGuid, negativeGuid).GetInputEvent(map, data, func);
+        public override InputEventType GetInputEvent(InputMapData data, IInputDevice device) =>
+            new Axis(positiveGuid, negativeGuid).GetInputEvent(map, data, device);
 
         public override float GetHighestValue(float a, float b) =>
             Mathf.Abs(a) > Mathf.Abs(b) ? a : b;

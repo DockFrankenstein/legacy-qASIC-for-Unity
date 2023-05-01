@@ -3,20 +3,19 @@ using System.Linq;
 
 namespace qASIC.Input.Map.Internal.Inspectors
 {
-    public class InputBindingInspector : InputMapItemInspector
+    public class ShortcutInspector : InputMapItemInspector
     {
-        public override Type ItemType => typeof(InputBinding);
+        public override Type ItemType => typeof(Shortcut);
 
-        InputBinding _binding;
-
+        Shortcut _shortcut;
         KeysDrawer _keyDrawer;
 
         public override void Initialize(OnInitializeContext context)
         {
-            _binding = context.item as InputBinding;
+            _shortcut = context.item as Shortcut;
 
             _keyDrawer = new KeysDrawer();
-            _keyDrawer.Initialize(_binding.keys);
+            _keyDrawer.Initialize(_shortcut.keys);
             _keyDrawer.OnDirty += () =>
             {
                 SetMapDirty();
@@ -26,7 +25,7 @@ namespace qASIC.Input.Map.Internal.Inspectors
 
         protected override void OnGUI(OnGUIContext context)
         {
-            _keyDrawer.PathsHaveErrors = _binding.HasUnassignedPaths().Count() != 0;
+            _keyDrawer.PathsHaveErrors = _shortcut.HasUnassignedPaths().Count() != 0;
             _keyDrawer.OnGUI();
         }
 

@@ -1,6 +1,5 @@
 using qASIC.Input.Map;
 using qASIC.ProjectSettings;
-using UnityEngine;
 
 namespace qASIC.Input.Internal
 {
@@ -15,6 +14,14 @@ namespace qASIC.Input.Internal
             };
 
             UnityEngine.SceneManagement.SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+
+            if (InputManager.MapLoaded)
+                Map = InputManager.Map;
+
+            InputManager.OnMapLoaded += map =>
+            {
+                Map = map;
+            };
         }
 
         private static void SceneManager_sceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)

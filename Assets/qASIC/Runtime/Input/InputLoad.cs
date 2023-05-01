@@ -15,7 +15,6 @@ namespace qASIC.Input
         private static bool init = false;
 
 #if UNITY_EDITOR
-        private static InputMap _editorMap = null;
         public static InputMap EditorMap { get; private set; }
         public static System.Action<InputMap> OnEditorMapChange;
 #endif
@@ -43,6 +42,8 @@ namespace qASIC.Input
                 qDebug.LogError("Cannot load Input Map: Input Map has not been assigned!");
                 return;
             }
+
+            InputManager.LoadMap(map);
         }
 
 #if UNITY_EDITOR

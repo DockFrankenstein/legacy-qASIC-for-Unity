@@ -60,6 +60,8 @@ namespace qASIC.Input
         #endregion
 
         #region Loading
+        public static event Action<InputMap> OnMapLoaded;
+
         private static bool _initialized = false;
         public static bool Initialized => _initialized;
 
@@ -101,6 +103,7 @@ namespace qASIC.Input
             InputPlayerManager.RebuildPlayerMapData(map);
 
             qDebug.Log("Input map has been assigned", "input");
+            OnMapLoaded?.Invoke(map);
         }
 
         /// <summary>Loads map data</summary>
