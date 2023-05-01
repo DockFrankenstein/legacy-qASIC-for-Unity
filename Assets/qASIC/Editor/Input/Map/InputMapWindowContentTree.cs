@@ -500,7 +500,11 @@ namespace qASIC.Input.Map.Internal
 			InputMapContentItemBase item = args.item as InputMapContentItemBase;
 
 			//Label
-			Rect rowRect = new Rect(args.rowRect).MoveRight(GetContentIndent(args.item));
+			Rect rowRect = new Rect(args.rowRect)
+                .MoveRight(GetContentIndent(args.item));
+
+            Rect labelRect = new Rect(rowRect)
+                .BorderLeft(4f);
 
 			GUIContent labelContent = new GUIContent(args.label);
 			if (InputMapWindow.Prefs_ShowItemIcons)
@@ -509,17 +513,22 @@ namespace qASIC.Input.Map.Internal
 				labelContent.tooltip = item.GetTooltip(group);
             }
 
-			Styles.Label.Draw(rowRect, labelContent, false, false, args.selected, args.focused);
+			Styles.Label.Draw(labelRect, labelContent, false, false, args.selected, args.focused);
+
+            //Color
+            if (!(item is null) && item.ItemColor != Color.clear)
+            {
+                Rect colorRect = new Rect(rowRect).ResizeToLeft(4f);
+                Styles.ColorBar(item.ItemColor).Draw(colorRect, GUIContent.none, false, false, false, false);
+                qGUIEditorUtility.VerticalLine(colorRect.ResizeToRight(0f));
+                qGUIEditorUtility.VerticalLine(colorRect.ResizeToLeft(0f));
+            }
 
 			//Separator
-			Rect separatorRect = new Rect(rowRect).ResizeToBottom(1f);
-			Styles.Separator.Draw(separatorRect, GUIContent.none, true, true, args.selected, args.focused);
-
-            //Color bar
-            if (!(item is null) && item.BarColor != Color.clear)
+            if (args.row != 0)
             {
-                Rect barRect = new Rect(rowRect).ResizeToBottom(2f);
-                Styles.ColorBar(item.BarColor).Draw(barRect, GUIContent.none, false, false, false, false);
+                qGUIEditorUtility.HorizontalLine(rowRect.ResizeToTop(0f));
+                qGUIEditorUtility.HorizontalLine(rowRect.ResizeToBottom(0f));
             }
 
             CalcFoldoutOffset(rowRect.height);
@@ -576,7 +585,7 @@ namespace qASIC.Input.Map.Internal
 		static class Styles
         {
 			public static GUIStyle Label => new GUIStyle("Label") { alignment = TextAnchor.MiddleLeft };
-			public static GUIStyle Separator => new GUIStyle("Label").WithBackground(qGUIEditorUtility.BorderTexture);
+
 			public static GUIStyle ColorBar(Color color) => new GUIStyle("Label").WithBackgroundColor(color);
         }
     }

@@ -17,7 +17,7 @@ namespace qASIC.Input.Map.Internal
 
         public virtual Texture GetIcon(InputGroup group) => null;
         public virtual string GetTooltip(InputGroup group) => string.Empty;
-        public virtual Color BarColor { get; set; } = Color.clear;
+        public virtual Color ItemColor { get; set; } = Color.clear;
         public virtual bool CanDrag { get => false; }
 
         public virtual void SelectInInspector(InputMapWindow window)
@@ -69,6 +69,7 @@ namespace qASIC.Input.Map.Internal
         public string Guid { get; set; }
         public InputMapItem Item { get; set; }
         public override bool CanDrag => true;
+        public override Color ItemColor => Item?.ItemColor ?? Color.clear;
 
         public override void SelectInInspector(InputMapWindow window)
         {
