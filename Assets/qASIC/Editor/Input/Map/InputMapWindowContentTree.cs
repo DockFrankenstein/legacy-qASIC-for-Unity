@@ -526,10 +526,9 @@ namespace qASIC.Input.Map.Internal
 
 			//Separator
             if (args.row != 0)
-            {
                 qGUIEditorUtility.HorizontalLine(rowRect.ResizeToTop(0f));
-                qGUIEditorUtility.HorizontalLine(rowRect.ResizeToBottom(0f));
-            }
+
+            qGUIEditorUtility.HorizontalLine(rowRect.ResizeToBottom(0f));
 
             CalcFoldoutOffset(rowRect.height);
 		}
