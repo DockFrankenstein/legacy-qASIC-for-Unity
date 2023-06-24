@@ -164,7 +164,7 @@ namespace Project.Internal
         public void GenerateCollection()
         {
             var systemsRootPath = $"{Application.dataPath}/{script.systemsRootPath}";
-            if (!Directory.Exists($"{systemsRootPath}~"))
+            if (Directory.Exists($"{systemsRootPath}~"))
             {
                 Debug.LogError($"Cannot generate collection, {systemsRootPath}~ already exists!");
                 return;
@@ -192,7 +192,7 @@ namespace Project.Internal
             var packagesRootPath = script.systemsRootPath.Replace('\\', '/');
             foreach (var system in script.systems)
             {
-                var systemPath = system.path.Replace('\\', '/');
+                var systemPath = $"{Application.dataPath}/{system.path.Replace('\\', '/')}";
                 if (!Directory.Exists(systemPath))
                     systemPath = systemPath.Replace(packagesRootPath, $"{packagesRootPath}~");
 
@@ -202,7 +202,7 @@ namespace Project.Internal
                     continue;
                 }
 
-                foreach (var directory in Directory.GetDirectories($"{Application.dataPath}/{system.path}"))
+                foreach (var directory in Directory.GetDirectories(systemPath))
                 {
                     var directoryName = directory.Replace('\\', '/').Split('/').Last();
                     CopyDirectoryContents(directory, $"{path}/{directoryName}/{system.name}");
@@ -242,15 +242,28 @@ namespace Project.Internal
         {
             string[] blacklistedFormats = new string[]
             {
-                "asmdef",
+                ".asmdef",
+                ".asmdef.meta",
             };
 
             foreach (var path in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
                 Directory.CreateDirectory(path.Replace(sourcePath, targetPath));
 
             foreach (var path in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
-                if (!blacklistedFormats.Contains(path.ToLower().Split('.').Last()))
-                    File.Copy(path, path.Replace(sourcePath, targetPath), true);
+            {
+                bool ignore = false;
+                foreach (var format in blacklistedFormats)
+                {
+                    if (!path.EndsWith(format)) continue;
+                    ignore = true;
+                    break;
+                }
+
+                if (ignore)
+                    continue;
+
+                File.Copy(path, path.Replace(sourcePath, targetPath), true);
+            }
         }
     }
 }
