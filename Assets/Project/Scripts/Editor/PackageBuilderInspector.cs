@@ -88,6 +88,17 @@ namespace Project.Internal
 
             if (GUILayout.Button("Generate Entire Collection", GUILayout.Height(32f)))
                 GenerateCollection();
+
+            var defaultGUIColor = GUI.color;
+
+            GUI.color = Color.red;
+            if (GUILayout.Button("Revert Collection"))
+                RevertCollection();
+
+            GUI.color = defaultGUIColor;
+
+            if (serializedObject.hasModifiedProperties)
+                serializedObject.ApplyModifiedProperties();
         }
 
         public void AutoDetectPackages(string path)
@@ -114,9 +125,6 @@ namespace Project.Internal
                 };
 
                 detectedComponents.Add(component);
-
-                if (serializedObject.hasModifiedProperties)
-                    serializedObject.ApplyModifiedProperties();
             }
         }
 
@@ -163,7 +171,7 @@ namespace Project.Internal
             }
 
             if (!EditorUtility.DisplayDialog("Are you sure?", "Do you want to generate the entire collection?", "Yes", "No"))
-            return;
+                return;
 
             var path = $"{Application.dataPath}/{script.generatedCollectionPath}";
 
@@ -203,7 +211,31 @@ namespace Project.Internal
 
             Directory.Move(systemsRootPath, $"{systemsRootPath}~");
 
+            if (File.Exists($"{systemsRootPath}.meta"))
+                File.Move($"{systemsRootPath}.meta", $"{systemsRootPath}.meta~");
+
             AssetDatabase.Refresh();
+        }
+
+        public void RevertCollection()
+        {
+            if (!EditorUtility.DisplayDialog("Are you sure?", "Do you want to revert the collection?", "Yes", "No"))
+                return;
+
+            var collectionPath = $"{Application.dataPath}/{script.generatedCollectionPath}";
+            var systemsPath = $"{Application.dataPath}/{script.systemsRootPath}";
+
+            if (Directory.Exists(collectionPath))
+                Directory.Delete(collectionPath, true);
+
+            if (File.Exists($"{collectionPath}.meta"))
+                File.Move($"{collectionPath}.meta", $"{collectionPath}.meta~");
+
+            if (Directory.Exists($"{systemsPath}~"))
+                Directory.Move($"{systemsPath}~", systemsPath);
+
+            if (File.Exists($"{systemsPath}.meta~"))
+                File.Move($"{systemsPath}.meta~", $"{systemsPath}.meta");
         }
 
         static void CopyDirectoryContents(string sourcePath, string targetPath)
