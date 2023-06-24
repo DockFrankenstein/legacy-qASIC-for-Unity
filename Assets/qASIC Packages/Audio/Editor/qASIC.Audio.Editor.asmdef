@@ -1,0 +1,21 @@
+{
+    "name": "qASIC.Audio.Editor",
+    "references": [
+        "GUID:d9cc264ec5fc290469fb5e9809defa31",
+        "GUID:f41e3cf79ca3ef346a6aca190f7cfd63",
+        "GUID:ac4fccf20718b9040b8acfcb6fbc8164",
+        "GUID:1edfea4bd2f381e479ddf3b39425a359",
+        "GUID:f04a0ef4b73fe1b4e9238552fb557c9d"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

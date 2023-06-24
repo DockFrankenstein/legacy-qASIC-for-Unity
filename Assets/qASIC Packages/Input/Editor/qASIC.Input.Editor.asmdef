@@ -1,0 +1,23 @@
+{
+    "name": "qASIC.Input.Editor",
+    "references": [
+        "GUID:98e1ca8f61a33ff4b9d03dae0c85de89",
+        "GUID:d9cc264ec5fc290469fb5e9809defa31",
+        "GUID:f41e3cf79ca3ef346a6aca190f7cfd63",
+        "GUID:ac4fccf20718b9040b8acfcb6fbc8164",
+        "GUID:1edfea4bd2f381e479ddf3b39425a359",
+        "GUID:b8b5d5fe97948a744a9777e3a950d6fd",
+        "GUID:304e5e7995ff03b428c6e750a156bf72"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

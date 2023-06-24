@@ -1,0 +1,19 @@
+{
+    "name": "qASIC.Console.Editor",
+    "references": [
+        "GUID:d9cc264ec5fc290469fb5e9809defa31",
+        "GUID:f41e3cf79ca3ef346a6aca190f7cfd63",
+        "GUID:b8b5d5fe97948a744a9777e3a950d6fd"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

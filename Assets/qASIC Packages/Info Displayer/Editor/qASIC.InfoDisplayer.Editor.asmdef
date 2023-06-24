@@ -1,0 +1,19 @@
+{
+    "name": "qASIC.InfoDisplayer.Editor",
+    "references": [
+        "GUID:2564f08dbb5e2be4296a9480c3d2b1f0",
+        "GUID:d9cc264ec5fc290469fb5e9809defa31",
+        "GUID:f41e3cf79ca3ef346a6aca190f7cfd63",
+        "GUID:b8b5d5fe97948a744a9777e3a950d6fd",
+        "GUID:304e5e7995ff03b428c6e750a156bf72"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
