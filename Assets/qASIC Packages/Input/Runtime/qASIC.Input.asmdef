@@ -2,7 +2,6 @@
     "name": "qASIC.Input",
     "references": [
         "GUID:d9cc264ec5fc290469fb5e9809defa31",
-        "GUID:ac4fccf20718b9040b8acfcb6fbc8164",
         "GUID:b8b5d5fe97948a744a9777e3a950d6fd",
         "GUID:6055be8ebefd69e48b49212b09b47b2f"
     ],
