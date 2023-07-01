@@ -12,6 +12,7 @@ namespace Project
         public string generatedPackagePath = "qASIC";
 
         public string systemsRootPath = "qASIC Packages";
+        public string persistentFilesPath = "Collection Persistent Files~";
 
         [FormerlySerializedAs("components")] public List<System> systems = new List<System>();
 

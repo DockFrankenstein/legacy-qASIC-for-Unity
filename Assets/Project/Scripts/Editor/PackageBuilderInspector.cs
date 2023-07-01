@@ -16,7 +16,7 @@ namespace Project.Internal
 
         List<PackageBuilder.System> detectedComponents = new List<PackageBuilder.System>();
 
-        [System.NonSerialized] bool _init = false;
+        [NonSerialized] bool _init = false;
 
         void Initialize()
         {
@@ -72,6 +72,13 @@ namespace Project.Internal
 
             EditorGUILayout.Space();
 
+            using (new GUILayout.VerticalScope(EditorStyles.helpBox))
+            {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PackageBuilder.persistentFilesPath)), new GUIContent("Persistent Files"));
+                EditorGUILayout.LabelField($"{Application.dataPath}/{script.persistentFilesPath}");
+            }
+
+            EditorGUILayout.Space();
 
 
             l_components.DoLayoutList();
@@ -205,7 +212,11 @@ namespace Project.Internal
                 foreach (var directory in Directory.GetDirectories(systemPath))
                 {
                     var directoryName = directory.Replace('\\', '/').Split('/').Last();
-                    CopyDirectoryContents(directory, $"{path}/{directoryName}/{system.name}");
+                    CopyDirectoryContents(directory, $"{path}/{directoryName}/{system.name}", new string[]
+                    {
+                        ".asmdef",
+                        ".asmdef.meta",
+                    });
                 }
             }
 
@@ -213,6 +224,8 @@ namespace Project.Internal
 
             if (File.Exists($"{systemsRootPath}.meta"))
                 File.Move($"{systemsRootPath}.meta", $"{systemsRootPath}.meta~");
+
+            CopyDirectoryContents(script.persistentFilesPath, systemsRootPath);
 
             AssetDatabase.Refresh();
         }
@@ -240,11 +253,11 @@ namespace Project.Internal
 
         static void CopyDirectoryContents(string sourcePath, string targetPath)
         {
-            string[] blacklistedFormats = new string[]
-            {
-                ".asmdef",
-                ".asmdef.meta",
-            };
+            CopyDirectoryContents(sourcePath, targetPath, new string[0]);
+        }
+
+        static void CopyDirectoryContents(string sourcePath, string targetPath, string[] blacklistedFormats)
+        {
 
             foreach (var path in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
                 Directory.CreateDirectory(path.Replace(sourcePath, targetPath));

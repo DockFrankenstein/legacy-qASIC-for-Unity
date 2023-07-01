@@ -30,6 +30,6 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: JSONSerializationProvider, ns: qASIC.Files.Serialization, asm: qASIC.Files}
+      type: {class: JSONSerializationProvider, ns: qASIC.Files.Serialization, asm: qASIC.Core}
       data:
         prettyPrint: 1
