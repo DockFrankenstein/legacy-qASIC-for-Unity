@@ -18,6 +18,7 @@ namespace qASIC.Input.Devices
 
         public List<DeviceProvider> GetActiveProviders() =>
             providers
+                .Where(x => x != null)
                 .Where(x => x.SupportedPlatforms.HasFlag(qApplication.Platform))
                 .Where(x => x.platforms.HasFlag(qApplication.Platform))
                 .ToList();

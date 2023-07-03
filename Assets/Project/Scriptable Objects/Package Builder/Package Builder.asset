@@ -15,6 +15,7 @@ MonoBehaviour:
   generatedCollectionPath: qASIC
   generatedPackagePath: 
   systemsRootPath: qASIC Packages
+  persistentFilesPath: Collection Persistent Files~
   systems:
   - name: Audio
     path: qASIC Packages/Audio
@@ -28,10 +29,6 @@ MonoBehaviour:
   - name: Core
     path: qASIC Packages/Core
     systemDependencies: []
-  - name: Files
-    path: qASIC Packages/Files
-    systemDependencies:
-    - Core
   - name: Info Displayer
     path: qASIC Packages/Info Displayer
     systemDependencies:

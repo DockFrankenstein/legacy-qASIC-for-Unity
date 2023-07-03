@@ -7,7 +7,7 @@ namespace qASIC.Internal
     internal static partial class AssetImporter
     {
         [InitializeOnLoadMethod]
-        static void Initialize()
+        static void InitializeOptions()
         {
             _ = OptionsProjectSettings.Instance;
             qInternalUtility.EnsureScriptDefineSymbols(new HashSet<string>()

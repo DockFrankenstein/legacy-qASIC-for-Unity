@@ -187,6 +187,9 @@ namespace Project.Internal
 
             Directory.CreateDirectory(path);
 
+            if (File.Exists($"{path}.meta~"))
+                File.Move($"{path}.meta~", $"{path}.meta");
+
             var folders = script.systems
                 .SelectMany(x => Directory.GetDirectories($"{Application.dataPath}/{x.path}"))
                 .Distinct()
@@ -194,7 +197,10 @@ namespace Project.Internal
                 .ToList();
 
             foreach (var item in folders)
+            {
                 Directory.CreateDirectory($"{path}/{item}");
+                Debug.Log($"Creating directory `{path}/{item}`");
+            }
 
             var packagesRootPath = script.systemsRootPath.Replace('\\', '/');
             foreach (var system in script.systems)
@@ -225,7 +231,7 @@ namespace Project.Internal
             if (File.Exists($"{systemsRootPath}.meta"))
                 File.Move($"{systemsRootPath}.meta", $"{systemsRootPath}.meta~");
 
-            CopyDirectoryContents(script.persistentFilesPath, systemsRootPath);
+            CopyDirectoryContents($"{Application.dataPath}/{script.persistentFilesPath}", path);
 
             AssetDatabase.Refresh();
         }
@@ -249,15 +255,16 @@ namespace Project.Internal
 
             if (File.Exists($"{systemsPath}.meta~"))
                 File.Move($"{systemsPath}.meta~", $"{systemsPath}.meta");
+
+            AssetDatabase.Refresh();
         }
 
-        static void CopyDirectoryContents(string sourcePath, string targetPath)
-        {
+        static void CopyDirectoryContents(string sourcePath, string targetPath) =>
             CopyDirectoryContents(sourcePath, targetPath, new string[0]);
-        }
 
         static void CopyDirectoryContents(string sourcePath, string targetPath, string[] blacklistedFormats)
         {
+            Directory.CreateDirectory(targetPath);
 
             foreach (var path in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
                 Directory.CreateDirectory(path.Replace(sourcePath, targetPath));

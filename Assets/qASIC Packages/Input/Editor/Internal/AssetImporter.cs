@@ -11,7 +11,7 @@ namespace qASIC.Internal
     {
 #if !qASIC_INPUT
         [InitializeOnLoadMethod]
-        static void Initialize()
+        static void InitializeInput()
         {
             //Create settings
             var settings = InputProjectSettings.Instance;
