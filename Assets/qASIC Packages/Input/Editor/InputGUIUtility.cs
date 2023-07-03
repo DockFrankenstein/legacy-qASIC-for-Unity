@@ -1,10 +1,9 @@
 ﻿using qASIC.EditorTools;
-using qASIC.Input.Internal.ReferenceExplorers;
+using qASIC.Input.Internal;
 using System;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace qASIC.Input.Map.Internal
 {

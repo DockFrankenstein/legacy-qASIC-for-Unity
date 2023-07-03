@@ -11,7 +11,7 @@ using System.Linq;
 using static UnityEditor.EditorGUILayout;
 using Manager = qASIC.Input.Internal.EditorInputManager;
 
-namespace qASIC.Input.Internal.ReferenceExplorers
+namespace qASIC.Input.Internal
 {
     public class InputItemReferenceExplorer : EditorWindow
     {
