@@ -62,6 +62,9 @@ namespace qASIC.Input
 
         public object GetInputValue() =>
             InputManager.GetInputValueFromGUID(guid);
+
+        public InputEventType GetInputEvent() =>
+            InputManager.GetInputEventFromGUID(guid);
         #endregion
 
         #region Getting Input From Players
@@ -79,6 +82,9 @@ namespace qASIC.Input
 
         public object GetInputValueFromPlayer(int playerIndex) =>
             InputManager.Players.IndexInRange(playerIndex) ? InputManager.Players[playerIndex].GetInputValueFromGUID(guid) : default;
+
+        public InputEventType GetInputEventFromPlayer(int playerIndex) =>
+            InputManager.Players.IndexInRange(playerIndex) ? InputManager.Players[playerIndex].GetInputEventFromGUID(guid) : default;
         #endregion
     }
 }
