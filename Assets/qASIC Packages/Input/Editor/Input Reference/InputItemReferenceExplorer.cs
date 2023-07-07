@@ -190,7 +190,10 @@ namespace qASIC.Input.Internal
             bool containsHeader = !string.IsNullOrEmpty(header);
 
             if (containsHeader)
-                GUILayout.Label(header);
+            {
+                GUILayout.Space(8f);
+                GUILayout.Label(header, Styles.HeaderStyle);
+            }
 
             using (new GUILayout.VerticalScope(containsHeader ? Styles.ItemsHeaderGroupStyle : Styles.ItemsGroupStyle))
             {
@@ -214,6 +217,15 @@ namespace qASIC.Input.Internal
 
             public static GUIStyle ItemsHeaderGroupStyle => new GUIStyle() { margin = new RectOffset(16, 0, 0, 0), };
             public static GUIStyle ItemsGroupStyle => new GUIStyle() { margin = new RectOffset(0, 0, 0, 0), };
+            public static GUIStyle HeaderStyle => new GUIStyle(EditorStyles.label) 
+            { 
+                fixedHeight = 18f,
+                margin = new RectOffset(0, 0, 0, 0),
+                padding = new RectOffset(4, 4, 4, 4),
+                
+            }.WithBackgroundColor(EditorGUIUtility.isProSkin ? 
+                new Color(0.1f, 0.1f, 0.1f) :
+                new Color(0.6f, 0.6f, 0.6f));
         }
     }
 }
